@@ -1,0 +1,33 @@
+<ion-view title="Profile" class="bg-lightgrey">
+
+    <ion-nav-buttons side="right">
+        <button class="button button-dark button-clear icon ion-ios-compose-outline" ui-sref="app.edit-profile"></button>
+    </ion-nav-buttons>
+
+    <ion-content class="has-header bt-grey profile" scroll="true">
+        <div class="header">
+            <img ng-src="{{user.photo}}">
+            <!--<span class="badge badge-balanced">3</span>-->
+            <h2 class="lead text-medium">{{user.name}}</h2>
+            <p>Account Manager</p>
+        </div>
+
+        <div class="list">
+            <div class="item item-text-wrap" >
+                <h2 class="talents">Handphone</h2>
+                <p class="text-small" >0818032868</p>
+            </div>
+            <div class="item item-text-wrap" >
+                <h2 class="talents">Email</h2>
+                <p class="text-small" >email@gmail.com</p>
+            </div>
+            <div class="item item-text-wrap" >
+                <h2 class="talents">Report To</h2>
+                <p class="text-small" >Michele</p>
+            </div>
+        </div>
+          <div class="row">
+                <button class="btn waves-effect waves-light button button-positive button-block waves-effect waves-light" ui-sref="app.changepassword">Change Password</button>
+            </div>
+    </ion-content>
+</ion-view>

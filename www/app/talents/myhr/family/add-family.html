@@ -1,0 +1,82 @@
+
+<ion-view title="Family">
+   
+    <ion-content padding="true" class="has-header materialize" scroll="true" style="font-size:12px">
+        
+        <form class="col s12">
+            
+            <div class="row">
+                <div class="input-field col">
+                    <input id="first_name" type="text" class="validate" ng-model="family.name">
+                    <label for="first_name">Name</label>
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="input-field col">
+                   
+                  <p>Relationship</p>
+                   <select ng-model="family.relationship">
+                        <option ng-repeat="relationship in selectRelationship">{{relationship.id}}</option>
+                  </select>
+
+                </div>
+                <div class="input-field col">
+                   
+                  <p>Gender</p>
+                   <select ng-model="family.gender">
+                        <option ng-repeat="gender in selectGender">{{gender.id}}</option>
+                  </select>
+
+                </div>
+                
+            </div>
+            <div class="row">
+                
+                <div class="input-field col">
+                    <input id="last_name" type="text" class="validate" ng-model="family.birthPlace">
+                    <label for="last_name">Place of Birth</label>
+                </div>
+
+                <div class="input-field col">
+                   <input id="first_name" type="text" class="validate" ion-datetime-picker ng-model="family.birthDate">
+                    <label for="first_name">Date</label>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="input-field col">
+                  <p for="first_name">Blood Type</p>
+                  <select ng-model="family.bloodType">
+                        <option ng-repeat="bloodType in selectBloodType">{{bloodType.id}}</option>
+                  </select>
+                    
+                </div>
+                <div class="input-field col">
+                  <p for="first_name">Marital Status</p>
+                  <select ng-model="family.maritalStatus">
+                        <option ng-repeat="maritalStatus in selectMaritalStatus">{{maritalStatus.id}}</option>
+                  </select>
+                    
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col">
+                    <input id="first_name" type="text" class="validate" ng-model="family.phone" >
+                    <label for="first_name">Phone</label>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col"><button ng-click = "resetForm()" style="width:120px" class="pull-right btn waves-effect waves-light button button-assertive waves-light">Reset</button></div>
+                    <div class="col"><button ng-click="submitForm()" style="width:120px" class="pull-left btn waves-effect waves-light button button-balanced  waves-effect waves-light"><i class="icon ion-ionic left"></i>Save</button></div>
+              <!-- <button class="btn waves-effect waves-light button button-positive  waves-effect waves-light" ng-click="gotoHome()">Send</button>-->
+            </div>
+
+
+        </form>
+
+    </ion-content>
+
+</ion-view>

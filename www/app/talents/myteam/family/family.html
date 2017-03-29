@@ -1,0 +1,25 @@
+<ion-view title="Family">
+    <ion-content class="has-header" scroll="false">
+       
+        <div style="height:95%; overflow:scroll" class="bg-lightgrey">
+            <div >
+                <div class="card hybrid" ng-repeat="post in news.items | filter: searchFilter  | orderBy: 'publishedDate':true " ui-sref="tabs.post-detail({post:post})">
+
+                    <div class="item item-avatar">
+                        <img ng-src="{{post.image}}">
+                        <div class="inner-content">
+                        <h2 class="balanced">{{post.author}}</h2>
+                        <p>Wife</p>
+                        <span class="interact">
+                            25 thn
+                        </span>
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+
+    <a class="btn-floating btn-large waves-effect waves-light red lighten-1" style="position:fixed; bottom:3%;right:5%;z-index:999" ng-click="goTo('app.addfamily');"><i class="icons ion-plus"></i></a>
+</ion-view>

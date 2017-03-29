@@ -1,0 +1,28 @@
+<ion-view title="My Address">
+    <ion-content class="has-header" scroll="false">
+       
+        <div style="height:95%; overflow:scroll" class="bg-lightgrey">
+            <div >
+                <div class="card hybrid" ng-repeat="post in news.items | filter: searchFilter  | orderBy: 'publishedDate':true " ui-sref="tabs.post-detail({post:post})">
+
+                    <div class="item item-thumbnail-left item-text-wrap">
+                        <img ng-src="{{post.image}}">
+                        
+                        <h2 class="lead text-small" style="padding-left:0px">{{post.author}}</h2>
+                        <p>08180968773xx</p>
+                        
+                         <span class="interact">
+                            <i class="icon ion-ios-bookmarks-outline"></i>
+                                <i class="icon ion-ios-star-outline bl-grey"></i>
+                                <i class="icon ion-ios-trash-outline bl-grey"></i>
+                        </span>
+                    </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+
+    <a class="btn-floating btn-large waves-effect waves-light red lighten-1" style="position:fixed; bottom:3%;right:5%;z-index:999" ng-click="goTo('app.addaddress');"><i class="icons ion-plus"></i></a>
+</ion-view>

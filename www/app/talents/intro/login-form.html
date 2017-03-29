@@ -1,0 +1,29 @@
+<ion-view hide-nav-bar="true" style="background-color:; background-size: cover;">
+    <ion-content padding="true" scroll="false" class="auth">
+        <div class="container" style="height:40%">
+            <div class="text-center"><img src="img/talents/200x100-talentslogin.png" class="text-center" /></div>
+           
+        </div>
+        <div ng-form="login_form" class="padding text-center" novalidate>
+            <ion-list>
+                <label class="item item-input">
+                    <i class="icon ion-android-person placeholder-icon"></i>
+                    <input type="text" placeholder="Username" ng-model="usertalent.username" required>
+                </label>
+                <label class="item item-input">
+                    <i class="icon ion-android-lock placeholder-icon"></i>
+                    <input type="password" placeholder="Password" ng-model="usertalent.password" required>
+                </label>
+            </ion-list>
+            <button class="button button-positive button-block waves-effect waves-light" ng-click="loginAction();">Log in</button>
+           
+        </div>
+        
+        <p class="padding-horizontal">
+            <span class="balanced pull-left" ng-click="closeLogin();openForgot();">Forgot password ?</span>
+            <span class="balanced pull-right" ng-click="closeLogin();goTo('signup');">Sign up</span>
+        </p>
+
+
+    </ion-content>
+</ion-view>

@@ -1,0 +1,42 @@
+<ion-view title="Profile" class="bg-lightgrey">
+
+    <ion-nav-buttons side="right">
+        <button class="button button-dark button-clear icon ion-ios-compose-outline" ui-sref="app.edit-biodata"></button>
+    </ion-nav-buttons>
+
+    <ion-content class="has-header bt-grey profile" scroll="true">
+        <div class="header">
+            <img ng-src="{{user.photo}}">
+            <!--<span class="badge badge-balanced">3</span>-->
+            <h2 class="lead text-medium">{{personal.firstName}}</h2>
+            <p>Account Manager</p>
+        </div>
+
+        <div class="list">
+            <div class="item item-text-wrap" >
+                <h2 class="talents">Place of Birth</h2>
+                <p class="text-small" >{{personal.birthPlace}}</p>
+            </div>
+            <div class="item item-text-wrap" >
+                <h2 class="talents">Date of Birth</h2>
+                <p class="text-small" >{{personal.birthDate}}</p>
+            </div>
+            <div class="item item-text-wrap" >
+                <h2 class="talents">Address</h2>
+                <p class="text-small" >Jln Kenanga no 17 Jakarta Selatan DKI Jakarta</p>
+            </div>
+            <div class="item item-text-wrap" >
+                <h2 class="talents">Handphone</h2>
+                <p class="text-small" >{{personal.mobilePhone}}</p>
+            </div>
+            <div class="item item-text-wrap" >
+                <h2 class="talents">Email</h2>
+                <p class="text-small" >{{personal.officeMail}}</p>
+            </div>
+            <div class="item item-text-wrap" >
+                <h2 class="talents">Report To</h2>
+                <p class="text-small" >Michele</p>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,62 @@
+<ion-view title="Add Certification">
+   
+    <ion-content padding="true" class="has-header materialize" scroll="true">
+        
+        <div class="item no-padding">
+            <div class="row">
+                <div class="input-field col">
+                    <input id="name" ng-model="certification.name" type="text" class="validate">
+                    <label for="first_name">Certification Name</label>
+                </div>
+                
+            </div>
+             <div class="row">
+                <div class="input-field col s6">
+                    <input  ng-model="certification.no" type="text" class="validate">
+                    <label for="first_name">No</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col">
+                   <input  ng-model="certification.date" type="text" class="validate">
+                    <label for="first_name">Date</label>
+                </div>
+
+                <div class="input-field col">
+                   <input  ng-model="certification.expired" type="text" class="validate">
+                    <label for="first_name">Exp Date</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col">
+                    <input  ng-model="certification.principle" type="text" class="validate">
+                    <label for="first_name">Principle</label>
+                </div>
+            </div>
+             <div class="row">
+                <div class="input-field col">
+                    <input  ng-model="certification.year" type="text" class="validate">
+                    <label for="first_name">Year</label>
+                </div>
+            </div>
+             <div class="row">
+                <div class="input-field col s12">
+                    <input  ng-model="certification.type" type="text" class="validate">
+                    <label for="textarea1">Type</label>
+                </div>
+            </div>
+            
+             <div class="row">
+                <div class="col">
+                    <button style="width:120px" class="pull-right btn waves-effect waves-light button button-assertive waves-light">Reset</button>
+                </div>
+                    <div class="col"><button ng-click="submitForm()" style="width:120px" class="pull-left btn waves-effect waves-light button button-balanced  waves-effect waves-light">Send</button>
+                </div>
+              <!-- <button class="btn waves-effect waves-light button button-positive  waves-effect waves-light" ng-click="gotoHome()">Send</button>-->
+            </div>
+
+        </div>
+
+    </ion-content>
+
+</ion-view>

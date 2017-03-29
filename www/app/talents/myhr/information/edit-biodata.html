@@ -1,0 +1,52 @@
+<ion-view hide-nav-bar="true" class="bg-lightgrey">
+
+    <ion-header-bar>
+        <div class="row text-center">
+            <div class="col font-thin text-large dark" ng-click="goTo('app.biodata')">Cancel</div>
+            <div class="col font-thin text-large balanced bl-grey" ng-click="save()">Save</div>
+        </div>
+    </ion-header-bar>
+
+    <ion-content class="profile has-header bt-grey">
+
+        <div class="header edit">
+            <img ng-src="{{user.photo}}">
+        </div>
+
+        <p class="bb text-smaller padding-horizontal uppercase">info</p>
+        <div class="edit padding-horizontal">
+            <label class="item item-input">
+                <span class="input-label">First name</span>
+                <input type="text" value="Kevin">
+            </label>
+            <label class="item item-input">
+                <span class="input-label" >Last name</span>
+                <input type="text" value="Michele">
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Email</span>
+                <input type="email" value="kevin@michele.com">
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Born</span>
+                <input type="email" value="Jakarta, 19 Jan 1978">
+            </label>
+           
+        </div>
+
+        
+
+        <p class="bb text-smaller padding-horizontal uppercase">More</p>
+        <div class="edit padding-horizontal">
+            <label class="item item-input">
+                    <span class="input-label">Phone number</span>
+                    <input type="tel" value="0818032784">
+                </label>
+            <label class="item item-input">
+                    <span class="input-label">Address</span>
+                    <textarea rows="3" style="resize:none">Jln. Duren Tiga No 18 Jakarta Selatan. DKI Jakarta. Indonesia</textarea>
+                </label>
+        </div>
+
+    </ion-content>
+</ion-view>

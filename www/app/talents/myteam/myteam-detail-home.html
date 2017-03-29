@@ -1,0 +1,31 @@
+<ion-view title="My HR" class="bg-lightgrey">
+
+    <ion-content class="has-header bt-grey profile" scroll="true">
+        <div class="header">
+            <img ng-src="{{user.photo}}">
+            <!--<span class="badge badge-balanced">3</span>-->
+            <h2 class="lead text-medium">{{user.name}}</h2>
+            <p>{{user.city}}</p>
+           
+        </div>
+        <div class="row height-33 no-padding text-center stable-bg">
+            <div class="col no-padding">
+                <div class="card tile tile-large" ui-sref="tabs.components">
+                    <div class="item item-text-wrap energized-bg light">
+                        <i class="icon ion-android-exit"></i>
+                        <span class="text-large">Leave</span> 
+                    </div>
+                </div>
+            </div>
+            <div class="col no-padding">
+                <div class="card tile tile-large" ui-sref="app.family">
+                    <div class="item item-text-wrap calm-bg light">
+                        <i class="icon ion-person-stalker"></i>
+                        <span class="text-large">Family</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </ion-content>
+</ion-view>
