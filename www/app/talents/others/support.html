@@ -1,0 +1,29 @@
+<ion-view title="Contacts" cache-view="false">
+
+    <ion-nav-buttons side="right">
+        <button class="button button-icon dark icon ion-ios-search" ng-click="searchPopover.show($event)"></button>
+    </ion-nav-buttons>
+
+    <ion-content class="has-header" scroll="false">
+
+        <ion-scroll class="bg-lightgrey" direction="y" style="height:100%">
+            <div class="list">
+                <div class="item item-avatar item-text-wrap">
+                    <img ng-src="{{comment.photo}}">
+                    <h2 class="lead">Email Customer Service</h2>
+                    <p>helpdesk@talents.com</p>
+
+                </div>
+                 <div class="item item-avatar item-text-wrap">
+                    <img ng-src="{{comment.photo}}">
+                    <h2 class="lead">Phone Customer Service</h2>
+                    <p>(+62 21738xxx)</p>
+                   
+                </div>
+
+            </div>
+        </ion-scroll>
+
+    </ion-content>
+
+</ion-view>
