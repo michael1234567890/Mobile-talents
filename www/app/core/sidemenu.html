@@ -1,0 +1,77 @@
+<ion-side-menus enable-menu-with-back-views="false">
+
+    <ion-side-menu-content>
+        <ion-nav-bar class="bar-positive no-b">
+            <ion-nav-back-button></ion-nav-back-button>
+            <ion-nav-buttons side="left">
+                <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
+            </ion-nav-buttons>
+        </ion-nav-bar>
+        <ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
+    </ion-side-menu-content>
+
+<!--
+    <ion-side-menu side="left" width="255" id="menu" hide-nav-bar="false">
+        <ion-header-bar class="c0">
+            <h1 class="title light">Menu</h1>
+        </ion-header-bar>
+        <ion-content padding="false" class="side-menu-left">
+            <ion-list>
+                <ion-item class="c1 item-avatar" menu-close><img ng-src="{{user.photo}}" ui-sref="tabs.account"></ion-item>
+                <ion-item class="c2" menu-close><i class="icon ion-ios-star-outline" ui-sref="tabs.dashboard"></i></ion-item>
+                
+                <ion-item class="c7" menu-close ui-sref="login">LOGIN</ion-item>
+            </ion-list>
+        </ion-content>
+    </ion-side-menu>
+-->
+ <!-- Left menu -->
+  <ion-side-menu side="left">
+    <ion-content>
+
+      <!-- User profile -->
+      <div class="profile positive-bg text-center padding">
+        <a ui-sref="app.profile" class="header">
+          <img class="profile-picture circle" menu-close src="img/users/1.jpg">
+          <h5 class="light">{{profile.fullname}}</h5>
+        </a>
+      </div>
+
+      <!-- Menu -->
+      <div class="list" menu-close>
+        <div class="item item-icon-left" ui-sref="app.home">
+          <i class="icon ion-ios-home-outline"></i>
+          Home
+        </div>
+        <div class="item item-icon-left" ui-sref="app.myhr">
+          <i class="icon ion-ios-list-outline"></i>
+          My HR
+        </div>
+
+        <div class="item item-icon-left" ui-sref="app.myteam">
+         <i class="icon ion-ios-people"></i>
+          My Team
+        </div>
+          <div class="item item-icon-left" ui-sref="app.about">
+          <i class="icon ion-ios-information-outline"></i>
+          About
+        </div>
+        <div class="item item-icon-left" ui-sref="app.support">
+          <i class="icon ion-help"></i>
+          Support
+        </div>
+        <div class="item item-icon-left" ui-sref="app.setting">
+          <i class="icon ion-ios-gear-outline"></i>
+          Settings
+        </div>
+        <div class="item item-icon-left" ng-click="signOut()">
+          <i class="icon ion-log-out"></i>
+          Logout
+        </div>
+
+        
+      </div>
+
+    </ion-content>
+  </ion-side-menu>
+</ion-side-menus>
