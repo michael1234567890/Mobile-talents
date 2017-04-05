@@ -1,0 +1,57 @@
+<ion-view view-title="Leave Request" class="header">
+  <ion-nav-bar class="bar-positive" align-title="center">
+   
+</ion-nav-bar>
+  <ion-content class="padding">
+
+
+<br>
+
+<div >
+
+    <a class="item item-thumbnail-left" >
+      <img src="img/users/1.jpg">
+      <h2>{{aprvs.Name}}</h2>
+      <p>{{aprvs.Position}}</p>
+      <p>{{aprvs.Part}}</p>
+      <p>{{aprvs.Place}}</p>
+    </a>
+
+</div>
+
+<br>
+<br>
+<center class ="pinggiran">
+<div class="col" >Leave Overview</div>
+</center>
+
+
+<center  class ="pinggiran2">
+<div class="row">
+
+
+ <div class="col pinggiran5">{{aprvs.Approved}} <br>approved</div>
+ <div class="col pinggiran4">{{aprvs.Requested}} <br>requested</div>
+ <div class="col pinggiran3">{{aprvs.Rejected}} <br>rejected</div>
+ 
+</div>
+</center>
+
+
+
+  <center>
+
+<a  href="#/app/requestLeave">
+  <button class="button button-positive Entitlement" >
+  Leave request
+    </button>
+</a>
+
+    <button class="button button-positive Entitlement" >
+    Entitlement
+    </button>
+
+</center>
+  
+  </ion-content>
+</ion-view>

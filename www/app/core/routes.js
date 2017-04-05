@@ -223,12 +223,64 @@ angular.module('talent.routes', [])
       })
 
 
+       .state('app.submitClaim', {
+        url: '/submitClaim',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/claim/submitClaim.html',
+            controller: 'submitClaimCtrl'
+          }
+        }
+      })
+
+
+       .state('app.claimList', {
+        url: '/claimList',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/claim/claimList.html',
+            controller: 'claimListCtrl'
+          }
+        }
+      })
+
+
        .state('app.support', {
         url: '/support',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/others/support.html',
             controller: 'SupportCtrl'
+          }
+        }
+      })
+
+       .state('app.leaveRequest', {
+        url: '/leaveRequest',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/leave/leaveRequest.html',
+            controller: 'leaveRequestCtrl'
+          }
+        }
+      })
+
+       .state('app.requestLeave', {
+        url: '/requestLeave',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/leave/requestLeave.html',
+            controller: 'requestLeaveCtrl'
+          }
+        }
+      })
+
+       .state('app.approval', {
+        url: '/approval',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/leave/approval.html',
+            controller: 'approvalCtrl'
           }
         }
       })

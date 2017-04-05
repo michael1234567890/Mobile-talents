@@ -1,0 +1,91 @@
+<ion-view view-title="Leave Details" class="header">
+<ion-nav-bar class="bar-positive" align-title="center">
+<ion-nav-back-button></ion-nav-back-button>
+</ion-nav-bar>
+  <ion-content>
+    <ion-list>
+<ion-item>
+
+   
+<form>
+ <div class="list">
+  <center>
+    <button class="button button-small button-stable btnMargin3">
+    Used Leave
+    </button>
+    
+    {{approves.Used}}
+    
+    <button class="button button-small button-stable btnMargin3">
+    Available leave
+    </button>
+    
+    {{approves.Available}}
+    
+  </center>
+</ion-item>
+<br>
+
+<div class="list">
+
+    <a class="item item-thumbnail-left" >
+      <img ng-src="{{approves.Picture}}">
+      <h2>{{approves.Name}}</h2>
+      <p>{{approves.Reason}}</p>
+
+     <span class="badge badge-assertive">{{approves.Request}}</span> 
+    
+    </a>
+
+    
+</div>
+
+
+
+
+
+
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Start Date & Time</span>
+    <br>
+    {{approves.Start}}
+  </label>
+
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">End Date & time</span>
+    <br>
+    {{approves.End}}
+  </label>
+
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Applied On</span>
+    <br>
+    {{approves.Applied}}
+  </label>
+
+ <label class="item item-input item-stacked-label">
+    <span class="input-label">Notes :</span>
+    <br>
+    {{approves.Notes}}
+  </label>
+
+
+
+
+<hr>
+
+  <center>
+    <button class="button button-assertive btnMargin4" ng-click="showConfirm2()">
+     Reject 
+    </button>
+
+    <button class="button button-positive btnMargin4"  ng-click ="showConfirm()">
+    Approve
+    </button>
+  </center>
+</div>
+</form>
+
+    </ion-list>
+  </ion-content>
+</ion-view>

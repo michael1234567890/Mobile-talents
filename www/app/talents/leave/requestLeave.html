@@ -1,0 +1,119 @@
+<ion-view view-title="Request to Leave" class="header">
+<ion-nav-bar class="bar-positive" align-title="center">
+<ion-nav-back-button class="bar-dark"></ion-nav-back-button>
+</ion-nav-bar>
+  <ion-content>
+    <ion-list>
+
+
+   
+<form>
+
+<ion-item>
+ <div class="list">
+  <center>
+    <button class="button button-small button-stable btnMargin2">
+    Used Leave
+    </button>
+    
+    {{absents.Used}}
+        <button class="button button-small button-stable btnMargin2">
+    Available leave
+    </button>
+    
+    {{absents.Available}}
+    
+  </center>
+
+<br>
+
+<ion-item>
+
+<script>
+  
+  $(document).ready(function() {
+    $('select').material_select();
+  });
+      
+
+</script>
+
+
+ <div class="input-label">Leave Type</div>
+  <div class="styled-select grey rounded">
+
+  
+  
+        <select class = "browser-default">
+      <option>Meeting</option>
+      <option >Casual Leave</option>
+      <option>Sick</option>
+
+    </select>
+
+
+</div>
+
+</ion-item>
+
+<script>
+    $('.datepicker').pickadate({
+    selectMonths: true, // Creates a dropdown to control month
+    selectYears: 15 // Creates a dropdown of 15 years to control year
+  });
+
+</script>
+
+
+
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Start Date & Time</span>
+    <div class="row" >
+    <input type="date"> &nbsp;&nbsp;&nbsp;
+    <input type="time">
+
+    </div>
+
+  </label>
+
+
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">End Date & Time</span>
+    <div class="row" >
+    <input type="date"> &nbsp;&nbsp;&nbsp;
+    <input type="time">
+
+    </div>
+
+  </label>
+
+
+<ion-item>
+  <div class="row">
+    <form class="col s12">
+      <div class="row">
+        <div class="input-field col s6">
+          <textarea id="icon_prefix2" class="materialize-textarea"></textarea>
+          <label for="icon_prefix2">Notes</label>
+        </div>
+      </div>
+    </form>
+  </div>
+</ion-item>
+
+<hr>
+
+
+  <center>
+    <button class="button button-assertive btnMargin " ng-click="showConfirm4()">
+    Reset
+    </button>
+    <button class="button button-positive btnMargin" ng-click="showConfirm3()">
+    Send
+    </button>
+  </center>
+</div>
+</form>
+
+</ion-item>
+  

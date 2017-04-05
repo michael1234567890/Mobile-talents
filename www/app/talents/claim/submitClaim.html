@@ -1,0 +1,75 @@
+<ion-view view-title="Submit Claim" class="header">
+<ion-nav-bar class="bar-positive" align-title="center">
+<ion-nav-back-button></ion-nav-back-button>
+</ion-nav-bar>
+  <ion-content>
+    <ion-list>
+
+   
+<form>
+ 
+<ion-item>
+
+ <div class="input-label"> Claim Type</div>
+  <div class="styled-select grey rounded"> 
+        <select class="browser-default">
+      <option>Travel</option>
+      <option >Lunch Meeting</option>
+      <option>OverTime</option>
+    </select>
+</div>
+
+</ion-item>
+<hr>
+
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">From Date</span>
+    <input type="date" >
+  </label>
+
+<hr>
+
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">To Date</span>
+    <input type="date" >
+  </label>
+
+
+<hr>
+
+        <div class="input-field col s6">
+          <input id="last_name" type="text" class="validate">
+          <label for="last_name">Amount</label>
+        </div>
+
+
+<hr>
+<hr>
+
+        <div class="input-field col s12">
+            <textarea id="textarea1" class="materialize-textarea" data-length="120"></textarea>
+            <label for="textarea1">Purpose</label>
+          </div>
+
+
+<hr>
+<hr>
+
+    <center>
+    <button class="button button-assertive btnMargin4" ng-click="showConfirm6()">
+     Reset
+    </button>
+
+    <button class="button button-positive btnMargin4"  ng-click ="showConfirm5()">
+    Send
+    </button>
+  </center>
+
+
+
+</form>
+
+
+    </ion-list>
+  </ion-content>
+</ion-view>

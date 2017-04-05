@@ -4,6 +4,128 @@
 
     angular.module('talent.services', [])
 
+    .factory('Sets', function() {
+  // Might use a resource here that returns a JSON array
+
+  // Some fake testing data
+  var sets = [{
+    id: 0,
+    Header:'Overtime',
+    Detail:'overtime',
+    Date: '20 March 2017',
+    Amount: '50.0000 IDR',
+    Icon: 'img/yes.png' 
+  }, {
+    id: 1,
+    Header: 'Lunch Meeting',
+    Detail: 'meeting with client',
+    Date: '21 March 2017',
+    Amount: '200.000 IDR',
+    Icon: 'img/no.png'
+  }, {
+       id: 2,
+    Header: 'Lunch Meeting',
+    Detail: 'meeting with client',
+    Date: '24 March 2017',
+    Amount: '150.000 IDR',
+    Icon: 'img/yes.png' ,
+  }, {
+        id: 3,
+    Header: 'Overtime',
+    Detail: 'overtime',
+    Date: '24 March 2017',
+    Amount: '170.000 IDR',
+    Icon: 'img/no.png'
+  }, {
+        id: 4,
+    Header: 'Lunch Meeting',
+    Detail: 'meeting with client',
+    Date: '29 March 2017',
+    Amount: '100.000 IDR',
+    Icon: 'img/no.png'
+  }];
+
+  return {
+    all: function() {
+      return sets;
+    },
+   
+    get: function(setId) {
+      for (var z = 0; z < sets.length; z++) {
+        if (sets[z].id === parseInt(setId)) {
+          return sets[z];
+        }
+      }
+      return null;
+    }
+  };
+})
+
+
+.factory('Absents', function() {
+
+  var absents = [{
+    id: 0,
+    Used: 5,
+    Available: 8
+  }];
+
+  return {
+    all: function() {
+      return absents[0];
+    }
+  };
+})
+
+
+
+.factory('Approves', function() {
+
+  var approves = [{
+    id: 0,
+    Used: 5,
+    Available: 8,
+    Start: '15 March 2017, 08.30',
+    End: '16 March 2017, 17.00',
+    Applied: '10 March 2017',
+    Notes: 'I need to attend a meeting',
+    Picture: 'img/users/1.jpg',
+    Name: 'hendra ramdhan',
+    Reason: 'casual leave',
+    Request: '2 days'
+  }];
+
+  return {
+    all: function() {
+      return approves[0];
+    }
+  };
+})
+
+
+.factory('Aprvs', function() {
+
+  var aprvs = [{
+    id: 0,
+    Approved: 5,
+    Requested: 8,
+    Rejected: 5,
+    Name:'hendra ramdhan',
+    Position:'Programmer',
+    Part: 'Middleware',
+    Place: 'Jakarta'
+  }];
+
+  return {
+    all: function() {
+      return aprvs[0];
+      
+    }
+  };
+})
+
+
+
         .service('appService', ['$state', '$ionicPopup', '$ionicActionSheet', '$ionicHistory', '$ionicLoading', '$timeout',
             function ($state, $ionicPopup, $ionicActionSheet, $ionicHistory, $ionicLoading, $timeout) {
 

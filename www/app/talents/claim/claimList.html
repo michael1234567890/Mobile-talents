@@ -1,0 +1,35 @@
+<ion-view view-title="Claims" class="header">
+<ion-nav-bar class="bar-positive" align-title="center">
+
+
+</ion-nav-bar>
+  <ion-content>
+    <ion-list>
+
+
+
+<ion-item  ng-repeat="set in sets" type="item-text-wrap" href="#/app/claim/{{set.id}}">
+        
+
+  <div class="item item-text-wrap">
+
+
+<div class="row">
+  <div class="col col-50">
+   <h2>{{set.Header}}</h2>
+   <p>{{set.Detail}}</p>
+   <h3>{{set.Date}}</h3>
+   </div>
+  <div class="col ">{{set.Amount}} </div> 
+  <div class="col"><span class="badge badge-light"><img ng-src="{{set.Icon}}" style="  width: 30px; height: 30px"></span></div>
+
+</div>
+
+
+      </ion-item>
+
+    </ion-list>
+  </ion-content>
+</ion-view>
+
+
