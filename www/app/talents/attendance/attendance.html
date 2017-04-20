@@ -1,0 +1,42 @@
+<ion-view view-title="Attendance" class="header">
+<ion-nav-bar class="bar-positive" align-title="center">
+<ion-nav-back-button></ion-nav-back-button>
+</ion-nav-bar>
+  <ion-content>
+    <ion-list>
+
+
+   
+<form>
+<br>
+<br>
+<div ng-app="tes2">
+
+    <div ng-controller="TimeCtrl">
+    <center><h1>{{ clock | date :'HH:mm:ss'}}</h1>
+    	<h3>The East Tower</h3>
+    	<h4>Jl. I made xxxx Jakarta Selatan</h4>
+    	</center>
+    </div>
+</div>
+
+<br>
+<br>
+
+
+  <center ng-controller="PopupCtrl">
+    <button class="button button-balanced btnMargin4" >
+     Check In
+    </button>
+
+    <button class="button button-balanced btnMargin4"  >
+    Check Out
+    </button>
+  </center>
+</div>
+</form>
+
+
+    </ion-list>
+  </ion-content>
+</ion-view>

@@ -9,3 +9,4 @@ angular.module('claim.controllers', [])
   $scope.sets = Sets.all();
 
  })
+

@@ -245,6 +245,17 @@ angular.module('talent.routes', [])
       })
 
 
+       .state('app.attendance', {
+        url: '/attendance',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/attendance/attendance.html',
+            controller: 'attendCtrl'
+          }
+        }
+      })
+
+
        .state('app.support', {
         url: '/support',
         views: {

@@ -1,61 +1,74 @@
 <ion-view view-title="Submit Claim" class="header">
-<ion-nav-bar class="bar-positive" align-title="center">
-<ion-nav-back-button></ion-nav-back-button>
-</ion-nav-bar>
-  <ion-content>
+
+ <ion-content padding="true" class="has-header materialize" scroll="true" style="font-size:12px">
     <ion-list>
 
-   
-<form>
- 
-<ion-item>
 
+         
+
+          
+<form class="col s12">
+
+<ion-item>
  <div class="input-label"> Claim Type</div>
-  <div class="styled-select grey rounded"> 
-        <select class="browser-default">
-      <option>Travel</option>
-      <option >Lunch Meeting</option>
-      <option>OverTime</option>
-    </select>
-</div>
+      <div class="styled-select grey rounded"> 
+            <select class="broswer-default">
+          <option value="" disabled selected></option>
+          <option value="" data-icon="img/home.png" class="circle">Travel</option>
+          <option value="" data-icon="img/home.png" class="circle">Lunch Meeting</option>
+          <option value="" data-icon="img/home.png" class="circle">OverTime</option>
+        </select>
+     </div>
+</ion-item>
+
+
+
+
+<ion-item>
+    <!--<label>Start Date</label>
+      <div class="item" ion-datetime-picker ng-model="datetimeValue">
+        {{datetimeValue| date: "yyyy-MM-dd H:mm:ss"}}
+      </div>-->
+  <p class="bb text-large padding uppercase" ng-click="_datetime = !_datetime">Date Time Picker
+  <span ng-if="_datetime" class="pull-right icon ion-ios-arrow-down"></span>
+  <span ng-if="!_datetime" class="pull-right icon ion-ios-arrow-up"></span></p>
+      <div class="item padding" ng-if="_datetime">
+          <div class="card" ion-datetime-picker ng-model="startsAt">
+              <div class="item"><span class="balanced">Click me to pick Date & Time</span>
+                  <p class="small">{{startsAt| date: "dd-MMM-yyyy"}}</p>
+                  <span class="text-large">{{startsAt| date: "H:mm a"}}</span></div>
+          </div>
 
 </ion-item>
-<hr>
-
-  <label class="item item-input item-stacked-label">
-    <span class="input-label">From Date</span>
-    <input type="date" >
-  </label>
-
-<hr>
-
-  <label class="item item-input item-stacked-label">
-    <span class="input-label">To Date</span>
-    <input type="date" >
-  </label>
 
 
-<hr>
+<ion-item>
+      <label>To Date</label>
+        <div class="item" ion-datetime-picker ng-model="datetimeValue">
+          {{datetimeValue| date: "yyyy-MM-dd H:mm:ss"}}
+        </div>
+</ion-item>
 
+
+<ion-item>
         <div class="input-field col s6">
-          <input id="last_name" type="text" class="validate">
+          <input id="last_name" type="text" class="validate" >
           <label for="last_name">Amount</label>
         </div>
+</ion-item>
 
 
-<hr>
-<hr>
-
+<ion-item>
         <div class="input-field col s12">
             <textarea id="textarea1" class="materialize-textarea" data-length="120"></textarea>
             <label for="textarea1">Purpose</label>
           </div>
+</ion-item>
 
 
-<hr>
-<hr>
 
-    <center>
+
+    <center ng-controller="PopupCtrl">
     <button class="button button-assertive btnMargin4" ng-click="showConfirm6()">
      Reset
     </button>
@@ -73,3 +86,5 @@
     </ion-list>
   </ion-content>
 </ion-view>
+
+

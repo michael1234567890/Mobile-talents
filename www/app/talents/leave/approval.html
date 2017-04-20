@@ -1,8 +1,6 @@
 <ion-view view-title="Leave Details" class="header">
-<ion-nav-bar class="bar-positive" align-title="center">
-<ion-nav-back-button></ion-nav-back-button>
-</ion-nav-bar>
-  <ion-content>
+
+  <ion-content padding="true" class="has-header materialize" scroll="true" style="font-size:12px"> 
     <ion-list>
 <ion-item>
 
@@ -74,7 +72,7 @@
 
 <hr>
 
-  <center>
+ <center ng-controller="PopupCtrl">
     <button class="button button-assertive btnMargin4" ng-click="showConfirm2()">
      Reject 
     </button>

@@ -7,10 +7,12 @@ angular.module('leave.controllers', [])
 
 .controller('requestLeaveCtrl',function($rootScope, $scope,$state , AuthenticationService, Main,Absents) {
   $scope.absents=Absents.all();
-
+  
  })
 
 .controller('approvalCtrl',function($rootScope, $scope,$state , AuthenticationService, Main,Approves) {
    $scope.approves=Approves.all();
 
  })
+
+angular.module('starter', ['ionic', 'ionic-modal-select'])

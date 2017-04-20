@@ -2,7 +2,25 @@
 <ion-view title="Family">
    
     <ion-content padding="true" class="has-header materialize" scroll="true" style="font-size:12px">
-        
+
+  <style>
+    .selectWrapper{
+    border-radius:36px;
+    height: 30px;
+    display:inline-block;
+    overflow:hidden;
+    background:#41adf8;
+    border:1px solid #3d4042;
+    }
+    .selectBox{
+    width:140px;
+    height:40px;
+    border:0px;
+    outline:none;
+    }
+  </style>  
+
+
         <form class="col s12">
             
             <div class="row">
@@ -16,7 +34,7 @@
                 <div class="input-field col">
                    
                   <p>Relationship</p>
-                   <select ng-model="family.relationship">
+                   <select ng-model="family.relationship" class ="browser-default">
                         <option ng-repeat="relationship in selectRelationship">{{relationship.id}}</option>
                   </select>
 
@@ -24,7 +42,7 @@
                 <div class="input-field col">
                    
                   <p>Gender</p>
-                   <select ng-model="family.gender">
+                   <select ng-model="family.gender"  class = "selectWrapper">
                         <option ng-repeat="gender in selectGender">{{gender.id}}</option>
                   </select>
 
@@ -47,14 +65,14 @@
             <div class="row">
                 <div class="input-field col">
                   <p for="first_name">Blood Type</p>
-                  <select ng-model="family.bloodType">
+                  <select ng-model="family.bloodType"  class = "selectWrapper">
                         <option ng-repeat="bloodType in selectBloodType">{{bloodType.id}}</option>
                   </select>
                     
                 </div>
                 <div class="input-field col">
                   <p for="first_name">Marital Status</p>
-                  <select ng-model="family.maritalStatus">
+                  <select ng-model="family.maritalStatus"  class = "selectWrapper">
                         <option ng-repeat="maritalStatus in selectMaritalStatus">{{maritalStatus.id}}</option>
                   </select>
                     

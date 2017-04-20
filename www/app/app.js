@@ -1,5 +1,5 @@
 
-angular.module('talent', ['ionic', 'ngStorage','others.controllers','claim.controllers','leave.controllers','home.controllers','myhr.controllers','intro.controllers','talent.controllers','talent.routes', 'main.services', 'authentication.services','talent.services', 'talent.directives'])
+angular.module('talent', ['ionic', 'ngStorage','others.controllers','attendance.controllers','claim.controllers','leave.controllers','home.controllers','myhr.controllers','intro.controllers','talent.controllers','talent.routes', 'main.services', 'authentication.services','talent.services', 'talent.directives'])
 
   .run(function ($ionicPlatform, appService) {
 

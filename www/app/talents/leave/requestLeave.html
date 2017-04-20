@@ -1,13 +1,30 @@
 <ion-view view-title="Request to Leave" class="header">
-<ion-nav-bar class="bar-positive" align-title="center">
-<ion-nav-back-button class="bar-dark"></ion-nav-back-button>
-</ion-nav-bar>
-  <ion-content>
+
+  <ion-content padding="true" class="has-header materialize" scroll="true" style="font-size:12px">
     <ion-list>
 
+<style>
+  .selectWrapper{
+  border-radius:36px;
+  display:inline-block;
+  overflow:hidden;
+  background:#41adf8;
+  border:1px solid #3d4042;
+}
+.selectBox{
+  width:140px;
+  height:40px;
+  border:0px;
+  outline:none;
+}
 
+</style>
    
 <form>
+
+<ion-item>
+
+</ion-item>
 
 <ion-item>
  <div class="list">
@@ -39,22 +56,17 @@
 </script>
 
 
- <div class="input-label">Leave Type</div>
-  <div class="styled-select grey rounded">
-
-  
-  
-        <select class = "browser-default">
+ <div class="input-label">Leave Type</div> 
+        <select class="selectWrapper">
+      <option value="" disabled selected></option>
       <option>Meeting</option>
       <option >Casual Leave</option>
       <option>Sick</option>
 
     </select>
-
-
-</div>
-
 </ion-item>
+
+
 
 <script>
     $('.datepicker').pickadate({
@@ -65,28 +77,39 @@
 </script>
 
 
+        
 
+<!--
   <label class="item item-input item-stacked-label">
-    <span class="input-label">Start Date & Time</span>
-    <div class="row" >
-    <input type="date"> &nbsp;&nbsp;&nbsp;
-    <input type="time">
-
+     <div class="input-field col">
+     <label>Start Date & Time</label>
+    <input type="text" ion-datetime-picker ng-model="">
     </div>
-
   </label>
 
 
   <label class="item item-input item-stacked-label">
     <span class="input-label">End Date & Time</span>
-    <div class="row" >
-    <input type="date"> &nbsp;&nbsp;&nbsp;
-    <input type="time">
+    <input type="text" ion-datetime-picker ng-model="">
+  </label>
+-->
+<ion-item>
+<label>Start Date</label>
+  <div class="item" ion-datetime-picker ng-model="datetimeValue">
+    {{datetimeValue| date: "yyyy-MM-dd H:mm:ss"}}
+  </div>
+</ion-item>
+
+<ion-item>
+<label>End Date</label>
+  <div class="item" ion-datetime-picker ng-model="datetimeValue">
+    {{datetimeValue| date: "yyyy-MM-dd H:mm:ss"}}
+  </div>
+</ion-item>
 
     </div>
 
   </label>
-
 
 <ion-item>
   <div class="row">
@@ -101,16 +124,17 @@
   </div>
 </ion-item>
 
-<hr>
 
 
-  <center>
+<center ng-controller="PopupCtrl">
+
     <button class="button button-assertive btnMargin " ng-click="showConfirm4()">
     Reset
     </button>
     <button class="button button-positive btnMargin" ng-click="showConfirm3()">
     Send
     </button>
+
   </center>
 </div>
 </form>
