@@ -1,10 +1,10 @@
- <ion-nav-bar class="bar-positive no-b">
-            
-            <ion-nav-back-button></ion-nav-back-button>
-</ion-nav-bar>
-<ion-view >
-    <ion-content padding="true" class="has-header materialize">
-        
+
+<ion-view title="Register">
+    <ion-content padding="true" class="has-header materialize" style="top:4px">
+        <div class="signup-screen">
+         <div class="text-center" style="margin-bottom: 5px;">
+            <div class="text-center"><img src="img/talents/talents.120x64-sidebar.png" class="text-center" /></div>
+         </div>
         <div class="item no-padding">
             <div class="row">
                 <div class="input-field col">
@@ -32,7 +32,8 @@
                 </div>
             </div>
             <div class="row">
-                <button class="btn waves-effect waves-light button button-energized  button-block waves-effect waves-light" ng-click="submitForm()">Register</button>
+                <button class="btn waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="goBack('login')">Back</button>&nbsp;
+                <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Register</button>
             </div>
 
         </div>

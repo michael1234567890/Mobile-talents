@@ -5,11 +5,15 @@ angular.module('myhr.controllers', [])
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
+    $scope.profile = {};
 
-    console.log(Main.getSession("token"));
 
     var successProfile = function (res){
-    	console.log(res);
+    	
+      $scope.profile = res;
+      $scope.profile.fullname = $scope.profile.firstName + " " + $scope.profile.lastName;
+      console.log($scope.profile);
+
     }
 
     var errorProfile = function (err, status){
@@ -53,6 +57,10 @@ angular.module('myhr.controllers', [])
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
+
+    $scope.goChangeMaritalStatus = function (idx) {
+      $state.go('app.changemaritalstatus',{'idx':idx});
+    };
 
     $scope.personal = {};
 
@@ -103,20 +111,45 @@ angular.module('myhr.controllers', [])
 
 
 
-.controller('FamilyCtrl', function($ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('FamilyCtrl', function($ionicHistory,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
   
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
 
     $scope.family = {};
+    $scope.goToDetails = function (idx) {
+      $state.go('app.detailfamily',{'idx':idx});
+    };
 
+    $scope.refresh = function(){
+      initMethod();
+    }
+
+    
+    $scope.goToAddFamily = function (page) {
+       
+        $state.go(page);
+        $ionicHistory.nextViewOptions({
+            disableAnimate: false,
+            disableBack: false
+        });
+    }
     console.log(Main.getSession("token"));
 
     var successRequest = function (res){
       $ionicLoading.hide();
       console.log(res);
       $scope.family = res;
+      $rootScope.family = [];
+      for(var i=0;i<$scope.family.length;i++) {
+        var obj = $scope.family[i];
+        obj.idx = i;
+        $rootScope.family.push(obj);
+      }
+      $scope.family = $rootScope.family;
+      $scope.$broadcast('scroll.refreshComplete');
+
     }
 
     var errorRequest = function (err, status){
@@ -156,17 +189,53 @@ angular.module('myhr.controllers', [])
       var urlApi = Main.getUrlApi() + '/api/myprofile/family';
       Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
     }
-    // Main.refreshToken("4c648f69-5158-4260-a47f-e7793c6a952e", resRefreshToken, errRefreshToken);
+    
 
 })
 
 
 
-.controller('AddFamilyCtrl', function($ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('DetailFamilyCtrl', function($stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
   
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
+
+    var familyIdx = $stateParams.idx;
+    $scope.family = {};
+    if(familyIdx != null)
+      $scope.family = $rootScope.family[familyIdx];
+    console.log(familyIdx);
+
+})
+
+
+
+.controller('AddFamilyCtrl', function($ionicHistory , $ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+  
+    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+        $state.go("login");
+    }
+
+    function goBack  (ui_sref) {
+        var currentView = $ionicHistory.currentView();
+        var backView = $ionicHistory.backView();
+
+        if (backView) {
+            //there is a back view, go to it
+            if (currentView.stateName == backView.stateName) {
+                //if not works try to go doubleBack
+                var doubleBackView = $ionicHistory.getViewById(backView.backViewId);
+                $state.go(doubleBackView.stateName, doubleBackView.stateParams);
+            } else {
+                backView.go();
+            }
+        } else {
+            $state.go(ui_sref);
+        }
+    }
+
+
     $scope.family = {};
     $scope.selectRelationship = {};
     $scope.selectBloodType = {};
@@ -183,6 +252,8 @@ angular.module('myhr.controllers', [])
         var accessToken = Main.getSession("token").access_token;
         var urlApi = Main.getUrlApi() + '/api/myprofile/family';
         var data = JSON.stringify($scope.family);
+
+        console.log(data);
         Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
 
         console.log($scope.family);
@@ -191,8 +262,9 @@ angular.module('myhr.controllers', [])
     var successRequest = function (res){
       $ionicLoading.hide();
       alert(res.message);
+      goBack('app.family');
       console.log(res);
-      $scope.family = res;
+      //$scope.family = res;
     }
 
     var errorRequest = function (err, status){
@@ -239,13 +311,32 @@ angular.module('myhr.controllers', [])
 
 
 
-.controller('AddressCtrl', function($ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('AddressCtrl', function($ionicHistory,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
   
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
 
+    $scope.refresh = function(){
+      initMethod();
+    }
+
+
     $scope.address = {};
+    
+    $scope.goToAddAddress = function () {
+       
+        $state.go('app.addaddress');
+        $ionicHistory.nextViewOptions({
+            disableAnimate: false,
+            disableBack: false
+        });
+    }
+
+    $scope.goToDetails = function (idx) {
+      $state.go('app.detailaddress',{'idx':idx});
+    };
+
 
     console.log(Main.getSession("token"));
 
@@ -253,6 +344,16 @@ angular.module('myhr.controllers', [])
       $ionicLoading.hide();
       console.log(res);
       $scope.address = res;
+      
+      $rootScope.address = [];
+      for(var i=0;i<$scope.address.length;i++) {
+        var obj = $scope.address[i];
+        obj.idx = i;
+        $rootScope.address.push(obj);
+      }
+      $scope.address = $rootScope.address;
+      $scope.$broadcast('scroll.refreshComplete');
+
     }
 
     var errorRequest = function (err, status){
@@ -281,7 +382,7 @@ angular.module('myhr.controllers', [])
     initMethod();
     //31acd2e6-e891-4628-a24e-58e408664516
     function initMethod(){
-      getAddress();
+      getAddress();      
     }
     // invalid access token error: "invalid_token" 401
     function getAddress(){
@@ -292,13 +393,12 @@ angular.module('myhr.controllers', [])
       var urlApi = Main.getUrlApi() + '/api/myprofile/address';
       Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
     }
-    // Main.refreshToken("4c648f69-5158-4260-a47f-e7793c6a952e", resRefreshToken, errRefreshToken);
 
 })
 
 
 
-.controller('AddAddressCtrl', function($ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('AddAddressCtrl', function($ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     
    
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
@@ -306,9 +406,31 @@ angular.module('myhr.controllers', [])
     }
     $scope.address = {};
     $scope.selectStayStatus = {};
+    $scope.selectProvince = [];
+    $scope.selectCity=[];
+    $scope.selectCountry=[];
     $scope.resetForm  = function(){
       $scope.address = {};
     }
+
+    function goBack  (ui_sref) {
+        var currentView = $ionicHistory.currentView();
+        var backView = $ionicHistory.backView();
+
+        if (backView) {
+            //there is a back view, go to it
+            if (currentView.stateName == backView.stateName) {
+                //if not works try to go doubleBack
+                var doubleBackView = $ionicHistory.getViewById(backView.backViewId);
+                $state.go(doubleBackView.stateName, doubleBackView.stateParams);
+            } else {
+                backView.go();
+            }
+        } else {
+            $state.go(ui_sref);
+        }
+    }
+
     $scope.submitForm = function(){
         verificationForm();
         $ionicLoading.show({
@@ -326,6 +448,7 @@ angular.module('myhr.controllers', [])
       $ionicLoading.hide();
       alert(res.message);
       console.log(res);
+      goBack("app.address");
       //$scope.family = res;
     }
 
@@ -356,6 +479,9 @@ angular.module('myhr.controllers', [])
     
     function initMethod(){
         $scope.selectStayStatus = [{id:"Owned"},{id:"Contract"},{id:"Live with parent"}];
+        $scope.selectProvince = [{id:"DKI Jakarta"},{id:"Jawa Barat"},{id:"Jawa Tengah"},{id:"Jawa Timur"}];
+        $scope.selectCity = [{id:"Jakarta Selatan"},{id:"Jakarta Utara"},{id:"Jakarta Barat"},{id:"Jakarta Timur"}];
+        $scope.selectCountry = [{id:"Indonesia"}];
     }
     // invalid access token error: "invalid_token" 401
     function verificationForm(){
@@ -367,27 +493,68 @@ angular.module('myhr.controllers', [])
 })
 
 
-.controller('CertificationCtrl', function($ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
-    /*$scope.certification = [{
-      name:"Salesforce.com Certification",
-      principle:"Salesforce",
-      expired:"3/24/2010",
-      number: "SF-01219873",
-      image: "img/certification.png"
-    }];
-*/
-  if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+
+.controller('DetailAddressCtrl', function($stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+  
+    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
 
-    $scope.certification = {};
+    var addressIdx = $stateParams.idx;
+    $scope.address = {};
+    if(addressIdx != null)
+      $scope.address = $rootScope.address[addressIdx];
+   
+})
 
-    console.log(Main.getSession("token"));
+
+
+.controller('CertificationCtrl', function($ionicHistory,$timeout,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+   
+  if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+        $state.go("login");
+  }
+
+  $scope.refresh = function(){
+    initMethod();
+  }
+
+    $scope.certification = {};
+    $scope.goToAdd = function () {
+       
+        $state.go('app.addcertification');
+        $ionicHistory.nextViewOptions({
+            disableAnimate: false,
+            disableBack: false
+        });
+    }
+
+
+    $scope.goToDetails = function (idx) {
+      $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner>'
+      });
+
+      $timeout(function () {
+          $ionicLoading.hide();
+           $state.go('app.detailcertification',{'idx':idx});
+      }, 1000);
+     
+    };
 
     var successRequest = function (res){
       $ionicLoading.hide();
       console.log(res);
       $scope.certification = res;
+      $rootScope.certification = [];
+      for(var i=0;i<$scope.certification.length;i++) {
+        var obj = $scope.certification[i];
+        obj.idx = i;
+        $rootScope.certification.push(obj);
+      }
+      $scope.certification = $rootScope.certification;
+      $scope.$broadcast('scroll.refreshComplete');
+
     }
 
     var errorRequest = function (err, status){
@@ -432,7 +599,7 @@ angular.module('myhr.controllers', [])
 
   })
 
-.controller('AddCertificationCtrl', function($ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('AddCertificationCtrl', function($ionicHistory,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
 
 
 
@@ -445,6 +612,25 @@ angular.module('myhr.controllers', [])
     $scope.resetForm  = function(){
       $scope.certification = {};
     }
+
+    function goBack  (ui_sref) {
+        var currentView = $ionicHistory.currentView();
+        var backView = $ionicHistory.backView();
+
+        if (backView) {
+            //there is a back view, go to it
+            if (currentView.stateName == backView.stateName) {
+                //if not works try to go doubleBack
+                var doubleBackView = $ionicHistory.getViewById(backView.backViewId);
+                $state.go(doubleBackView.stateName, doubleBackView.stateParams);
+            } else {
+                backView.go();
+            }
+        } else {
+            $state.go(ui_sref);
+        }
+    }
+
     $scope.submitForm = function(){
         verificationForm();
         $ionicLoading.show({
@@ -462,6 +648,7 @@ angular.module('myhr.controllers', [])
       $ionicLoading.hide();
       alert(res.message);
       console.log(res);
+      goBack("app.certification");
       //$scope.certification = res;
     }
 
@@ -501,4 +688,40 @@ angular.module('myhr.controllers', [])
 
 
 })
+
+
+
+
+.controller('DetailCertificationCtrl', function($stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+  
+    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+        $state.go("login");
+    }
+
+    var certificationIdx = $stateParams.idx;
+    $scope.certification = {};
+    if(certificationIdx != null)
+      $scope.certification = $rootScope.certification[certificationIdx];
+   
+})
+
+
+.controller('ChangeMaritalStatusCtrl', function($stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+  $scope.itens = [
+        { title: "Item 1", checked: false },
+        { title: "Item 2", checked: false },
+        { title: "Item 3", checked: false },
+    ];
+    
+    $scope.updateSelection = function(position, itens, title) {
+        angular.forEach(itens, function(subscription, index) {
+            if (position != index)
+                subscription.checked = false;
+                $scope.selected = title;
+            }
+        );
+    }
+
+})
+
 

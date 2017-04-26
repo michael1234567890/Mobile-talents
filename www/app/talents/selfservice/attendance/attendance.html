@@ -1,0 +1,26 @@
+<ion-view title="Attendance" class="bg-lightgrey">
+
+    <ion-content class="has-header bt-grey profile" scroll="true">
+        <div class="item no-padding" >
+                <!-- <map on-create="mapCreated(map)" id="map" coords="currentLocation" style="display: block;width: 100%; height: 250px;"></map>-->
+                 <div id="map" data-tap-disabled="true" style="position:relative;display:block;height:250px;width:100%"></div>
+        </div>
+        <div>
+            <center><h2>{{ clock | date :'HH:mm:ss'}}</h2>
+            <h4>{{attendance.address}}</h4>
+            </center>
+        </div>
+        
+         <div class="row" ng-if="actionStatus == 1">
+                <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="checkin()">Check In</button>
+        </div>
+
+        <div class="row" ng-if="actionStatus == 2">
+                <button class="btn waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="checkout()">Check Out</button>
+        </div>
+
+
+        
+    </ion-content>
+</ion-view>
+

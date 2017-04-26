@@ -3,21 +3,29 @@
        
         <div style="height:95%; overflow:scroll" class="bg-lightgrey">
             <div >
-                <div class="card hybrid" ng-repeat="post in news.items | filter: searchFilter  | orderBy: 'publishedDate':true " ui-sref="app.myteamdetail">
+                <div class="card hybrid" ng-repeat="post in team | filter: searchFilter  | orderBy: 'publishedDate':true " ng-click="goToDetails(post.idx)">
 
-                    <div class="item item-avatar">
-                        <img ng-src="{{post.image}}">
+                    <div class="item item-avatar item-icon-left item-icon-right">
+                        <img ng-src="img/1491892621_profle.png">
                         <div class="inner-content">
-                        <h2 class="balanced">{{post.author}}</h2>
-                        <p>Account Manager</p>
-                        <p>Sales Department</p>
+                        <h2 class="balanced">{{post.firstName}}</h2>
+                        <p>{{post.assignment.jobTitle.jobTitle}}</p>
+                        <p>{{post.assignment.division}}</p>
                         <span class="interact">
-                            Jakarta
+                            {{post.assignment.homeBase}}
                         </span>
                         
                         </div>
+                        <i class="icon ion-ios-arrow-right pull-right"></i>
                     </div>
                 </div>
+                <div class="item" ng-if="team.length == 0" >
+                    <div class="col col-100">
+                    <h2>No Team available</h2>
+                        <p>You may don't have any member</p>
+                    </div>  
+                </div>
+
             </div>
         </div>
     </ion-content>

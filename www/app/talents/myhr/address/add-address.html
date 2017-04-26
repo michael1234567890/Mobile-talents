@@ -4,9 +4,30 @@
         
         <div class="item no-padding">
             <div class="row">
+                <div class="input-field col s12">
+                    <textarea  ng-model="address.address" class="materialize-textarea"></textarea>
+                    <label for="textarea1">Address</label>
+                </div>
+            </div>
+             <div class="row">
+                <div class="input-field col s6">
+                    <input id="first_name" ng-model="address.rt" type="text" class="validate">
+                    <label for="first_name">RT</label>
+                </div>
+                <div class="input-field col s6">
+                    <input  type="text" ng-model="address.rw" class="validate">
+                    <label for="first_name">RW</label>
+                </div>
+        
+            </div>
+
+            <div class="row">
                 <div class="input-field col">
-                    <input ng-model="address.country" type="text" class="validate">
-                    <label for="first_name">Country</label>
+                      <p for="first_name">Country</p>
+                      <select ng-model="address.country">
+                            <option ng-repeat="country in selectCountry">{{country.id}}</option>
+                      </select>
+                    
                 </div>
                 
             </div>
@@ -26,23 +47,8 @@
                 </div>
 
             </div>
-            <div class="row">
-                <div class="input-field col s6">
-                    <input id="first_name" ng-model="address.rt" type="text" class="validate">
-                    <label for="first_name">RT</label>
-                </div>
-                <div class="input-field col s6">
-                    <input  type="text" ng-model="address.rw" class="validate">
-                    <label for="first_name">RW</label>
-                </div>
-        
-            </div>
-             <div class="row">
-                <div class="input-field col s12">
-                    <textarea  ng-model="address.address" class="materialize-textarea"></textarea>
-                    <label for="textarea1">Address</label>
-                </div>
-            </div>
+           
+             
             <div class="row">
                 <div class="input-field col">
                     <input ng-model="address.zipCode" type="text" class="validate">
@@ -66,10 +72,10 @@
                 </div>
             </div>
 
-             <div class="row">
-                <div class="col"><button style="width:120px" class="pull-right btn waves-effect waves-light button button-assertive waves-light">Reset</button></div>
-                    <div class="col"><button  ng-click="submitForm()" style="width:120px" class="pull-left btn waves-effect waves-light button button-balanced  waves-effect waves-light">Save</button></div>
-              <!-- <button class="btn waves-effect waves-light button button-positive  waves-effect waves-light" ng-click="gotoHome()">Send</button>-->
+            
+            <div class="row">
+                <button class="btn waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="resetForm()">Reset</button>&nbsp;
+                <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Submit</button>
             </div>
 
         </div>

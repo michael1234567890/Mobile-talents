@@ -1,12 +1,20 @@
 <ion-view title="My Certification">
-    <ion-content class="has-header" scroll="false">
+    
        
-        <div style="height:95%; overflow:scroll" class="bg-lightgrey">
-            <div >
-                <div class="card hybrid" ng-repeat="item in certification | filter: searchFilter  | orderBy: 'publishedDate':true " ui-sref="tabs.post-detail({post:post})">
+        <ion-content class="has-header" scroll="true">
+            <ion-refresher pulling-text="Pull to refresh"
+             refreshing-text="Loading..."
+             refreshing-icon="ion-loading-c"
+             pulling-icon="ion-ios7-arrow-thin-down"
+             on-refresh="refresh()">
+            </ion-refresher>
 
-                    <div class="item item-thumbnail-left item-text-wrap">
-                        <img ng-src="{{item.image}}">
+        <div  class="bg-lightgrey">
+          
+                <div class="card hybrid" ng-repeat="item in certification | filter: searchFilter  | orderBy: 'publishedDate':true " ng-click="goToDetails(item.idx)">
+
+                    <div class="item item-thumbnail-left item-icon-right item-text-wrap" >
+                        <img ng-src="img/1490867306_icon-138-certificate.png">
                         
                         <h2 class="lead text-small" style="padding-left:0px">{{item.name}}</h2>
                         <p><b>{{item.no}} </b> - {{item.principle}}</p>
@@ -17,13 +25,20 @@
                                 <i class="icon ion-ios-star-outline bl-grey"></i>
                                 <i class="icon ion-ios-trash-outline bl-grey"></i>
                         </span>-->
+                        <i class="icon ion-ios-arrow-right pull-right"></i>
                     </div>
                         
-                    </div>
                 </div>
+                <div class="item" ng-if="certification.length == 0" >
+                    <div class="col col-100">
+                    <h2>No Certification available</h2>
+                        <p>You may don't have any Certification</p>
+                    </div>  
+                </div>
+        
             </div>
         </div>
     </ion-content>
 
-    <a class="btn-floating btn-large waves-effect waves-light red lighten-1" style="position:fixed; bottom:3%;right:5%;z-index:999" ng-click="goTo('app.addcertification');"><i class="icons ion-plus"></i></a>
+    <a class="btn-floating btn-large waves-effect waves-light red lighten-1" style="position:fixed; bottom:3%;right:5%;z-index:999" ng-click="goToAdd();"><i class="icons ion-plus"></i></a>
 </ion-view>

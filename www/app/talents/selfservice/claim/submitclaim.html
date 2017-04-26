@@ -1,0 +1,81 @@
+<ion-view view-title="Submit Claim" class="header">
+
+ <ion-content padding="true" class="has-header materialize" scroll="true" style="font-size:12px">
+    <ion-list>
+
+
+<style>
+
+#rcorners2 {
+    border-radius: 25px;
+    border: 2px solid #335272;
+    padding: 20px; 
+
+}
+</style>     
+
+          
+<form class="col s12">
+
+<ion-item>
+ <div class="input-label"> Claim Type</div>
+      <div> 
+          <select class="browser-default">
+          <option value="" disabled selected>choose your option</option>
+          <option>Travel</option>
+          <option>Lunch Meeting</option>
+          <option>OverTime</option>
+        </select>
+     </div>
+</ion-item>
+
+
+
+<ion-item>
+    <h3>From Date</h3>
+      <div class="item" ion-datetime-picker ng-model="datetimeValue">
+        {{datetimeValue| date: "yyyy-MM-dd, H:mm"}}
+         <span class="text-large">{{startsAt| date: "H:mm a"}}</span></div>
+      </div>
+  
+
+</ion-item>
+
+
+<ion-item>
+      <h3>To Date</h3>
+        <div class="item" ion-datetime-picker ng-model="datetimeValue">
+          {{datetimeValue| date: "yyyy-MM-dd, H:mm"}}
+        </div>
+</ion-item>
+
+
+<ion-item>
+        <div class="input-field col s6">
+          <input id="last_name" type="text" class="validate" >
+          <label for="last_name">Amount</label>
+        </div>
+</ion-item>
+
+
+<ion-item>
+        <div class="input-field col s12">
+            <textarea id="textarea1" class="materialize-textarea" data-length="120"></textarea>
+            <label for="textarea1">Notes</label>
+          </div>
+</ion-item>
+
+
+            <div class="row">
+               
+                <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Send</button>
+            </div>
+
+</form>
+
+
+    </ion-list>
+  </ion-content>
+</ion-view>
+
+

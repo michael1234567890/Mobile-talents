@@ -4,15 +4,16 @@
         <div class="header">
             <img ng-src="{{user.photo}}">
             <!--<span class="badge badge-balanced">3</span>-->
-            <h2 class="lead text-medium">{{user.name}}</h2>
-            <p>{{user.city}}</p>
+            <h2 class="lead text-medium">{{profile.fullname}}</h2>
+            <p style="font-size:14px">{{profile.employeeTransient.assignment.jobTitle.jobTitle}}</p>
            
         </div>
         <div class="row height-33 no-padding text-center stable-bg">
             <div class="col no-padding">
                 <div class="card tile tile-large" ui-sref="app.biodata">
                     <div class="item item-text-wrap energized-bg light">
-                        <i class="icon ion-information-circled"></i>
+                        <!-- <i class="icon ion-information-circled"></i>-->
+                         <img src="img/talents/information-60x60.png"><br>
                         <span class="text-large">Information</span> 
                     </div>
                 </div>
@@ -20,7 +21,8 @@
             <div class="col no-padding">
                 <div class="card tile tile-large" ui-sref="app.family">
                     <div class="item item-text-wrap calm-bg light">
-                        <i class="icon ion-person-stalker"></i>
+                        <!--<i class="icon ion-person-stalker"></i>-->
+                         <img src="img/talents/family-60x60.png"><br>
                         <span class="text-large">Family</span>
                     </div>
                 </div>
@@ -31,7 +33,8 @@
             <div class="col no-padding">
                 <div class="card tile tile-large" ui-sref="app.address">
                     <div class="item item-text-wrap royal-bg light">
-                        <i class="icon ion-ios-chatboxes-outline"></i>
+                        <!--<i class="icon ion-ios-chatboxes-outline"></i>-->
+                        <img src="img/talents/address-60x60.png"><br>
                         <span class="text-large">Address</span> 
                     </div>
                 </div>
@@ -39,7 +42,7 @@
             <div class="col no-padding">
                 <div class="card tile tile-large" ui-sref="app.certification">
                     <div class="item item-text-wrap energized-bg light">
-                        <img src="img/talents/certification-60x60.png">
+                        <img src="img/talents/certification-60x60.png"><br>
                         <span class="text-large">Certificate</span> 
                     </div>
                 </div>

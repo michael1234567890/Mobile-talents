@@ -8,21 +8,21 @@
         <div class="header">
             <img ng-src="{{user.photo}}">
             <!--<span class="badge badge-balanced">3</span>-->
-            <h2 class="lead text-medium">{{user.name}}</h2>
+            <h2 class="lead text-medium">{{profile.employeeTransient.firstName}} {{profile.employeeTransient.middleName}} {{profile.employeeTransient.lastName}}</h2>
             <p>Account Manager</p>
         </div>
 
         <div class="list">
             <div class="item item-text-wrap" >
                 <h2 class="talents">Handphone</h2>
-                <p class="text-small" >0818032868</p>
+                <p class="text-small" >{{profile.employeeTransient.mobilePhone}}</p>
             </div>
             <div class="item item-text-wrap" >
                 <h2 class="talents">Email</h2>
-                <p class="text-small" >email@gmail.com</p>
+                <p class="text-small" >{{profile.employeeTransient.officeMail}}</p>
             </div>
             <div class="item item-text-wrap" >
-                <h2 class="talents">Report To</h2>
+                <h2 class="talents">Company</h2>
                 <p class="text-small" >Michele</p>
             </div>
         </div>

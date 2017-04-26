@@ -8,7 +8,6 @@
                     <input id="name" ng-model="certification.name" type="text" class="validate">
                     <label for="first_name">Certification Name</label>
                 </div>
-                
             </div>
              <div class="row">
                 <div class="input-field col s6">
@@ -16,6 +15,7 @@
                     <label for="first_name">No</label>
                 </div>
             </div>
+            <!--
             <div class="row">
                 <div class="input-field col">
                    <input  ng-model="certification.date" type="text" class="validate">
@@ -27,6 +27,7 @@
                     <label for="first_name">Exp Date</label>
                 </div>
             </div>
+        -->
             <div class="row">
                 <div class="input-field col">
                     <input  ng-model="certification.principle" type="text" class="validate">
@@ -45,14 +46,16 @@
                     <label for="textarea1">Type</label>
                 </div>
             </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <textarea  ng-model="address.description" class="materialize-textarea"></textarea>
+                    <label for="textarea1">Description</label>
+                </div>
+            </div>
             
              <div class="row">
-                <div class="col">
-                    <button style="width:120px" class="pull-right btn waves-effect waves-light button button-assertive waves-light">Reset</button>
-                </div>
-                    <div class="col"><button ng-click="submitForm()" style="width:120px" class="pull-left btn waves-effect waves-light button button-balanced  waves-effect waves-light">Send</button>
-                </div>
-              <!-- <button class="btn waves-effect waves-light button button-positive  waves-effect waves-light" ng-click="gotoHome()">Send</button>-->
+                <button class="btn waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="resetForm()">Reset</button>&nbsp;
+                <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Submit</button>
             </div>
 
         </div>

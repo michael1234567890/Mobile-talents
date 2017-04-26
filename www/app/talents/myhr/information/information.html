@@ -1,15 +1,23 @@
 <ion-view title="Profile" class="bg-lightgrey">
 
     <ion-nav-buttons side="right">
-        <button class="button button-dark button-clear icon ion-ios-compose-outline" ui-sref="app.edit-biodata"></button>
+        <!-- <button class="button button-dark button-clear icon ion-ios-compose-outline" ui-sref="app.edit-biodata"></button>-->
     </ion-nav-buttons>
 
     <ion-content class="has-header bt-grey profile" scroll="true">
-        <div class="header">
+        <!-- <div class="header">
             <img ng-src="{{user.photo}}">
             <!--<span class="badge badge-balanced">3</span>-->
-            <h2 class="lead text-medium">{{personal.firstName}}</h2>
-            <p>Account Manager</p>
+            <!-- <h2 class="lead text-medium">{{personal.firstName}} {{personal.lastName}}</h2>
+            <p style="font-size:14px">{{personal.assignment.jobTitle.jobTitle}}</p>
+        </div>-->
+        <div class="card hybrid">
+            <div class="item item-thumbnail-left item-text-wrap">
+                <img ng-src="{{user.photo}}">
+                <h2 class="lead text-medium">{{personal.firstName}} {{personal.middleName}} {{personal.lastName}}</h2>
+                <h3>{{personal.assignment.jobTitleName}}</h3>
+                <p style="font-size:14px">{{personal.assignment.division}}</p>
+            </div>
         </div>
 
         <div class="list">
@@ -20,6 +28,11 @@
             <div class="item item-text-wrap" >
                 <h2 class="talents">Date of Birth</h2>
                 <p class="text-small" >{{personal.birthDate}}</p>
+            </div>
+            <div class="item item-text-wrap item-icon-right" ng-click="goChangeMaritalStatus(personal.id)">
+                <h2 class="talents">Marital Status</h2>
+                <p class="text-small" >{{personal.maritalStatus}}</p>
+                <i class="icon ion-ios-arrow-right pull-right"></i>
             </div>
             <div class="item item-text-wrap" >
                 <h2 class="talents">Address</h2>
@@ -32,10 +45,6 @@
             <div class="item item-text-wrap" >
                 <h2 class="talents">Email</h2>
                 <p class="text-small" >{{personal.officeMail}}</p>
-            </div>
-            <div class="item item-text-wrap" >
-                <h2 class="talents">Report To</h2>
-                <p class="text-small" >Michele</p>
             </div>
         </div>
     </ion-content>

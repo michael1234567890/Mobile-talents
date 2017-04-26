@@ -1,31 +1,35 @@
 <ion-view title="My HR" class="bg-lightgrey">
 
     <ion-content class="has-header bt-grey profile" scroll="true">
-        <div class="header">
+
+    <div class="card hybrid">
+        <div class="item item-thumbnail-left item-text-wrap">
             <img ng-src="{{user.photo}}">
-            <!--<span class="badge badge-balanced">3</span>-->
-            <h2 class="lead text-medium">{{user.name}}</h2>
-            <p>{{user.city}}</p>
-           
+            <h2 class="lead text-medium">{{detail.fullName}}</h2>
+            <h3>{{detail.assignment.jobTitleName}}</h3>
+            <p style="font-size:14px">{{detail.assignment.division}}</p>
         </div>
-        <div class="row height-33 no-padding text-center stable-bg">
-            <div class="col no-padding">
-                <div class="card tile tile-large" ui-sref="tabs.components">
-                    <div class="item item-text-wrap energized-bg light">
-                        <i class="icon ion-android-exit"></i>
-                        <span class="text-large">Leave</span> 
-                    </div>
-                </div>
+    </div>
+    <div class="list">
+            <div class="item item-text-wrap" >
+                <h2 class="talents">Place of Birth</h2>
+                <p class="text-small" >{{detail.birthPlace}}</p>
             </div>
-            <div class="col no-padding">
-                <div class="card tile tile-large" ui-sref="app.family">
-                    <div class="item item-text-wrap calm-bg light">
-                        <i class="icon ion-person-stalker"></i>
-                        <span class="text-large">Family</span>
-                    </div>
-                </div>
+            <div class="item item-text-wrap" >
+                <h2 class="talents">Date of Birth</h2>
+                <p class="text-small" >{{detail.birthDate}}</p>
             </div>
-        </div>
+            
+            <div class="item item-text-wrap" >
+                <h2 class="talents">Handphone</h2>
+                <p class="text-small" >{{detail.mobilePhone}}</p>
+            </div>
+            <div class="item item-text-wrap" >
+                <h2 class="talents">Email</h2>
+                <p class="text-small" >{{detail.officeMail}}</p>
+            </div>
+    </div>
+   
         
     </ion-content>
 </ion-view>

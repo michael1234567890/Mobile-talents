@@ -74,6 +74,16 @@ angular.module('talent.routes', [])
         }
       })
 
+      .state('app.changemaritalstatus', {
+        url: '/changemaritalstatus',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/myhr/information/changemaritalstatus.html',
+            controller: 'ChangeMaritalStatusCtrl'
+          }
+        }
+      })
+
        .state('app.edit-biodata', {
         url: '/edit-biodata',
         views: {
@@ -106,6 +116,17 @@ angular.module('talent.routes', [])
         }
       })
 
+      .state('app.detailfamily', {
+        url: '/detailfamily/:idx',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/myhr/family/detail-family.html',
+            controller: 'DetailFamilyCtrl'
+          }
+        }
+      })
+
+
       
        .state('app.certification', {
         url: '/certification',
@@ -126,6 +147,58 @@ angular.module('talent.routes', [])
           }
         }
       })
+
+
+       .state('app.detailcertification', {
+        url: '/detailcertification/:idx',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/myhr/certification/detail-certification.html',
+            controller: 'DetailCertificationCtrl'
+          }
+        }
+      })
+
+       .state('app.selfservice', {
+        url: '/selfservice',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/selfservice-home.html',
+            controller: 'SelfServiceCtrl'
+          }
+        }
+      })
+
+       .state('app.submitattendance', {
+        url: '/submitattendance',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/attendance/attendance.html',
+            controller: 'SubmitAttendanceCtrl'
+          }
+        }
+      })
+
+       .state('app.submitpayslip', {
+        url: '/submitpayslip',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/payslip/submitpayslip.html',
+            controller: 'SubmitPayslipCtrl'
+          }
+        }
+      })
+
+       .state('app.submitclaim', {
+        url: '/submitclaim',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/claim/submitclaim.html',
+            controller: 'SubmitClaimCtrl'
+          }
+        }
+      })
+
 
 
       .state('app.changepassword', {
@@ -158,6 +231,16 @@ angular.module('talent.routes', [])
         }
       })
 
+       .state('app.detailaddress', {
+        url: '/detailaddress/:idx',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/myhr/address/detail-address.html',
+            controller: 'DetailAddressCtrl'
+          }
+        }
+      })
+
 
 
       .state('app.home', {
@@ -175,17 +258,17 @@ angular.module('talent.routes', [])
         views: {
           'menuContent': {
             templateUrl: 'app/talents/myteam/myteam-home.html',
-            controller: 'appCtrl'
+            controller: 'MyTeamCtrl'
           }
         }
       })
 
       .state('app.myteamdetail', {
-        url: '/myteamdetail',
+        url: '/myteamdetail/:idx',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/myteam/myteam-detail-home.html',
-            controller: 'appCtrl'
+            controller: 'DetailTeamCtrl'
           }
         }
       })
@@ -206,7 +289,7 @@ angular.module('talent.routes', [])
         views: {
           'menuContent': {
             templateUrl: 'app/talents/profile/profile.html',
-            controller: 'appCtrl'
+            controller: 'ProfileCtrl'
           }
         }
       })
@@ -223,75 +306,12 @@ angular.module('talent.routes', [])
       })
 
 
-       .state('app.submitClaim', {
-        url: '/submitClaim',
-        views: {
-          'menuContent': {
-            templateUrl: 'app/talents/claim/submitClaim.html',
-            controller: 'submitClaimCtrl'
-          }
-        }
-      })
-
-
-       .state('app.claimList', {
-        url: '/claimList',
-        views: {
-          'menuContent': {
-            templateUrl: 'app/talents/claim/claimList.html',
-            controller: 'claimListCtrl'
-          }
-        }
-      })
-
-
-       .state('app.attendance', {
-        url: '/attendance',
-        views: {
-          'menuContent': {
-            templateUrl: 'app/talents/attendance/attendance.html',
-            controller: 'attendCtrl'
-          }
-        }
-      })
-
-
        .state('app.support', {
         url: '/support',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/others/support.html',
             controller: 'SupportCtrl'
-          }
-        }
-      })
-
-       .state('app.leaveRequest', {
-        url: '/leaveRequest',
-        views: {
-          'menuContent': {
-            templateUrl: 'app/talents/leave/leaveRequest.html',
-            controller: 'leaveRequestCtrl'
-          }
-        }
-      })
-
-       .state('app.requestLeave', {
-        url: '/requestLeave',
-        views: {
-          'menuContent': {
-            templateUrl: 'app/talents/leave/requestLeave.html',
-            controller: 'requestLeaveCtrl'
-          }
-        }
-      })
-
-       .state('app.approval', {
-        url: '/approval',
-        views: {
-          'menuContent': {
-            templateUrl: 'app/talents/leave/approval.html',
-            controller: 'approvalCtrl'
           }
         }
       })
