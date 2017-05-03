@@ -169,6 +169,48 @@ angular.module('talent.routes', [])
         }
       })
 
+       .state('app.homeleave', {
+        url: '/homeleave',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/leave/home-leave.html',
+            controller: 'HomeLeaveCtrl'
+          }
+        }
+      })
+
+       .state('app.chooseleavetype', {
+        url: '/chooseleavetype',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/leave/choose-leave-type.html',
+            controller: 'ChooseLeaveCtrl'
+          }
+        }
+      })
+
+
+      .state('app.addleave', {
+        url: '/addleave/:idx',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/leave/add-leave.html',
+            controller: 'AddLeaveCtrl'
+          }
+        }
+      })
+
+      .state('app.leave', {
+        url: '/leave',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/leave/leave.html',
+            controller: 'ListLeaveCtrl'
+          }
+        }
+      })
+
+
        .state('app.submitattendance', {
         url: '/submitattendance',
         views: {
@@ -206,7 +248,7 @@ angular.module('talent.routes', [])
         views: {
           'menuContent': {
             templateUrl: 'app/talents/profile/change-password.html',
-            controller: 'appCtrl'
+            controller: 'ChangePasswordCtrl'
           }
         }
       })
@@ -269,6 +311,16 @@ angular.module('talent.routes', [])
           'menuContent': {
             templateUrl: 'app/talents/myteam/myteam-detail-home.html',
             controller: 'DetailTeamCtrl'
+          }
+        }
+      })
+
+       .state('app.requestapproval', {
+        url: '/requestapproval',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/myteam/request-approval.html',
+            controller: 'RequestApprovalCtrl'
           }
         }
       })
