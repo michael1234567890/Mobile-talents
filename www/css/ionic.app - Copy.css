@@ -3009,7 +3009,7 @@ time, mark, audio, video {
   border: 0;
   vertical-align: baseline;
   font: inherit;
-  font-size: 90%; }
+  font-size: 100%; }
 
 ol, ul {
   list-style: none; }
@@ -5705,7 +5705,7 @@ ion-tabs.tabs-striped.tabs-color-active-dark .tab-item.tab-item-active, ion-tabs
   display: block;
   margin: -1px;
   padding: 16px;
-  border-width: 0px;
+  border-width: 1px;
   border-style: solid;
   font-size: 16px; }
   .item h2 {
@@ -9090,7 +9090,7 @@ a.button {
   -ms-flex: 1;
   flex: 1;
   display: block;
-  padding: 0px;
+  padding: 5px;
   width: 100%; }
 
 /* Vertically Align Columns */
