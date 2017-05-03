@@ -1,0 +1,41 @@
+<ion-view title="Request" class="bg-lightgrey">
+
+    <ion-content class="has-header bt-grey profile" scroll="true">
+    <ion-refresher pulling-text="Pull to refresh"
+             refreshing-text="Loading..."
+             refreshing-icon="ion-loading-c"
+             pulling-icon="ion-ios7-arrow-thin-down"
+             on-refresh="refresh()">
+            </ion-refresher>
+   <div class="card" ng-repeat="item in requests | filter: searchFilter ">
+            <div class="item item-avatar item-text-wrap" ng-if="item.task=='CHANGEMARITALSTATUS'" >
+                <img ng-src="img/1491892511_profle.png">
+                <h2 class="lead">{{item.employeeRequest.firstName}}</h2>
+                <p>{{item.taskDescription}}</p>
+                <p class="text-smaller" am-time-ago="item.modifiedDate"></p>
+                <div class="card-action pull-right">
+                    <button class="waves-effect waves-light btn button-calm" ng-click="approval('rejected',{{item.id}})">Reject</button>&nbsp;&nbsp;
+                    <button class="waves-effect waves-light btn button-balanced" ng-click="approval('approved',{{item.id}})">Approve</button>
+                </div>
+            </div>
+            <div class="item item-avatar item-text-wrap" ng-if="item.task=='SUBMITLEAVE'" >
+                <img ng-src="img/1491892511_profle.png">
+                <h2 class="lead">{{item.employeeRequest.firstName}} {{item.employeeRequest.lastName}}</h2>
+                <p>{{item.ref.startDate}} - {{item.ref.endDate}}</p>
+                <p>{{item.ref.comment}}</p>
+                <p class="text-smaller" am-time-ago="item.modifiedDate"></p>
+                <div class="card-action pull-right">
+                    <button class="waves-effect waves-light btn button-calm" ng-click="approval('rejected',{{item.id}})">Reject</button>&nbsp;&nbsp;
+                    <button class="waves-effect waves-light btn button-balanced" ng-click="approval('approved',{{item.id}})">Approve</button>
+                </div>
+            </div>
+
+    </div>
+    <div class="item" ng-if="requests.length == 0" >
+                    <div class="col col-100">
+                        <h2>No request available</h2>
+                        <p>You may don't have any request need your approval</p>
+                    </div>  
+            </div>
+    </ion-content>
+</ion-view>

@@ -616,7 +616,6 @@ angular.module('myhr.controllers', [])
     function goBack  (ui_sref) {
         var currentView = $ionicHistory.currentView();
         var backView = $ionicHistory.backView();
-
         if (backView) {
             //there is a back view, go to it
             if (currentView.stateName == backView.stateName) {
@@ -708,18 +707,84 @@ angular.module('myhr.controllers', [])
 
 .controller('ChangeMaritalStatusCtrl', function($stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
   $scope.itens = [
-        { title: "Item 1", checked: false },
-        { title: "Item 2", checked: false },
-        { title: "Item 3", checked: false },
+        { title: "Single", checked: false },
+        { title: "Married", checked: false },
+        { title: "Divorce", checked: false },
     ];
+
+    console.log(Main.getSession("profile"));
     
     $scope.updateSelection = function(position, itens, title) {
+      
         angular.forEach(itens, function(subscription, index) {
             if (position != index)
                 subscription.checked = false;
                 $scope.selected = title;
             }
         );
+    }
+
+    function goBack  (ui_sref) {
+        var currentView = $ionicHistory.currentView();
+        var backView = $ionicHistory.backView();
+        if (backView) {
+            //there is a back view, go to it
+            if (currentView.stateName == backView.stateName) {
+                //if not works try to go doubleBack
+                var doubleBackView = $ionicHistory.getViewById(backView.backViewId);
+                $state.go(doubleBackView.stateName, doubleBackView.stateParams);
+            } else {
+                backView.go();
+            }
+        } else {
+            $state.go(ui_sref);
+        }
+    }
+
+    var successRequest = function (res){
+      $ionicLoading.hide();
+      alert(res.message);
+      console.log(res);
+      goBack("app.biodata");
+      //$scope.certification = res;
+    }
+
+    var errorRequest = function (err, status){
+      $ionicLoading.hide();
+      if(status == 401) {
+        var refreshToken = Main.getSession("token").refresh_token
+        console.log("need refresh token");
+        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
+      }else {
+        alert("Check your connection");
+      }
+      console.log(err);
+      console.log(status);
+    }
+
+    var successRefreshToken = function(res){
+      Main.setSession("token",res);
+      console.log("token session");
+      console.log(Main.getSession("token"));
+    }
+    var errRefreshToken = function(err, status) {
+      console.log(err);
+      console.log(status);
+    }
+
+
+    $scope.send = function (){
+       var idRef = Main.getSession("profile").employee;
+       var jsonData = '{"maritalStatus":"'+$scope.selected+'"}';
+       var dataStr = {task:"CHANGEMARITALSTATUS",data:jsonData,idRef:idRef};
+       $ionicLoading.show({
+          template: 'Submit Request...'
+        });
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval';
+        var data = JSON.stringify(dataStr);
+        Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
+
     }
 
 })

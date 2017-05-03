@@ -6,12 +6,22 @@
 
     <ion-content class="has-header bt-grey profile" scroll="true">
         <ion-list>
-            <ion-item class="item-checkbox" ng-repeat="item in itens">
+           <!--  <ion-checkbox class="item-checkbox" ng-repeat="item in itens">
                 <label class="checkbox">
                     <input type="checkbox" ng-model="item.checked" ng-click="updateSelection($index, itens, item.title)">
                 </label>
                 {{ item.title }}
-            </ion-item>
+            </ion-checkbox>-->
+             <ion-checkbox ng-repeat="item in itens"
+                      ng-model="item.checked" 
+                      ng-checked="item.checked" ng-click="updateSelection($index, itens, item.title)">
+            {{ item.title }}
+            </ion-checkbox>
+
+            <div class="row">
+                <button class="btn waves-effect waves-light button button-positive button-block waves-effect waves-light" ng-click="send()">Send</button>
+            </div>
         </ion-list>
+
     </ion-content>
 </ion-view>

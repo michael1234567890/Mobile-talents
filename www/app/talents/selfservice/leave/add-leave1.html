@@ -1,0 +1,80 @@
+<ion-view title="My Team">
+    <ion-content class="has-header" scroll="false">
+       
+        <div style="height:95%; overflow:scroll" class="bg-lightgrey">
+            
+ <style>
+        .change{
+            border-color: white;
+            padding: 5px;
+        }
+</style>
+   
+<form>
+
+
+
+  <center>
+    <button class="button button-small button-stable">
+    Used Leave
+    </button>
+    
+    {{absents.Used}}
+        <button class="button button-small button-stable">
+    Available leave
+    </button>
+    
+    {{absents.Available}}
+    
+  </center>
+
+<br>
+
+<ion-item class="change">
+ <h2 class="input-label">Leave Type</h2>
+      <div> 
+            <select disabled>
+          <option>Casual</option>
+        </select>
+     </div>
+
+       <br>
+
+<h2>From Date</h2>
+<onezone-datepicker datepicker-object="onezoneDatepicker">
+    <button class="button button-block button-outline button-positive show-onezone-datepicker">
+        {{onezoneDatepicker.date | date:'dd-MM-yyyy'}} 
+    </button>
+</onezone-datepicker>
+
+<h2>To Date</h2>
+<onezone-datepicker datepicker-object="onezoneDatepicker2">
+    <button class="button button-block button-outline button-positive show-onezone-datepicker">
+        {{onezoneDatepicker2.date | date:'dd-MM-yyyy'}} 
+    </button>
+</onezone-datepicker>
+
+</ion-item>
+
+
+  <div class="row">
+    <form class="col s12">
+      <div class="row">
+        <div class="input-field col s6">
+          <textarea id="icon_prefix2" class="materialize-textarea"></textarea>
+          <label for="icon_prefix2">Notes</label>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+            <div class="row">
+                <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Submit</button>
+            </div>
+
+</div>
+</form>
+        </div>
+    </ion-content>
+</ion-view>

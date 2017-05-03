@@ -1,0 +1,20 @@
+<ion-view title="Leave Request">
+    <ion-content padding="true" class="has-header materialize" scroll="true">
+        <div  class="bg-lightgrey">
+                <p class="bb text-large padding uppercase">Select Leave Type</p>
+                <br>
+                 <div class="card hybrid" ng-repeat="item in entitlement | filter: searchFilter  | orderBy: 'publishedDate':true " ng-click="goToLeave(item.idx)">
+                    <div class="item item-text-wrap item-icon-right">
+                        
+                        <h2 class="lead text-small" style="padding-left:0px">{{item.leaveTypeObj.name}}</h2>
+                        <p>Balance : {{item.noOfDays}}</p>
+                        <p>Used    : <b>{{item.daysUsed}}</b></p>
+                        <i class="icon ion-ios-arrow-right pull-right"></i>
+                    </div>
+                    
+                 </div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

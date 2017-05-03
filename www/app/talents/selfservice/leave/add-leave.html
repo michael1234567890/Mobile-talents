@@ -1,0 +1,42 @@
+<style>
+        .change{
+            border-color: white;
+            padding: 10px;
+        }
+</style>
+
+<ion-view title="My Team">
+    <ion-content class="has-header" scroll="false">
+
+      <div style="height:95%; overflow:scroll" class="bg-lightgrey">
+        <ion-item class="change bg-lightgrey">
+          <p class="bb text-large padding uppercase">{{leaveType.leaveTypeObj.name}}</p>
+          <div class="row no-padding text-center bt-grey bb-grey" style="height:44px">
+            <div class="col col-25"><p class="bb text-medium padding uppercase">Balance</p></div>
+            <div class="col col-25"><p class="bb text-large padding uppercase">{{leaveType.noOfDays}}</p></div>
+            <div class="col col-25 bl-grey"><p class="bb text-medium padding uppercase">Used</p></div>
+            <div class="col col-25 bl-grey"><p class="bb text-large padding uppercase">{{leaveType.daysUsed}}</p></div>
+        </div>
+        <br/><br/>
+          <h2>From Date</h2>
+          <onezone-datepicker datepicker-object="onezoneDatepicker">
+          <button class="button button-block button-outline button-positive show-onezone-datepicker">
+              {{onezoneDatepicker.date | date:'yyyy-MM-dd'}} 
+          </button>
+          </onezone-datepicker>
+
+          <h2>To Date</h2>
+          <onezone-datepicker datepicker-object="onezoneDatepicker2">
+          <button class="button button-block button-outline button-positive show-onezone-datepicker">
+              {{onezoneDatepicker2.date | date:'yyyy-MM-dd'}} 
+          </button>
+          </onezone-datepicker>
+          <h2>Comment</h2>
+          <textarea style="border-color:#1479c9" ng-model="leave.comment"></textarea>
+          <div class="row">
+                 <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="sendRequestLeave()">Send</button>
+            </div>
+        </ion-item>
+      </div>
+    </ion-content>
+</ion-view>

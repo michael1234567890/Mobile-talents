@@ -1,0 +1,35 @@
+<ion-view title="My Leaves">
+    <ion-content class="has-header" scroll="true">
+        <ion-refresher pulling-text="Pull to refresh"
+             refreshing-text="Loading..."
+             refreshing-icon="ion-loading-c"
+             pulling-icon="ion-ios7-arrow-thin-down"
+             on-refresh="refresh()">
+            </ion-refresher>
+        <div  class="bg-lightgrey">
+            <div >
+                <div class="card" ng-repeat="item in leaves | filter: searchFilter  | orderBy: 'publishedDate':true " ng-click="goToDetails(item.idx)">
+
+                    <div class="item item-text-wrap item-icon-right">
+                        
+                        <h2 class="lead text-small" style="padding-left:0px">{{item.leaveTypeName}}</h2>
+                        <p>{{item.startDate}} -  {{item.endDate}}</p>
+                        <p><b>{{item.status}}</b></p>
+                        
+                    </div>
+                    
+                 </div>
+                 <div class="item" ng-if="leaves.length == 0" >
+                    <div class="col col-100">
+                    <h2>No Leaves available</h2>
+                        <p>You may don't have any leaves</p>
+                    </div>  
+                </div>
+
+                </div>
+            </div>
+        </div>
+    </ion-content>
+
+    <a class="btn-floating btn-large waves-effect waves-light red lighten-1" style="position:fixed; bottom:3%;right:5%;z-index:999" ng-click="goToAddAddress();"><i class="icons ion-plus"></i></a>
+</ion-view>

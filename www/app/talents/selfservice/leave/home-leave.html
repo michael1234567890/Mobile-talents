@@ -1,0 +1,90 @@
+<ion-view title="Leaves">
+    <ion-content class="has-header" scroll="false">
+        <div style="height:95%; overflow:scroll" class="bg-lightgrey">
+            <div >
+                 <div class="card">
+                     <div class="item item-divider" >My Leave Balance</div>
+                     <div class="item">
+                         <div class="row height-33 no-padding text-center stable-bg">
+                        <div class="col no-padding">
+                            <div class="card tile tile-small ">
+                                <div class="item item-text-wrap energized-bg light">
+                                    <!-- <i class="icon ion-information-circled"></i>-->
+                                     <h1>15</h1>
+                                    <span class="text-large">Requested</span> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col no-padding">
+                            <div class="card tile tile-small ">
+                                <div class="item item-text-wrap calm-bg light">
+                                    <!--<i class="icon ion-person-stalker"></i>-->
+                                     <h1>10</h1>
+                                    <span class="text-large">Approved</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col no-padding">
+                            <div class="card tile tile-small ">
+                                <div class="item item-text-wrap royal-bg light">
+                                    <!--<i class="icon ion-person-stalker"></i>-->
+                                     <h1>2</h1>
+                                    <span class="text-large">Rejected</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    </div>
+                </div>
+
+                 <div class="card">
+                    <div class="item item-divider" >Quick Action</div>
+                    <div class="item">
+                     <div class="row height-10 no-padding text-center stable-bg">
+                        <div class="col no-padding">
+                            <div class="card tile tile-small " ui-sref="app.leave">
+                                <div class="item item-text-wrap energized-bg light">
+                                    <!-- <i class="icon ion-information-circled"></i>-->
+                                     <img src="img/talents/attendance-48x48.png"><br>
+                                    <span class="text-large">List Leave</span> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col no-padding">
+                            <div class="card tile tile-small " ui-sref="app.chooseleavetype">
+                                <div class="item item-text-wrap calm-bg light">
+                                    <!--<i class="icon ion-person-stalker"></i>-->
+                                     <img src="img/talents/leave-48x48.png"><br>
+                                    <span class="text-large">Add Leave</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    </div>
+                </div>
+                <div class="item item-divider" >Waiting Approval Leave</div>
+                <div class="list" ng-repeat="item in leaves">
+                    
+                    <div class="item">
+                        
+                        <h2 class="lead text-small" style="padding-left:0px">{{item.leaveTypeName}}</h2>
+                        <p>{{item.startDate}} -  {{item.endDate}}</p>
+                        <p><b>{{item.status}}</b></p>
+                    </div>
+
+                    <div class="item" ng-if="leave.length == 0">
+                        <div class="col col-100">
+                            <h3>No request available</h3>
+                            <p>You may don't have pending leave request</p>
+                        </div>  
+                    </div>
+
+                </div>
+    </ion-content>
+
+                </div>
+
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
