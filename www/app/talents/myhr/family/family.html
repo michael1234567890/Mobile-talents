@@ -13,10 +13,13 @@
                     <div class="item item-avatar item-icon-left item-icon-right">
                         <img ng-src="img/users/female.png">
                         <div class="inner-content">
-                        <h2 class="balanced">{{item.name}}</h2>
-                        <p>{{item.relationship}}</p>
+                            <h2 class="balanced">{{item.name}}</h2>
+                            <p>{{item.relationship}}</p>
                         
                         </div>
+                        <span class="item-note calm" ng-if="item.status=='pending'">
+                          Pending
+                        </span>
                         <i class="icon ion-ios-arrow-right pull-right"></i>
                     </div>
                 </div>

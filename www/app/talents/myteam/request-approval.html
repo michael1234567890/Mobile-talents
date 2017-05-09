@@ -6,11 +6,11 @@
              refreshing-icon="ion-loading-c"
              pulling-icon="ion-ios7-arrow-thin-down"
              on-refresh="refresh()">
-            </ion-refresher>
+    </ion-refresher>
    <div class="card" ng-repeat="item in requests | filter: searchFilter ">
-            <div class="item item-avatar item-text-wrap" ng-if="item.task=='CHANGEMARITALSTATUS'" >
+            <div class="item item-avatar item-text-wrap" ng-if="item.task=='SUBMITFAMILY'" ng-click="gotoDetailRequest(1)" >
                 <img ng-src="img/1491892511_profle.png">
-                <h2 class="lead">{{item.employeeRequest.firstName}}</h2>
+                <h2 class="lead">{{item.employeeRequest.fullName}}</h2>
                 <p>{{item.taskDescription}}</p>
                 <p class="text-smaller" am-time-ago="item.modifiedDate"></p>
                 <div class="card-action pull-right">
@@ -18,16 +18,41 @@
                     <button class="waves-effect waves-light btn button-balanced" ng-click="approval('approved',{{item.id}})">Approve</button>
                 </div>
             </div>
-            <div class="item item-avatar item-text-wrap" ng-if="item.task=='SUBMITLEAVE'" >
+            <div class="item item-avatar item-text-wrap" ng-if="item.task=='CHANGEMARITALSTATUS'" ng-click="gotoDetailRequest(1)" >
                 <img ng-src="img/1491892511_profle.png">
-                <h2 class="lead">{{item.employeeRequest.firstName}} {{item.employeeRequest.lastName}}</h2>
-                <p>{{item.ref.startDate}} - {{item.ref.endDate}}</p>
-                <p>{{item.ref.comment}}</p>
+                <h2 class="lead">{{item.employeeRequest.fullName}}</h2>
+                <p>{{item.taskDescription}}</p>
                 <p class="text-smaller" am-time-ago="item.modifiedDate"></p>
                 <div class="card-action pull-right">
                     <button class="waves-effect waves-light btn button-calm" ng-click="approval('rejected',{{item.id}})">Reject</button>&nbsp;&nbsp;
                     <button class="waves-effect waves-light btn button-balanced" ng-click="approval('approved',{{item.id}})">Approve</button>
                 </div>
+            </div>
+            
+            <div class="item item-text-wrap" ng-if="item.task=='SUBMITLEAVE'" ng-click="gotoDetailRequest(1)" >
+                <div class="row">
+                    <div class="col col-10"><img ng-src="img/1491892511_profle.png"></div>
+                    <div class="col col-80" style="valign:center"><h2 class="lead">{{item.employeeRequest.firstName}} {{item.employeeRequest.lastName}}</h2></div>
+                    <div class="col col-10"><p class="text-smaller pull-right" style="right:32px" am-time-ago="item.modifiedDate"></p></div>
+                </div>
+                <div class="row item">
+                    <div class="col col-10"><span class="item item-icon-left" >
+                        <i class="icon ion-ios-list-outline"></i>
+    
+                    </span> </div>
+                    <div class="col col-80">{{item.ref.leaveTypeName}}</div>
+                    <div class="col col-10"></div>
+                </div>
+                <div class="row">
+                    <div class="col col-10"><span class="item item-icon-left" ><i class="icon ion-ios-calendar-outline"></i></span> </div>
+                    <div class="col col-80"><p>{{item.ref.startDate}} - {{item.ref.endDate}}</p></div>
+                    <div class="col col-10"><span class="badge badge-balanced" style="top:50px">{{item.ref.days}}</span></div>
+                </div>
+
+                <div class="card-action pull-right">
+                    <button class="waves-effect waves-light btn button-calm" ng-click="approval('rejected',{{item.id}})">Reject</button>&nbsp;&nbsp;
+                    <button class="waves-effect waves-light btn button-balanced" ng-click="approval('approved',{{item.id}})">Approve</button>
+                </div><br>
             </div>
 
     </div>

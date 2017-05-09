@@ -4,7 +4,7 @@
     <ion-content padding="true" class="has-header materialize" scroll="true" style="font-size:12px">
         
         <form class="col s12">
-            
+           <div class="item item-divider">Information</div> 
             <div class="row">
                 <div class="input-field col">
                     <input id="first_name" type="text" class="validate" ng-model="family.name">
@@ -35,15 +35,15 @@
                 <div class="input-field col">
                    
                   <p style="font-size:13px">Relationship</p>
-                   <select ng-model="family.relationship">
+                   <select class="select-dropdown" ng-model="family.relationship" style="display:none">
                         <option ng-repeat="relationship in selectRelationship">{{relationship.id}}</option>
                   </select>
 
-                </div>
+                </div>&nbsp;&nbsp;
                 <div class="input-field col">
                    
                   <p style="font-size:13px">Gender</p>
-                   <select ng-model="family.gender">
+                   <select class="select-dropdown" ng-model="family.gender" style="display:none">
                         <option ng-repeat="gender in selectGender">{{gender.id}}</option>
                   </select>
 
@@ -55,14 +55,14 @@
             <div class="row">
                 <div class="input-field col">
                   <p for="first_name" style="font-size:13px">Marital Status</p>
-                  <select ng-model="family.maritalStatus">
+                  <select class="select-dropdown" ng-model="family.maritalStatus" style="display:none">
                         <option ng-repeat="maritalStatus in selectMaritalStatus">{{maritalStatus.id}}</option>
                   </select>
                     
-                </div>
+                </div>&nbsp;&nbsp;
                 <div class="input-field col">
                   <p for="first_name" style="font-size:13px">Blood Type</p>
-                  <select ng-model="family.bloodType">
+                  <select class="select-dropdown" ng-model="family.bloodType" style="display:none">
                         <option ng-repeat="bloodType in selectBloodType">{{bloodType.id}}</option>
                   </select>
                     
@@ -81,14 +81,13 @@
                     <label for="first_name">Phone</label>
                 </div>
             </div>
-
-            
-
-            
-            
-             <div class="row">
-                <button class="btn waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="resetForm()">Reset</button>&nbsp;
-                <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Submit</button>
+            <div class="item item-divider">Attach Document Support</div> 
+            <div class="row center">
+                <div class="col" style="min-height:90px"><a ng-click="takePicture()"><img ng-src="{{image}}" height="90px" ></a></div>
+            </div>
+            <div class="row">
+                
+                <button class="btn waves-effect button-small waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Submit</button>
             </div>
         </form>
     </ion-content>

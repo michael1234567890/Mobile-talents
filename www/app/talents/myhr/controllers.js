@@ -211,13 +211,49 @@ angular.module('myhr.controllers', [])
 
 
 
-.controller('AddFamilyCtrl', function($ionicHistory , $ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('AddFamilyCtrl', function($cordovaCamera,$ionicHistory , $ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
   
+    $(document).ready(function() {
+        $('select').material_select();
+    });
+
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
 
-    function goBack  (ui_sref) {
+   
+
+    $scope.image = "img/placeholder.png";
+    $scope.family = {};
+    $scope.selectRelationship = {};
+    $scope.selectBloodType = {};
+    $scope.selectGender = [];
+    $scope.selectMaritalStatus = [];
+    $scope.imageData = null;
+
+
+    $scope.takePicture = function(){
+        var options = {
+            quality: 100,
+            destinationType: Camera.DestinationType.DATA_URL,
+            sourceType: Camera.PictureSourceType.CAMERA,
+            targetWidth : 750,
+            targetHeight:550,
+            encodingType: Camera.EncodingType.JPEG,
+            saveToPhotoAlbum: true,
+            correctOrientation:true
+        };
+
+        $cordovaCamera.getPicture(options).then(function (imageData) {
+            $scope.image = "data:image/jpeg;base64," + imageData;
+            $scope.imageData = imageData;
+        }, function (err) {
+            // An error occured. Show a message to the user
+            alert("an error occured while take picture");
+        });
+    }
+
+     function goBack  (ui_sref) {
         var currentView = $ionicHistory.currentView();
         var backView = $ionicHistory.backView();
 
@@ -235,12 +271,6 @@ angular.module('myhr.controllers', [])
         }
     }
 
-
-    $scope.family = {};
-    $scope.selectRelationship = {};
-    $scope.selectBloodType = {};
-    $scope.selectGender = [];
-    $scope.selectMaritalStatus = [];
     $scope.resetForm  = function(){
       $scope.family = {};
     }
@@ -249,10 +279,14 @@ angular.module('myhr.controllers', [])
         $ionicLoading.show({
           template: 'Processing...'
         });
+        var attachment = [];
+        var objAttchament = {"image":$scope.imageData};
+        attachment.push(objAttchament);
+        if($scope.imageData != null)
+          $scope.family.attachments = attachment;
         var accessToken = Main.getSession("token").access_token;
         var urlApi = Main.getUrlApi() + '/api/myprofile/family';
         var data = JSON.stringify($scope.family);
-
         console.log(data);
         Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
 
@@ -705,15 +739,39 @@ angular.module('myhr.controllers', [])
 })
 
 
-.controller('ChangeMaritalStatusCtrl', function($stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
-  $scope.itens = [
-        { title: "Single", checked: false },
-        { title: "Married", checked: false },
-        { title: "Divorce", checked: false },
-    ];
 
-    console.log(Main.getSession("profile"));
-    
+.controller('ChangeMaritalStatusCtrl', function($ionicHistory,$cordovaCamera,$stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+    $scope.itens = [
+          { title: "Single", checked: false },
+          { title: "Married", checked: false },
+          { title: "Divorce", checked: false },
+      ];
+    $scope.image = "img/placeholder.png";
+    $scope.imageData ;
+
+    $scope.takePicture = function(){
+        var options =  {
+            quality: Main.getTakePictureOptions().quality,
+            destinationType: Camera.DestinationType.DATA_URL,
+            sourceType: Camera.PictureSourceType.CAMERA,
+            targetWidth : Main.getTakePictureOptions().targetWidth,
+            targetHeight:Main.getTakePictureOptions().targetHeight,
+            encodingType: Camera.EncodingType.JPEG,
+            saveToPhotoAlbum: true,
+            correctOrientation:true
+        };
+        
+        $cordovaCamera.getPicture(options).then(function (imageData) {
+            $scope.image = "data:image/jpeg;base64," + imageData;
+            $scope.imageData = imageData;
+            console.log("$scope.imageData");
+            console.log($scope.imageData);
+            //$scope.image =  imageData;
+        }, function (err) {
+            // An error occured. Show a message to the user
+            alert("an error occured while take picture");
+        });
+    }
     $scope.updateSelection = function(position, itens, title) {
       
         angular.forEach(itens, function(subscription, index) {
@@ -746,7 +804,6 @@ angular.module('myhr.controllers', [])
       alert(res.message);
       console.log(res);
       goBack("app.biodata");
-      //$scope.certification = res;
     }
 
     var errorRequest = function (err, status){
@@ -776,13 +833,18 @@ angular.module('myhr.controllers', [])
     $scope.send = function (){
        var idRef = Main.getSession("profile").employee;
        var jsonData = '{"maritalStatus":"'+$scope.selected+'"}';
-       var dataStr = {task:"CHANGEMARITALSTATUS",data:jsonData,idRef:idRef};
+       var attachment = [];
+       var objAttchament = {"image":$scope.imageData};
+       attachment.push(objAttchament);
+       var dataStr = {task:"CHANGEMARITALSTATUS",data:jsonData,idRef:idRef,attachments:attachment};
+       
        $ionicLoading.show({
           template: 'Submit Request...'
         });
         var accessToken = Main.getSession("token").access_token;
         var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval';
         var data = JSON.stringify(dataStr);
+        console.log(dataStr);
         Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
 
     }

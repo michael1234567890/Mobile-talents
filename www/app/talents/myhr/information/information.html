@@ -32,6 +32,9 @@
             <div class="item item-text-wrap item-icon-right" ng-click="goChangeMaritalStatus(personal.id)">
                 <h2 class="talents">Marital Status</h2>
                 <p class="text-small" >{{personal.maritalStatus}}</p>
+                <span class="item-note calm" ng-if="item.status='pending'" style="font-size:12px;color">
+                    Waiting Approval
+                </span>
                 <i class="icon ion-ios-arrow-right pull-right"></i>
             </div>
             <div class="item item-text-wrap" >

@@ -230,35 +230,44 @@ angular.module('selfservice.controllers', [])
 
 
 .controller('SubmitPayslipCtrl', function($compile,$filter,$cordovaGeolocation,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
- $scope.selectYear = [];
- $scope.selectMonth = [];
- 
- function initData(){
-   $scope.selectYear = [{id:"2016"},{id:"2017"}];
-   $scope.selectMonth = [{id:"JAN"},{id:"FEB"},{id:"MAR"},{id:"APR"},{id:"MAY"},{id:"JUN"}];     
- }
+    $scope.selectYear = [];
+    $scope.selectMonth = [];
 
- function initModule() {
-    initData();
-  }
+    $scope.submitForm = function(){
+        $state.go("app.detailpayslip");
+    }
 
-  initModule();
+    function initData(){
+     $scope.selectYear = [{id:"2016"},{id:"2017"}];
+     $scope.selectMonth = [{id:"JAN"},{id:"FEB"},{id:"MAR"},{id:"APR"},{id:"MAY"},{id:"JUN"}];     
+    }
+
+    function initModule() {
+      initData();
+    }
+
+    initModule();
+    })
+
+
+    .controller('SubmitClaimCtrl', function($compile,$filter,$cordovaGeolocation,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+    $scope.selectYear = [];
+    $scope.selectMonth = [];
+
+    function initData(){
+     $scope.selectYear = [{id:"2016"},{id:"2017"}];
+     $scope.selectMonth = [{id:"JAN"},{id:"FEB"},{id:"MAR"},{id:"APR"},{id:"MAY"},{id:"JUN"}];     
+    }
+
+    function initModule() {
+      initData();
+    }
+
+    initModule();
 })
 
 
-.controller('SubmitClaimCtrl', function($compile,$filter,$cordovaGeolocation,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
- $scope.selectYear = [];
- $scope.selectMonth = [];
- 
- function initData(){
-   $scope.selectYear = [{id:"2016"},{id:"2017"}];
-   $scope.selectMonth = [{id:"JAN"},{id:"FEB"},{id:"MAR"},{id:"APR"},{id:"MAY"},{id:"JUN"}];     
- }
+.controller('DetailPayslipCtrl', function($compile,$filter,$cordovaGeolocation,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
 
- function initModule() {
-    initData();
-  }
-
-  initModule();
 })
 

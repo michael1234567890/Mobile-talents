@@ -231,6 +231,17 @@ angular.module('talent.routes', [])
         }
       })
 
+       .state('app.detailpayslip', {
+        url: '/detailpayslip',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/payslip/detail-payslip.html',
+            controller: 'DetailPayslipCtrl'
+          }
+        }
+      })
+
+
        .state('app.submitclaim', {
         url: '/submitclaim',
         views: {
@@ -321,6 +332,16 @@ angular.module('talent.routes', [])
           'menuContent': {
             templateUrl: 'app/talents/myteam/request-approval.html',
             controller: 'RequestApprovalCtrl'
+          }
+        }
+      })
+
+       .state('app.requestdetail', {
+        url: '/requestdetail/:idx',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/myteam/request/request-detail.html',
+            controller: 'RequestDetailCtrl'
           }
         }
       })

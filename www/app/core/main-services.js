@@ -4,10 +4,18 @@
 
     angular.module('main.services', [])
     .factory('Main', function($q, $timeout, $http, $localStorage){
-       // var baseUrl = "http://192.168.43.162:8080";
-        var baseUrl = "http://localhost:8080";
+        var baseUrl = "http://192.168.43.162:8080";
+        //var baseUrl = "http://localhost:8080";
         var basicAuthentication = 'Basic dGFsZW50czpzZWNyZXQ=';
         var timeoutms = 15000; // 15 sec
+
+        var takePictureOptions = {
+            quality: 100,
+            targetWidth : 750,
+            targetHeight:550
+        };
+
+
        
         function changeUser(user) {
             angular.extend(currentUser, user);
@@ -140,7 +148,11 @@
             },
             getUrlApi : function(){
                 return baseUrl;
+            },
+            getTakePictureOptions : function(){
+                return takePictureOptions;
             }
+            
         };
 
 
