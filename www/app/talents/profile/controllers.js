@@ -5,6 +5,13 @@ angular.module('profile.controllers', [])
         $state.go("login");
     }
     $scope.profile = Main.getSession("profile");
+    $scope.profile.fullName = $scope.profile.employeeTransient.firstName;
+    if($scope.profile.employeeTransient.middleName != null)
+      $scope.profile.fullName += " " + $scope.profile.employeeTransient.middleName;
+
+    if($scope.profile.employeeTransient.lastName != null)
+      $scope.profile.fullName += " " + $scope.profile.employeeTransient.lastName;
+    
     console.log($scope.profile);
   
 

@@ -58,8 +58,8 @@ angular.module('myhr.controllers', [])
         $state.go("login");
     }
 
-    $scope.goChangeMaritalStatus = function (idx) {
-      $state.go('app.changemaritalstatus',{'idx':idx});
+    $scope.goChangeMaritalStatus = function (currentStatus,dataApprovalId) {
+      $state.go('app.changemaritalstatus',{'currentStatus':currentStatus,'dataApprovalId':dataApprovalId});
     };
 
     $scope.personal = {};
@@ -69,6 +69,10 @@ angular.module('myhr.controllers', [])
     var successRequest = function (res){
     	console.log(res);
     	$scope.personal = res;
+      $scope.personal.showMaritalStatus = $scope.personal.maritalStatus;
+      if($scope.personal.maritalStatusDataApproval != null) {
+          $scope.personal.showMaritalStatus = $scope.personal.changeMaritalStatus;
+      }
     }
 
     var errorRequest = function (err, status){
@@ -213,9 +217,9 @@ angular.module('myhr.controllers', [])
 
 .controller('AddFamilyCtrl', function($cordovaCamera,$ionicHistory , $ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
   
-    $(document).ready(function() {
+    /*$(document).ready(function() {
         $('select').material_select();
-    });
+    });*/
 
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
@@ -274,6 +278,7 @@ angular.module('myhr.controllers', [])
     $scope.resetForm  = function(){
       $scope.family = {};
     }
+
     $scope.submitForm = function(){
         verificationForm();
         $ionicLoading.show({
@@ -745,10 +750,16 @@ angular.module('myhr.controllers', [])
           { title: "Single", checked: false },
           { title: "Married", checked: false },
           { title: "Divorce", checked: false },
-      ];
+    ];
+
+    var dataapprovalId = $stateParams.dataApprovalId;
+    $scope.currentStatus = $stateParams.currentStatus;
+    $scope.showButton = true;
+    $scope.dataApprovalStatus = null;
+    console.log($stateParams);
+
     $scope.image = "img/placeholder.png";
     $scope.imageData ;
-
     $scope.takePicture = function(){
         var options =  {
             quality: Main.getTakePictureOptions().quality,
@@ -772,6 +783,8 @@ angular.module('myhr.controllers', [])
             alert("an error occured while take picture");
         });
     }
+
+
     $scope.updateSelection = function(position, itens, title) {
       
         angular.forEach(itens, function(subscription, index) {
@@ -809,11 +822,14 @@ angular.module('myhr.controllers', [])
     var errorRequest = function (err, status){
       $ionicLoading.hide();
       if(status == 401) {
-        var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
-        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
+          var refreshToken = Main.getSession("token").refresh_token
+          console.log("need refresh token");
+          Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
       }else {
-        alert("Check your connection");
+          if(status==500)
+            alert(err.message);
+          else
+            alert("Please Check your connection");
       }
       console.log(err);
       console.log(status);
@@ -824,6 +840,7 @@ angular.module('myhr.controllers', [])
       console.log("token session");
       console.log(Main.getSession("token"));
     }
+
     var errRefreshToken = function(err, status) {
       console.log(err);
       console.log(status);
@@ -848,6 +865,40 @@ angular.module('myhr.controllers', [])
         Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
 
     }
+
+    var successDataApproval = function (res){
+      $ionicLoading.hide();
+      var dataApproval = res;
+      $scope.dataApprovalStatus = dataApproval.processingStatus; 
+      if(dataApproval.processingStatus != null && dataApproval.processingStatus.toLowerCase()!='request'){
+          $scope.showButton = false;
+          
+      }
+
+      if(dataApproval.attachments != null && dataApproval.attachments.length > 0)
+            $scope.image = dataApproval.attachments[0].image;
+        
+
+      console.log(res);
+    }
+
+
+    function getDataApproval (dataapprovalId) {
+        $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner>'
+        });
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval/'+dataapprovalId;
+        Main.requestApi(accessToken,urlApi,successDataApproval, errorRequest);
+    }
+    function initModule(){
+       $scope.showButton = true;
+      if(dataapprovalId != null && dataapprovalId !="" && dataapprovalId !="0" ){
+          getDataApproval(dataapprovalId);
+      }
+    }
+
+    initModule();
 
 })
 

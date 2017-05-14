@@ -35,7 +35,7 @@
                 <div class="input-field col">
                    
                   <p style="font-size:13px">Relationship</p>
-                   <select class="select-dropdown" ng-model="family.relationship" style="display:none">
+                   <select class="select-dropdown" ng-model="family.relationship" >
                         <option ng-repeat="relationship in selectRelationship">{{relationship.id}}</option>
                   </select>
 
@@ -43,7 +43,7 @@
                 <div class="input-field col">
                    
                   <p style="font-size:13px">Gender</p>
-                   <select class="select-dropdown" ng-model="family.gender" style="display:none">
+                   <select class="select-dropdown" ng-model="family.gender" >
                         <option ng-repeat="gender in selectGender">{{gender.id}}</option>
                   </select>
 
@@ -55,14 +55,14 @@
             <div class="row">
                 <div class="input-field col">
                   <p for="first_name" style="font-size:13px">Marital Status</p>
-                  <select class="select-dropdown" ng-model="family.maritalStatus" style="display:none">
+                  <select class="select-dropdown" ng-model="family.maritalStatus" >
                         <option ng-repeat="maritalStatus in selectMaritalStatus">{{maritalStatus.id}}</option>
                   </select>
                     
                 </div>&nbsp;&nbsp;
                 <div class="input-field col">
                   <p for="first_name" style="font-size:13px">Blood Type</p>
-                  <select class="select-dropdown" ng-model="family.bloodType" style="display:none">
+                  <select class="select-dropdown" ng-model="family.bloodType" >
                         <option ng-repeat="bloodType in selectBloodType">{{bloodType.id}}</option>
                   </select>
                     

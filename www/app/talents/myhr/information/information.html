@@ -12,9 +12,9 @@
             <p style="font-size:14px">{{personal.assignment.jobTitle.jobTitle}}</p>
         </div>-->
         <div class="card hybrid">
-            <div class="item item-thumbnail-left item-text-wrap">
-                <img ng-src="{{user.photo}}">
-                <h2 class="lead text-medium">{{personal.firstName}} {{personal.middleName}} {{personal.lastName}}</h2>
+            <div class="item item-thumbnail-left item-text-wrap" >
+                <img ng-src="{{user.photo}}" style="max-width:100px">
+                <h2 class="lead text-medium" style="padding-left:0px">{{personal.firstName}} {{personal.middleName}} {{personal.lastName}}</h2>
                 <h3>{{personal.assignment.jobTitleName}}</h3>
                 <p style="font-size:14px">{{personal.assignment.division}}</p>
             </div>
@@ -29,10 +29,10 @@
                 <h2 class="talents">Date of Birth</h2>
                 <p class="text-small" >{{personal.birthDate}}</p>
             </div>
-            <div class="item item-text-wrap item-icon-right" ng-click="goChangeMaritalStatus(personal.id)">
+            <div class="item item-text-wrap item-icon-right" ng-click="goChangeMaritalStatus(personal.maritalStatus,personal.maritalStatusDataApproval)">
                 <h2 class="talents">Marital Status</h2>
-                <p class="text-small" >{{personal.maritalStatus}}</p>
-                <span class="item-note calm" ng-if="item.status='pending'" style="font-size:12px;color">
+                <p class="text-small" >{{personal.showMaritalStatus}}</p>
+                <span class="item-note calm" ng-if="personal.maritalStatusDataApproval !=null" style="font-size:12px;color">
                     Waiting Approval
                 </span>
                 <i class="icon ion-ios-arrow-right pull-right"></i>

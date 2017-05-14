@@ -6,8 +6,9 @@
 
     <ion-content class="has-header bt-grey profile" scroll="true">
         <ion-list>
+            <span class="pull-right calm" style="padding-right:10px" ng-if="dataApprovalStatus!=null">{{dataApprovalStatus}}</span>
             <div class="item item-divider">Current Marital Status</div>
-            <label class="item">Single</label>
+            <label class="item">{{currentStatus}}</label>
             <div class="item item-divider">New Marital Status</div>
             <ion-checkbox ng-repeat="item in itens"
                       ng-model="item.checked" 
@@ -20,7 +21,7 @@
                 <div class="col" style="min-height:90px"><a ng-click="takePicture()"><img ng-src="{{image}}" height="90px" ></a></div>
             </div>
             <div class="row">
-                <button class="btn waves-effect waves-light button button-positive button-block waves-effect waves-light" ng-click="send()">Send</button>
+                <button ng-show="showButton==true"class="btn waves-effect waves-light button button-positive button-block waves-effect waves-light" ng-click="send()">Send</button>
             </div>
         </ion-list>
 
