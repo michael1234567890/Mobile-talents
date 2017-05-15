@@ -1,33 +1,45 @@
 
 <ion-view title="Family">
    
-    <ion-content padding="true" class="has-header materialize" scroll="true" style="font-size:12px">
+    <ion-content padding="true" class="has-header materialize" scroll="true" >
         
-        <form class="col s12">
+        <div class="item no-padding">
            <div class="item item-divider">Information</div> 
             <div class="row">
                 <div class="input-field col">
+                    <p for="first_name">Name</p>
                     <input id="first_name" type="text" class="validate" ng-model="family.name">
-                    <label for="first_name">Name</label>
+                    
                 </div>
                 
             </div>
             <div class="row">
                 
                 <div class="input-field col">
+                    <p for="last_name">Place of Birth</p>
                     <input id="last_name" type="text" class="validate" ng-model="family.birthPlace">
-                    <label for="last_name">Place of Birth</label>
+                    
                 </div>
 
-                <!-- <div class="input-field col">
-                   <input id="first_name" type="text" class="validate" ion-datetime-picker ng-model="family.birthDate">
-                    <label for="first_name">Date</label>
-                </div>-->
+                
             </div>
+            <div class="input-field col">
+                  <p for="first_name">Date of Birth</p>
+                  <!--
+                   <input id="first_name" datetime="yyyy-MM-dd" callback="datePickerCallback" datetime="0" type="text" class="validate" ion-datetime-picker ng-model="family.birthDate">-->
+                    <!-- <input id="first_name" type="date" class="validate" ng-model="family.birthDate">-->
+                    <button class="button button-block button-outline button-positive" ion-datetime-picker ng-model="family.birthDate">
+                        {{family.birthDate| date: "yyyy-MM-dd"}}
+                    </button>
+                </div>
             <div class="row">
-                <div class="input-field col s12">
-                    <textarea  ng-model="family.address" class="materialize-textarea"></textarea>
-                    <label for="textarea1">Address</label>
+                <div class="input-field col">
+                   
+                  <p style="font-size:13px">Gender</p>
+                   <select class="select-dropdown" ng-model="family.gender" >
+                        <option ng-repeat="gender in selectGender">{{gender.id}}</option>
+                  </select>
+
                 </div>
             </div>
 
@@ -39,18 +51,17 @@
                         <option ng-repeat="relationship in selectRelationship">{{relationship.id}}</option>
                   </select>
 
-                </div>&nbsp;&nbsp;
-                <div class="input-field col">
-                   
-                  <p style="font-size:13px">Gender</p>
-                   <select class="select-dropdown" ng-model="family.gender" >
-                        <option ng-repeat="gender in selectGender">{{gender.id}}</option>
-                  </select>
-
                 </div>
                 
+                
             </div>
-            
+            <div class="row">
+                <div class="input-field col s12">
+                    <p for="textarea1">Address</p>
+                    <textarea  ng-model="family.address" class="materialize-textarea"></textarea>
+                    
+                </div>
+            </div>
             
             <div class="row">
                 <div class="input-field col">
@@ -59,37 +70,43 @@
                         <option ng-repeat="maritalStatus in selectMaritalStatus">{{maritalStatus.id}}</option>
                   </select>
                     
-                </div>&nbsp;&nbsp;
-                <div class="input-field col">
+                </div>
+            </div>
+            <div class="row">
+              <div class="input-field col">
                   <p for="first_name" style="font-size:13px">Blood Type</p>
                   <select class="select-dropdown" ng-model="family.bloodType" >
                         <option ng-repeat="bloodType in selectBloodType">{{bloodType.id}}</option>
                   </select>
                     
                 </div>
-                
+
             </div>
              <div class="row">
                 <div class="input-field col">
+                    <p for="first_name">Occupation</p>
                     <input id="first_name" type="text" class="validate" ng-model="family.occupation" >
-                    <label for="first_name">Occupation</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col">
+                    <p for="first_name">Phone</p>
                     <input id="first_name" type="text" class="validate" ng-model="family.phone" >
-                    <label for="first_name">Phone</label>
+                    
                 </div>
             </div>
-            <div class="item item-divider">Attach Document Support</div> 
-            <div class="row center">
-                <div class="col" style="min-height:90px"><a ng-click="takePicture()"><img ng-src="{{image}}" height="90px" ></a></div>
+            <div ng-if="isEdit != true">
+              <div class="item item-divider">Attach Document Support</div> 
+              <div class="row center">
+                  <div class="col" style="min-height:90px"><a ng-click="takePicture()"><img ng-src="{{image}}" height="90px" ></a></div>
+              </div>
             </div>
             <div class="row">
-                
-                <button class="btn waves-effect button-small waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Submit</button>
+                  
+                  <button class="btn waves-effect button-small waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Submit</button>
+              
             </div>
-        </form>
+       </div>
     </ion-content>
 
 </ion-view>

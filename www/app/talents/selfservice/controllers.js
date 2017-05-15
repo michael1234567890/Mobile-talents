@@ -232,14 +232,16 @@ angular.module('selfservice.controllers', [])
 .controller('SubmitPayslipCtrl', function($compile,$filter,$cordovaGeolocation,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     $scope.selectYear = [];
     $scope.selectMonth = [];
-
+    $scope.payslip = {};
     $scope.submitForm = function(){
-        $state.go("app.detailpayslip");
+        console.log($scope.payslip);
+        $state.go('app.detailpayslip',{'year':$scope.payslip.year,'month':$scope.payslip.month});
+        //$state.go("app.detailpayslip");
     }
 
     function initData(){
      $scope.selectYear = [{id:"2016"},{id:"2017"}];
-     $scope.selectMonth = [{id:"JAN"},{id:"FEB"},{id:"MAR"},{id:"APR"},{id:"MAY"},{id:"JUN"}];     
+     $scope.selectMonth = [{name:"JAN",id:"01"},{name:"FEB",id:"02"},{id:"03",name:"MAR"},{id:"04",name:"APR"},{id:"05",name:"MAY"},{id:"06",name:"JUN"},{id:"07",name:"JUL"},{id:"08",name:"AUG"},{id:"09",name:"SEP"},{id:"10",name:"OCT"},{id:"11",name:"NOV"},{id:"12",name:"DES"}];     
     }
 
     function initModule() {
@@ -267,7 +269,62 @@ angular.module('selfservice.controllers', [])
 })
 
 
-.controller('DetailPayslipCtrl', function($compile,$filter,$cordovaGeolocation,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('DetailPayslipCtrl', function($ionicLoading, $stateParams,$compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
 
+    var year = $stateParams.year;
+    var month = $stateParams.month;
+    $scope.listHeader = [];
+    console.log("year ", year);
+    console.log("month ", month);
+
+    var successRequest = function (res){
+      $ionicLoading.hide();
+      console.log(res);
+      $scope.listHeader = res;
+
+    }
+
+    var errorRequest = function (err, status){
+      $ionicLoading.hide();
+      if(status == 401) {
+        var refreshToken = Main.getSession("token").refresh_token
+        console.log("need refresh token");
+        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
+      }else {
+        alert("Check your connection");
+      }
+      console.log(err);
+      console.log(status);
+    }
+
+    var successRefreshToken = function(res){
+      Main.setSession("token",res);
+      console.log("token session");
+      console.log(Main.getSession("token"));
+    }
+    var errRefreshToken = function(err, status) {
+      console.log(err);
+      console.log(status);
+    }
+
+    function initMethod(){
+      getPaySlip();
+    }
+
+    // invalid access token error: "invalid_token" 401
+    function getPaySlip(){
+      $ionicLoading.show({
+          template: 'Loading...'
+      });
+      var strData = {month:year+"-"+month};
+      var data = JSON.stringify(strData);
+      var accessToken = Main.getSession("token").access_token;
+      var urlApi = Main.getUrlApi() + '/api/user/payroll';
+      Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
+
+    }
+
+    initMethod();
+    
 })
 

@@ -15,6 +15,10 @@
             targetHeight:550
         };
 
+        var selectMaritalStatus = [{id:"Single"},{id:"Married"}];
+        var selectBloodType = [{id:"A"},{id:"B"},{id:"AB"},{id:"O"}];
+        var selectFamilyRelationShip = [{id:"Ayah"},{id:"Ibu"},{id:"Suami"},{id:"Istri"},{id:"Anak"}];
+        var selectGender = [{id:"Male"},{id:"Female"}];
 
        
         function changeUser(user) {
@@ -57,6 +61,19 @@
 
              getUrlApi : function(){
                 return baseUrl;
+             },
+
+             getSelectMaritalStatus : function(){
+                return selectMaritalStatus;
+             },
+             getSelectBloodType : function(){
+                return selectBloodType;
+             },
+             getSelectFamilyRelationShip : function(){
+                return selectFamilyRelationShip;
+             },
+             getSelectGender : function(){
+                return selectGender;
              },
 
             signin: function(data, success, error) {

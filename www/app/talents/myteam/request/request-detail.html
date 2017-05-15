@@ -6,14 +6,15 @@
         <div class="item item-avatar item-text-wrap">
             <img ng-src="{{user.photo}}">
             <h2 class="lead text-medium">{{detail.employeeRequest.fullName}}</h2>
-            <h3>Senior Consultant</h3>
-            <p style="font-size:14px">Middleware</p>
+            <h3>{{detail.employeeRequest.assignment.positionName}}</h3>
+            <p style="font-size:14px">{{detail.employeeRequest.assignment.organizationName}}</p>
         </div>
     </div>
     <div class="list">
         <div class="item item-text-wrap" >
             <h2 class="talents">Request Type</h2>
-            <p class="text-small" >{{detail.taskTitle}}</p>
+            <!-- <p class="text-small" >{{detail.taskTitle}}</p>-->
+            <p class="text-small" >{{detail.description}}</p>
         </div>
         <div ng-if="detail.task == 'CHANGEMARITALSTATUS'">
                 <div class="item item-text-wrap" >

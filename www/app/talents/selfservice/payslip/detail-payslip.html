@@ -1,39 +1,35 @@
 <ion-view view-title="Detail Payslip" class="header">
-  <ion-content padding="true" class="has-header materialize" scroll="true" style="font-size:12px"> 
-<ion-item style="background-color: #11c1f3 ;">
+<ion-content padding="true" class="has-header materialize" scroll="true" style="font-size:12px"> 
 
+<div ng-repeat="header in listHeader">
+<ion-item style="background-color: #11c1f3 ;">
 <div>
   <div class="col col-75"><h2 class="light">Sarah Varki</h2></div>   <div class="col no-padding"></div>
 </div>
 
 <div class="row" style="margin-bottom: 1px;">
   <div class="col col-75 no-padding"><h3 class="light">Period</h3></div>   
-  <div class="col no-padding"></div>
+  <div class="col no-padding">{{header.periodDate}}</div>
 </div>
-
-<div class="row">
-  <div class="col col-75 no-padding"><h3 class="light">Jun18-Jun24, 2016</h3></div>    
-  <div class="col no-padding"><i class="ion-android-done-all" style="color: #00ff1e;"><span>Approved</span></i></div>
-</div>
-
-<br>
-
 <div class="row" style="margin-bottom: 1px;">
-  <div class="col col-75 no-padding"><h3 class="light">Pay Date</h3></div>     
-  <div class="col no-padding"><h3 class="light" style="float: right;">TOTAL</p></div>
+  <div class="col col-75 no-padding"><h3 class="light">Position</h3></div>   
+  <div class="col no-padding">{{header.periodDate}}</div>
+</div>
+<div class="row" style="margin-bottom: 1px;">
+  <div class="col col-75 no-padding"><h3 class="light">Organization</h3></div>   
+  <div class="col no-padding">{{header.periodDate}}</div>
+</div>
+<div class="row" style="margin-bottom: 1px;">
+  <div class="col col-75 no-padding"><h3 class="light">Grade</h3></div>   
+  <div class="col no-padding">{{header.periodDate}}</div>
 </div>
 
-
-<div class="row">
-  <div class="col col-50 no-padding"><h3 class="light">Friday, Jun24, 2016</h3></div>    
-  <div class="col no-padding"><h2 class="light" style="float: right;">Rp.1.000.000.000</h2></div>
-</div>
 </ion-item>
 
 <ion-item style="padding-bottom: 5px;padding-top: 5px;">
 <div class="row">
-  <div class="col col-60"><h2 class="balanced">GROSS PAY</h2></div>    
-  <div class="col"><h4 class="balanced" style="float: right;">Rp.1.000</h4></div>
+  <div class="col col-60"><h2 class="balanced">PENERIMAAN</h2></div>    
+  <div class="col"><h4 class="balanced" style="float: right;"></h4></div>
 </div>
 
 <hr class="no-margin">
@@ -45,28 +41,10 @@
 </ion-item>
 
 
-
-
-
-
 <ion-item style="padding-bottom: 5px;padding-top: 5px;">
 <div class="row">
-  <div class="col col-60"><h2 class="balanced">TAXES WITHELD</h2></div>     
-  <div class="col"><h4 class="balanced" style="float: right;">Rp.10.000.000</h4></div>
-</div>
-
-<hr class="no-margin">
-
-<div class="row">
-  <div class="col col-60"><h3>Social security</h3></div>     
-  <div class="col"><h4 style="float: right;">Rp.10.000.000</h4></div>
-</div>
-</ion-item>
-
-<ion-item style="padding-bottom: 5px;padding-top: 5px;">
-<div class="row">
-  <div class="col col-60"><h2 class="balanced">DEDUCTIONS</h2></div>     
-  <div class="col"><h4 class="balanced" style="float: right;">Rp.10.000.000</h4></div>
+  <div class="col col-60"><h2 class="balanced">POTONGAN</h2></div>     
+  <div class="col"><h4 class="balanced" style="float: right;"></h4></div>
 </div>
 
 <hr class="no-margin">
@@ -76,7 +54,34 @@
   <div class="col"><h4 style="float: right;">Rp.10.000.000</h4></div>
 </div>
 </ion-item>
-  
+
+
+
+
+<ion-item style="padding-bottom: 5px;padding-top: 5px;">
+<div class="row">
+  <div class="col col-60"><h2 class="balanced">TOTAL</h2></div>     
+  <div class="col"><h4 class="balanced" style="float: right;"></h4></div>
+</div>
+
+<hr class="no-margin">
+
+<div class="row">
+  <div class="col col-60"><h3>Total Penerimaan</h3></div>     
+  <div class="col"><h4 style="float: right;">{{header.totalAllowance}}</h4></div>
+</div>
+<div class="row">
+  <div class="col col-60"><h3>Total Potongan</h3></div>     
+  <div class="col"><h4 style="float: right;">{{header.totalDeduction}}</h4></div>
+</div>
+<div class="row">
+  <div class="col col-60"><h3>Penerimaan</h3></div>     
+  <div class="col"><h4 style="float: right;">{{header.takeHomePay}}</h4></div>
+</div>
+</ion-item>
+
+
+</div>
 
 
   </ion-content>

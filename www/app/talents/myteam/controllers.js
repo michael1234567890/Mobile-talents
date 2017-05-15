@@ -68,6 +68,121 @@ angular.module('myteam.controllers', [])
    	}
 })
 
+
+.controller('MyRequestCtrl', function($ionicPopover,$ionicLoading,$rootScope, $scope,$state , AuthenticationService, Main) {
+  if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+        $state.go("login");
+    }
+
+    $scope.requests = [];
+
+    $scope.confirmApprove = $ionicPopover.fromTemplate(contactTemplate, {
+        scope: $scope
+    });
+
+    $scope.confirmReject = $ionicPopover.fromTemplate(contactTemplate, {
+        scope: $scope
+    });
+
+    $scope.gotoDetailRequest = function(id){
+       // $rootScope.requestSelected = $scope.requests[idx];
+        $state.go('app.myrequestdetail',{'id':id});
+    }
+
+    $scope.refresh = function(){
+      initMethod();
+    }
+    
+    $scope.approval = function(action,id){
+        var data = {"id":id,"status":action};
+        $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner>'
+        });
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/workflow/actionapproval';
+        var data = JSON.stringify(data);
+
+        console.log(data);
+        Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
+
+    }
+
+    $scope.goToDetails = function (idx) {
+      $rootScope.requestSelected = $scope.requests[idx];
+      $state.go('app.requestDetail',{'idx':idx});
+    };
+
+   
+    var successRequest = function (res){
+      $scope.$broadcast('scroll.refreshComplete');
+      for(var i=0;i<res.length;i++) {
+        var obj = res[i];
+        obj.idx = i;
+        if(res[i].task == 'CHANGEMARITALSTATUS') {
+           var change = res[i].data;
+           var objData = JSON.parse(change);
+           obj.taskDescription = "Change marital status from "+res[i].employeeRequest.maritalStatus + " to " + objData.maritalStatus;
+        }else if(res[i].task == 'SUBMITADDRESS'){
+          obj.taskDescription = "Add new Address";
+        }else if(res[i].task == 'SUBMITFAMILY'){
+          obj.taskDescription = "Add new family";
+        }
+        obj.employeeRequest.fullName = obj.employeeRequest.firstName;
+          if(obj.employeeRequest.middleName != null)
+            obj.employeeRequest.fullName += " " + obj.employeeRequest.middleName;
+
+          if(obj.employeeRequest.lastName != null)
+            obj.employeeRequest.fullName += " " + obj.employeeRequest.lastName;
+        
+        $scope.requests.push(obj);
+       }
+
+      $ionicLoading.hide();
+      console.log($scope.requests);
+    }
+
+    var errorRequest = function (err, status){
+      if(status == 401) {
+        var refreshToken = Main.getSession("token").refresh_token
+        console.log("need refresh token");
+        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
+      }else if(status == 500) {
+        alert("Problem with server. Please try again later.");
+      }else {
+        alert(err.message);
+      }
+      $ionicLoading.hide();
+      console.log(err);
+      console.log(status);
+    }
+
+    var successRefreshToken = function(res){
+      Main.setSession("token",res);
+      console.log("token session");
+      console.log(Main.getSession("token"));
+    }
+    var errRefreshToken = function(err, status) {
+      console.log(err);
+      console.log(status);
+    }
+
+    initMethod();
+    //31acd2e6-e891-4628-a24e-58e408664516
+    function initMethod(){
+      $scope.requests = [];
+      getMyApproval();
+    }
+    // invalid access token error: "invalid_token" 401
+    function getMyApproval(){
+      $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner>'
+        });
+      var accessToken = Main.getSession("token").access_token;
+      var urlApi = Main.getUrlApi() + '/api/user/workflow/myrequest';
+      Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
+    }
+})
+
 .controller('RequestApprovalCtrl', function($ionicPopover,$ionicLoading,$rootScope, $scope,$state , AuthenticationService, Main) {
   if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
@@ -285,6 +400,167 @@ angular.module('myteam.controllers', [])
           $scope.detail.taskDescription = "Change marital status from "+$scope.detail.employeeRequest.maritalStatus + " to " + objData.maritalStatus;
       }else if($scope.detail.task == 'SUBMITFAMILY') {
            $scope.detail.taskTitle = "Add new Family";
+            $scope.detail.taskDescription = "Add new family";
+      }
+
+      
+      $scope.detail.employeeRequest.fullName = $scope.detail.employeeRequest.firstName;
+      if($scope.detail.employeeRequest.middleName != null)
+          $scope.detail.employeeRequest.fullName += " " + $scope.detail.employeeRequest.middleName;
+
+      if($scope.detail.employeeRequest.lastName != null)
+          $scope.detail.employeeRequest.fullName += " " + $scope.detail.employeeRequest.lastName;
+  
+      if($scope.detail.attachments.length > 0){
+          console.log("kesini");
+          $scope.attachment = $scope.detail.attachments[0].image;
+      }else{
+        console.log("gak kesini");
+      } 
+
+          
+      console.log("$scope.detail");
+      console.log($scope.detail);
+    }
+
+    var errorRequest = function (err, status){
+      $ionicLoading.hide();
+      if(status == 401) {
+        var refreshToken = Main.getSession("token").refresh_token
+        console.log("need refresh token");
+        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
+      }else {
+        if(status == -1) {
+          alert("Error : Problem with your connection.");
+        }else {
+          alert("Error : " + err.message);
+        }
+        
+      }
+      console.log(err);
+      console.log(status);
+    }
+
+    var successRefreshToken = function(res){
+      Main.setSession("token",res);
+      console.log("token session");
+      console.log(Main.getSession("token"));
+    }
+    var errRefreshToken = function(err, status) {
+      console.log(err);
+      console.log(status);
+    }
+
+    function getDetailRequest(){
+      $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner>'
+      });
+      var accessToken = Main.getSession("token").access_token;
+      var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval/'+id;
+      Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
+    }
+
+    function initModule(){
+        $scope.detail = {};
+        $scope.attachment = "img/placeholder.png";
+        getDetailRequest();
+        
+    }
+    
+
+    initModule();
+
+   // console.log(teamIdx);
+
+})
+
+
+.controller('MyRequestDetailCtrl', function($ionicPopup,$ionicPopover,$ionicModal,$ionicLoading,$stateParams,$rootScope, $scope,$state , AuthenticationService, Main) {
+    
+    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+        $state.go("login");
+    }
+
+
+    var id = $stateParams.id;
+    $scope.detail = {};
+    $scope.confirm = {reasonReject:""};
+
+    $scope.attachment = "img/placeholder.png";
+
+    var successApprove = function(res){
+        $ionicLoading.hide();
+        alert("Cancel your request Successfully");
+        $scope.goBack("app.myrequestapproval");
+    }
+
+    var sendApproval = function(action,id,reason){
+        var data = {};
+        if(action == 'approved')
+          data = {"id":id,"status":action};
+        else
+          data = {"id":id,"status":action,"reasonReject":reason};
+
+        $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner>'
+        });
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/workflow/actionapproval';
+        var data = JSON.stringify(data);
+
+        console.log(data);
+        Main.postRequestApi(accessToken,urlApi,data,successApprove,errorRequest);
+
+    }
+    
+
+    $scope.confirmCancel = function (){
+        var confirmPopup = $ionicPopup.confirm({
+            title: 'Confirm',
+            template: '<h5>Are you sure want to Cancel this request ?</h5>',
+            cancelText: 'Cancel',
+            okText: 'Yes'
+          }).then(function(res) {
+              if (res) {
+                  sendApproval('cancelled',id,"");
+              }
+              
+          });
+    }
+
+
+   $ionicModal.fromTemplateUrl('app/shop/product-preview.html', {
+        scope: $scope,
+        animation: 'fade-in-scale'
+    }).then(function (modal) {
+        $scope.modalPopupImage = modal;
+    });
+
+    $scope.openImagePreview = function (item) {
+        console.log(item);
+        var product = {id:1,image:item};
+        $scope.detailImage = product;
+        console.log($scope.detailImage);
+        $scope.modalPopupImage.show();
+    };
+    $scope.closeImagePreview = function () {
+        $scope.detailImage = undefined;
+        $scope.modalPopupImage.hide();
+    };
+
+    var successRequest = function (res){
+      $ionicLoading.hide();
+      $scope.detail = res;
+
+      if($scope.detail.task == 'SUBMITLEAVE') {
+          $scope.detail.taskTitle = "Request Leave";
+      }else if($scope.detail.task == 'CHANGEMARITALSTATUS'){
+          $scope.detail.taskTitle = "Change Marital Status";
+          var change = $scope.detail.data;
+          var objData = JSON.parse(change);
+          $scope.detail.taskDescription = "Change marital status from "+$scope.detail.employeeRequest.maritalStatus + " to " + objData.maritalStatus;
+      }else if($scope.detail.task == 'SUBMITFAMILY') {
+           $scope.detail.taskTitle = "Add new Family";
            obj.taskDescription = "Add new family";
       }
 
@@ -315,7 +591,7 @@ angular.module('myteam.controllers', [])
         if(status == -1) {
           alert("Error : Problem with your connection.");
         }else {
-          alert("Error : " + err.message);
+          alert( err.message);
         }
         
       }

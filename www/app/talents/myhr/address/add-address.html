@@ -5,18 +5,21 @@
         <div class="item no-padding">
             <div class="row">
                 <div class="input-field col s12">
+                     <p for="textarea1">Address</p>
                     <textarea  ng-model="address.address" class="materialize-textarea"></textarea>
-                    <label for="textarea1">Address</label>
+                   
                 </div>
             </div>
              <div class="row">
                 <div class="input-field col s6">
+                     <p for="textarea1">RT</p>
                     <input id="first_name" ng-model="address.rt" type="text" class="validate">
-                    <label for="first_name">RT</label>
+                  
                 </div>
                 <div class="input-field col s6">
+                    <p for="textarea1">RW</p>
                     <input  type="text" ng-model="address.rw" class="validate">
-                    <label for="first_name">RW</label>
+                   
                 </div>
         
             </div>
@@ -33,12 +36,15 @@
             </div>
             <div class="row">
                 <div class="input-field col">
-                      <p for="first_name">State</p>
+                      <p for="first_name">Province</p>
                       <select ng-model="address.province">
                             <option ng-repeat="province in selectProvince">{{province.id}}</option>
                       </select>
                     
                 </div>
+                
+            </div>
+            <div class="row">
                 <div class="input-field col">
                   <p for="first_name">City</p>
                   <select ng-model="address.city">
@@ -51,12 +57,16 @@
              
             <div class="row">
                 <div class="input-field col">
+                    <p for="first_name">ZIP Code</p>
                     <input ng-model="address.zipCode" type="text" class="validate">
-                    <label for="first_name">ZIP Code</label>
+                    
                 </div>
+            </div>
+            <div class="row">
                 <div class="input-field col">
+                    <p for="first_name">Phone</p>
                     <input ng-model="address.phone" type="text" class="validate">
-                    <label for="first_name">Phone</label>
+                   
                 </div>
             </div>
 

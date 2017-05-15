@@ -1,4 +1,4 @@
-<ion-view title="Request" class="bg-lightgrey">
+<ion-view title="Need Approval" class="bg-lightgrey">
 
     <ion-content class="has-header bt-grey profile" scroll="true">
     <ion-refresher pulling-text="Pull to refresh"
@@ -17,6 +17,26 @@
                     <button class="waves-effect waves-light btn button-calm" ng-click="approval('rejected',{{item.id}})">Reject</button>&nbsp;&nbsp;
                     <button class="waves-effect waves-light btn button-balanced" ng-click="approval('approved',{{item.id}})">Approve</button>
                 </div>-->
+            </div>
+             <div class="item item-avatar item-text-wrap" ng-if="item.task=='SUBMITADDRESS'" ng-click="gotoDetailRequest(item.id)" >
+                <img ng-src="img/1491892511_profle.png">
+                <h2 class="lead">{{item.employeeRequest.fullName}}</h2>
+                <p>{{item.description}}</p>
+                <p class="text-smaller" am-time-ago="item.modifiedDate"></p>
+                <span class="item-note calm">
+                    {{item.processingStatus}}
+                </span>
+                
+            </div>
+            <div class="item item-avatar item-text-wrap" ng-if="item.task=='CHANGEFAMILY'" ng-click="gotoDetailRequest(item.id)" >
+                <img ng-src="img/1491892511_profle.png">
+                <h2 class="lead">{{item.employeeRequest.fullName}}</h2>
+                <p>{{item.description}}</p>
+                <p class="text-smaller" am-time-ago="item.modifiedDate"></p>
+                <span class="item-note calm">
+                    {{item.processingStatus}}
+                </span>
+                
             </div>
             <div class="item item-avatar item-text-wrap" ng-if="item.task=='CHANGEMARITALSTATUS'" ng-click="gotoDetailRequest(item.id)" >
                 <img ng-src="img/1491892511_profle.png">

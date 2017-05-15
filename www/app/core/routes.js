@@ -75,7 +75,7 @@ angular.module('talent.routes', [])
       })
 
       .state('app.changemaritalstatus', {
-        url: '/changemaritalstatus',
+        url: '/changemaritalstatus/:currentStatus/:dataApprovalId',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/myhr/information/changemaritalstatus.html',
@@ -112,6 +112,16 @@ angular.module('talent.routes', [])
           'menuContent': {
             templateUrl: 'app/talents/myhr/family/add-family.html',
             controller: 'AddFamilyCtrl'
+          }
+        }
+      })
+
+      .state('app.editfamily', {
+        url: '/editfamily/:idx',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/myhr/family/add-family.html',
+            controller: 'EditFamilyCtrl'
           }
         }
       })
@@ -232,7 +242,7 @@ angular.module('talent.routes', [])
       })
 
        .state('app.detailpayslip', {
-        url: '/detailpayslip',
+        url: '/detailpayslip/:year/:month',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/selfservice/payslip/detail-payslip.html',
@@ -280,6 +290,16 @@ angular.module('talent.routes', [])
           'menuContent': {
             templateUrl: 'app/talents/myhr/address/add-address.html',
             controller: 'AddAddressCtrl'
+          }
+        }
+      })
+
+       .state('app.editaddress', {
+        url: '/editaddress/:idx',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/myhr/address/add-address.html',
+            controller: 'EditAddressCtrl'
           }
         }
       })
@@ -336,12 +356,32 @@ angular.module('talent.routes', [])
         }
       })
 
+      .state('app.myrequest', {
+        url: '/myrequest',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/myteam/request/myrequest.html',
+            controller: 'MyRequestCtrl'
+          }
+        }
+      })
+
        .state('app.requestdetail', {
-        url: '/requestdetail/:idx',
+        url: '/requestdetail/:id',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/myteam/request/request-detail.html',
             controller: 'RequestDetailCtrl'
+          }
+        }
+      })
+
+       .state('app.myrequestdetail', {
+        url: '/myrequestdetail/:id',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/myteam/request/myrequest-detail.html',
+            controller: 'MyRequestDetailCtrl'
           }
         }
       })

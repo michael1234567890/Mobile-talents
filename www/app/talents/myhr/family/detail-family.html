@@ -1,7 +1,7 @@
 <ion-view title="Detail Family" class="bg-lightgrey">
 
     <ion-nav-buttons side="right">
-        <!-- <button class="button button-dark button-clear icon ion-ios-compose-outline" ui-sref="app.edit-biodata"></button>-->
+        <button class="button button-dark button-clear icon ion-ios-compose-outline" ng-click="goEditFamily()"></button>
     </ion-nav-buttons>
 
     <ion-content class="has-header bt-grey profile" scroll="true">
@@ -9,37 +9,46 @@
 
         <div class="list">
             <div class="item item-text-wrap" >
-                <h2 class="talents">Name</h2>
+                <h2 class="talents text-smaller">Name</h2>
                 <p class="text-small" >{{family.name}}</p>
             </div>
             <div class="item item-text-wrap" >
-                <h2 class="talents">Date of Birth</h2>
-                <p class="text-small" >{{family.birthPlace}} , {{family.birthDate}}</p>
+                <h2 class="talents text-smaller">Place of Birth</h2>
+                <p class="text-small" >{{family.birthPlace}}</p>
             </div>
             <div class="item item-text-wrap" >
-                <h2 class="talents">Gender</h2>
+                <h2 class="talents text-smaller">Date of Birth</h2>
+                <p class="text-small" >{{family.birthDate | date: "yyyy-MM-dd"}}</p>
+            </div>
+            <div class="item item-text-wrap" >
+                <h2 class="talents text-smaller">Gender</h2>
                 <p class="text-small" >{{family.gender}}</p>
             </div>
             <div class="item item-text-wrap" >
-                <h2 class="talents">Address</h2>
-                <p class="text-small" >{{family.address}}</p>
+                <h2 class="talents text-smaller">Relationship</h2>
+                <p class="text-small" >{{family.relationship}}</p>
             </div>
             
+            
             <div class="item item-text-wrap" >
-                <h2 class="talents">Blood Type</h2>
+                <h2 class="talents text-smaller">Blood Type</h2>
                 <p class="text-small" >{{family.bloodType}}</p>
             </div>
             <div class="item item-text-wrap" >
-                <h2 class="talents">Marital Status</h2>
+                <h2 class="talents text-smaller">Address</h2>
+                <p class="text-small" >{{family.address}}</p>
+            </div>
+            <div class="item item-text-wrap" >
+                <h2 class="talents text-smaller">Marital Status</h2>
                 <p class="text-small" >{{family.maritalStatus}}</p>
             </div>
             <div class="item item-text-wrap" >
-                <h2 class="talents">Occupation</h2>
+                <h2 class="talents text-smaller">Occupation</h2>
                 <p class="text-small" >{{family.occupation}}</p>
             </div>
             <div class="item item-text-wrap" >
-                <h2 class="talents">Phone</h2>
-                <p class="text-small" >{{family.phone}}</p>
+                <h2 class="talents text-smaller">Phone</h2>
+                <p class="text-medium" >{{family.phone}}</p>
             </div>
            
         </div>

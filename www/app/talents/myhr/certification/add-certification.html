@@ -42,13 +42,17 @@
             </div>
              <div class="row">
                 <div class="input-field col s12">
-                    <input  ng-model="certification.type" type="text" class="validate">
-                    <label for="textarea1">Type</label>
+                    <p style="font-size:13px">Type</p>
+                    <!-- <input  ng-model="certification.type" type="text" class="validate">-->
+                    <select class="select-dropdown" ng-model="certification.type" >
+                        <option ng-repeat="type in selectCertificationType">{{type.id}}</option>
+                  </select>
+                    
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s12">
-                    <textarea  ng-model="address.description" class="materialize-textarea"></textarea>
+                    <textarea  ng-model="certification.description" class="materialize-textarea"></textarea>
                     <label for="textarea1">Description</label>
                 </div>
             </div>

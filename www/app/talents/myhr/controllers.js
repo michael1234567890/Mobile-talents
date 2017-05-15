@@ -121,7 +121,7 @@ angular.module('myhr.controllers', [])
         $state.go("login");
     }
 
-    $scope.family = {};
+    $scope.family = [];
     $scope.goToDetails = function (idx) {
       $state.go('app.detailfamily',{'idx':idx});
     };
@@ -190,7 +190,7 @@ angular.module('myhr.controllers', [])
           template: 'Loading...'
       });
       var accessToken = Main.getSession("token").access_token;
-      var urlApi = Main.getUrlApi() + '/api/myprofile/family';
+      var urlApi = Main.getUrlApi() + '/api/user/family';
       Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
     }
     
@@ -199,7 +199,7 @@ angular.module('myhr.controllers', [])
 
 
 
-.controller('DetailFamilyCtrl', function($stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('DetailFamilyCtrl', function($ionicHistory,$stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
   
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
@@ -209,8 +209,97 @@ angular.module('myhr.controllers', [])
     $scope.family = {};
     if(familyIdx != null)
       $scope.family = $rootScope.family[familyIdx];
-    console.log(familyIdx);
+    
+    $scope.goEditFamily = function () {
+      $state.go('app.editfamily',{idx:familyIdx});
+      $ionicHistory.nextViewOptions({
+          disableAnimate: false,
+          disableBack: false
+      });
+    }
 
+
+})
+
+
+.controller('EditFamilyCtrl', function($filter, $ionicHistory,$stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+  
+    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+        $state.go("login");
+    }
+
+    var familyIdx = $stateParams.idx;
+    console.log("familyIdx",familyIdx)
+    $scope.familyData = {};
+    if(familyIdx != null)
+      $scope.family = $rootScope.family[familyIdx];
+    if($scope.family.birthDate != null) 
+      $scope.family.birthDate = new Date($scope.family.birthDate);
+    else
+      $scope.family.birthDate = new Date();
+
+    $scope.selectMaritalStatus = Main.getSelectMaritalStatus();
+    $scope.selectRelationship = Main.getSelectFamilyRelationShip();
+    $scope.selectBloodType = Main.getSelectBloodType();
+    $scope.selectGender = Main.getSelectGender();
+    $scope.isEdit = true;
+    var successRequest = function (res){
+      $ionicLoading.hide();
+      alert(res.message);
+      $scope.goBack('app.family');
+      console.log(res);
+      //$scope.family = res;
+    }
+
+    var errorRequest = function (err, status){
+      $ionicLoading.hide();
+      if(status == 401) {
+        var refreshToken = Main.getSession("token").refresh_token
+        console.log("need refresh token");
+        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
+      }else {
+          if(status==500)
+            alert(err.message);
+          else
+            alert("Please Check your connection");
+      }
+
+      console.log(err);
+      console.log(status);
+    }
+
+    var successRefreshToken = function(res){
+      Main.setSession("token",res);
+      console.log("token session");
+      console.log(Main.getSession("token"));
+    }
+    var errRefreshToken = function(err, status) {
+      console.log(err);
+      console.log(status);
+    }
+
+
+    $scope.submitForm = function (){
+        $ionicLoading.show({
+          template: 'Processing...'
+        });
+
+        var birthDate = null;
+        if($scope.family.birthDate != null) 
+          birthDate = $filter('date')($scope.family.birthDate,'yyyy-MM-dd'); 
+
+        var dataEdit = {name:$scope.family.name,birthPlace:$scope.family.birthPlace,birthDate:birthDate,gender:$scope.family.gender,relationship:$scope.family.relationship,address:$scope.family.address,maritalStatus:$scope.family.maritalStatus,bloodType:$scope.family.bloodType,occupation:$scope.family.occupation,phone:$scope.family.phone};
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/family/'+$scope.family.id;
+        var data = JSON.stringify(dataEdit);
+        console.log(data);
+        Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
+
+        console.log(dataEdit);
+    }
+
+    console.log("$scope.family",$scope.family)
+    
 })
 
 
@@ -229,11 +318,14 @@ angular.module('myhr.controllers', [])
 
     $scope.image = "img/placeholder.png";
     $scope.family = {};
-    $scope.selectRelationship = {};
-    $scope.selectBloodType = {};
-    $scope.selectGender = [];
-    $scope.selectMaritalStatus = [];
+
+    $scope.selectMaritalStatus = Main.getSelectMaritalStatus();
+    $scope.selectRelationship = Main.getSelectFamilyRelationShip();
+    $scope.selectBloodType = Main.getSelectBloodType();
+    $scope.selectGender = Main.getSelectGender();
+
     $scope.imageData = null;
+    $scope.isEdit = false;
 
 
     $scope.takePicture = function(){
@@ -290,7 +382,7 @@ angular.module('myhr.controllers', [])
         if($scope.imageData != null)
           $scope.family.attachments = attachment;
         var accessToken = Main.getSession("token").access_token;
-        var urlApi = Main.getUrlApi() + '/api/myprofile/family';
+        var urlApi = Main.getUrlApi() + '/api/user/family';
         var data = JSON.stringify($scope.family);
         console.log(data);
         Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
@@ -332,11 +424,7 @@ angular.module('myhr.controllers', [])
     initMethod();
     
     function initMethod(){
-        $scope.selectRelationship = [{id:"Ayah"},{id:"Ibu"},{id:"Suami"},{id:"Istri"},{id:"Anak"},];
-        $scope.selectBloodType = [{id:"A"},{id:"B"},{id:"AB"},{id:"O"}];
-        $scope.selectGender = [{id:"Male"},{id:"Female"}];
-        $scope.selectMaritalStatus = [{id:"Single"},{id:"Married"},{id:"Divorce"}];
-
+        
     }
     // invalid access token error: "invalid_token" 401
     function verificationForm(){
@@ -429,12 +517,93 @@ angular.module('myhr.controllers', [])
           template: 'Loading...'
       });
       var accessToken = Main.getSession("token").access_token;
-      var urlApi = Main.getUrlApi() + '/api/myprofile/address';
+      var urlApi = Main.getUrlApi() + '/api/user/address';
       Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
     }
 
 })
 
+
+.controller('EditAddressCtrl', function($stateParams,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+    
+   
+    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+        $state.go("login");
+    }
+
+    var addressIdx = $stateParams.idx;
+    $scope.address = {};
+    if(addressIdx != null)
+      $scope.address = $rootScope.address[addressIdx];
+
+    console.log($scope.address);
+    $scope.selectStayStatus = {};
+    $scope.selectProvince = [];
+    $scope.selectCity=[];
+    $scope.selectCountry=[];
+   
+
+    
+
+    $scope.submitForm = function(){
+        verificationForm();
+        $ionicLoading.show({
+          template: 'Submit...'
+        });
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/address';
+        var data = JSON.stringify($scope.address);
+        Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
+
+    }
+
+    var successRequest = function (res){
+      $ionicLoading.hide();
+      alert(res.message);
+      console.log(res);
+      goBack("app.address");
+      //$scope.family = res;
+    }
+
+    var errorRequest = function (err, status){
+      $ionicLoading.hide();
+      if(status == 401) {
+        var refreshToken = Main.getSession("token").refresh_token
+        console.log("need refresh token");
+        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
+      }else {
+        alert("Check your connection");
+      }
+      console.log(err);
+      console.log(status);
+    }
+
+    var successRefreshToken = function(res){
+      Main.setSession("token",res);
+      console.log("token session");
+      console.log(Main.getSession("token"));
+    }
+    var errRefreshToken = function(err, status) {
+      console.log(err);
+      console.log(status);
+    }
+
+    initMethod();
+    
+    function initMethod(){
+        $scope.selectStayStatus = [{id:"Owned"},{id:"Contract"},{id:"Live with parent"}];
+        $scope.selectProvince = [{id:"DKI Jakarta"},{id:"Jawa Barat"},{id:"Jawa Tengah"},{id:"Jawa Timur"}];
+        $scope.selectCity = [{id:"Jakarta Selatan"},{id:"Jakarta Utara"},{id:"Jakarta Barat"},{id:"Jakarta Timur"}];
+        $scope.selectCountry = [{id:"Indonesia"}];
+    }
+    // invalid access token error: "invalid_token" 401
+    function verificationForm(){
+
+    }
+
+   
+
+})
 
 
 .controller('AddAddressCtrl', function($ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
@@ -476,7 +645,7 @@ angular.module('myhr.controllers', [])
           template: 'Submit...'
         });
         var accessToken = Main.getSession("token").access_token;
-        var urlApi = Main.getUrlApi() + '/api/myprofile/address';
+        var urlApi = Main.getUrlApi() + '/api/user/address';
         var data = JSON.stringify($scope.address);
         Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
 
@@ -533,7 +702,7 @@ angular.module('myhr.controllers', [])
 
 
 
-.controller('DetailAddressCtrl', function($stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('DetailAddressCtrl', function($ionicHistory , $stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
   
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
@@ -543,6 +712,16 @@ angular.module('myhr.controllers', [])
     $scope.address = {};
     if(addressIdx != null)
       $scope.address = $rootScope.address[addressIdx];
+
+    
+    $scope.goEditAddress = function () {
+     
+      $state.go('app.editaddress',{idx:addressIdx});
+      $ionicHistory.nextViewOptions({
+          disableAnimate: false,
+          disableBack: false
+      });
+    }
    
 })
 
@@ -558,15 +737,15 @@ angular.module('myhr.controllers', [])
     initMethod();
   }
 
-    $scope.certification = {};
-    $scope.goToAdd = function () {
-       
-        $state.go('app.addcertification');
-        $ionicHistory.nextViewOptions({
-            disableAnimate: false,
-            disableBack: false
-        });
-    }
+  $scope.certification = {};
+  $scope.goToAdd = function () {
+     
+      $state.go('app.addcertification');
+      $ionicHistory.nextViewOptions({
+          disableAnimate: false,
+          disableBack: false
+      });
+  }
 
 
     $scope.goToDetails = function (idx) {
@@ -647,6 +826,7 @@ angular.module('myhr.controllers', [])
     }
     $scope.certification = {};
     $scope.selectRelationship = {};
+    $scope.selectCertificationType =
 
     $scope.resetForm  = function(){
       $scope.certification = {};
@@ -716,7 +896,7 @@ angular.module('myhr.controllers', [])
     initMethod();
     
     function initMethod(){
-        //$scope.selectRelationship = [{id:"Suami"},{id:"Istri"}];
+        $scope.selectCertificationType = [{id:"Period"},{id:"Lifetime"}];
     }
 
     // invalid access token error: "invalid_token" 401

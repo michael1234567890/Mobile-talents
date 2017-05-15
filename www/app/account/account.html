@@ -28,10 +28,10 @@
         <ion-scroll direction="y" style="height: 100%">
             <div ng-if="profile.type === 1">
                 <div style="height: 700px">
-                    <div class="row post" ng-repeat="post in news.items" ng-if="$index % 3 == 0">
-                        <div class="col"><img ng-src="{{news.items[$index].image}}" /></div>
-                        <div class="col"><img ng-src="{{news.items[$index + 1].image}}" /></div>
-                        <div class="col"><img ng-src="{{news.items[$index + 2].image}}" /></div>
+                    <div class="row post" ng-repeat="attachment in detail.attachments" ng-if="$index % 3 == 0">
+                        <div class="col"><img ng-src="{{attachment[$index].image}}" /></div>
+                        <div class="col"><img ng-src="{{attachment[$index + 1].image}}" /></div>
+                        <div class="col"><img ng-src="{{attachment[$index + 2].image}}" /></div>
                     </div>
                 </div>
             </div>
