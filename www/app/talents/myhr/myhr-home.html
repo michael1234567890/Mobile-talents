@@ -1,10 +1,17 @@
 <ion-view title="My HR" class="bg-lightgrey">
 
     <ion-content class="has-header bt-grey profile" scroll="true">
+        <ion-refresher pulling-text="Pull to refresh"
+             refreshing-text="Loading..."
+             refreshing-icon="ion-loading-c"
+             pulling-icon="ion-ios7-arrow-thin-down"
+             on-refresh="refresh()">
+        </ion-refresher>
+        
         <div class="header">
             <img ng-src="{{user.photo}}">
             <!--<span class="badge badge-balanced">3</span>-->
-            <h2 class="lead text-medium">{{profile.fullname}}</h2>
+            <h2 class="lead text-medium">{{profile.firstName}} {{profile.lastName}}</h2>
             <p class="text-medium">{{profile.employeeTransient.assignment.positionName}}</p>
             <p class="text-medium">{{profile.employeeTransient.assignment.organizationName}}</p>
            

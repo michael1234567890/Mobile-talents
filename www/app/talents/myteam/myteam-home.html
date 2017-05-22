@@ -1,6 +1,12 @@
 <ion-view title="My Team">
-    <ion-content class="has-header" scroll="false">
-       
+
+    <ion-content class="has-header" scroll="true">
+        <ion-refresher pulling-text="Pull to refresh"
+             refreshing-text="Loading..."
+             refreshing-icon="ion-loading-c"
+             pulling-icon="ion-ios7-arrow-thin-down"
+             on-refresh="refresh()">
+    </ion-refresher>
         <div style="height:95%; overflow:scroll" class="bg-lightgrey">
             <div >
                 <div class="card hybrid" ng-repeat="post in team | filter: searchFilter  | orderBy: 'publishedDate':true " ng-click="goToDetails(post.idx)">
@@ -8,9 +14,9 @@
                     <div class="item item-avatar item-icon-left item-icon-right">
                         <img ng-src="img/1491892621_profle.png">
                         <div class="inner-content">
-                        <h2 class="balanced">{{post.firstName}}</h2>
-                        <p>{{post.assignment.jobTitle.jobTitle}}</p>
-                        <p>{{post.assignment.division}}</p>
+                        <h2 class="balanced">{{post.firstName}} {{post.lastName}}</h2>
+                        <p>{{post.assignment.positionName}}</p>
+                        <p>{{post.assignment.organizationName}}</p>
                         <span class="interact">
                             {{post.assignment.homeBase}}
                         </span>

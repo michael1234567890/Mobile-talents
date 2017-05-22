@@ -15,42 +15,8 @@
             </div>
          </div>
         <!-- </ion-scroll>-->
-        <div class="item item-divider" >Notification</div>
-        <!-- <ion-scroll class="bg-lightgrey" direction="y" style="height:100%">-->
-            <div style="height:250px">
-                <div class="card no-margin bb-grey no-br no-box" ng-if="seletedDateEvents.length > 0" ng-repeat="notification in seletedDateEvents | filter: searchFilter | orderBy: 'startsAt':true track by $index">
-                    <div class="item item-text-wrap item-icon-left teal lighten-1" ng-click="open[$index] = !open[$index]" on-hold="onCardHold($index, notification);" ng-if="notification.type == 'Add Task'">
-                        <i class="icon light ion-ios-checkmark-outline"></i>
-                        <span class="light text-medium">{{notification.title}}</span><br/>
-                        <span class="light text-smaller justified" ng-if="open[$index] && notification.notes">{{notification.notes}}<br/></span>
-                        <span class="text-smaller light">Start's at {{notification.startsAt | date: 'HH:mm a'}}</span>
-                        <span class="light text-smaller pull-right" ng-if="open[$index] && !notification.allDay">End's at {{notification.endsAt | date: 'HH:mm a'}}</span>
-                        <span class="light text-smaller pull-right" ng-if="open[$index] && notification.allDay">on going for entire day</span>
-                    </div>
-
-                    <div class="item item-text-wrap item-icon-left indigo lighten-1" ng-click="open[$index] = !open[$index]" on-hold="onCardHold($index, notification);" ng-if="notification.type == 'Add Event'">
-                        <i class="icon light ion-ios-calendar-outline"></i>
-                        <span class="light text-medium">{{notification.title}}</span><br/>
-                        <span class="light text-small justified" ng-if="open[$index] && notification.notes">{{notification.notes}}<br/></span>
-                        <span class="light text-small" ng-if="open[$index] && notification.location"><i class="icon ion-ios-location"></i> {{notification.location}}<br/></span>
-                        <span class="text-smaller light">Start's at {{notification.startsAt | date: 'HH:mm a'}}</span>
-                        <span class="light text-smaller pull-right" ng-if="open[$index] && !notification.allDay">End's at {{notification.endsAt | date: 'HH:mm a'}}</span>
-                        <span class="light text-smaller pull-right" ng-if="open[$index] && notification.allDay">on going for entire day</span>
-                    </div>
-
-                    <a href="tel:{{notification.phone}}" class="item item-text-wrap item-icon-left blue lighten-1" ng-if="notification.type == 'Add Call'" on-hold="goTo('tabs.reminder')">
-                        <i class="icon light ion-ios-telephone-outline"></i>
-                        <span class="light text-medium">{{notification.title}}</span><br/>
-                        <span class="text-smaller light">Start's at {{notification.startsAt | date: 'HH:mm a'}}</span>
-                    </a>
-
-                    <a href="email:{{notification.email}}" class="item item-text-wrap item-icon-left light blue lighten-1" ng-if="notification.type == 'Add Email'" on-hold="goTo('tabs.reminder')">
-                        <i class="icon light ion-ios-at-outline"></i>
-                        <span class="light text-medium">{{notification.title}}</span><br/>
-                        <span class="text-smaller light">Start's at {{notification.startsAt | date: 'HH:mm a'}}</span>
-                    </a>
-                </div>
-            </div>
+        <div class="item item-divider" style="display:none">Notification</div>
+       
         </ion-scroll>
     </ion-content>
 

@@ -13,7 +13,6 @@
     <div class="list">
         <div class="item item-text-wrap" >
             <h2 class="talents">Request Type</h2>
-            <!-- <p class="text-small" >{{detail.taskTitle}}</p>-->
             <p class="text-small" >{{detail.description}}</p>
         </div>
         <div ng-if="detail.task == 'CHANGEMARITALSTATUS'">
@@ -68,10 +67,24 @@
                 </div>
                 
         </div>
-        <div class="row">
-                <button class="btn button-small  waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="confirmReject()">Reject</button>&nbsp;
-                <button class="btn button-small waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="confirmAccept()">Approve</button>
 
+        <div ng-if="detail.task == 'SUBMITADDRESS'">
+                <div class="item item-text-wrap" >
+                    <h2 class="talents">Address</h2>
+                    <p class="text-small" >{{detail.ref.address}}</p>
+                </div>
+                <div class="item item-text-wrap" >
+                    <h2 class="talents">Province</h2>
+                    <p class="text-small" >{{detail.ref.province}}</p>
+                </div>
+                <div class="item item-text-wrap" >
+                    <h2 class="talents">City</h2>
+                    <p class="text-small" >{{detail.ref.city}}</p>
+                </div>
+                
+        </div>
+        <div class="row">
+                <button style="display:none"class="btn button-small  waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-if="detail.processingStatus == 'Request'" ng-click="confirmCancel()">Cancel</button>&nbsp;
         </div>
     </div>
     

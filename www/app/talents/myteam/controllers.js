@@ -9,6 +9,11 @@ angular.module('myteam.controllers', [])
     	$state.go('app.myteamdetail',{'idx':idx});
     };
 
+     $scope.refresh = function(){
+        initMethod();
+        $scope.$broadcast('scroll.refreshComplete');
+    }
+
    
     $scope.team = [];
     var successProfile = function (res){
@@ -34,7 +39,7 @@ angular.module('myteam.controllers', [])
         if(status == -1) {
           alert("Error : Problem with your connection.");
         }else {
-          alert("Error : " + err.message);
+          alert( err.message);
         }
         
       }
@@ -189,6 +194,15 @@ angular.module('myteam.controllers', [])
     }
 
     $scope.requests = [];
+    $scope.$on('$ionicView.beforeEnter', function () {
+        console.log("$ionicView.beforeEnter");
+        if( $rootScope.refreshRequestApprovalCtrl) {
+            console.log("refresh AddressCtrl");
+            initMethod();
+        }
+        $rootScope.refreshRequestApprovalCtrl = false;
+    });
+
 
     $scope.confirmApprove = $ionicPopover.fromTemplate(contactTemplate, {
         scope: $scope
@@ -228,7 +242,7 @@ angular.module('myteam.controllers', [])
 
    
     var successRequest = function (res){
-      $scope.$broadcast('scroll.refreshComplete');
+      
       for(var i=0;i<res.length;i++) {
         var obj = res[i];
         obj.idx = i;
@@ -250,6 +264,7 @@ angular.module('myteam.controllers', [])
        }
 
       $ionicLoading.hide();
+      $scope.$broadcast('scroll.refreshComplete');
       console.log($scope.requests);
     }
 
@@ -311,6 +326,7 @@ angular.module('myteam.controllers', [])
     var successApprove = function(res){
         $ionicLoading.hide();
         alert(res.message);
+        $rootScope.refreshRequestApprovalCtrl = true;
         $scope.goBack("app.requestapproval");
     }
 
@@ -433,7 +449,7 @@ angular.module('myteam.controllers', [])
         if(status == -1) {
           alert("Error : Problem with your connection.");
         }else {
-          alert("Error : " + err.message);
+          alert(err.message);
         }
         
       }

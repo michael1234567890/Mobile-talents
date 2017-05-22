@@ -1,4 +1,18 @@
+<style type="text/css">
 
+.remove{
+    background: #C76868;
+    color: #FFF;
+    font-weight: bold;
+    font-size: 21px;
+    border: 0;
+    cursor: pointer;
+    display: inline-block;
+    padding: 4px 9px;
+    vertical-align: top;
+    line-height: 100%;   
+}
+</style>
 <ion-view title="Family">
    
     <ion-content padding="true" class="has-header materialize" scroll="true" >
@@ -97,13 +111,22 @@
             </div>
             <div ng-if="isEdit != true">
               <div class="item item-divider">Attach Document Support</div> 
+              <div class="row">
+                  <button class="btn waves-effect button-small waves-light button button-stable  button-block waves-effect waves-light" ng-click="addPicture()">Add Attachment</button>
+              </div>
+              <div class="row post" >
+                  
+                        <div class="col" ng-repeat="items in family.images" ><img height="90px"  ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
+
+                        
+                 
+              </div>
               <div class="row center">
-                  <div class="col" style="min-height:90px"><a ng-click="takePicture()"><img ng-src="{{image}}" height="90px" ></a></div>
+               <div class="col" style="min-height:90px" ng-if="family.images.length==0"><a ng-click="takePicture()"><img ng-src="{{image}}" height="90px" ></a></div>
               </div>
             </div>
             <div class="row">
-                  
-                  <button class="btn waves-effect button-small waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Submit</button>
+                <button class="btn waves-effect button-small waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Submit</button>
               
             </div>
        </div>

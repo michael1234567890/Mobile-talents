@@ -1,0 +1,25 @@
+<ion-view title="Attachments" class="bg-lightgrey">
+
+    <ion-nav-buttons side="right">
+        <!-- <button class="button button-dark button-clear icon ion-ios-compose-outline" ui-sref="app.edit-biodata"></button>-->
+    </ion-nav-buttons>
+
+    <ion-content class="has-header bt-grey profile" scroll="true">
+        
+        <div class="list">
+            <div class="item" >
+                <div class="row post" ng-repeat="obj in attachments" ng-if="$index % 3 == 0">
+                    <div class="col" ng-if="$index==0"><img style="max-width:100px;max-height:100px" ng-src="{{obj.image}}" ng-click="openImagePreview(obj.image)" /></div>
+                    <div class="col" ng-if="$index==1"><img style="max-width:100px;max-height:100px" ng-src="{{obj.image}}" ng-click="openImagePreview(obj.image)"/></div>
+                    <div class="col" ng-if="$index==2"><img style="max-width:100px;max-height:100px" ng-src="{{obj.image}}" ng-click="openImagePreview(obj.image)" /></div>
+                </div>
+                <div class="item" ng-if="attachments.length == 0" >
+                    <div class="col col-100">
+                        <p>No Image</p>
+                    </div>  
+                </div>
+            </div>
+            
+        </div>
+    </ion-content>
+</ion-view>

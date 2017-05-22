@@ -233,9 +233,51 @@ angular.module('selfservice.controllers', [])
     $scope.selectYear = [];
     $scope.selectMonth = [];
     $scope.payslip = {};
+    $scope.payslip.payrollType = "monthly";
+
+    var successRequest = function (res){
+      $ionicLoading.hide();
+      if(res.length == 0 ){
+          alert("Data Not Found");
+      }else {
+        $rootScope.payslipSelected = res;
+        $state.go("app.detailpayslip");
+      }
+    }
+
+    var errorRequest = function (err, status){
+      $ionicLoading.hide();
+      if(status == 401) {
+        var refreshToken = Main.getSession("token").refresh_token
+        console.log("need refresh token");
+        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
+      }else {
+         if(status==500)
+            alert(err.message);
+          else
+            alert("Please Check your connection");
+      }
+      console.log(err);
+      console.log(status);
+    }
+
+    function getPaySlip(payrollType,year,month){
+      $ionicLoading.show({
+          template: 'Loading...'
+      });
+      var strData = {payrollType:payrollType,year:year,month:month};
+      var data = JSON.stringify(strData);
+      var accessToken = Main.getSession("token").access_token;
+      var urlApi = Main.getUrlApi() + '/api/user/payroll';
+      Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
+
+    }
+
+
     $scope.submitForm = function(){
-        console.log($scope.payslip);
-        $state.go('app.detailpayslip',{'year':$scope.payslip.year,'month':$scope.payslip.month});
+        $rootScope.payslipSelected = null;
+        getPaySlip($scope.payslip.payrollType,$scope.payslip.year,$scope.payslip.month);
+        //$state.go('app.detailpayslip',{'year':$scope.payslip.year,'month':$scope.payslip.month});
         //$state.go("app.detailpayslip");
     }
 
@@ -249,10 +291,28 @@ angular.module('selfservice.controllers', [])
     }
 
     initModule();
+
     })
 
+.controller('DetailPayslipCtrl', function($ionicLoading, $stateParams,$compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
 
-    .controller('SubmitClaimCtrl', function($compile,$filter,$cordovaGeolocation,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+    $scope.listHeader = [];
+    function getPaySlip (){
+        console.log($rootScope.payslipSelected);
+        if($rootScope.payslipSelected != null) {
+            $scope.listHeader = $rootScope.payslipSelected;
+        }
+    }
+    function initMethod(){
+      getPaySlip();
+    }
+
+    
+
+    initMethod();
+    
+})
+.controller('SubmitClaimCtrl', function($compile,$filter,$cordovaGeolocation,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     $scope.selectYear = [];
     $scope.selectMonth = [];
 
@@ -269,62 +329,5 @@ angular.module('selfservice.controllers', [])
 })
 
 
-.controller('DetailPayslipCtrl', function($ionicLoading, $stateParams,$compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
 
-    var year = $stateParams.year;
-    var month = $stateParams.month;
-    $scope.listHeader = [];
-    console.log("year ", year);
-    console.log("month ", month);
-
-    var successRequest = function (res){
-      $ionicLoading.hide();
-      console.log(res);
-      $scope.listHeader = res;
-
-    }
-
-    var errorRequest = function (err, status){
-      $ionicLoading.hide();
-      if(status == 401) {
-        var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
-        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-      }else {
-        alert("Check your connection");
-      }
-      console.log(err);
-      console.log(status);
-    }
-
-    var successRefreshToken = function(res){
-      Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
-    }
-    var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
-    }
-
-    function initMethod(){
-      getPaySlip();
-    }
-
-    // invalid access token error: "invalid_token" 401
-    function getPaySlip(){
-      $ionicLoading.show({
-          template: 'Loading...'
-      });
-      var strData = {month:year+"-"+month};
-      var data = JSON.stringify(strData);
-      var accessToken = Main.getSession("token").access_token;
-      var urlApi = Main.getUrlApi() + '/api/user/payroll';
-      Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
-
-    }
-
-    initMethod();
-    
-})
 

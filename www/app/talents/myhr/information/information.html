@@ -15,8 +15,8 @@
             <div class="item item-thumbnail-left item-text-wrap" >
                 <img ng-src="{{user.photo}}" style="max-width:100px">
                 <h2 class="lead text-medium" style="padding-left:0px">{{personal.firstName}} {{personal.middleName}} {{personal.lastName}}</h2>
-                <h3>{{personal.assignment.jobTitleName}}</h3>
-                <p style="font-size:14px">{{personal.assignment.division}}</p>
+                <h3>{{personal.assignment.positionName}}</h3>
+                <p style="font-size:14px">{{personal.assignment.organizationName}}</p>
             </div>
         </div>
 
@@ -38,10 +38,6 @@
                 <i class="icon ion-ios-arrow-right pull-right"></i>
             </div>
             <div class="item item-text-wrap" >
-                <h2 class="talents">Address</h2>
-                <p class="text-small" >Jln Kenanga no 17 Jakarta Selatan DKI Jakarta</p>
-            </div>
-            <div class="item item-text-wrap" >
                 <h2 class="talents">Handphone</h2>
                 <p class="text-small" >{{personal.mobilePhone}}</p>
             </div>
@@ -56,6 +52,10 @@
             <div class="item item-text-wrap" >
                 <h2 class="talents">Blood Type</h2>
                 <p class="text-small" >{{personal.bloodType}}</p>
+            </div>
+            <div class="item item-text-wrap" >
+                <h2 class="talents">Address</h2>
+                <p class="text-small" >{{personal.addressFull}}</p>
             </div>
         </div>
     </ion-content>

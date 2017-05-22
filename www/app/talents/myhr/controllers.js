@@ -5,7 +5,18 @@ angular.module('myhr.controllers', [])
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
-    $scope.profile = {};
+
+    $scope.profile = Main.getSession("profile");
+    //$scope.profile = {};
+    console.log("profile", $scope.profile);
+    $scope.$on('$ionicView.beforeEnter', function () {
+         $scope.profile = Main.getSession("profile");
+    });
+
+    $scope.refresh = function(){
+        $scope.profile = Main.getSession("profile");
+        $scope.$broadcast('scroll.refreshComplete');
+    }
 
 
     var successProfile = function (res){
@@ -21,7 +32,12 @@ angular.module('myhr.controllers', [])
     		var refreshToken = Main.getSession("token").refresh_token
     		console.log("need refresh token");
     		Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-    	}
+    	}else {
+          if(status==500)
+            alert(err.message);
+          else
+            alert("Please Check your connection");
+      }
     	console.log(err);
     	console.log(status);
     }
@@ -39,7 +55,8 @@ angular.module('myhr.controllers', [])
    	initMethod();
    	//31acd2e6-e891-4628-a24e-58e408664516
    	function initMethod(){
-   		getProfile();
+      /*if(Main.getSession("profile") == null)
+   		   getProfile();*/
    	}
    	// invalid access token error: "invalid_token" 401
    	function getProfile(){
@@ -73,6 +90,13 @@ angular.module('myhr.controllers', [])
       if($scope.personal.maritalStatusDataApproval != null) {
           $scope.personal.showMaritalStatus = $scope.personal.changeMaritalStatus;
       }
+      $scope.personal.addressShow = false;
+      $scope.personal.addressFull = "";
+      if(res.address != null){
+          address = res.address;
+          $scope.personal.addressFull += " " + address.address + " RT. " + address.rt + " RW. " + address.rw + " " + address.city + ", " + address.province;
+          
+      }
     }
 
     var errorRequest = function (err, status){
@@ -81,7 +105,10 @@ angular.module('myhr.controllers', [])
     		console.log("need refresh token");
     		Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
     	}else {
-    		alert("Check your connection");
+    		  if(status==500)
+            alert(err.message);
+          else
+            alert("Please Check your connection");
     	}
     	console.log(err);
     	console.log(status);
@@ -122,6 +149,15 @@ angular.module('myhr.controllers', [])
     }
 
     $scope.family = [];
+    $scope.$on('$ionicView.beforeEnter', function () {
+        console.log("$ionicView.beforeEnter");
+        if( $rootScope.refreshFamilyCtrl) {
+           
+            initMethod();
+        }
+        $rootScope.refreshFamilyCtrl = false;
+    });
+
     $scope.goToDetails = function (idx) {
       $state.go('app.detailfamily',{'idx':idx});
     };
@@ -163,7 +199,10 @@ angular.module('myhr.controllers', [])
         console.log("need refresh token");
         Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
       }else {
-        alert("Check your connection");
+          if(status==500)
+            alert(err.message);
+          else
+            alert("Please Check your connection");
       }
       console.log(err);
       console.log(status);
@@ -326,8 +365,15 @@ angular.module('myhr.controllers', [])
 
     $scope.imageData = null;
     $scope.isEdit = false;
-
-
+    $scope.family.images = [];
+    $scope.addPicture = function(){
+        if($scope.family.images.length > 3) {
+          alert("Only 3 pictures can be upload");
+          return false;
+        }
+        $scope.family.images.push({'image':"img/placeholder.png"});
+        console.log($scope.family.images);
+    }
     $scope.takePicture = function(){
         var options = {
             quality: 100,
@@ -393,8 +439,194 @@ angular.module('myhr.controllers', [])
     var successRequest = function (res){
       $ionicLoading.hide();
       alert(res.message);
+      $rootScope.refreshFamilyCtrl=true;
       goBack('app.family');
       console.log(res);
+      //$scope.family = res;
+    }
+
+    var errorRequest = function (err, status){
+      $ionicLoading.hide();
+      if(status == 401) {
+        var refreshToken = Main.getSession("token").refresh_token
+        console.log("need refresh token");
+        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
+      }else {
+        if(status==500)
+          alert(err.message);
+        else
+          alert("Please Check your connection");
+      }
+      console.log(err);
+      console.log(status);
+    }
+
+    var successRefreshToken = function(res){
+      Main.setSession("token",res);
+      console.log("token session");
+      console.log(Main.getSession("token"));
+    }
+    var errRefreshToken = function(err, status) {
+      console.log(err);
+      console.log(status);
+    }
+
+    initMethod();
+    
+    function initMethod(){
+        
+    }
+    // invalid access token error: "invalid_token" 401
+    function verificationForm(){
+
+    }
+
+   
+
+})
+
+
+
+
+.controller('AddressCtrl', function($ionicHistory,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+  
+    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+        $state.go("login");
+    }
+
+    $scope.$on('$ionicView.beforeEnter', function () {
+        console.log("$ionicView.beforeEnter");
+        if( $rootScope.refreshAddressCtrl) {
+            console.log("refresh AddressCtrl");
+            initMethod();
+        }
+        $rootScope.refreshAddressCtrl = false;
+    });
+
+    $scope.refresh = function(){
+      initMethod();
+    }
+
+
+    $scope.address = [];
+    
+    $scope.goToAddAddress = function () {
+       
+        $state.go('app.addaddress');
+        $ionicHistory.nextViewOptions({
+            disableAnimate: false,
+            disableBack: false
+        });
+    }
+
+    $scope.goToDetails = function (idx) {
+      $state.go('app.detailaddress',{'idx':idx});
+    };
+
+
+    console.log(Main.getSession("token"));
+
+    var successRequest = function (res){
+      $ionicLoading.hide();
+      console.log(res);
+      $scope.address = res;
+      
+      $rootScope.address = [];
+      for(var i=0;i<$scope.address.length;i++) {
+        var obj = $scope.address[i];
+        obj.idx = i;
+        $rootScope.address.push(obj);
+      }
+      $scope.address = $rootScope.address;
+      $scope.$broadcast('scroll.refreshComplete');
+
+    }
+
+    var errorRequest = function (err, status){
+      $ionicLoading.hide();
+      if(status == 401) {
+        var refreshToken = Main.getSession("token").refresh_token
+        console.log("need refresh token");
+        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
+      }else {
+          if(status==500)
+            alert(err.message);
+          else
+            alert("Please Check your connection");
+      }
+      console.log(err);
+      console.log(status);
+    }
+
+    var successRefreshToken = function(res){
+      Main.setSession("token",res);
+      console.log("token session");
+      console.log(Main.getSession("token"));
+    }
+    var errRefreshToken = function(err, status) {
+      console.log(err);
+      console.log(status);
+    }
+
+    initMethod();
+    //31acd2e6-e891-4628-a24e-58e408664516
+    function initMethod(){
+      $scope.address = [];
+      getAddress();      
+    }
+    // invalid access token error: "invalid_token" 401
+    function getAddress(){
+      $ionicLoading.show({
+          template: 'Loading...'
+      });
+      var accessToken = Main.getSession("token").access_token;
+      var urlApi = Main.getUrlApi() + '/api/user/address';
+      Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
+    }
+
+})
+
+
+.controller('EditAddressCtrl', function($stateParams,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+    
+   
+    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+        $state.go("login");
+    }
+
+    var addressIdx = $stateParams.idx;
+    $scope.address = {};
+    if(addressIdx != null)
+      $scope.address = $rootScope.address[addressIdx];
+
+    console.log($scope.address);
+    $scope.selectStayStatus = Main.getSelectStayStatus();
+    $scope.selectProvince = Main.getSelectProvince();
+    $scope.selectCity=Main.getSelectCity();
+    $scope.selectCountry=Main.getSelectCountry();
+   
+
+    
+
+    $scope.submitForm = function(){
+        var dataSubmit = {address: $scope.address.address, rt: $scope.address.rt, rw:$scope.address.rw, country:$scope.address.country, province:$scope.address.province, city:$scope.address.city, zipCode:$scope.address.zipCode, phone: $scope.address.phone, stayStatus : $scope.address.stayStatus};
+        verificationForm();
+        $ionicLoading.show({
+          template: 'Submit...'
+        });
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/address/'+$scope.address.id;
+        var data = JSON.stringify(dataSubmit);
+        console.log("data Submit", data);
+        Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
+
+    }
+
+    var successRequest = function (res){
+      $ionicLoading.hide();
+      alert(res.message);
+      console.log(res);
+      $scope.goBack("app.address");
       //$scope.family = res;
     }
 
@@ -436,176 +668,6 @@ angular.module('myhr.controllers', [])
 })
 
 
-
-
-.controller('AddressCtrl', function($ionicHistory,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
-  
-    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
-        $state.go("login");
-    }
-
-    $scope.refresh = function(){
-      initMethod();
-    }
-
-
-    $scope.address = {};
-    
-    $scope.goToAddAddress = function () {
-       
-        $state.go('app.addaddress');
-        $ionicHistory.nextViewOptions({
-            disableAnimate: false,
-            disableBack: false
-        });
-    }
-
-    $scope.goToDetails = function (idx) {
-      $state.go('app.detailaddress',{'idx':idx});
-    };
-
-
-    console.log(Main.getSession("token"));
-
-    var successRequest = function (res){
-      $ionicLoading.hide();
-      console.log(res);
-      $scope.address = res;
-      
-      $rootScope.address = [];
-      for(var i=0;i<$scope.address.length;i++) {
-        var obj = $scope.address[i];
-        obj.idx = i;
-        $rootScope.address.push(obj);
-      }
-      $scope.address = $rootScope.address;
-      $scope.$broadcast('scroll.refreshComplete');
-
-    }
-
-    var errorRequest = function (err, status){
-      $ionicLoading.hide();
-      if(status == 401) {
-        var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
-        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-      }else {
-        alert("Check your connection");
-      }
-      console.log(err);
-      console.log(status);
-    }
-
-    var successRefreshToken = function(res){
-      Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
-    }
-    var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
-    }
-
-    initMethod();
-    //31acd2e6-e891-4628-a24e-58e408664516
-    function initMethod(){
-      getAddress();      
-    }
-    // invalid access token error: "invalid_token" 401
-    function getAddress(){
-      $ionicLoading.show({
-          template: 'Loading...'
-      });
-      var accessToken = Main.getSession("token").access_token;
-      var urlApi = Main.getUrlApi() + '/api/user/address';
-      Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
-    }
-
-})
-
-
-.controller('EditAddressCtrl', function($stateParams,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
-    
-   
-    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
-        $state.go("login");
-    }
-
-    var addressIdx = $stateParams.idx;
-    $scope.address = {};
-    if(addressIdx != null)
-      $scope.address = $rootScope.address[addressIdx];
-
-    console.log($scope.address);
-    $scope.selectStayStatus = {};
-    $scope.selectProvince = [];
-    $scope.selectCity=[];
-    $scope.selectCountry=[];
-   
-
-    
-
-    $scope.submitForm = function(){
-        verificationForm();
-        $ionicLoading.show({
-          template: 'Submit...'
-        });
-        var accessToken = Main.getSession("token").access_token;
-        var urlApi = Main.getUrlApi() + '/api/user/address';
-        var data = JSON.stringify($scope.address);
-        Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
-
-    }
-
-    var successRequest = function (res){
-      $ionicLoading.hide();
-      alert(res.message);
-      console.log(res);
-      goBack("app.address");
-      //$scope.family = res;
-    }
-
-    var errorRequest = function (err, status){
-      $ionicLoading.hide();
-      if(status == 401) {
-        var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
-        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-      }else {
-        alert("Check your connection");
-      }
-      console.log(err);
-      console.log(status);
-    }
-
-    var successRefreshToken = function(res){
-      Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
-    }
-    var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
-    }
-
-    initMethod();
-    
-    function initMethod(){
-        $scope.selectStayStatus = [{id:"Owned"},{id:"Contract"},{id:"Live with parent"}];
-        $scope.selectProvince = [{id:"DKI Jakarta"},{id:"Jawa Barat"},{id:"Jawa Tengah"},{id:"Jawa Timur"}];
-        $scope.selectCity = [{id:"Jakarta Selatan"},{id:"Jakarta Utara"},{id:"Jakarta Barat"},{id:"Jakarta Timur"}];
-        $scope.selectCountry = [{id:"Indonesia"}];
-    }
-    // invalid access token error: "invalid_token" 401
-    function verificationForm(){
-
-    }
-
-   
-
-})
-
-
 .controller('AddAddressCtrl', function($ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     
    
@@ -613,10 +675,13 @@ angular.module('myhr.controllers', [])
         $state.go("login");
     }
     $scope.address = {};
-    $scope.selectStayStatus = {};
-    $scope.selectProvince = [];
-    $scope.selectCity=[];
-    $scope.selectCountry=[];
+    
+
+    $scope.selectStayStatus = Main.getSelectStayStatus();
+    $scope.selectProvince = Main.getSelectProvince();
+    $scope.selectCity=Main.getSelectCity();
+    $scope.selectCountry=Main.getSelectCountry();
+
     $scope.resetForm  = function(){
       $scope.address = {};
     }
@@ -648,7 +713,6 @@ angular.module('myhr.controllers', [])
         var urlApi = Main.getUrlApi() + '/api/user/address';
         var data = JSON.stringify($scope.address);
         Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
-
         //console.log($scope.address);
     }
 
@@ -656,6 +720,7 @@ angular.module('myhr.controllers', [])
       $ionicLoading.hide();
       alert(res.message);
       console.log(res);
+      $rootScope.refreshAddressCtrl = true;
       goBack("app.address");
       //$scope.family = res;
     }
@@ -667,7 +732,10 @@ angular.module('myhr.controllers', [])
         console.log("need refresh token");
         Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
       }else {
-        alert("Check your connection");
+          if(status==500)
+            alert(err.message);
+          else
+            alert("Please Check your connection");
       }
       console.log(err);
       console.log(status);
@@ -686,10 +754,7 @@ angular.module('myhr.controllers', [])
     initMethod();
     
     function initMethod(){
-        $scope.selectStayStatus = [{id:"Owned"},{id:"Contract"},{id:"Live with parent"}];
-        $scope.selectProvince = [{id:"DKI Jakarta"},{id:"Jawa Barat"},{id:"Jawa Tengah"},{id:"Jawa Timur"}];
-        $scope.selectCity = [{id:"Jakarta Selatan"},{id:"Jakarta Utara"},{id:"Jakarta Barat"},{id:"Jakarta Timur"}];
-        $scope.selectCountry = [{id:"Indonesia"}];
+       
     }
     // invalid access token error: "invalid_token" 401
     function verificationForm(){
@@ -729,6 +794,9 @@ angular.module('myhr.controllers', [])
 
 .controller('CertificationCtrl', function($ionicHistory,$timeout,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
    
+  
+  $scope.certification = [];
+
   if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
   }
@@ -737,7 +805,16 @@ angular.module('myhr.controllers', [])
     initMethod();
   }
 
-  $scope.certification = {};
+  $scope.$on('$ionicView.beforeEnter', function () {
+        console.log("$ionicView.beforeEnter");
+      if( $rootScope.refreshCertificationCtrl) {
+          console.log("refresh AddressCtrl");
+          initMethod();
+      }
+      $rootScope.refreshCertificationCtrl = false;
+  });
+
+
   $scope.goToAdd = function () {
      
       $state.go('app.addcertification');
@@ -782,7 +859,10 @@ angular.module('myhr.controllers', [])
         console.log("need refresh token");
         Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
       }else {
-        alert("Check your connection");
+          if(status==500)
+            alert(err.message);
+          else
+            alert("Please Check your connection");
       }
       console.log(err);
       console.log(status);
@@ -801,6 +881,8 @@ angular.module('myhr.controllers', [])
     initMethod();
     //31acd2e6-e891-4628-a24e-58e408664516
     function initMethod(){
+
+      $scope.certification = [];
       getCertification();
     }
     // invalid access token error: "invalid_token" 401
@@ -817,7 +899,7 @@ angular.module('myhr.controllers', [])
 
   })
 
-.controller('AddCertificationCtrl', function($ionicHistory,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('AddCertificationCtrl', function($cordovaCamera,$ionicHistory,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
 
 
 
@@ -827,6 +909,30 @@ angular.module('myhr.controllers', [])
     $scope.certification = {};
     $scope.selectRelationship = {};
     $scope.selectCertificationType =
+    $scope.imageData = null;
+    $scope.image = "img/placeholder.png";
+    
+
+    $scope.takePicture = function(){
+        var options = {
+            quality: 100,
+            destinationType: Camera.DestinationType.DATA_URL,
+            sourceType: Camera.PictureSourceType.CAMERA,
+            targetWidth : 750,
+            targetHeight:550,
+            encodingType: Camera.EncodingType.JPEG,
+            saveToPhotoAlbum: true,
+            correctOrientation:true
+        };
+
+        $cordovaCamera.getPicture(options).then(function (imageData) {
+            $scope.image = "data:image/jpeg;base64," + imageData;
+            $scope.imageData = imageData;
+        }, function (err) {
+            // An error occured. Show a message to the user
+            alert("an error occured while take picture");
+        });
+    }
 
     $scope.resetForm  = function(){
       $scope.certification = {};
@@ -854,6 +960,10 @@ angular.module('myhr.controllers', [])
         $ionicLoading.show({
           template: 'Processing...'
         });
+        var attachments = [];
+        var objAttchament = {"image":$scope.imageData};
+        attachments.push(objAttchament);
+        $scope.certification.attachments = attachments;
         var accessToken = Main.getSession("token").access_token;
         var urlApi = Main.getUrlApi() + '/api/myprofile/certification';
         var data = JSON.stringify($scope.certification);
@@ -866,8 +976,9 @@ angular.module('myhr.controllers', [])
       $ionicLoading.hide();
       alert(res.message);
       console.log(res);
+      $rootScope.refreshCertificationCtrl = true;
       goBack("app.certification");
-      //$scope.certification = res;
+      
     }
 
     var errorRequest = function (err, status){
@@ -877,7 +988,10 @@ angular.module('myhr.controllers', [])
         console.log("need refresh token");
         Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
       }else {
-        alert("Check your connection");
+          if(status==500)
+            alert(err.message);
+          else
+            alert("Please Check your connection");
       }
       console.log(err);
       console.log(status);
@@ -896,7 +1010,8 @@ angular.module('myhr.controllers', [])
     initMethod();
     
     function initMethod(){
-        $scope.selectCertificationType = [{id:"Period"},{id:"Lifetime"}];
+        // $scope.selectCertificationType = [{id:"Period"},{id:"Lifetime"}];
+        $scope.selectCertificationType = [{id:"Lifetime"}];
     }
 
     // invalid access token error: "invalid_token" 401
@@ -919,7 +1034,96 @@ angular.module('myhr.controllers', [])
     var certificationIdx = $stateParams.idx;
     $scope.certification = {};
     if(certificationIdx != null)
-      $scope.certification = $rootScope.certification[certificationIdx];
+        $scope.certification = $rootScope.certification[certificationIdx];
+
+    $scope.goToViewImage = function (id){
+        $state.go('app.viewimagecertification',{'id':id});
+    }
+   
+})
+
+.controller('ViewImageCertificationCtrl', function($ionicModal,$stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+  
+    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+        $state.go("login");
+    }
+
+    $ionicModal.fromTemplateUrl('app/shop/product-preview.html', {
+        scope: $scope,
+        animation: 'fade-in-scale'
+    }).then(function (modal) {
+        $scope.modalPopupImage = modal;
+    });
+
+    $scope.openImagePreview = function (item) {
+        console.log(item);
+        var product = {id:1,image:item};
+        $scope.detailImage = product;
+        console.log($scope.detailImage);
+        $scope.modalPopupImage.show();
+    };
+    
+    $scope.closeImagePreview = function () {
+        $scope.detailImage = undefined;
+        $scope.modalPopupImage.hide();
+    };
+
+
+    var certificationId = $stateParams.id;
+    $scope.attachments = [];
+    $scope.image = "img/placeholder.png";
+    
+    var successRequest = function (res){
+      $ionicLoading.hide();
+      $scope.attachments = res;
+    }
+
+    var errorRequest = function (err, status){
+      $ionicLoading.hide();
+      if(status == 401) {
+          var refreshToken = Main.getSession("token").refresh_token
+          console.log("need refresh token");
+          Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
+      }else {
+          if(status==500)
+            alert(err.message);
+          else
+            alert("Please Check your connection");
+      }
+     
+    }
+
+    var successRefreshToken = function(res){
+      Main.setSession("token",res);
+      console.log("token session");
+      console.log(Main.getSession("token"));
+    }
+
+    var errRefreshToken = function(err, status) {
+      console.log(err);
+      console.log(status);
+    }
+
+
+   
+
+    function retreiveImage(certificationId){
+        
+        $ionicLoading.show({
+          template: 'Retrieve Image ...'
+        });
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/myprofile/certification/'+certificationId+'/attachments';
+        Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
+
+    }
+    if(certificationId != null){
+        retreiveImage(certificationId);
+    }else {
+      alert("ID Certification can not be null");
+    }
+
+    
    
 })
 
@@ -1011,8 +1215,7 @@ angular.module('myhr.controllers', [])
           else
             alert("Please Check your connection");
       }
-      console.log(err);
-      console.log(status);
+     
     }
 
     var successRefreshToken = function(res){
