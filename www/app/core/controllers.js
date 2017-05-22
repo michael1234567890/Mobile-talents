@@ -11,112 +11,16 @@
         'ngLodash',
         'ion-datetime-picker',
         'ion-google-place',
-        'chart.js',
-        
+        'chart.js'
     ])
-
-
-        .controller('PopupCtrl', function($scope, $ionicPopup, $timeout) {
-
-    $scope.showConfirm = function() {
-       var confirmPopup = $ionicPopup.confirm({
-         title: 'Approve Request',
-         template: 'Are you sure you want to approve this request?'
-       });
-       confirmPopup.then(function(res) {
-         if(res) {
-           console.log('Ok');
-         } else {
-           console.log('Cancel');
-         }
-       });
-     };
-
-
-     $scope.showConfirm2 = function() {
-       var confirmPopup2 = $ionicPopup.confirm({
-         title: 'Reject Request',
-         template: 'Are you sure you want to reject this request?'
-       });
-       confirmPopup.then(function(res) {
-         if(res) {
-           console.log('Ok');
-         } else {
-           console.log('Cancel');
-         }
-       });
-     };
-
-    $scope.showConfirm3 = function() {
-       var confirmPopup3 = $ionicPopup.confirm({
-         title: 'Send Request',
-         template: 'Are you sure you want to send request?'
-       });
-       confirmPopup.then(function(res) {
-         if(res) {
-           console.log('Ok');
-         } else {
-           console.log('Cancel');
-         }
-       });
-     };
-
-    $scope.showConfirm4 = function() {
-       var confirmPopup4 = $ionicPopup.confirm({
-         title: 'Reset',
-         template: 'Are you sure you want to reset?'
-       });
-       confirmPopup.then(function(res) {
-         if(res) {
-           console.log('Ok');
-         } else {
-           console.log('Cancel');
-         }
-       });
-     };
-
-    $scope.showConfirm5 = function() {
-       var confirmPopup5 = $ionicPopup.confirm({
-         title: 'Send Request',
-         template: 'Are you sure you want to send request?'
-       });
-       confirmPopup.then(function(res) {
-         if(res) {
-           console.log('Ok');
-         } else {
-           console.log('Cancel');
-         }
-       });
-     };
-
-
-    $scope.showConfirm6 = function() {
-       var confirmPopup6 = $ionicPopup.confirm({
-         title: 'Reset',
-         template: 'Are you sure you want to reset?'
-       });
-       confirmPopup.then(function(res) {
-         if(res) {
-           console.log('Ok');
-         } else {
-           console.log('Cancel');
-         }
-       });
-     };
-
-})
-
-
-
-
 
         .controller('appCtrl', function ($rootScope, $state, $scope, $stateParams, appService, $ionicHistory, $ionicPopover, $ionicModal,
             $ionicScrollDelegate, $ionicLoading, $ionicActionSheet, $cordovaCamera, $cordovaSocialSharing, $cordovaGeolocation, $timeout,AuthenticationService, Main) {
-
+            initProfile();
             initData();
             initIntro();
             initNews();
-            initProfile();
+           
             initDashboard();
             initShop();
             initChat();
