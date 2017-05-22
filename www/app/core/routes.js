@@ -169,6 +169,17 @@ angular.module('talent.routes', [])
         }
       })
 
+      .state('app.viewimagecertification', {
+        url: '/viewimagecertification/:id',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/myhr/certification/view-image.html',
+            controller: 'ViewImageCertificationCtrl'
+          }
+        }
+      })
+
+
        .state('app.selfservice', {
         url: '/selfservice',
         views: {
@@ -242,7 +253,7 @@ angular.module('talent.routes', [])
       })
 
        .state('app.detailpayslip', {
-        url: '/detailpayslip/:year/:month',
+        url: '/detailpayslip',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/selfservice/payslip/detail-payslip.html',

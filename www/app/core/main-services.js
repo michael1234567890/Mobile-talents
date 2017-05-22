@@ -4,8 +4,9 @@
 
     angular.module('main.services', [])
     .factory('Main', function($q, $timeout, $http, $localStorage){
-        var baseUrl = "http://192.168.43.162:8080";
-        //var baseUrl = "http://localhost:8080";
+        // var baseUrl = "http://192.168.43.162:8080";
+        //var baseUrl = "http://192.168.1.104:8080";
+        var baseUrl = "http://localhost:8080";
         var basicAuthentication = 'Basic dGFsZW50czpzZWNyZXQ=';
         var timeoutms = 15000; // 15 sec
 
@@ -19,6 +20,11 @@
         var selectBloodType = [{id:"A"},{id:"B"},{id:"AB"},{id:"O"}];
         var selectFamilyRelationShip = [{id:"Ayah"},{id:"Ibu"},{id:"Suami"},{id:"Istri"},{id:"Anak"}];
         var selectGender = [{id:"Male"},{id:"Female"}];
+
+        var selectStayStatus = [{id:"Owned"},{id:"Contract"},{id:"Live with parent"}];
+        var selectProvince = [{id:"Jakarta Special Capital Region"}];
+        var selectCity = [{id:"South Jakarta"},{id:"North Jakarta"},{id:"West Jakarta"},{id:"East Jakarta"}];
+        var selectCountry = [{id:"Indonesia"}];
 
        
         function changeUser(user) {
@@ -61,6 +67,18 @@
 
              getUrlApi : function(){
                 return baseUrl;
+             },
+             getSelectStayStatus : function(){
+                return selectStayStatus;
+             },
+             getSelectProvince : function(){
+                return selectProvince;
+             },
+             getSelectCity : function(){
+                return selectCity;
+             },
+             getSelectCountry : function(){
+                return selectCountry;
              },
 
              getSelectMaritalStatus : function(){
