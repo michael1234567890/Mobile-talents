@@ -15,4 +15,17 @@ angular.module('talent', ['ionic', 'ngCordova','onezone-datepicker','ngStorage',
         StatusBar.styleDefault();
       }
     });
+
+    // Disable BACK button on home
+    $ionicPlatform.registerBackButtonAction(function (event) {
+      if($state.current.name=="app.home"){
+        navigator.app.exitApp();
+      }
+      else {
+        navigator.app.backHistory();
+      }
+    }, 100);
+  
+
+
   })
