@@ -115,14 +115,12 @@
                   <button class="btn waves-effect button-small waves-light button button-stable  button-block waves-effect waves-light" ng-click="addPicture()">Add Attachment</button>
               </div>
               <div class="row post" >
-                  
-                        <div class="col" ng-repeat="items in family.images" ><img height="90px"  ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
-
-                        
+            
+                  <div class="col" ng-repeat="items in family.images" ><img height="90px"  ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
                  
               </div>
               <div class="row center">
-               <div class="col" style="min-height:90px" ng-if="family.images.length==0"><a ng-click="takePicture()"><img ng-src="{{image}}" height="90px" ></a></div>
+               <div class="col" style="min-height:90px" ng-if="family.images.length==0"><img ng-src="{{image}}" height="90px" ></div>
               </div>
             </div>
             <div class="row">

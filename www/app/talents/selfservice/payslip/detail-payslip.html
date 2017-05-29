@@ -18,11 +18,11 @@
 <div class="row" style="margin-bottom: 1px;">
   <div class="col col-75 no-padding"><h3 class="light">Organization</h3></div>   
   <div class="col no-padding">{{header.employeeTransient.assignment.organizationName}}</div>
-</div>
+</div><!--
 <div class="row" style="margin-bottom: 1px;">
   <div class="col col-75 no-padding"><h3 class="light">Grade</h3></div>   
   <div class="col no-padding"></div>
-</div>
+</div>-->
 
 </ion-item>
 
@@ -33,10 +33,15 @@
 </div>
 
 <hr class="no-margin">
+<div class="row">
+    <div class="col col-60"><h3>Tunjangan Pajak</h3></div>     
+    <div class="col"><h4 style="float: right;">Rp. {{header.taxAllowance | number:0}}</h4></div>
+</div>
+
 <div ng-repeat="detailIn in header.detailIn">
   <div class="row">
     <div class="col col-60"><h3>{{detailIn.elementGroup}}</h3></div>     
-    <div class="col"><h4 style="float: right;">Rp.{{detailIn.elementValue}}</h4></div>
+    <div class="col"><h4 style="float: right;">Rp. {{detailIn.total  | number:0}}</h4></div>
   </div>
 </div>
 </ion-item>
@@ -49,10 +54,14 @@
 </div>
 
 <hr class="no-margin">
+<div class="row">
+    <div class="col col-60"><h3>Potongan Pajak</h3></div>     
+    <div class="col"><h4 style="float: right;">Rp. {{header.taxGross  | number:0}}</h4></div>
+</div>
 <div ng-repeat="detailOut in header.detailOut">
   <div class="row">
     <div class="col col-60"><h3>{{detailOut.elementGroup}}</h3></div>     
-    <div class="col"><h4 style="float: right;">Rp.{{detailOut.elementValue}}</h4></div>
+    <div class="col"><h4 style="float: right;">Rp. {{detailOut.total  | number:0}}</h4></div>
   </div>
 </div>
 </ion-item>
@@ -70,15 +79,19 @@
 
 <div class="row">
   <div class="col col-60"><h3>Total Penerimaan</h3></div>     
-  <div class="col"><h4 style="float: right;">{{header.totalAllowance}}</h4></div>
+  <div class="col"><h4 style="float: right;">Rp. {{header.totalAllowance  | number:0}}</h4></div>
 </div>
 <div class="row">
   <div class="col col-60"><h3>Total Potongan</h3></div>     
-  <div class="col"><h4 style="float: right;">{{header.totalDeduction}}</h4></div>
+  <div class="col"><h4 style="float: right;">Rp. {{header.totalDeduction+header.taxGross  | number:0}}</h4></div>
 </div>
 <div class="row">
   <div class="col col-60"><h3>Penerimaan</h3></div>     
-  <div class="col"><h4 style="float: right;">{{header.takeHomePay}}</h4></div>
+  <div class="col"><h4 style="float: right;">Rp. {{header.takeHomePay  | number:0}}</h4></div>
+</div>
+
+<div class="row">
+    <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="printPdf()">Print PDF</button>
 </div>
 </ion-item>
 

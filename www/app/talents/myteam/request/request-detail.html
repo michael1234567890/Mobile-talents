@@ -23,10 +23,8 @@
                 </div>
                 <div class="item item-text-wrap" >
                     <h2 class="talents">Attachment</h2>
-                    <div class="row post" ng-repeat="obj in detail.attachments" ng-if="$index % 3 == 0">
-                        <div class="col" ng-if="$index==0"><img style="max-width:100px;max-height:100px" ng-src="{{obj.image}}" ng-click="openImagePreview(obj.image)" /></div>
-                        <div class="col" ng-if="$index==1"><img style="max-width:100px;max-height:100px" ng-src="{{obj.image}}" ng-click="openImagePreview(obj.image)"/></div>
-                        <div class="col" ng-if="$index==2"><img style="max-width:100px;max-height:100px" ng-src="{{obj.image}}" ng-click="openImagePreview(obj.image)" /></div>
+                    <div class="row post" >
+                        <div class="col" ng-repeat="items in detail.attachments" style="width:90px;height:90px" ><img width="90px" height="90px"  ng-src="{{items.image}}" ng-click="openImagePreview(items.image)" /></div>
                     </div>
 
                 </div>
@@ -62,13 +60,46 @@
                     <h2 class="talents">Relation Type</h2>
                     <p class="text-small" >{{detail.ref.relationship}}</p>
                 </div>
+                <div class="row">
+                  <button class="btn waves-effect button-small waves-light button button-stable  button-block waves-effect waves-light" ng-click="viewMoreFamily()">View More</button>
+                </div>
                  <div class="item item-text-wrap" >
                     <h2 class="talents">Attachment</h2>
-                    <div class="col" style="min-height:90px"><a ng-click="gotoAddPhoto()"><img ng-src="{{attachment}}" height="90px" ></a></div>
+                    <div class="row post" >
+                        <div class="col" ng-repeat="items in detail.attachments" style="width:90px;height:90px" ><img width="90px" height="90px"  ng-src="{{items.image}}" ng-click="openImagePreview(items.image)" /></div>
+                    </div>
+                    <!-- 
+                    <div class="col" style="min-height:90px"><a ng-click="gotoAddPhoto()"><img ng-src="{{attachment}}" height="90px" ></a></div>-->
                 </div>
                 
         </div>
-        <div class="row">
+        <div ng-if="detail.task == 'SUBMITADDRESS'">
+                <div class="item item-text-wrap" >
+                    <h2 class="talents">Address</h2>
+                    <p class="text-small" >{{detail.ref.address}} RT.{{detail.ref.rt}} RW.{{detail.ref.rw}} </p>
+                </div>
+                <div class="item item-text-wrap" >
+                    <h2 class="talents">City</h2>
+                    <p class="text-small" >{{detail.ref.city}}</p>
+                </div>
+                <div class="item item-text-wrap" >
+                    <h2 class="talents">Province</h2>
+                    <p class="text-small" >{{detail.ref.province}}</p>
+                </div>
+                <div class="row">
+                  <button class="btn waves-effect button-small waves-light button button-stable  button-block waves-effect waves-light" ng-click="viewMoreAddress()">View More</button>
+                </div>
+                 <div class="item item-text-wrap" >
+                    <h2 class="talents">Attachment</h2>
+                    <div class="row post" >
+                        <div class="col" ng-repeat="items in detail.attachments" style="width:90px;height:90px" ><img width="90px" height="90px"  ng-src="{{items.image}}" ng-click="openImagePreview(items.image)" /></div>
+                    </div>
+                    <!-- 
+                    <div class="col" style="min-height:90px"><a ng-click="gotoAddPhoto()"><img ng-src="{{attachment}}" height="90px" ></a></div> -->
+                </div>
+                
+        </div>
+        <div class="row" ng-if= "needApproval == 'true'">
                 <button class="btn button-small  waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="confirmReject()">Reject</button>&nbsp;
                 <button class="btn button-small waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="confirmAccept()">Approve</button>
 

@@ -91,8 +91,11 @@ angular.module('myteam.controllers', [])
 
     $scope.gotoDetailRequest = function(id){
        // $rootScope.requestSelected = $scope.requests[idx];
-        $state.go('app.myrequestdetail',{'id':id});
+       // $state.go('app.myrequestdetail',{'id':id});
+        $state.go('app.requestdetail',{'id':id,'needApproval':false});
     }
+
+    
 
     $scope.refresh = function(){
       initMethod();
@@ -193,6 +196,7 @@ angular.module('myteam.controllers', [])
         $state.go("login");
     }
 
+
     $scope.requests = [];
     $scope.$on('$ionicView.beforeEnter', function () {
         console.log("$ionicView.beforeEnter");
@@ -214,7 +218,7 @@ angular.module('myteam.controllers', [])
 
     $scope.gotoDetailRequest = function(id){
        // $rootScope.requestSelected = $scope.requests[idx];
-        $state.go('app.requestdetail',{'id':id});
+        $state.go('app.requestdetail',{'id':id,'needApproval':true});
     }
 
     $scope.refresh = function(){
@@ -242,7 +246,8 @@ angular.module('myteam.controllers', [])
 
    
     var successRequest = function (res){
-      
+      $scope.general.countApproval = res.length;
+      $rootScope.countApproval = res.length;
       for(var i=0;i<res.length;i++) {
         var obj = res[i];
         obj.idx = i;
@@ -316,12 +321,21 @@ angular.module('myteam.controllers', [])
         $state.go("login");
     }
 
-
+    $scope.needApproval = $stateParams.needApproval;
+    console.log($scope.needApproval);
     var id = $stateParams.id;
     $scope.detail = {};
     $scope.confirm = {reasonReject:""};
 
     $scope.attachment = "img/placeholder.png";
+
+    $scope.viewMoreFamily = function(){
+        $state.go('app.detailfamily',{'idx':0,'edit':'false'});
+    }
+
+    $scope.viewMoreAddress = function(){
+        $state.go('app.detailaddress',{'idx':0});
+    }
 
     var successApprove = function(res){
         $ionicLoading.hide();
@@ -416,7 +430,12 @@ angular.module('myteam.controllers', [])
           $scope.detail.taskDescription = "Change marital status from "+$scope.detail.employeeRequest.maritalStatus + " to " + objData.maritalStatus;
       }else if($scope.detail.task == 'SUBMITFAMILY') {
            $scope.detail.taskTitle = "Add new Family";
-            $scope.detail.taskDescription = "Add new family";
+           $scope.detail.taskDescription = "Add new family";
+           $rootScope.family = [];
+           $rootScope.family.push($scope.detail.ref);
+      }else if($scope.detail.task == 'SUBMITADDRESS') {
+           $rootScope.address = [];
+           $rootScope.address.push($scope.detail.ref);
       }
 
       
@@ -428,7 +447,7 @@ angular.module('myteam.controllers', [])
           $scope.detail.employeeRequest.fullName += " " + $scope.detail.employeeRequest.lastName;
   
       if($scope.detail.attachments.length > 0){
-          console.log("kesini");
+          
           $scope.attachment = $scope.detail.attachments[0].image;
       }else{
         console.log("gak kesini");

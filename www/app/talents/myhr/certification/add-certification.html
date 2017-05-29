@@ -57,10 +57,21 @@
                     
                 </div>
             </div>
+            
+
             <div ng-if="isEdit != true">
               <div class="item item-divider">Attach Document Support</div> 
+              <div class="row">
+                  <button class="btn waves-effect button-small waves-light button button-stable  button-block waves-effect waves-light" ng-click="addPicture()">Add Attachment</button>
+              </div>
+              <div class="row post" >
+            
+                  <div class="col" ng-repeat="items in imageCertification.images" style="height:90px;width:90px" ><img height="90px"  ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
+                 
+              </div>
+
               <div class="row center">
-                  <div class="col" style="min-height:90px"><a ng-click="takePicture()"><img ng-src="{{image}}" height="90px" ></a></div>
+                  <div class="col" style="min-height:90px" ng-if="imageCertification.images.length==0"><a ><img ng-src="{{image}}" height="90px" ></a></div>
               </div>
             </div>
              <div class="row">

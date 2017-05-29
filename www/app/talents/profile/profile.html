@@ -1,7 +1,7 @@
 <ion-view title="Profile" class="bg-lightgrey">
 
     <ion-nav-buttons side="right">
-        <!-- <button class="button button-dark button-clear icon ion-ios-compose-outline" ui-sref="app.edit-profile"></button>-->
+        <button class="button button-dark button-clear icon ion-ios-compose-outline" ui-sref="app.edit-profile"></button>
     </ion-nav-buttons>
 
     <ion-content class="has-header bt-grey profile" scroll="true">
@@ -9,9 +9,7 @@
             <img ng-src="{{user.photo}}">
             <!--<span class="badge badge-balanced">3</span>-->
             <h2 class="lead text-medium">{{profile.fullName}}</h2>
-            <p class="text-medium">{{profile.employeeTransient.assignment.positionName}}</p>
-            <p class="text-medium">{{profile.employeeTransient.assignment.organizationName}}</p>
-            
+            <p class="text-medium">{{profile.employeeTransient.assignment.positionName}} , {{profile.employeeTransient.assignment.organizationName}}</p>
         </div>
 
         <div class="list">

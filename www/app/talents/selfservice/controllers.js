@@ -241,7 +241,7 @@ angular.module('selfservice.controllers', [])
           alert("Data Not Found");
       }else {
         $rootScope.payslipSelected = res;
-        $state.go("app.detailpayslip");
+        $state.go("app.detailpayslip",{'year':$scope.payslip.year,'month':$scope.payslip.month});
       }
     }
 
@@ -297,6 +297,8 @@ angular.module('selfservice.controllers', [])
 .controller('DetailPayslipCtrl', function($ionicLoading, $stateParams,$compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
 
     $scope.listHeader = [];
+    var year = $stateParams.year;
+    var month = $stateParams.month;
     function getPaySlip (){
         console.log($rootScope.payslipSelected);
         if($rootScope.payslipSelected != null) {
@@ -307,6 +309,19 @@ angular.module('selfservice.controllers', [])
       getPaySlip();
     }
 
+    $scope.printPdf = function(){
+        var profile = Main.getSession("profile");
+        if(profile.employeeTransient.assignment.employment == null) {
+            alert("Employment is null");
+            return false;
+        }
+        var employment_id = profile.employeeTransient.assignment.employment;
+        var url = Main.getPrintBaseUrl() + "?employment_id="+employment_id+"&year="+year+"&month="+month;
+        window.open(encodeURI(url), '_system', 'location=yes');
+        //window.open(url, '_system', 'location=yes'); 
+        //window.open(url, '_blank', 'location=no'); 
+        return false;
+    }
     
 
     initMethod();
