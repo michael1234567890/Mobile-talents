@@ -12,6 +12,19 @@
     vertical-align: top;
     line-height: 100%;   
 }
+
+  .ionic_datepicker_popup .popup-body .month_select select, .ionic_datepicker_popup .popup-body .year_select select {
+    left: -3px;
+    top: -15px;
+    border: none;
+    padding: 0;
+}
+
+.ionic_datepicker_popup .calendar_grid {
+    height: 215px;
+    font-size: large;
+    line-height: 3;
+}
 </style>
 <ion-view title="Family">
    
@@ -37,15 +50,21 @@
 
                 
             </div>
+         <!--    
             <div class="input-field col">
                   <p for="first_name">Date of Birth</p>
-                  <!--
+                 
                    <input id="first_name" datetime="yyyy-MM-dd" callback="datePickerCallback" datetime="0" type="text" class="validate" ion-datetime-picker ng-model="family.birthDate">-->
-                    <!-- <input id="first_name" type="date" class="validate" ng-model="family.birthDate">-->
+                    <!-- <input id="first_name" type="date" class="validate" ng-model="family.birthDate">
                     <button class="button button-block button-outline button-positive" ion-datetime-picker ng-model="family.birthDate">
                         {{family.birthDate| date: "yyyy-MM-dd"}}
                     </button>
-                </div>
+                </div>-->
+          <ionic-datepicker input-obj="datepickerObject">
+            <button class="button button-block button-positive" ng-click="openDatePicker()"> {{datepickerObject.inputDate | date:'dd-MM-yyyy'}}</button>
+          </ionic-datepicker>
+
+
             <div class="row">
                 <div class="input-field col">
                    

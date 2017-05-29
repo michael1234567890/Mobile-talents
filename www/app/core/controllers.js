@@ -10,8 +10,10 @@
         'monospaced.elastic',
         'ngLodash',
         'ion-datetime-picker',
+        'ionic-datepicker',
         'ion-google-place',
-        'chart.js'
+        'chart.js',
+
     ])
 
         .controller('appCtrl', function ($rootScope, $state, $scope, $stateParams, appService, $ionicHistory, $ionicPopover, $ionicModal,

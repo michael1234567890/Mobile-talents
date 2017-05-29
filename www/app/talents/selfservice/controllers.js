@@ -327,7 +327,61 @@ angular.module('selfservice.controllers', [])
     initMethod();
     
 })
+    .controller('DateCtrl', function($scope, ionicDatePicker) {
+        
+      $scope.openDatePicker = function(){
+      ionicDatePicker.openDatePicker(ipObj1);
+    };
+          var ipObj1 = {
+      callback: function (val) {  //Mandatory
+        datePickerCallback(val);
+      },
+    };
+
+
+  $scope.datepickerObject = {
+      titleLabel: 'Title',  //Optional
+      inputDate: new Date(),
+      titleLabel: 'Select a Date',
+      setLabel: 'Set',
+      todayLabel: 'Today',
+      closeLabel: 'Close',
+      mondayFirst: false,
+      weeksList: ["S", "M", "T", "W", "T", "F", "S"],
+      monthsList: ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"],
+      templateType: 'popup',
+      from: new Date(2012, 8, 1),
+      to: new Date(2018, 12, 31),
+      showTodayButton: true,
+      dateFormat: 'dd MM yyyy',
+      disableWeekdays: [], 
+      inputDate: new Date(),      
+      mondayFirst: true,               
+      closeOnSelect: false,       
+      callback: function (val) {  //Mandatory
+      datePickerCallback(val);
+    }
+  };
+
+      var datePickerCallback = function (val) {
+    if (typeof(val) === 'undefined') {
+      console.log('No date selected');
+    } else {
+      console.log('Selected date is : ', val)
+      $scope.datepickerObject.inputDate = val;
+    }
+  };
+  
+})
+
 .controller('SubmitClaimCtrl', function($compile,$filter,$cordovaGeolocation,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+       $(document).ready(function() {
+        $('select').material_select();
+      });
+
+    $scope.options = [{name: 'Travel'},{name: 'Overtime'},{name: 'Lunch Meeting'}];
+    $scope.selectedOption = $scope.options[1];
+
     $scope.selectYear = [];
     $scope.selectMonth = [];
 

@@ -3,66 +3,54 @@
  <ion-content padding="true" class="has-header materialize" scroll="true" style="font-size:12px">
     <ion-list>
 
-
 <style>
-
-#rcorners2 {
-    border-radius: 25px;
-    border: 2px solid #335272;
-    padding: 20px; 
-
+  .ionic_datepicker_popup .popup-body .month_select select, .ionic_datepicker_popup .popup-body .year_select select {
+    left: -3px;
+    top: -15px;
+    border: none;
+    padding: 0;
 }
-</style>     
+.ionic_datepicker_popup .calendar_grid {
+    height: 215px;
+    font-size: large;
+    line-height: 3;
+}
+</style>
 
-          
 <form class="col s12">
+ 
+<ion-item style="border-color: white; padding: 5px;">
 
-<ion-item>
- <div class="input-label"> Claim Type</div>
-      <div> 
-          <select class="browser-default">
-          <option value="" disabled selected>choose your option</option>
-          <option>Travel</option>
-          <option>Lunch Meeting</option>
-          <option>OverTime</option>
-        </select>
-     </div>
-</ion-item>
+            <h2 class="input-label"> Claim Type</h2>
+          <select style="display: none;" ng-model="selectedOption" ng-options="option.name for option in options"> </select>
 
+<br>
 
+          <h2>From Date</h2>
+        <ionic-datepicker input-obj="datepickerObject" ng-controller="DateCtrl">
+          <button class="button button-block button-positive" ng-click="openDatePicker()"> {{datepickerObject.inputDate | date:'dd-MM-yyyy'}}</button>
+        </ionic-datepicker>
 
-<ion-item>
-    <h3>From Date</h3>
-      <div class="item" ion-datetime-picker ng-model="datetimeValue">
-        {{datetimeValue| date: "yyyy-MM-dd, H:mm"}}
-         <span class="text-large">{{startsAt| date: "H:mm a"}}</span></div>
-      </div>
-  
+          <h2>To Date</h2>
+        <ionic-datepicker input-obj="datepickerObject" ng-controller="DateCtrl">
+          <button class="button button-block button-positive" ng-click="openDatePicker()"> {{datepickerObject.inputDate | date:'dd-MM-yyyy'}}</button>
+        </ionic-datepicker>
+
 
 </ion-item>
 
 
-<ion-item>
-      <h3>To Date</h3>
-        <div class="item" ion-datetime-picker ng-model="datetimeValue">
-          {{datetimeValue| date: "yyyy-MM-dd"}}
-        </div>
-</ion-item>
-
-
-<ion-item>
+<ion-item style="padding-top: 0px;">
         <div class="input-field col s6">
           <input id="last_name" type="text" class="validate" >
           <label for="last_name">Amount</label>
         </div>
-</ion-item>
 
 
-<ion-item>
-        <div class="input-field col s12">
-            <textarea id="textarea1" class="materialize-textarea" data-length="120"></textarea>
-            <label for="textarea1">Notes</label>
-          </div>
+        <div class="input-field col s6">
+          <input id="last_name" type="text" class="validate" >
+          <label for="last_name">Notes</label>
+        </div>
 </ion-item>
 
 
