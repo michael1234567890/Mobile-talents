@@ -4,9 +4,11 @@
 
     angular.module('main.services', [])
     .factory('Main', function($q, $timeout, $http, $localStorage){
-        // var baseUrl = "http://192.168.43.162:8080";
+        var baseUrl = "http://192.168.43.162:8080";
+        var printBaseUrl = "http://192.168.43.162/spice/printpdf"
         //var baseUrl = "http://192.168.1.104:8080";
-        var baseUrl = "http://localhost:8080";
+        //var printBaseUrl = "http://localhost/spice/printpdf"
+        //var baseUrl = "http://localhost:8080";
         var basicAuthentication = 'Basic dGFsZW50czpzZWNyZXQ=';
         var timeoutms = 15000; // 15 sec
 
@@ -15,7 +17,6 @@
             targetWidth : 750,
             targetHeight:550
         };
-
         var selectMaritalStatus = [{id:"Single"},{id:"Married"}];
         var selectBloodType = [{id:"A"},{id:"B"},{id:"AB"},{id:"O"}];
         var selectFamilyRelationShip = [{id:"Ayah"},{id:"Ibu"},{id:"Suami"},{id:"Istri"},{id:"Anak"}];
@@ -63,6 +64,10 @@
          return {
             save: function(data, success, error) {
                 $http.post(baseUrl + '/signin', data).success(success).error(error)
+             },
+
+             getPrintBaseUrl : function(){
+                return printBaseUrl;
              },
 
              getUrlApi : function(){

@@ -127,7 +127,7 @@ angular.module('talent.routes', [])
       })
 
       .state('app.detailfamily', {
-        url: '/detailfamily/:idx',
+        url: '/detailfamily/:idx/:edit',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/myhr/family/detail-family.html',
@@ -253,7 +253,7 @@ angular.module('talent.routes', [])
       })
 
        .state('app.detailpayslip', {
-        url: '/detailpayslip',
+        url: '/detailpayslip/:year/:month',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/selfservice/payslip/detail-payslip.html',
@@ -378,7 +378,7 @@ angular.module('talent.routes', [])
       })
 
        .state('app.requestdetail', {
-        url: '/requestdetail/:id',
+        url: '/requestdetail/:id/:needApproval',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/myteam/request/request-detail.html',
@@ -445,7 +445,7 @@ angular.module('talent.routes', [])
         views: {
           'menuContent': {
             templateUrl: 'app/talents/profile/edit-profile.html',
-            controller: 'appCtrl'
+            controller: 'EditProfileCtrl'
           }
         }
       })

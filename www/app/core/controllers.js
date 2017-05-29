@@ -319,6 +319,11 @@ he
             function initProfile() {
 
              $scope.profile = {};
+             $scope.general = {};
+             if($rootScope.countApproval == null)
+                $scope.general.countApproval = '?';
+             else 
+                $scope.general.countApproval = $rootScope.countApproval;
                 
                if(Main.getSession("profile") === null || Main.getSession("profile") === undefined ) {
                     console.log("Session Profile Masih kosong");
@@ -327,7 +332,8 @@ he
                         getProfile();
                     }
                }else {
-                    $scope.profile.fullname = Main.getSession('profile').firstName + " " + Main.getSession('profile').lastName;
+                    // $scope.profile.fullname = Main.getSession('profile').firstName + " " + Main.getSession('profile').lastName;
+                    $scope.profile.fullname = Main.getSession('profile').fullName;
                }
                
                function successProfile  (res){
@@ -363,7 +369,8 @@ he
                         function(res){
                             Main.setSession("profile",res);
                             $scope.profile = Main.getSession("profile");
-                            $scope.profile.fullname = $scope.profile.firstName + " " + $scope.profile.lastName;
+                            // $scope.profile.fullname = $scope.profile.firstName + " " + $scope.profile.lastName;
+                             $scope.profile.fullname = Main.getSession('profile').fullName;
                         }, 
                         function(err){
 
