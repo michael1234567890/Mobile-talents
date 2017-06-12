@@ -3,7 +3,21 @@
     'use strict'
 
     angular.module('talent.services', [])
+    
+        .factory('Absents', function() {
 
+          var absents = [{
+            id: 0,
+            Used: 5,
+            Available: 8
+          }];
+
+          return {
+            all: function() {
+              return absents[0];
+            }
+          };
+        })
         .service('appService', ['$state', '$ionicPopup', '$ionicActionSheet', '$ionicHistory', '$ionicLoading', '$timeout',
             function ($state, $ionicPopup, $ionicActionSheet, $ionicHistory, $ionicLoading, $timeout) {
 
@@ -104,6 +118,7 @@
                 }
             }]);
 })();
+
 
 //Contacts data
 var _contacts = [
