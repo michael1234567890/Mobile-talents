@@ -59,8 +59,9 @@ angular.module('leave.controllers', [])
 
 })
 
-.controller('AddLeaveCtrl', function($filter, $stateParams, $ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
-    
+.controller('AddLeaveCtrl', function($filter, $stateParams, $ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main,Absents) {
+$scope.absents=Absents.all();
+
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
@@ -70,40 +71,7 @@ angular.module('leave.controllers', [])
     $scope.leaveType = {};
     $scope.leave = {comment:""}
 
-    $scope.onezoneDatepicker = { 
-        date: new Date(), 
-        mondayFirst: false, 
-        disablePastDays: false, 
-        disableSwipe: false, 
-        disableWeekend: false, 
-        showDatepicker: false, 
-        showTodayButton: true, 
-        calendarMode: true, 
-        hideCancelButton: false, 
-        hideSetButton: false, 
-        highlights: [ { date: new Date(2016, 6, 6), color: '#8FD4D9', textColor: '#f00', }], 
-        callback: function(value) { 
-            startDate = $filter('date')(new Date(value),'yyyy-MM-dd');
-        } 
-    }
-
-    $scope.onezoneDatepicker2 = { 
-        date: new Date(), 
-        mondayFirst: false, 
-        disablePastDays: false, 
-        disableSwipe: false, 
-        disableWeekend: false, 
-        showDatepicker: false, 
-        showTodayButton: true, 
-        calendarMode: true, 
-        hideCancelButton: false, 
-        hideSetButton: false, 
-        highlights: [ { date: new Date(2016, 6, 6), color: '#8FD4D9', textColor: '#f00', }], 
-        callback: function(value) { 
-            endDate = $filter('date')(new Date(value),'yyyy-MM-dd');
-        } 
-    }
-
+    
     var successRefreshToken = function(res){
       Main.setSession("token",res);
       console.log("token session");
