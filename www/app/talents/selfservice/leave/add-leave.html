@@ -1,8 +1,21 @@
 <style>
-        .change{
-            border-color: white;
-            padding: 10px;
-        }
+    .change{
+        border-color: white;
+        padding: 10px;
+    }
+/* CSS untuk kalender*/
+    .ionic_datepicker_popup .popup-body .month_select select, .ionic_datepicker_popup .popup-body .year_select select {
+      left: -3px;
+      top: -15px;
+      border: none;
+      padding: 0;
+    }
+    .ionic_datepicker_popup .calendar_grid {
+        height: 215px;
+        font-size: large;
+        line-height: 3;
+    }
+
 </style>
 
 <ion-view title="My Team">
@@ -13,24 +26,21 @@
           <p class="bb text-large padding uppercase">{{leaveType.leaveTypeObj.name}}</p>
           <div class="row no-padding text-center bt-grey bb-grey" style="height:44px">
             <div class="col col-25"><p class="bb text-medium padding uppercase">Balance</p></div>
-            <div class="col col-25"><p class="bb text-large padding uppercase">{{leaveType.noOfDays}}</p></div>
+            <div class="col col-25"><p class="bb text-large padding uppercase">{{absents.Used}}</p></div>
             <div class="col col-25 bl-grey"><p class="bb text-medium padding uppercase">Used</p></div>
-            <div class="col col-25 bl-grey"><p class="bb text-large padding uppercase">{{leaveType.daysUsed}}</p></div>
+            <div class="col col-25"><p class="bb text-large padding uppercase">{{absents.Available}}</p></div>
         </div>
         <br/><br/>
           <h2>From Date</h2>
-          <onezone-datepicker datepicker-object="onezoneDatepicker">
-          <button class="button button-block button-outline button-positive show-onezone-datepicker">
-              {{onezoneDatepicker.date | date:'yyyy-MM-dd'}} 
-          </button>
-          </onezone-datepicker>
+        <ionic-datepicker input-obj="datepickerObject" ng-controller="DateCtrl">
+          <button class="button button-block button-positive" ng-click="openDatePicker()"> {{datepickerObject.inputDate | date:'dd-MM-yyyy'}}</button>
+        </ionic-datepicker>
 
           <h2>To Date</h2>
-          <onezone-datepicker datepicker-object="onezoneDatepicker2">
-          <button class="button button-block button-outline button-positive show-onezone-datepicker">
-              {{onezoneDatepicker2.date | date:'yyyy-MM-dd'}} 
-          </button>
-          </onezone-datepicker>
+        <ionic-datepicker input-obj="datepickerObject" ng-controller="DateCtrl">
+          <button class="button button-block button-positive" ng-click="openDatePicker()"> {{datepickerObject.inputDate | date:'dd-MM-yyyy'}}</button>
+        </ionic-datepicker>
+
           <h2>Comment</h2>
           <textarea style="border-color:#1479c9" ng-model="leave.comment"></textarea>
           <div class="row">
