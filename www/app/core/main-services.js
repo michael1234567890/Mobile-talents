@@ -4,11 +4,11 @@
 
     angular.module('main.services', [])
     .factory('Main', function($q, $timeout, $http, $localStorage){
-        var baseUrl = "http://192.168.43.162:8080";
-        var printBaseUrl = "http://192.168.43.162/spice/printpdf"
-        //var baseUrl = "http://192.168.1.104:8080";
-        //var printBaseUrl = "http://localhost/spice/printpdf"
-        //var baseUrl = "http://localhost:8080";
+        //var baseUrl = "http://192.168.43.162:8080";
+        //var printBaseUrl = "http://192.168.43.162/spice/printpdf"
+
+        var printBaseUrl = "http://localhost/spice/printpdf"
+        var baseUrl = "http://localhost:8080";
         var basicAuthentication = 'Basic dGFsZW50czpzZWNyZXQ=';
         var timeoutms = 15000; // 15 sec
 
@@ -26,8 +26,10 @@
         var selectProvince = [{id:"Jakarta Special Capital Region"}];
         var selectCity = [{id:"South Jakarta"},{id:"North Jakarta"},{id:"West Jakarta"},{id:"East Jakarta"}];
         var selectCountry = [{id:"Indonesia"}];
-
+        var selectMonth = [{name:"JAN",id:"01"},{name:"FEB",id:"02"},{id:"03",name:"MAR"},{id:"04",name:"APR"},{id:"05",name:"MAY"},{id:"06",name:"JUN"},{id:"07",name:"JUL"},{id:"08",name:"AUG"},{id:"09",name:"SEP"},{id:"10",name:"OCT"},{id:"11",name:"NOV"},{id:"12",name:"DES"}];  
+        var selectYear = [{id:"2016"},{id:"2017"}]; 
        
+
         function changeUser(user) {
             angular.extend(currentUser, user);
         }
@@ -59,11 +61,32 @@
             return user;
         }
 
+        function getValuefromId(array,id){
+            var val = "";
+            for (var i = array.length - 1; i >= 0; i--) {
+                if(array[i].id==id)
+                    val = array[i].name;
+            };
+            return val;
+        }
+
         var currentUser = getUserFromToken();
+       // var getValuefromId = getValuefromId(array,id);
         
          return {
             save: function(data, success, error) {
                 $http.post(baseUrl + '/signin', data).success(success).error(error)
+             },
+
+             getValuefromId : function(array,id){
+                return getValuefromId(array,id);
+             },
+             getSelectMonth : function(){
+                return selectMonth;
+             },
+
+             getSelectYear : function(){
+                return selectYear;
              },
 
              getPrintBaseUrl : function(){
@@ -153,6 +176,7 @@
                 var bearerAuthentication = 'Bearer '+ access_token;
                 $http.get(url,{headers:{'Authorization':bearerAuthentication}}).success(success).error(error)
             },
+
             postRequestApi: function(access_token,url, data, success, error) {
                 console.log(data);
                 var bearerAuthentication = 'Bearer '+ access_token;
@@ -181,7 +205,11 @@
                 return localStorage.setItem(key,JSON.stringify(value));
             },
             getSession : function(key) {
-                return JSON.parse(localStorage.getItem(key));
+                
+                if(localStorage.getItem(key) === null || localStorage.getItem(key)=== undefined )
+                    return null;
+                else
+                    return JSON.parse(localStorage.getItem(key));
             },
             destroySession : function (key){
                 return localStorage.removeItem(key);
@@ -191,6 +219,17 @@
             },
             getTakePictureOptions : function(){
                 return takePictureOptions;
+            },
+            getDataReference : function(dataRef,category,subCategory,field){
+                var result = null;
+                if(dataRef.length > 0) {
+                    for (var i = dataRef.length - 1; i >= 0; i--) {
+                        var obj = dataRef[i];
+                        if(obj.category==category && obj.subCategory == subCategory && obj.field == field )
+                            return obj.value;
+                    };
+                }
+                return result;
             }
             
         };

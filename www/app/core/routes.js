@@ -252,8 +252,18 @@ angular.module('talent.routes', [])
         }
       })
 
+       .state('app.choicepayslip', {
+        url: '/choicepayslip',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/payslip/choice-payslip.html',
+            controller: 'ChoicePayslipCtrl'
+          }
+        }
+      })
+
        .state('app.detailpayslip', {
-        url: '/detailpayslip/:year/:month',
+        url: '/detailpayslip/:year/:month/:type',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/selfservice/payslip/detail-payslip.html',
@@ -263,12 +273,22 @@ angular.module('talent.routes', [])
       })
 
 
-       .state('app.submitclaim', {
+      .state('app.submitclaim', {
         url: '/submitclaim',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/selfservice/claim/submitclaim.html',
             controller: 'SubmitClaimCtrl'
+          }
+        }
+      })
+
+      .state('app.benefitlisttype', {
+        url: '/benefitlisttype/:categoryType',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/claim/listtype.html',
+            controller: 'BenefitListtypeCtrl'
           }
         }
       })

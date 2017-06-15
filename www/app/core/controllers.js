@@ -10,10 +10,9 @@
         'monospaced.elastic',
         'ngLodash',
         'ion-datetime-picker',
-        'ionic-datepicker',
         'ion-google-place',
         'chart.js',
-
+        'ionic-datepicker'
     ])
 
         .controller('appCtrl', function ($rootScope, $state, $scope, $stateParams, appService, $ionicHistory, $ionicPopover, $ionicModal,
@@ -132,6 +131,28 @@ he
                         }
                     } else {
                         $state.go(ui_sref);
+                    }
+                }
+
+                $scope.errorRequest = function (err, status){
+                  if(status == 401) {
+                    $scope.goTo('login');
+                  }else if(status == 500) {
+                    alert("Problem with server. Please try again later.");
+                  }else {
+                    if(err != null)
+                      alert(err.message);
+                    else 
+                      alert("Please Check your connection.");
+                  }
+                  $ionicLoading.hide();
+                  console.log(err);
+                  console.log(status);
+                }
+
+                $scope.checkLoginSession = function(){
+                    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+                        $state.go("login");
                     }
                 }
 
@@ -320,64 +341,14 @@ he
             // profile
             function initProfile() {
 
-             $scope.profile = {};
-             $scope.general = {};
-             if($rootScope.countApproval == null)
-                $scope.general.countApproval = '?';
-             else 
-                $scope.general.countApproval = $rootScope.countApproval;
-                
-               if(Main.getSession("profile") === null || Main.getSession("profile") === undefined ) {
-                    console.log("Session Profile Masih kosong");
-                    if(Main.getSession('token') != null) {
-                        // get Profile from API
-                        getProfile();
-                    }
-               }else {
-                    // $scope.profile.fullname = Main.getSession('profile').firstName + " " + Main.getSession('profile').lastName;
-                    $scope.profile.fullname = Main.getSession('profile').fullName;
-               }
-               
-               function successProfile  (res){
-                    console.log("set session profile");
-                    Main.setSession("profile",res);
-                }
+                $scope.profile = Main.getSession('profile');
+                $scope.profile.fullname = $scope.profile.employeeTransient.name;
+                $scope.general = {};
 
-                /*
-
-                var errorProfile = function (err, status){
-                    if(status == 401) {
-                        var refreshToken = Main.getSession("token").refresh_token
-                        console.log("need refresh token");
-                        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-                    }
-                    console.log(err);
-                    console.log(status);
-                }
-
-                var successRefreshToken = function(res){
-                    Main.setSession("token",res);
-                }
-                var errRefreshToken = function(err, status) {
-                    console.log(err);
-                    console.log(status);
-                }*/
-                // invalid access token error: "invalid_token" 401
-                function getProfile(){
-
-                    var accessToken = Main.getSession("token").access_token;
-                    var urlApi = Main.getUrlApi() + '/api/myprofile';
-                    Main.requestApi(accessToken,urlApi,
-                        function(res){
-                            Main.setSession("profile",res);
-                            $scope.profile = Main.getSession("profile");
-                            // $scope.profile.fullname = $scope.profile.firstName + " " + $scope.profile.lastName;
-                             $scope.profile.fullname = Main.getSession('profile').fullName;
-                        }, 
-                        function(err){
-
-                        });
-                }
+                if($rootScope.countApproval == null)
+                    $scope.general.countApproval = '?';
+                else 
+                    $scope.general.countApproval = $rootScope.countApproval;
             }
 
             // dashboard
@@ -481,6 +452,7 @@ he
                     $scope.product = product;
                     $scope.openProductDetails();
                 }
+                
                 $scope.addToCart = function (product) {
                     $scope.products.splice(_.findIndex($scope.products, ['id', product.id]), 1, product);
                     $scope.cart.push(product);
