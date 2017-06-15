@@ -7,10 +7,15 @@
              pulling-icon="ion-ios7-arrow-thin-down"
              on-refresh="refresh()">
     </ion-refresher>
+   <div class="row text-center" style="font-size:100%">
+            <div class="col font-thin" ng-class="module.type === 'personalia' ? 'text-large balanced' : ''" ng-click="chooseTab('personalia')">Personalia</div>
+            <div class="col font-thin" ng-class="module.type === 'benefit' ? 'text-large balanced' : ''" ng-click="chooseTab('benefit')">Benefit</div>
+    </div>
+<div ng-if="module.type === 'personalia'">
    <div class="card" ng-repeat="item in requests | filter: searchFilter ">
             <div class="item item-avatar item-text-wrap" ng-if="item.task=='SUBMITFAMILY'" ng-click="gotoDetailRequest(item.id)" >
                 <img ng-src="img/1491892511_profle.png">
-                <h2 class="lead">{{item.employeeRequest.fullName}}</h2>
+                <h2 class="lead">{{item.employeeRequest.name}}</h2>
                 <p>{{item.taskDescription}}</p>
                 <p class="text-smaller" am-time-ago="item.modifiedDate"></p>
                 <!-- <div class="card-action pull-right">
@@ -20,7 +25,7 @@
             </div>
              <div class="item item-avatar item-text-wrap" ng-if="item.task=='SUBMITADDRESS'" ng-click="gotoDetailRequest(item.id)" >
                 <img ng-src="img/1491892511_profle.png">
-                <h2 class="lead">{{item.employeeRequest.fullName}}</h2>
+                <h2 class="lead">{{item.employeeRequest.name}}</h2>
                 <p>{{item.description}}</p>
                 <p class="text-smaller" am-time-ago="item.modifiedDate"></p>
                 <span class="item-note calm">
@@ -30,7 +35,7 @@
             </div>
             <div class="item item-avatar item-text-wrap" ng-if="item.task=='CHANGEFAMILY'" ng-click="gotoDetailRequest(item.id)" >
                 <img ng-src="img/1491892511_profle.png">
-                <h2 class="lead">{{item.employeeRequest.fullName}}</h2>
+                <h2 class="lead">{{item.employeeRequest.name}}</h2>
                 <p>{{item.description}}</p>
                 <p class="text-smaller" am-time-ago="item.modifiedDate"></p>
                 <span class="item-note calm">
@@ -40,7 +45,7 @@
             </div>
             <div class="item item-avatar item-text-wrap" ng-if="item.task=='CHANGEADDRESS'" ng-click="gotoDetailRequest(item.id)" >
                 <img ng-src="img/1491892511_profle.png">
-                <h2 class="lead">{{item.employeeRequest.fullName}}</h2>
+                <h2 class="lead">{{item.employeeRequest.name}}</h2>
                 <p>{{item.description}}</p>
                 <p class="text-smaller" am-time-ago="item.modifiedDate"></p>
                 <span class="item-note calm">
@@ -51,7 +56,7 @@
 
             <div class="item item-avatar item-text-wrap" ng-if="item.task=='CHANGEMARITALSTATUS'" ng-click="gotoDetailRequest(item.id)" >
                 <img ng-src="img/1491892511_profle.png">
-                <h2 class="lead">{{item.employeeRequest.fullName}}</h2>
+                <h2 class="lead">{{item.employeeRequest.name}}</h2>
                 <p>{{item.taskDescription}}</p>
                 <p class="text-smaller" am-time-ago="item.modifiedDate"></p>
                 <!-- <div class="row  pull-right">
@@ -88,10 +93,33 @@
 
     </div>
     <div class="item" ng-if="requests.length == 0" >
-                    <div class="col col-100">
-                        <h2>No request available</h2>
-                        <p>You may don't have any request need your approval</p>
-                    </div>  
-            </div>
+            <div class="col col-100">
+                <h2>No request available</h2>
+                <p>You may don't have any request need your approval</p>
+            </div>  
+    </div>
+</div>
+<div ng-if="module.type === 'benefit'">
+         <div class="card" ng-repeat="item in benefitRequests | filter: searchFilter ">
+                <div class="item item-avatar item-text-wrap" ng-click="gotoDetailRequest(item.id)" >
+                    <img ng-src="img/1491892511_profle.png">
+                    <h2 class="lead">{{item.employeeRequest.name}}</h2>
+                    <p class="text-small" >{{item.ref.categoryType}}</p>
+                    <p class="text-small" >Total : {{item.ref.totalAmount}}</p>
+                    <p class="text-smaller" am-time-ago="item.modifiedDate"></p>
+                    <span class="item-note calm">
+                        {{item.processingStatus}}
+                    </span>
+                
+                </div>
+         </div>
+         <div class="item" ng-if="benefitRequests.length == 0" >
+            <div class="col col-100">
+                <h2>No request available</h2>
+                <p>You may don't have any request need your approval</p>
+            </div>  
+        </div>
+    </div>
+    
     </ion-content>
 </ion-view>

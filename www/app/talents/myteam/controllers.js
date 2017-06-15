@@ -77,28 +77,38 @@ angular.module('myteam.controllers', [])
 .controller('MyRequestCtrl', function($ionicPopover,$ionicLoading,$rootScope, $scope,$state , AuthenticationService, Main) {
   if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
-    }
+  }
 
     $scope.requests = [];
-
+    $scope.module = {};
+   
     $scope.confirmApprove = $ionicPopover.fromTemplate(contactTemplate, {
         scope: $scope
     });
+
+    $scope.chooseTab = function(tab){
+        $scope.module.type = tab;
+        if(tab === 'personalia')
+          $scope.requests = [];
+        else if(tab === 'benefit')
+          $scope.benefitRequests = [];
+
+        getMyApproval(tab);
+    }
 
     $scope.confirmReject = $ionicPopover.fromTemplate(contactTemplate, {
         scope: $scope
     });
 
     $scope.gotoDetailRequest = function(id){
-       // $rootScope.requestSelected = $scope.requests[idx];
-       // $state.go('app.myrequestdetail',{'id':id});
+      
         $state.go('app.requestdetail',{'id':id,'needApproval':false});
     }
 
     
 
     $scope.refresh = function(){
-      initMethod();
+      $scope.chooseTab($scope.module.type);    
     }
     
     $scope.approval = function(action,id){
@@ -122,72 +132,59 @@ angular.module('myteam.controllers', [])
 
    
     var successRequest = function (res){
-      $scope.$broadcast('scroll.refreshComplete');
+      
       for(var i=0;i<res.length;i++) {
         var obj = res[i];
         obj.idx = i;
-        if(res[i].task == 'CHANGEMARITALSTATUS') {
-           var change = res[i].data;
-           var objData = JSON.parse(change);
-           obj.taskDescription = "Change marital status from "+res[i].employeeRequest.maritalStatus + " to " + objData.maritalStatus;
-        }else if(res[i].task == 'SUBMITADDRESS'){
-          obj.taskDescription = "Add new Address";
-        }else if(res[i].task == 'SUBMITFAMILY'){
-          obj.taskDescription = "Add new family";
+        if($scope.module.type == 'personalia') {
+            if(res[i].task == 'CHANGEMARITALSTATUS') {
+               var change = res[i].data;
+               var objData = JSON.parse(change);
+               obj.taskDescription = "Change marital status from "+res[i].employeeRequest.maritalStatus + " to " + objData.maritalStatus;
+            }else if(res[i].task == 'SUBMITADDRESS'){
+                obj.taskDescription = "Add new Address";
+            }else if(res[i].task == 'SUBMITFAMILY'){
+                obj.taskDescription = "Add new family";
+            }
         }
-        obj.employeeRequest.fullName = obj.employeeRequest.firstName;
+        
+          obj.employeeRequest.fullName = obj.employeeRequest.firstName;
           if(obj.employeeRequest.middleName != null)
             obj.employeeRequest.fullName += " " + obj.employeeRequest.middleName;
 
           if(obj.employeeRequest.lastName != null)
             obj.employeeRequest.fullName += " " + obj.employeeRequest.lastName;
         
-        $scope.requests.push(obj);
-       }
+
+        if($scope.module.type == 'personalia') {
+            $scope.requests.push(obj);
+        }else {
+            $scope.benefitRequests.push(obj);
+        }
+          
+      }
 
       $ionicLoading.hide();
+      $scope.$broadcast('scroll.refreshComplete');
       console.log($scope.requests);
     }
 
-    var errorRequest = function (err, status){
-      if(status == 401) {
-        var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
-        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-      }else if(status == 500) {
-        alert("Problem with server. Please try again later.");
-      }else {
-        alert(err.message);
-      }
-      $ionicLoading.hide();
-      console.log(err);
-      console.log(status);
-    }
-
-    var successRefreshToken = function(res){
-      Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
-    }
-    var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
-    }
+    
 
     initMethod();
     //31acd2e6-e891-4628-a24e-58e408664516
     function initMethod(){
-      $scope.requests = [];
-      getMyApproval();
+      
+      $scope.chooseTab('personalia');
     }
     // invalid access token error: "invalid_token" 401
-    function getMyApproval(){
+    function getMyApproval(module){
       $ionicLoading.show({
           template: '<ion-spinner></ion-spinner>'
         });
       var accessToken = Main.getSession("token").access_token;
-      var urlApi = Main.getUrlApi() + '/api/user/workflow/myrequest';
-      Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
+      var urlApi = Main.getUrlApi() + '/api/user/workflow/myrequest?module='+module;
+      Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
     }
 })
 
@@ -198,6 +195,9 @@ angular.module('myteam.controllers', [])
 
 
     $scope.requests = [];
+    $scope.benefitRequests = [];
+    $scope.module = {};
+
     $scope.$on('$ionicView.beforeEnter', function () {
         console.log("$ionicView.beforeEnter");
         if( $rootScope.refreshRequestApprovalCtrl) {
@@ -206,6 +206,15 @@ angular.module('myteam.controllers', [])
         }
         $rootScope.refreshRequestApprovalCtrl = false;
     });
+
+    $scope.chooseTab = function(tab){
+        $scope.module.type = tab;
+        if(tab === 'personalia')
+          $scope.requests = [];
+        else if(tab === 'benefit')
+          $scope.benefitRequests = [];
+        getNeedApproval(tab);
+    }
 
 
     $scope.confirmApprove = $ionicPopover.fromTemplate(contactTemplate, {
@@ -222,7 +231,7 @@ angular.module('myteam.controllers', [])
     }
 
     $scope.refresh = function(){
-      initMethod();
+      $scope.chooseTab($scope.module.type);    
     }
     
     $scope.approval = function(action,id){
@@ -251,21 +260,29 @@ angular.module('myteam.controllers', [])
       for(var i=0;i<res.length;i++) {
         var obj = res[i];
         obj.idx = i;
-        if(res[i].task == 'CHANGEMARITALSTATUS') {
-           var change = res[i].data;
-           var objData = JSON.parse(change);
-           obj.taskDescription = "Change marital status from "+res[i].employeeRequest.maritalStatus + " to " + objData.maritalStatus;
-        }else if(res[i].task == 'SUBMITFAMILY'){
-          obj.taskDescription = "Add new family";
+        if($scope.module.type == 'personalia') {
+            if(res[i].task == 'CHANGEMARITALSTATUS') {
+               var change = res[i].data;
+               var objData = JSON.parse(change);
+               obj.taskDescription = "Change marital status from "+res[i].employeeRequest.maritalStatus + " to " + objData.maritalStatus;
+            }else if(res[i].task == 'SUBMITFAMILY'){
+              obj.taskDescription = "Add new family";
+            }
         }
+
         obj.employeeRequest.fullName = obj.employeeRequest.firstName;
-          if(obj.employeeRequest.middleName != null)
+        if(obj.employeeRequest.middleName != null)
             obj.employeeRequest.fullName += " " + obj.employeeRequest.middleName;
 
-          if(obj.employeeRequest.lastName != null)
+        if(obj.employeeRequest.lastName != null)
             obj.employeeRequest.fullName += " " + obj.employeeRequest.lastName;
         
-        $scope.requests.push(obj);
+        if($scope.module.type == 'personalia') {
+            $scope.requests.push(obj);
+        }else {
+            $scope.benefitRequests.push(obj);
+        }
+
        }
 
       $ionicLoading.hide();
@@ -273,45 +290,21 @@ angular.module('myteam.controllers', [])
       console.log($scope.requests);
     }
 
-    var errorRequest = function (err, status){
-      if(status == 401) {
-        var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
-        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-      }else if(status == 500) {
-        alert("Problem with server. Please try again later.");
-      }else {
-        alert(err.message);
-      }
-      $ionicLoading.hide();
-      console.log(err);
-      console.log(status);
-    }
-
-    var successRefreshToken = function(res){
-      Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
-    }
-    var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
-    }
+    
 
     initMethod();
-    //31acd2e6-e891-4628-a24e-58e408664516
+
     function initMethod(){
-      $scope.requests = [];
-      getNeedApproval();
+      $scope.chooseTab('personalia');
     }
     // invalid access token error: "invalid_token" 401
-    function getNeedApproval(){
+    function getNeedApproval(module){
       $ionicLoading.show({
           template: '<ion-spinner></ion-spinner>'
         });
       var accessToken = Main.getSession("token").access_token;
-      var urlApi = Main.getUrlApi() + '/api/user/workflow/needapproval';
-      Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
+      var urlApi = Main.getUrlApi() + '/api/user/workflow/needapproval?module='+module;
+      Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
     }
 })
 
@@ -359,7 +352,7 @@ angular.module('myteam.controllers', [])
         var data = JSON.stringify(data);
 
         console.log(data);
-        Main.postRequestApi(accessToken,urlApi,data,successApprove,errorRequest);
+        Main.postRequestApi(accessToken,urlApi,data,successApprove,$scope.errorRequest);
 
     }
     
@@ -433,7 +426,7 @@ angular.module('myteam.controllers', [])
            $scope.detail.taskDescription = "Add new family";
            $rootScope.family = [];
            $rootScope.family.push($scope.detail.ref);
-      }else if($scope.detail.task == 'SUBMITADDRESS') {
+      }else if($scope.detail.task == 'SUBMITADDRESS' || $scope.detail.task == 'CHANGEADDRESS') {
            $rootScope.address = [];
            $rootScope.address.push($scope.detail.ref);
       }
@@ -458,33 +451,7 @@ angular.module('myteam.controllers', [])
       console.log($scope.detail);
     }
 
-    var errorRequest = function (err, status){
-      $ionicLoading.hide();
-      if(status == 401) {
-        var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
-        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-      }else {
-        if(status == -1) {
-          alert("Error : Problem with your connection.");
-        }else {
-          alert(err.message);
-        }
-        
-      }
-      console.log(err);
-      console.log(status);
-    }
-
-    var successRefreshToken = function(res){
-      Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
-    }
-    var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
-    }
+   
 
     function getDetailRequest(){
       $ionicLoading.show({
@@ -492,7 +459,7 @@ angular.module('myteam.controllers', [])
       });
       var accessToken = Main.getSession("token").access_token;
       var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval/'+id;
-      Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
+      Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
     }
 
     function initModule(){
