@@ -10,6 +10,35 @@ angular.module('intro.controllers', [])
         });
     }
 
+    var successUserReference = function(res){
+        $ionicLoading.hide();
+        Main.setSession('profile',res);
+        console.log(Main.getSession('profile'));
+        $state.go("app.home");
+    }
+
+    var errorUserReference = function(res,status){
+        if(status == 401) {
+            $scope.goTo('login');
+        }else if(status == 500) {
+            alert("Problem with server. Please try again later.");
+        }else {
+            if(err != null)
+              alert(err.message);
+            else 
+              alert("Please Check your connection.");
+        }
+        $ionicLoading.hide();
+    }
+    function getUserReference(){
+        $ionicLoading.show({
+            template: 'Get User Reference ...'
+        });
+
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/profile';
+        Main.requestApi(accessToken,urlApi,successUserReference,errorUserReference);
+    }
 	$scope.loginAction = function() {
 			//alert("signin");
             $ionicLoading.show({
@@ -28,11 +57,9 @@ angular.module('intro.controllers', [])
                 if (res.type == false) {
                     console.log(res)    
                 } else {
-                    
                     Main.setSession('token',res);
-                    console.log(Main.getSession("token"));
-                    $state.go("app.home");
-                    ///window.location = "/";    
+                    getUserReference();
+                    //$state.go("app.home");
                 }
             }, function(error, status) {
                 $ionicLoading.hide();
@@ -97,9 +124,7 @@ angular.module('intro.controllers', [])
             Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
         }else {
             alert(messageValidation);
-        }
-        
-        
+        }    
 
     }
 
