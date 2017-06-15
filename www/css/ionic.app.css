@@ -26,6 +26,20 @@ $dark:                            #444 !default;
   used under CC BY http://creativecommons.org/licenses/by/4.0/
   Modified icons to fit ionicon’s grid from original.
 */
+
+.ionic_datepicker_popup .popup-body .month_select select, .ionic_datepicker_popup .popup-body .year_select select {
+    left: -3px;
+    top: -15px;
+    border: none;
+    padding: 0;
+}
+
+.ionic_datepicker_popup .calendar_grid {
+    height: 215px;
+    font-size: large;
+    line-height: 3;
+}
+
 @font-face {
   font-family: "Ionicons";
   src: url("../lib/ionic/fonts/ionicons.eot?v=2.0.1");
