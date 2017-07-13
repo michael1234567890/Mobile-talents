@@ -20,6 +20,8 @@
   },
   "dependencies": {
     "lodash": "^4.13.1",
-    "Chart.js": "^2.1.4"
+    "Chart.js": "^2.1.4",
+    "onezone-datepicker": "*",
+    "ionic-datepicker": "^1.2.1"
   }
 }

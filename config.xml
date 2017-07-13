@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.phincon.mobile.talents" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>mobile_talents</name>
+  <name>Talents</name>
   <description>
         Mobile Talents Project
     </description>
