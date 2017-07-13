@@ -3,21 +3,7 @@
     'use strict'
 
     angular.module('talent.services', [])
-    
-        .factory('Absents', function() {
 
-          var absents = [{
-            id: 0,
-            Used: 5,
-            Available: 8
-          }];
-
-          return {
-            all: function() {
-              return absents[0];
-            }
-          };
-        })
         .service('appService', ['$state', '$ionicPopup', '$ionicActionSheet', '$ionicHistory', '$ionicLoading', '$timeout',
             function ($state, $ionicPopup, $ionicActionSheet, $ionicHistory, $ionicLoading, $timeout) {
 
@@ -100,7 +86,8 @@
                             saveToPhotoAlbum: true,
                             correctOrientation: true,
                             targetWidth : 633,
-                            targetHeight:633
+                            targetHeight:633,
+                            allowEdit:true
                         };
                     },
                     getLibraryOptions: function () {
@@ -112,13 +99,13 @@
                             saveToPhotoAlbum: false,
                             correctOrientation: true,
                             targetWidth : 633,
-                            targetHeight:633
+                            targetHeight:633,
+                            allowEdit:true
                         };
                     },
                 }
             }]);
 })();
-
 
 //Contacts data
 var _contacts = [

@@ -283,8 +283,39 @@ angular.module('talent.routes', [])
         }
       })
 
+      .state('app.claimchoice', {
+        url: '/claimchoice',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/claim/claimchoice.html',
+            controller: 'ClaimChoice'
+          }
+        }
+      })
+
+      .state('app.benefitclaimlist', {
+        url: '/benefitclaimlist',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/claim/benefitclaimlist.html',
+            controller: 'BenefitClaimListCtrl'
+          }
+        }
+      })
+
+      .state('app.spdadvanceadd', {
+        url: '/spdadvanceadd/:categoryType/:extId',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/claim/spdadvanceadd.html',
+            controller: 'SpdAdvanceAdd'
+          }
+        }
+      })
+
+     
       .state('app.benefitlisttype', {
-        url: '/benefitlisttype/:categoryType',
+        url: '/benefitlisttype/:categoryType/:extId',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/selfservice/claim/listtype.html',
@@ -456,6 +487,26 @@ angular.module('talent.routes', [])
           'menuContent': {
             templateUrl: 'app/talents/others/support.html',
             controller: 'SupportCtrl'
+          }
+        }
+      })
+
+      .state('app.announcement', {
+        url: '/announcement',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/others/announcement.html',
+            controller: 'AnnouncementCtrl'
+          }
+        }
+      })
+
+      .state('app.mycompany', {
+        url: '/mycompany',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/others/mycompany.html',
+            controller: 'MyCompanyCtrl'
           }
         }
       })

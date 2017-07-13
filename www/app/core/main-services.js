@@ -4,11 +4,11 @@
 
     angular.module('main.services', [])
     .factory('Main', function($q, $timeout, $http, $localStorage){
-        //var baseUrl = "http://192.168.43.162:8080";
-        //var printBaseUrl = "http://192.168.43.162/spice/printpdf"
+        var baseUrl = "http://192.168.43.162:8080";
+        var printBaseUrl = "http://192.168.43.162/spice/payslippdf"
 
-        var printBaseUrl = "http://localhost/spice/printpdf"
-        var baseUrl = "http://localhost:8080";
+        // var printBaseUrl = "http://localhost/spice/payslippdf"
+        // var baseUrl = "http://localhost:8080";
         var basicAuthentication = 'Basic dGFsZW50czpzZWNyZXQ=';
         var timeoutms = 15000; // 15 sec
 
@@ -29,7 +29,6 @@
         var selectMonth = [{name:"JAN",id:"01"},{name:"FEB",id:"02"},{id:"03",name:"MAR"},{id:"04",name:"APR"},{id:"05",name:"MAY"},{id:"06",name:"JUN"},{id:"07",name:"JUL"},{id:"08",name:"AUG"},{id:"09",name:"SEP"},{id:"10",name:"OCT"},{id:"11",name:"NOV"},{id:"12",name:"DES"}];  
         var selectYear = [{id:"2016"},{id:"2017"}]; 
        
-
         function changeUser(user) {
             angular.extend(currentUser, user);
         }

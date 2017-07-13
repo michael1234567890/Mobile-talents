@@ -17,8 +17,9 @@
 
         .controller('appCtrl', function ($rootScope, $state, $scope, $stateParams, appService, $ionicHistory, $ionicPopover, $ionicModal,
             $ionicScrollDelegate, $ionicLoading, $ionicActionSheet, $cordovaCamera, $cordovaSocialSharing, $cordovaGeolocation, $timeout,AuthenticationService, Main) {
-            initProfile();
+            
             initData();
+            initProfile();
             initIntro();
             initNews();
            
@@ -138,12 +139,13 @@ he
                   if(status == 401) {
                     $scope.goTo('login');
                   }else if(status == 500) {
-                    alert("Problem with server. Please try again later.");
-                  }else {
                     if(err != null)
                       alert(err.message);
                     else 
-                      alert("Please Check your connection.");
+                      alert("Problem with server. Please try again later.");
+                
+                  }else  {
+                    alert("Please Check your connection.");
                   }
                   $ionicLoading.hide();
                   console.log(err);
@@ -340,15 +342,20 @@ he
 
             // profile
             function initProfile() {
-
-                $scope.profile = Main.getSession('profile');
-                $scope.profile.fullname = $scope.profile.employeeTransient.name;
                 $scope.general = {};
+               
+                if(Main.getSession('profile')!=null && Main.getSession('profile') !=undefined ) {
+                    $scope.profile = Main.getSession('profile');
+                    $scope.profile.fullname = $scope.profile.employeeTransient.name;
+                    if($rootScope.countApproval == null)
+                        $scope.general.countApproval = $scope.profile.needApproval;
+                    else 
+                        $scope.general.countApproval = $rootScope.countApproval;
 
-                if($rootScope.countApproval == null)
-                    $scope.general.countApproval = '?';
-                else 
-                    $scope.general.countApproval = $rootScope.countApproval;
+                    if($scope.profile.image != undefined) {
+                        $rootScope.user.photo = $scope.profile.image;
+                    }
+                }
             }
 
             // dashboard
