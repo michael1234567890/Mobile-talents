@@ -1,0 +1,27 @@
+<ion-view title="Announcement">
+     <ion-content class="has-header" scroll="true">
+        <ion-refresher pulling-text="Pull to refresh"
+             refreshing-text="Loading..."
+             refreshing-icon="ion-loading-c"
+             pulling-icon="ion-ios7-arrow-thin-down"
+             on-refresh="refresh()">
+        </ion-refresher>
+        <div class="note note-info padding" style="margin:10px;" ng-if="news.length === 0">
+            <h2 class="positive">No Announcement</h4>
+            <p class="dark">There is no data to be displayed</p>
+        </div>
+        
+        <div class="list">
+            <div class="item item-text-wrap"  ng-repeat="item in news" >
+              
+                <h2 class="lead">{{item.title}}</h2>
+                <p class="text-small">{{item.content}}</p>
+                <i class="icon ion-calendar assertive dark"><span class="text-smaller assertive">&nbsp;&nbsp;{{item.createdDate | date: 'dd MMM yyyy HH:mm a'}}</span></i>
+
+               
+            </div>
+        </div>
+        
+    </ion-content>
+
+</ion-view>

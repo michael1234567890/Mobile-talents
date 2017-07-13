@@ -1,69 +1,13 @@
-<ion-view view-title="Submit Claim" class="header">
-
- <ion-content padding="true" class="has-header materialize" scroll="true" style="font-size:12px">
-    <ion-list>
-
-<style>
-  .ionic_datepicker_popup .popup-body .month_select select, .ionic_datepicker_popup .popup-body .year_select select {
-    left: -3px;
-    top: -15px;
-    border: none;
-    padding: 0;
-}
-.ionic_datepicker_popup .calendar_grid {
-    height: 215px;
-    font-size: large;
-    line-height: 3;
-}
-</style>
-
-<form class="col s12">
- 
-<ion-item style="border-color: white; padding: 5px;">
-
-            <h2 class="input-label"> Claim Type</h2>
-          <select style="display: none;" ng-model="selectedOption" ng-options="option.name for option in options"> </select>
-
-<br>
-
-          <h2>From Date</h2>
-        <ionic-datepicker input-obj="datepickerObject" ng-controller="DateCtrl">
-          <button class="button button-block button-positive" ng-click="openDatePicker()"> {{datepickerObject.inputDate | date:'dd-MM-yyyy'}}</button>
-        </ionic-datepicker>
-
-          <h2>To Date</h2>
-        <ionic-datepicker input-obj="datepickerObject" ng-controller="DateCtrl">
-          <button class="button button-block button-positive" ng-click="openDatePicker()"> {{datepickerObject.inputDate | date:'dd-MM-yyyy'}}</button>
-        </ionic-datepicker>
-
-
-</ion-item>
-
-
-<ion-item style="padding-top: 0px;">
-        <div class="input-field col s6">
-          <input id="last_name" type="text" class="validate" >
-          <label for="last_name">Amount</label>
-        </div>
-
-
-        <div class="input-field col s6">
-          <input id="last_name" type="text" class="validate" >
-          <label for="last_name">Notes</label>
-        </div>
-</ion-item>
-
-
-            <div class="row">
-               
-                <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Send</button>
-            </div>
-
-</form>
-
-
-    </ion-list>
-  </ion-content>
+<ion-view title="Submit Claim">
+    <ion-content padding="true" class="has-header materialize" scroll="true">
+        <div  class="bg-lightgrey">
+                <p class="bb text-large padding uppercase">Select Expense Category</p>
+                 <div class="card hybrid" ng-repeat="item in categoryType" ng-click="gotoListType(item.name,item.id)">
+                    <div class="item item-text-wrap item-icon-right">
+                        <h2 class="lead text-meidum" style="padding-left:0px">{{item.name}}</h2>
+                        <i class="icon ion-ios-arrow-right pull-right"></i>
+                    </div>
+                 </div>
+      </div>
+    </ion-content>
 </ion-view>
-
-

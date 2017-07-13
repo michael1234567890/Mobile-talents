@@ -1,5 +1,5 @@
 angular.module('intro.controllers', [])
-.controller('LoginCtrl',function( $ionicLoading, appService, $state,$localStorage, $rootScope, $scope, $location,  Main) {
+.controller('LoginCtrl',function( $ionicHistory, $ionicLoading, appService, $state,$localStorage, $rootScope, $scope, $location,  Main) {
 	$scope.usertalent = {username:'',password:''};
 	//$scope.email = "hendra.ramdhan@gmail.com";
   $scope.goToSignup = function () {
@@ -67,8 +67,10 @@ angular.module('intro.controllers', [])
                 // $rootScope.error = 'Failed to signin';
                 if(status == 400 || status==401) {
                     err = "Error : " + error.error_description;
-
+                    
                     //appService.showAlert('Error', err, 'Close', 'button-assertive', null);
+                }else {
+                    err = "Problem with server. Please try again later !"
                 }
                 appService.showAlert('Error', err, 'Close', 'button-assertive', null);
                

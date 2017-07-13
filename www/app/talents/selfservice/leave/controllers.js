@@ -58,56 +58,9 @@ angular.module('leave.controllers', [])
 
 
 })
-    .controller('DateCtrl', function($scope, ionicDatePicker) {
-        
-      $scope.openDatePicker = function(){
-      ionicDatePicker.openDatePicker(ipObj1);
-    };
-          var ipObj1 = {
-      callback: function (val) {  //Mandatory
-        datePickerCallback(val);
-      },
-    };
 
-
-  $scope.datepickerObject = {
-      titleLabel: 'Title',  //Optional
-      inputDate: new Date(),
-      titleLabel: 'Select a Date',
-      setLabel: 'Set',
-      todayLabel: 'Today',
-      closeLabel: 'Close',
-      mondayFirst: false,
-      weeksList: ["S", "M", "T", "W", "T", "F", "S"],
-      monthsList: ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"],
-      templateType: 'popup',
-      from: new Date(2012, 8, 1),
-      to: new Date(2018, 12, 31),
-      showTodayButton: true,
-      dateFormat: 'dd MM yyyy',
-      disableWeekdays: [], 
-      inputDate: new Date(),      
-      mondayFirst: true,               
-      closeOnSelect: false,       
-      callback: function (val) {  //Mandatory
-      datePickerCallback(val);
-    }
-  };
-
-      var datePickerCallback = function (val) {
-    if (typeof(val) === 'undefined') {
-      console.log('No date selected');
-    } else {
-      console.log('Selected date is : ', val)
-      $scope.datepickerObject.inputDate = val;
-    }
-  };
-  
-})
-
-.controller('AddLeaveCtrl', function($filter, $stateParams, $ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main,Absents) {
-$scope.absents=Absents.all();
-
+.controller('AddLeaveCtrl', function($filter, $stateParams, $ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+    
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
@@ -117,7 +70,40 @@ $scope.absents=Absents.all();
     $scope.leaveType = {};
     $scope.leave = {comment:""}
 
-    
+    $scope.onezoneDatepicker = { 
+        date: new Date(), 
+        mondayFirst: false, 
+        disablePastDays: false, 
+        disableSwipe: false, 
+        disableWeekend: false, 
+        showDatepicker: false, 
+        showTodayButton: true, 
+        calendarMode: true, 
+        hideCancelButton: false, 
+        hideSetButton: false, 
+        highlights: [ { date: new Date(2016, 6, 6), color: '#8FD4D9', textColor: '#f00', }], 
+        callback: function(value) { 
+            startDate = $filter('date')(new Date(value),'yyyy-MM-dd');
+        } 
+    }
+
+    $scope.onezoneDatepicker2 = { 
+        date: new Date(), 
+        mondayFirst: false, 
+        disablePastDays: false, 
+        disableSwipe: false, 
+        disableWeekend: false, 
+        showDatepicker: false, 
+        showTodayButton: true, 
+        calendarMode: true, 
+        hideCancelButton: false, 
+        hideSetButton: false, 
+        highlights: [ { date: new Date(2016, 6, 6), color: '#8FD4D9', textColor: '#f00', }], 
+        callback: function(value) { 
+            endDate = $filter('date')(new Date(value),'yyyy-MM-dd');
+        } 
+    }
+
     var successRefreshToken = function(res){
       Main.setSession("token",res);
       console.log("token session");

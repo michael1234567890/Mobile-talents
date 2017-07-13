@@ -1,0 +1,41 @@
+<ion-view title="{{title}}">
+    <ion-content padding="true" class="has-header materialize">
+     <div class="item no-padding">
+        <div class="row">
+            <div class="input-field col">
+                      <p>Travelling Date</p>
+                        <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()">
+                            {{requestHeader.transactionDate| date: "yyyy-MM-dd"}}
+                        </ionic-datepicker>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col">
+                <input  id="disabled" type="text" class="validate" ng-model="detail.origin">
+                <label for="Origin">Origin</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col">
+                <input  id="disabled" type="text" class="validate" ng-model="detail.destination">
+                <label for="destination">Destination</label>
+            </div>
+        </div>
+
+         <div class="row">
+            <div class="input-field col">
+                <p>Amount</p>
+                <input  id="disabled" ng-keyup="change($event,$index)" type="tel" class="validate" ng-model="detail.amount">
+                
+            </div>
+        </div>
+
+        
+      </div>
+    
+    <div class="row">
+        <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Submit</button>
+    </div>
+    </ion-content>
+</ion-view>

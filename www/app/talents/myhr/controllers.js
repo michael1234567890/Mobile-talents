@@ -6,8 +6,7 @@ angular.module('myhr.controllers', [])
         $state.go("login");
     }
 
-    $scope.profile = Main.getSession("profile");
-    //$scope.profile = {};
+    //$scope.profile.fullname = $scope.profile.employeeTransient.name;
     console.log("profile", $scope.profile);
     $scope.$on('$ionicView.beforeEnter', function () {
          $scope.profile = Main.getSession("profile");
@@ -20,52 +19,24 @@ angular.module('myhr.controllers', [])
 
 
     var successProfile = function (res){
-    	
       $scope.profile = res;
       $scope.profile.fullname = $scope.profile.firstName + " " + $scope.profile.lastName;
       console.log($scope.profile);
 
     }
 
-    var errorProfile = function (err, status){
-    	if(status == 401) {
-    		var refreshToken = Main.getSession("token").refresh_token
-    		console.log("need refresh token");
-    		Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-    	}else {
-          if(status==500)
-            alert(err.message);
-          else
-            alert("Please Check your connection");
-      }
-    	console.log(err);
-    	console.log(status);
-    }
-
-   	var successRefreshToken = function(res){
-   		Main.setSession("token",res);
-   		console.log("token session");
-   		console.log(Main.getSession("token"));
-   	}
-   	var errRefreshToken = function(err, status) {
-   		console.log(err);
-   		console.log(status);
-   	}
-
-   	initMethod();
-   	//31acd2e6-e891-4628-a24e-58e408664516
    	function initMethod(){
-      /*if(Main.getSession("profile") == null)
-   		   getProfile();*/
+      if(Main.getSession("profile") == null)
+   		   getProfile();
    	}
    	// invalid access token error: "invalid_token" 401
    	function getProfile(){
    		var accessToken = Main.getSession("token").access_token;
    		var urlApi = Main.getUrlApi() + '/api/myprofile';
-   		Main.requestApi(accessToken,urlApi,successProfile, errorProfile);
+   		Main.requestApi(accessToken,urlApi,successProfile, $scope.errorRequest);
    	}
-    // Main.refreshToken("4c648f69-5158-4260-a47f-e7793c6a952e", resRefreshToken, errRefreshToken);
-
+   
+    initMethod();
 }])
 
 
@@ -99,31 +70,6 @@ angular.module('myhr.controllers', [])
       }
     }
 
-    var errorRequest = function (err, status){
-    	if(status == 401) {
-    		var refreshToken = Main.getSession("token").refresh_token
-    		console.log("need refresh token");
-    		Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-    	}else {
-    		  if(status==500)
-            alert(err.message);
-          else
-            alert("Please Check your connection");
-    	}
-    	console.log(err);
-    	console.log(status);
-    }
-
-   	var successRefreshToken = function(res){
-   		Main.setSession("token",res);
-   		console.log("token session");
-   		console.log(Main.getSession("token"));
-   	}
-   	var errRefreshToken = function(err, status) {
-   		console.log(err);
-   		console.log(status);
-   	}
-
    	initMethod();
    	//31acd2e6-e891-4628-a24e-58e408664516
    	function initMethod(){
@@ -133,7 +79,7 @@ angular.module('myhr.controllers', [])
    	function getPersonal(){
    		var accessToken = Main.getSession("token").access_token;
    		var urlApi = Main.getUrlApi() + '/api/myprofile/personal';
-   		Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
+   		Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
    	}
     // Main.refreshToken("4c648f69-5158-4260-a47f-e7793c6a952e", resRefreshToken, errRefreshToken);
 
@@ -192,31 +138,6 @@ angular.module('myhr.controllers', [])
 
     }
 
-    var errorRequest = function (err, status){
-      $ionicLoading.hide();
-      if(status == 401) {
-        var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
-        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-      }else {
-          if(status==500)
-            alert(err.message);
-          else
-            alert("Please Check your connection");
-      }
-      console.log(err);
-      console.log(status);
-    }
-
-    var successRefreshToken = function(res){
-      Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
-    }
-    var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
-    }
 
     initMethod();
     //31acd2e6-e891-4628-a24e-58e408664516
@@ -230,7 +151,7 @@ angular.module('myhr.controllers', [])
       });
       var accessToken = Main.getSession("token").access_token;
       var urlApi = Main.getUrlApi() + '/api/user/family';
-      Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
+      Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
     }
     
 
@@ -344,61 +265,12 @@ angular.module('myhr.controllers', [])
 })
 
 
-
-.controller('AddFamilyCtrl', function(appService,$ionicActionSheet,$cordovaCamera,$ionicHistory , $ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main,ionicDatePicker) {
+.controller('AddFamilyCtrl', function(ionicDatePicker,$ionicPopup,appService,$ionicActionSheet,$cordovaCamera,$ionicHistory , $ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
   
-    /*$(document).ready(function() {
-        $('select').material_select();
-    });*/
-    $scope.openDatePicker = function(){
-      ionicDatePicker.openDatePicker(ipObj1);
-    };
-          var ipObj1 = {
-      callback: function (val) {  //Mandatory
-        datePickerCallback(val);
-      },
-    };
-
-
-  $scope.datepickerObject = {
-      titleLabel: 'Title',  //Optional
-      inputDate: new Date(),
-      titleLabel: 'Select a Date',
-      setLabel: 'Set',
-      todayLabel: 'Today',
-      closeLabel: 'Close',
-      mondayFirst: false,
-      weeksList: ["S", "M", "T", "W", "T", "F", "S"],
-      monthsList: ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"],
-      templateType: 'popup',
-      from: new Date(2012, 8, 1),
-      to: new Date(2018, 12, 31),
-      showTodayButton: true,
-      dateFormat: 'dd MM yyyy',
-      disableWeekdays: [], 
-      inputDate: new Date(),      
-      mondayFirst: true,               
-      closeOnSelect: false,       
-      callback: function (val) {  //Mandatory
-
-    }
-  };
-
-      var datePickerCallback = function (val) {
-    if (typeof(val) === 'undefined') {
-      console.log('No date selected');
-    } else {
-      console.log('Selected date is : ', val)
-      $scope.datepickerObject.inputDate = val;
-    }
-  };
-
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
-
-   
-
+    
     $scope.image = "img/placeholder.png";
     $scope.family = {};
 
@@ -411,7 +283,23 @@ angular.module('myhr.controllers', [])
     $scope.isEdit = false;
     $scope.family.images = [];
     $scope.family.imagesData = [];
-    $scope.family.birthDate = new Date();
+    var messageValidation = "";
+    // $scope.family.birthDate = new Date();
+
+    var datepicker = {
+      callback: function (val) {  //Mandatory
+        $scope.family.birthDate = val;
+      },
+      inputDate: new Date(),      //Optional
+      mondayFirst: true,          //Optional
+      dateFormat:"yyyy-MM-dd",
+      closeOnSelect: false,       //Optional
+      templateType: 'popup'       //Optional
+    };
+
+    $scope.openDatePicker = function(){
+      ionicDatePicker.openDatePicker(datepicker);
+    };
 
     $scope.removeChoice = function(){
         var lastItem = $scope.family.imagesData.length-1;
@@ -424,8 +312,6 @@ angular.module('myhr.controllers', [])
             alert("Only 3 pictures can be upload");
             return false;
           }
-        
-
           $ionicActionSheet.show({
               buttons: [{
                   text: 'Take Picture'
@@ -473,6 +359,7 @@ angular.module('myhr.controllers', [])
         $scope.family.images.push({'image':"img/placeholder.png"});
         console.log($scope.family.images);
     }
+
     $scope.takePicture = function(){
         var options = {
             quality: 100,
@@ -494,98 +381,83 @@ angular.module('myhr.controllers', [])
         });
     }
 
-     function goBack  (ui_sref) {
-        var currentView = $ionicHistory.currentView();
-        var backView = $ionicHistory.backView();
-
-        if (backView) {
-            //there is a back view, go to it
-            if (currentView.stateName == backView.stateName) {
-                //if not works try to go doubleBack
-                var doubleBackView = $ionicHistory.getViewById(backView.backViewId);
-                $state.go(doubleBackView.stateName, doubleBackView.stateParams);
-            } else {
-                backView.go();
-            }
-        } else {
-            $state.go(ui_sref);
-        }
-    }
-
     $scope.resetForm  = function(){
       $scope.family = {};
     }
 
     $scope.submitForm = function(){
-        verificationForm();
-        $ionicLoading.show({
-          template: 'Processing...'
-        });
-        var attachment = [];
-        if($scope.family.imagesData.length > 0) {
-            for (var i = $scope.family.imagesData.length - 1; i >= 0; i--) {
-                var objAttchament = {"image":$scope.family.imagesData[i].image};
-                attachment.push(objAttchament);
-            };
-        }
+      if(verificationForm($scope.family)){
+        var confirmPopup = $ionicPopup.confirm({
+            title: 'Confirm',
+            template: '<h5>Are you sure the data submitted is correct ?</h5>',
+            cancelText: 'Cancel',
+            okText: 'Yes'
+          }).then(function(res) {
+              if (res) {
+                  $ionicLoading.show({
+                    template: 'Processing...'
+                  });
+                  var attachment = [];
+                  if($scope.family.imagesData.length > 0) {
+                      for (var i = $scope.family.imagesData.length - 1; i >= 0; i--) {
+                          var objAttchament = {"image":$scope.family.imagesData[i].image};
+                          attachment.push(objAttchament);
+                      };
+                  }
 
-        $scope.family.attachments = attachment;
-        
-        var accessToken = Main.getSession("token").access_token;
-        var urlApi = Main.getUrlApi() + '/api/user/family';
-        var data = JSON.stringify($scope.family);
-        console.log(data);
-        Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
-
-        console.log($scope.family);
+                  $scope.family.attachments = attachment;  
+                  var accessToken = Main.getSession("token").access_token;
+                  var urlApi = Main.getUrlApi() + '/api/user/family';
+                  var data = JSON.stringify($scope.family);
+                  console.log(data);
+                  Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
+              }
+              
+          });
+      }else {
+          alert(messageValidation);
+      }
     }
 
     var successRequest = function (res){
       $ionicLoading.hide();
       alert(res.message);
       $rootScope.refreshFamilyCtrl=true;
-      goBack('app.family');
+      $scope.goBack('app.family');
       console.log(res);
       //$scope.family = res;
     }
 
-    var errorRequest = function (err, status){
-      $ionicLoading.hide();
-      if(status == 401) {
-        var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
-        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-      }else {
-        if(status==500)
-          alert(err.message);
-        else
-          alert("Please Check your connection");
-      }
-      console.log(err);
-      console.log(status);
-    }
-
-    var successRefreshToken = function(res){
-      Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
-    }
-    var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
-    }
-
+    
     initMethod();
     
     function initMethod(){
         
     }
     // invalid access token error: "invalid_token" 401
-    function verificationForm(){
+    function verificationForm(family){
+        if(family.name == undefined){
+            messageValidation = "Name can't empty";
+            return false;
+        }else if(family.birthDate == undefined){
+            messageValidation = "Date of Birth can't empty";
+            return false;
+        }else if(family.gender ==undefined) {
+            messageValidation = "Gender can't empty";
+            return false;
+        }else if(family.relationship ==undefined) {
+            messageValidation = "Relationship can't empty";
+            return false;
+        }else if(family.maritalStatus ==undefined) {
+            messageValidation = "Marital Status can't empty";
+            return false;
+        }else if(family.bloodType ==undefined) {
+            messageValidation = "Blood Type can't empty";
+            return false;
+        }
 
+        return true;
     }
-
-
 })
 
 
@@ -645,31 +517,6 @@ angular.module('myhr.controllers', [])
 
     }
 
-    var errorRequest = function (err, status){
-      $ionicLoading.hide();
-      if(status == 401) {
-        var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
-        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-      }else {
-          if(status==500)
-            alert(err.message);
-          else
-            alert("Please Check your connection");
-      }
-      console.log(err);
-      console.log(status);
-    }
-
-    var successRefreshToken = function(res){
-      Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
-    }
-    var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
-    }
 
     initMethod();
     //31acd2e6-e891-4628-a24e-58e408664516
@@ -684,7 +531,7 @@ angular.module('myhr.controllers', [])
       });
       var accessToken = Main.getSession("token").access_token;
       var urlApi = Main.getUrlApi() + '/api/user/address';
-      Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
+      Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
     }
 
 })
@@ -708,9 +555,6 @@ angular.module('myhr.controllers', [])
     $scope.selectCity=Main.getSelectCity();
     $scope.selectCountry=Main.getSelectCountry();
    
-
-    
-
     $scope.submitForm = function(){
         var dataSubmit = {address: $scope.address.address, rt: $scope.address.rt, rw:$scope.address.rw, country:$scope.address.country, province:$scope.address.province, city:$scope.address.city, zipCode:$scope.address.zipCode, phone: $scope.address.phone, stayStatus : $scope.address.stayStatus};
         verificationForm();
@@ -721,7 +565,7 @@ angular.module('myhr.controllers', [])
         var urlApi = Main.getUrlApi() + '/api/user/address/'+$scope.address.id;
         var data = JSON.stringify(dataSubmit);
         console.log("data Submit", data);
-        Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
+        Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
 
     }
 
@@ -733,28 +577,7 @@ angular.module('myhr.controllers', [])
       //$scope.family = res;
     }
 
-    var errorRequest = function (err, status){
-      $ionicLoading.hide();
-      if(status == 401) {
-        var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
-        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-      }else {
-        alert("Check your connection");
-      }
-      console.log(err);
-      console.log(status);
-    }
-
-    var successRefreshToken = function(res){
-      Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
-    }
-    var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
-    }
+    
 
     initMethod();
     
@@ -771,12 +594,13 @@ angular.module('myhr.controllers', [])
 })
 
 
-.controller('AddAddressCtrl', function($ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('AddAddressCtrl', function($ionicPopup, $ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     
    
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
+    var messageValidation = "";
     $scope.address = {};
     
 
@@ -789,33 +613,29 @@ angular.module('myhr.controllers', [])
       $scope.address = {};
     }
 
-    function goBack  (ui_sref) {
-        var currentView = $ionicHistory.currentView();
-        var backView = $ionicHistory.backView();
-
-        if (backView) {
-            //there is a back view, go to it
-            if (currentView.stateName == backView.stateName) {
-                //if not works try to go doubleBack
-                var doubleBackView = $ionicHistory.getViewById(backView.backViewId);
-                $state.go(doubleBackView.stateName, doubleBackView.stateParams);
-            } else {
-                backView.go();
-            }
-        } else {
-            $state.go(ui_sref);
-        }
-    }
-
     $scope.submitForm = function(){
-        verificationForm();
-        $ionicLoading.show({
-          template: 'Submit...'
-        });
-        var accessToken = Main.getSession("token").access_token;
-        var urlApi = Main.getUrlApi() + '/api/user/address';
-        var data = JSON.stringify($scope.address);
-        Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
+      if(verificationForm($scope.address)){
+        var confirmPopup = $ionicPopup.confirm({
+            title: 'Confirm',
+            template: '<h5>Are you sure the data submitted is correct ?</h5>',
+            cancelText: 'Cancel',
+            okText: 'Yes'
+          }).then(function(res) {
+              if (res) {
+                  $ionicLoading.show({
+                    template: 'Submit...'
+                  });
+                  var accessToken = Main.getSession("token").access_token;
+                  var urlApi = Main.getUrlApi() + '/api/user/address';
+                  var data = JSON.stringify($scope.address);
+                  Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
+              }
+              
+          });
+
+      } else {
+        alert(messageValidation);
+      }
         //console.log($scope.address);
     }
 
@@ -824,44 +644,35 @@ angular.module('myhr.controllers', [])
       alert(res.message);
       console.log(res);
       $rootScope.refreshAddressCtrl = true;
-      goBack("app.address");
+      $scope.goBack("app.address");
       //$scope.family = res;
     }
 
-    var errorRequest = function (err, status){
-      $ionicLoading.hide();
-      if(status == 401) {
-        var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
-        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-      }else {
-          if(status==500)
-            alert(err.message);
-          else
-            alert("Please Check your connection");
-      }
-      console.log(err);
-      console.log(status);
-    }
-
-    var successRefreshToken = function(res){
-      Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
-    }
-    var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
-    }
-
+    
     initMethod();
     
     function initMethod(){
        
     }
     // invalid access token error: "invalid_token" 401
-    function verificationForm(){
-
+    function verificationForm(address){
+        if(address.address == undefined){
+            messageValidation = "Address can't empty";
+            return false;
+        }else if(address.country == undefined){
+            messageValidation = "Country can't empty";
+            return false;
+        }else if(address.province == undefined){
+            messageValidation = "Province can't empty";
+            return false;
+        }else if(address.city == undefined){
+            messageValidation = "City can't empty";
+            return false;
+        }else if(address.stayStatus == undefined){
+            messageValidation = "Stay Status can't empty";
+            return false;
+        }
+        return true;
     }
 
    
@@ -897,9 +708,7 @@ angular.module('myhr.controllers', [])
 
 .controller('CertificationCtrl', function($ionicHistory,$timeout,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
    
-  
   $scope.certification = [];
-
   if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
   }
@@ -955,32 +764,6 @@ angular.module('myhr.controllers', [])
 
     }
 
-    var errorRequest = function (err, status){
-      $ionicLoading.hide();
-      if(status == 401) {
-        var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
-        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-      }else {
-          if(status==500)
-            alert(err.message);
-          else
-            alert("Please Check your connection");
-      }
-      console.log(err);
-      console.log(status);
-    }
-
-    var successRefreshToken = function(res){
-      Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
-    }
-    var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
-    }
-
     initMethod();
     //31acd2e6-e891-4628-a24e-58e408664516
     function initMethod(){
@@ -995,16 +778,11 @@ angular.module('myhr.controllers', [])
       });
       var accessToken = Main.getSession("token").access_token;
       var urlApi = Main.getUrlApi() + '/api/myprofile/certification';
-      Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
+      Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
     }
-    
-
-
   })
 
-.controller('AddCertificationCtrl', function(appService,$ionicActionSheet,$cordovaCamera,$ionicHistory,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
-
-
+.controller('AddCertificationCtrl', function($ionicPopup, appService,$ionicActionSheet,$cordovaCamera,$ionicHistory,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
 
   if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
@@ -1017,6 +795,8 @@ angular.module('myhr.controllers', [])
     $scope.imageCertification = {};
     $scope.imageCertification.images = [];
     $scope.imageCertification.imagesData = [];
+
+    var messageValidation = ""
 
     
     $scope.removeChoice = function(){
@@ -1101,41 +881,39 @@ angular.module('myhr.controllers', [])
       $scope.certification = {};
     }
 
-    function goBack  (ui_sref) {
-        var currentView = $ionicHistory.currentView();
-        var backView = $ionicHistory.backView();
-        if (backView) {
-            //there is a back view, go to it
-            if (currentView.stateName == backView.stateName) {
-                //if not works try to go doubleBack
-                var doubleBackView = $ionicHistory.getViewById(backView.backViewId);
-                $state.go(doubleBackView.stateName, doubleBackView.stateParams);
-            } else {
-                backView.go();
-            }
-        } else {
-            $state.go(ui_sref);
-        }
-    }
 
     $scope.submitForm = function(){
-        verificationForm();
-        $ionicLoading.show({
-          template: 'Processing...'
-        });
-        var attachments = [];
-        if($scope.imageCertification.imagesData.length > 0) {
-            for (var i = $scope.imageCertification.imagesData.length - 1; i >= 0; i--) {
-                var objAttchament = {"image":$scope.imageCertification.imagesData[i].image};
-                attachments.push(objAttchament);
-            };
-        }
+      if(verificationForm($scope.certification)){
+        var confirmPopup = $ionicPopup.confirm({
+            title: 'Confirm',
+            template: '<h5>Are you sure the data submitted is correct ?</h5>',
+            cancelText: 'Cancel',
+            okText: 'Yes'
+          }).then(function(res) {
+              if (res) {
+                  $ionicLoading.show({
+                    template: 'Processing...'
+                  });
+                  var attachments = [];
+                  if($scope.imageCertification.imagesData.length > 0) {
+                      for (var i = $scope.imageCertification.imagesData.length - 1; i >= 0; i--) {
+                          var objAttchament = {"image":$scope.imageCertification.imagesData[i].image};
+                          attachments.push(objAttchament);
+                      };
+                  }
 
-        $scope.certification.attachments = attachments;
-        var accessToken = Main.getSession("token").access_token;
-        var urlApi = Main.getUrlApi() + '/api/myprofile/certification';
-        var data = JSON.stringify($scope.certification);
-        Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
+                  $scope.certification.attachments = attachments;
+                  var accessToken = Main.getSession("token").access_token;
+                  var urlApi = Main.getUrlApi() + '/api/myprofile/certification';
+                  var data = JSON.stringify($scope.certification);
+                  Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
+              }
+              
+          });
+      } else {
+          alert(messageValidation);
+      }
+      
     }
 
     var successRequest = function (res){
@@ -1143,35 +921,10 @@ angular.module('myhr.controllers', [])
       alert(res.message);
       console.log(res);
       $rootScope.refreshCertificationCtrl = true;
-      goBack("app.certification");
+      $scope.goBack("app.certification");
       
     }
 
-    var errorRequest = function (err, status){
-      $ionicLoading.hide();
-      if(status == 401) {
-        var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
-        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-      }else {
-          if(status==500)
-            alert(err.message);
-          else
-            alert("Please Check your connection");
-      }
-      console.log(err);
-      console.log(status);
-    }
-
-    var successRefreshToken = function(res){
-      Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
-    }
-    var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
-    }
 
     initMethod();
     
@@ -1181,9 +934,19 @@ angular.module('myhr.controllers', [])
     }
 
     // invalid access token error: "invalid_token" 401
-    function verificationForm(){
-
+    function verificationForm(certification){
+        if(certification.name == undefined){
+            messageValidation = "Name can't empty";
+            return false;
+        }else if(certification.type == undefined){
+            messageValidation = "Type can't empty";
+            return false;
+        }
+        return true;
     }
+    
+     
+        
 
 
 })
@@ -1295,7 +1058,7 @@ angular.module('myhr.controllers', [])
 
 
 
-.controller('ChangeMaritalStatusCtrl', function($ionicActionSheet,appService,$ionicHistory,$cordovaCamera,$stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('ChangeMaritalStatusCtrl', function($ionicPopup, $ionicActionSheet,appService,$ionicHistory,$cordovaCamera,$stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     $scope.itens = [
           { title: "Single", checked: false },
           { title: "Married", checked: false }
@@ -1450,29 +1213,41 @@ angular.module('myhr.controllers', [])
 
 
     $scope.send = function (){
-       var idRef = Main.getSession("profile").employee;
-       var jsonData = '{"maritalStatus":"'+$scope.selected+'"}';
-       var attachment = [];
-       // var objAttchament = {"image":$scope.imageData};
-       // attachment.push(objAttchament);
+      var confirmPopup = $ionicPopup.confirm({
+            title: 'Confirm',
+            template: '<h5>Are you sure the data submitted is correct ?</h5>',
+            cancelText: 'Cancel',
+            okText: 'Yes'
+          }).then(function(res) {
+              if (res) {
+                var idRef = Main.getSession("profile").employeeTransient.id;
+                 var jsonData = '{"maritalStatus":"'+$scope.selected+'"}';
+                 var attachment = [];
+                 // var objAttchament = {"image":$scope.imageData};
+                 // attachment.push(objAttchament);
 
-       if($scope.maritalStatus.imagesData.length > 0) {
-            for (var i = $scope.maritalStatus.imagesData.length - 1; i >= 0; i--) {
-                var objAttchament = {"image":$scope.maritalStatus.imagesData[i].image};
-                attachment.push(objAttchament);
-            };
-        }
+                 if($scope.maritalStatus.imagesData.length > 0) {
+                      for (var i = $scope.maritalStatus.imagesData.length - 1; i >= 0; i--) {
+                          var objAttchament = {"image":$scope.maritalStatus.imagesData[i].image};
+                          attachment.push(objAttchament);
+                      };
+                  }
 
-       var dataStr = {task:"CHANGEMARITALSTATUS",data:jsonData,idRef:idRef,attachments:attachment};
+                 var dataStr = {task:"CHANGEMARITALSTATUS",data:jsonData,idRef:idRef,attachments:attachment};
+                 
+                 $ionicLoading.show({
+                    template: 'Submit Request...'
+                  });
+                  var accessToken = Main.getSession("token").access_token;
+                  var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval';
+                  var data = JSON.stringify(dataStr);
+                  console.log(dataStr);
+                  Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
+              }
+              
+          });
+
        
-       $ionicLoading.show({
-          template: 'Submit Request...'
-        });
-        var accessToken = Main.getSession("token").access_token;
-        var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval';
-        var data = JSON.stringify(dataStr);
-        console.log(dataStr);
-        Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
 
     }
 

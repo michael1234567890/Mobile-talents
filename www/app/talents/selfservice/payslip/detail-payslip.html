@@ -1,15 +1,15 @@
 <ion-view view-title="Detail Payslip" class="header">
 <ion-content padding="true" class="has-header materialize" scroll="true" style="font-size:12px"> 
 
-<div ng-repeat="header in listHeader">
+<div ng-repeat="header in listHeader" ng-if="type=='latest'">
 <ion-item style="background-color: #11c1f3 ;">
-<div>
-  <div class="col col-75"><h2 class="light">{{header.employeeTransient.firstName}} {{header.employeeTransient.middleName}} {{header.employeeTransient.lastName}}</h2></div>   <div class="col no-padding"></div>
-</div>
-
 <div class="row" style="margin-bottom: 1px;">
-  <div class="col col-75 no-padding"><h3 class="light">Period</h3></div>   
-  <div class="col no-padding">{{header.periodDate}}</div>
+  <div class="col col-75 no-padding"><h3 class="light">Employee No</h3></div>   
+  <div class="col no-padding">{{header.employeeTransient.assignment.employeeNo}}</div>
+</div>
+<div class="row" style="margin-bottom: 1px;">
+  <div class="col col-75 no-padding"><h3 class="light">Full Name</h3></div>   
+  <div class="col no-padding">{{header.employeeTransient.name}}</div>
 </div>
 <div class="row" style="margin-bottom: 1px;">
   <div class="col col-75 no-padding"><h3 class="light">Position</h3></div>   
@@ -18,11 +18,15 @@
 <div class="row" style="margin-bottom: 1px;">
   <div class="col col-75 no-padding"><h3 class="light">Organization</h3></div>   
   <div class="col no-padding">{{header.employeeTransient.assignment.organizationName}}</div>
-</div><!--
+</div>
 <div class="row" style="margin-bottom: 1px;">
-  <div class="col col-75 no-padding"><h3 class="light">Grade</h3></div>   
-  <div class="col no-padding"></div>
-</div>-->
+  <div class="col col-75 no-padding"><h3 class="light">Status</h3></div>   
+  <div class="col no-padding">{{header.taxStatus}}</div>
+</div>
+<div class="row" style="margin-bottom: 1px;">
+  <div class="col col-75 no-padding"><h3 class="light">Period</h3></div>   
+  <div class="col no-padding"> {{ header.periodDate | date :  "MMM-yyyy" }}</div>
+</div>
 
 </ion-item>
 
@@ -91,7 +95,104 @@
 </div>
 
 <div class="row">
-    <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="printPdf()">Print PDF</button>
+    <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="printPdf('latest')">Print PDF</button>
+</div>
+</ion-item>
+
+
+</div>
+
+<div ng-repeat="header in listHeader" ng-if="type=='yearly'">
+<ion-item style="background-color: #11c1f3 ;">
+
+<div class="row" style="margin-bottom: 1px;">
+  <div class="col col-75 no-padding"><h3 class="light">Employee No</h3></div>   
+  <div class="col no-padding">{{header.employeeTransient.assignment.employeeNo}}</div>
+</div>
+<div class="row" style="margin-bottom: 1px;">
+  <div class="col col-75 no-padding"><h3 class="light">Full Name</h3></div>   
+  <div class="col no-padding">{{header.employeeTransient.name}}</div>
+</div>
+
+<div class="row" style="margin-bottom: 1px;">
+  <div class="col col-75 no-padding"><h3 class="light">Position</h3></div>   
+  <div class="col no-padding">{{header.employeeTransient.assignment.positionName}}</div>
+</div>
+<div class="row" style="margin-bottom: 1px;">
+  <div class="col col-75 no-padding"><h3 class="light">Organization</h3></div>   
+  <div class="col no-padding">{{header.employeeTransient.assignment.organizationName}}</div>
+</div>
+<div class="row" style="margin-bottom: 1px;">
+  <div class="col col-75 no-padding"><h3 class="light">Status</h3></div>   
+  <div class="col no-padding">{{header.taxStatus}}</div>
+</div>
+<div class="row" style="margin-bottom: 1px;">
+  <div class="col col-75 no-padding"><h3 class="light">Period</h3></div>   
+  <div class="col no-padding">{{header.currentYear}}</div>
+</div>
+
+</ion-item>
+
+<ion-item style="padding-bottom: 5px;padding-top: 5px;">
+<div class="row">
+  <div class="col col-60"><h2 class="balanced">PENERIMAAN</h2></div>    
+  <div class="col"><h4 class="balanced" style="float: right;"></h4></div>
+</div>
+
+<hr class="no-margin">
+
+
+<div ng-repeat="detailIn in header.detailIn">
+  <div class="row">
+    <div class="col col-60"><h3>{{detailIn.elementGroup}}</h3></div>     
+    <div class="col"><h4 style="float: right;">Rp. {{detailIn.total  | number:0}}</h4></div>
+  </div>
+</div>
+</ion-item>
+
+
+<ion-item style="padding-bottom: 5px;padding-top: 5px;">
+<div class="row">
+  <div class="col col-60"><h2 class="balanced">POTONGAN</h2></div>     
+  <div class="col"><h4 class="balanced" style="float: right;"></h4></div>
+</div>
+
+<hr class="no-margin">
+<div class="row">
+    <div class="col col-60"><h3>PPH 21</h3></div>     
+    <div class="col"><h4 style="float: right;">Rp. {{header.pph21DipotongDilunasi  | number:0}}</h4></div>
+</div>
+<div ng-repeat="detailOut in header.detailOut">
+  <div class="row">
+    <div class="col col-60"><h3>{{detailOut.elementGroup}}</h3></div>     
+    <div class="col"><h4 style="float: right;">Rp. {{detailOut.total  | number:0}}</h4></div>
+  </div>
+</div>
+</ion-item>
+
+
+
+
+<ion-item style="padding-bottom: 5px;padding-top: 5px;">
+<div class="row">
+  <div class="col col-60"><h2 class="balanced">TOTAL</h2></div>     
+  <div class="col"><h4 class="balanced" style="float: right;"></h4></div>
+</div>
+
+<hr class="no-margin">
+
+<div class="row">
+  <div class="col col-60"><h3>Total Penerimaan</h3></div>     
+  <div class="col"><h4 style="float: right;">Rp. {{header.jumlahPhBruto  | number:0}}</h4></div>
+</div>
+<div class="row">
+  <div class="col col-60"><h3>Total Potongan</h3></div>     
+  <div class="col"><h4 style="float: right;">Rp. {{header.totalDeduction  | number:0}}</h4></div>
+</div>
+
+
+<div class="row">
+    <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="printPdf('yearly')">Print PDF</button>
 </div>
 </ion-item>
 

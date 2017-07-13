@@ -51,7 +51,7 @@
                 </div>
         </div>
 
-        <div ng-if="detail.task == 'SUBMITFAMILY'">
+        <div ng-if="detail.task == 'SUBMITFAMILY' || detail.task == 'CHANGEFAMILY'">
                 <div class="item item-text-wrap" >
                     <h2 class="talents">Name</h2>
                     <p class="text-small" >{{detail.ref.name}}</p>
@@ -78,19 +78,27 @@
                     <h2 class="talents">Category</h2>
                     <p class="text-small" >{{detail.ref.categoryType}}</p>
                 </div>
-                <div class="edit padding-horizontal" ng-repeat="obj in detail.ref.details">
+                <div ng-if="detail.ref.categoryType != 'Medical Overlimit'" class="edit padding-horizontal" ng-repeat="obj in detail.ref.details">
                     <label class="item item-input" style="margin-bottom:0px">
                         <span class="input-label">{{obj.type}}</span>
-                        <input type="email" value="Rp. {{obj.amount | number:0}}">
+                        <input  type="text" value="Rp. {{obj.amount | number:0}}">
+                        
                     </label>
                 </div>
-                 <div class="item item-text-wrap" >
+                <p ng-if="detail.ref.categoryType != 'Medical Overlimit'" class="text-medium padding uppercase">Total<span class="pull-right text-medium"> Rp.
+                {{detail.ref.totalAmount | number:0}}</span></p>
+
+                 <div class="item item-text-wrap" ng-if="detail.ref.categoryType != 'Medical Overlimit'">
                     <h2 class="talents">Attachment</h2>
                     <div class="row post" >
                         <div class="col" ng-repeat="items in detail.attachments" style="width:90px;height:90px" ><img width="90px" height="90px"  ng-src="{{items.image}}" ng-click="openImagePreview(items.image)" /></div>
                     </div>
-                    <!-- 
-                    <div class="col" style="min-height:90px"><a ng-click="gotoAddPhoto()"><img ng-src="{{attachment}}" height="90px" ></a></div>-->
+                    
+                </div>
+
+                <div class="item item-text-wrap" ng-if="detail.ref.categoryType == 'Medical Overlimit'">
+                    <h2 class="talents">Amount</h2>
+                    <input   ng-model="data.amount" ng-keyup="change($event,$index)" type="tel">
                 </div>
                 
         </div>

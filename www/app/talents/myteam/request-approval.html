@@ -7,10 +7,11 @@
              pulling-icon="ion-ios7-arrow-thin-down"
              on-refresh="refresh()">
     </ion-refresher>
-   <div class="row text-center" style="font-size:100%">
-            <div class="col font-thin" ng-class="module.type === 'personalia' ? 'text-large balanced' : ''" ng-click="chooseTab('personalia')">Personalia</div>
-            <div class="col font-thin" ng-class="module.type === 'benefit' ? 'text-large balanced' : ''" ng-click="chooseTab('benefit')">Benefit</div>
+   <div class="row text-center" style="font-size:100%; height:40px">
+            <div class="col font-thin" ng-class="module.type === 'personalia' ? 'text-large balanced bb' : ''" ng-click="chooseTab('personalia')">Personalia</div>
+            <div class="col font-thin" ng-class="module.type === 'benefit' ? 'text-large balanced bb' : ''" ng-click="chooseTab('benefit')">Benefit</div>
     </div>
+ <ion-scroll class="bg-lightgrey" direction="y" style="height:100%">
 <div ng-if="module.type === 'personalia'">
    <div class="card" ng-repeat="item in requests | filter: searchFilter ">
             <div class="item item-avatar item-text-wrap" ng-if="item.task=='SUBMITFAMILY'" ng-click="gotoDetailRequest(item.id)" >
@@ -105,12 +106,11 @@
                     <img ng-src="img/1491892511_profle.png">
                     <h2 class="lead">{{item.employeeRequest.name}}</h2>
                     <p class="text-small" >{{item.ref.categoryType}}</p>
-                    <p class="text-small" >Total : {{item.ref.totalAmount}}</p>
+                    <p class="text-small" >Total : Rp. {{item.ref.totalAmount | number:0}}</p>
                     <p class="text-smaller" am-time-ago="item.modifiedDate"></p>
                     <span class="item-note calm">
                         {{item.processingStatus}}
                     </span>
-                
                 </div>
          </div>
          <div class="item" ng-if="benefitRequests.length == 0" >
@@ -120,6 +120,6 @@
             </div>  
         </div>
     </div>
-    
+ </ion-scroll> 
     </ion-content>
 </ion-view>

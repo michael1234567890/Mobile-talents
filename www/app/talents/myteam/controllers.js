@@ -214,6 +214,7 @@ angular.module('myteam.controllers', [])
         else if(tab === 'benefit')
           $scope.benefitRequests = [];
         getNeedApproval(tab);
+        getCountNeedApproval();
     }
 
 
@@ -255,8 +256,8 @@ angular.module('myteam.controllers', [])
 
    
     var successRequest = function (res){
-      $scope.general.countApproval = res.length;
-      $rootScope.countApproval = res.length;
+      //$scope.general.countApproval = res.length;
+      // $rootScope.countApproval = res.length;
       for(var i=0;i<res.length;i++) {
         var obj = res[i];
         obj.idx = i;
@@ -290,6 +291,14 @@ angular.module('myteam.controllers', [])
       console.log($scope.requests);
     }
 
+    var successRequestCount = function (res){
+        console.log(res);
+        if(res!= null) {
+            $rootScope.countApproval = res.count;
+            $scope.general.countApproval = res.count;
+           
+        }
+    }
     
 
     initMethod();
@@ -298,6 +307,12 @@ angular.module('myteam.controllers', [])
       $scope.chooseTab('personalia');
     }
     // invalid access token error: "invalid_token" 401
+    function getCountNeedApproval(){
+      var accessToken = Main.getSession("token").access_token;
+      var urlApi = Main.getUrlApi() + '/api/user/workflow/countneedapproval';
+      Main.requestApi(accessToken,urlApi,successRequestCount, $scope.errorRequest);
+    }
+
     function getNeedApproval(module){
       $ionicLoading.show({
           template: '<ion-spinner></ion-spinner>'
@@ -313,14 +328,23 @@ angular.module('myteam.controllers', [])
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
+    $scope.data = {}
+    $scope.data.amount = 0;
 
     $scope.needApproval = $stateParams.needApproval;
     console.log($scope.needApproval);
     var id = $stateParams.id;
     $scope.detail = {};
     $scope.confirm = {reasonReject:""};
-
     $scope.attachment = "img/placeholder.png";
+    
+    $scope.change = function(event,index){
+      var value = event.target.value;
+      value = value
+        .replace(/\D/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      $scope.data.amount = value;
+    }
 
     $scope.viewMoreFamily = function(){
         $state.go('app.detailfamily',{'idx':0,'edit':'false'});
@@ -338,11 +362,19 @@ angular.module('myteam.controllers', [])
     }
 
     var sendApproval = function(action,id,reason){
+
         var data = {};
-        if(action == 'approved')
-          data = {"id":id,"status":action};
-        else
-          data = {"id":id,"status":action,"reasonReject":reason};
+        if(action == 'approved'){
+            var dataAmount  = null;
+            if($scope.detail.ref.categoryType == 'Medical Overlimit'){
+                dataAmount =  $scope.data.amount.replace(/\./g,'');
+                dataAmount = Number(dataAmount);
+            }
+            data = {"id":id,"status":action,"amount":dataAmount};
+        } else{
+            data = {"id":id,"status":action,"reasonReject":reason};
+        }
+          
 
         $ionicLoading.show({
           template: '<ion-spinner></ion-spinner>'
@@ -358,6 +390,14 @@ angular.module('myteam.controllers', [])
     
 
     $scope.confirmAccept = function (){
+        console.log($scope.data.amount);
+        if($scope.detail.ref != null && $scope.detail.ref.categoryType == 'Medical Overlimit') {
+          if(parseInt($scope.data.amount)<=0) {
+              alert("Please fill out correct amount !!");
+              return false;
+          }
+        }
+
         var confirmPopup = $ionicPopup.confirm({
             title: 'Confirm',
             template: '<h5>Are you sure want to Accept this request ?</h5>',
@@ -421,14 +461,34 @@ angular.module('myteam.controllers', [])
           var change = $scope.detail.data;
           var objData = JSON.parse(change);
           $scope.detail.taskDescription = "Change marital status from "+$scope.detail.employeeRequest.maritalStatus + " to " + objData.maritalStatus;
-      }else if($scope.detail.task == 'SUBMITFAMILY') {
+      }else if($scope.detail.task == 'SUBMITFAMILY' || $scope.detail.task == 'CHANGEFAMILY') {
            $scope.detail.taskTitle = "Add new Family";
            $scope.detail.taskDescription = "Add new family";
            $rootScope.family = [];
+           if($scope.detail.task == 'CHANGEFAMILY' && $scope.detail.processingStatus == 'Reject')
+              $scope.detail.ref = JSON.parse($scope.detail.data);
+
            $rootScope.family.push($scope.detail.ref);
       }else if($scope.detail.task == 'SUBMITADDRESS' || $scope.detail.task == 'CHANGEADDRESS') {
            $rootScope.address = [];
+           if($scope.detail.task == 'CHANGEADDRESS' && $scope.detail.processingStatus == 'Reject')
+              $scope.detail.ref = JSON.parse($scope.detail.data);
+
            $rootScope.address.push($scope.detail.ref);
+      }else if($scope.detail.task == 'SUBMITBENEFIT' ){
+          if($scope.detail.ref.categoryType == 'Medical') {
+              var arrDetail = [];
+              if($scope.detail.ref.details.length > 0) {
+                arrDetail = JSON.parse($scope.detail.ref.details[0].data);
+              }
+              $scope.detail.ref.details = arrDetail;
+          }else if($scope.detail.ref.categoryType == 'Medical Overlimit'){
+              if($scope.detail.ref.details.length > 0){
+                  var obj = $scope.detail.ref.details[0];
+                  $scope.data.amount = obj.amount;
+              }
+               
+          }
       }
 
       
@@ -446,9 +506,6 @@ angular.module('myteam.controllers', [])
         console.log("gak kesini");
       } 
 
-          
-      console.log("$scope.detail");
-      console.log($scope.detail);
     }
 
    
