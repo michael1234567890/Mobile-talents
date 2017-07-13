@@ -1,7 +1,7 @@
 
 angular.module('talent', ['ionic', 'ngCordova','onezone-datepicker','ngStorage','profile.controllers','leave.controllers','selfservice.controllers','others.controllers','home.controllers','myteam.controllers','myhr.controllers','intro.controllers','talent.controllers', 'talent.routes', 'main.services', 'authentication.services','talent.services', 'talent.directives'])
 
-  .run(function ($ionicPlatform, appService) {
+  .run(function ($ionicPlatform, appService,$ionicHistory) {
 
     $ionicPlatform.ready(function () {
       
