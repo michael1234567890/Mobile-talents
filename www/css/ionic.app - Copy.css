@@ -26,6 +26,20 @@ $dark:                            #444 !default;
   used under CC BY http://creativecommons.org/licenses/by/4.0/
   Modified icons to fit ionicon’s grid from original.
 */
+
+.ionic_datepicker_popup .popup-body .month_select select, .ionic_datepicker_popup .popup-body .year_select select {
+    left: -3px;
+    top: -15px;
+    border: none;
+    padding: 0;
+}
+
+.ionic_datepicker_popup .calendar_grid {
+    height: 215px;
+    font-size: large;
+    line-height: 3;
+}
+
 @font-face {
   font-family: "Ionicons";
   src: url("../lib/ionic/fonts/ionicons.eot?v=2.0.1");
@@ -3009,7 +3023,7 @@ time, mark, audio, video {
   border: 0;
   vertical-align: baseline;
   font: inherit;
-  font-size: 100%; }
+  font-size: 90%; }
 
 ol, ul {
   list-style: none; }
@@ -5705,7 +5719,7 @@ ion-tabs.tabs-striped.tabs-color-active-dark .tab-item.tab-item-active, ion-tabs
   display: block;
   margin: -1px;
   padding: 16px;
-  border-width: 1px;
+  border-width: 0px;
   border-style: solid;
   font-size: 16px; }
   .item h2 {
@@ -5722,7 +5736,7 @@ ion-tabs.tabs-striped.tabs-color-active-dark .tab-item.tab-item-active, ion-tabs
     margin: 0 0 3px 0;
     font-size: 10px; }
   .item p {
-    color: #666;
+    color: #000;
     font-size: 14px;
     margin-bottom: 2px; }
   .item h1:last-child,
@@ -9090,7 +9104,7 @@ a.button {
   -ms-flex: 1;
   flex: 1;
   display: block;
-  padding: 5px;
+  padding: 0px;
   width: 100%; }
 
 /* Vertically Align Columns */
@@ -10879,3 +10893,17 @@ ui-multi-range {
       background: none; }
       ui-multi-range input[type=range]:nth-child(2)::-webkit-slider-thumb::before {
         background-color: #ccc; }
+
+
+.remove{
+    background: #C76868;
+    color: #FFF;
+    font-weight: bold;
+    font-size: 21px;
+    border: 0;
+    cursor: pointer;
+    display: inline-block;
+    padding: 4px 9px;
+    vertical-align: top;
+    line-height: 100%;   
+}
