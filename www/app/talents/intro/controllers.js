@@ -1,5 +1,5 @@
 angular.module('intro.controllers', [])
-.controller('LoginCtrl',function( $ionicHistory, $ionicLoading, appService, $state,$localStorage, $rootScope, $scope, $location,  Main) {
+.controller('LoginCtrl',function( $timeout,$ionicHistory, $ionicLoading, appService, $state,$localStorage, $rootScope, $scope, $location,  Main) {
 	$scope.usertalent = {username:'',password:''};
 	//$scope.email = "hendra.ramdhan@gmail.com";
   $scope.goToSignup = function () {
@@ -11,10 +11,15 @@ angular.module('intro.controllers', [])
     }
 
     var successUserReference = function(res){
-        $ionicLoading.hide();
-        Main.setSession('profile',res);
-        console.log(Main.getSession('profile'));
-        $state.go("app.home");
+        $timeout(function () {
+            $ionicLoading.hide();
+            Main.setSession('profile',res);
+            $state.go("app.myhr");
+        }, 2000);
+
+        // $ionicLoading.hide();
+        // Main.setSession('profile',res);
+        // $state.go("app.myhr");
     }
 
     var errorUserReference = function(res,status){

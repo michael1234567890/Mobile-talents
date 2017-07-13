@@ -366,7 +366,7 @@ angular.module('myteam.controllers', [])
         var data = {};
         if(action == 'approved'){
             var dataAmount  = null;
-            if($scope.detail.ref.categoryType == 'Medical Overlimit'){
+            if($scope.detail.ref != undefined && $scope.detail.ref.categoryType != undefined && $scope.detail.ref.categoryType == 'Medical Overlimit') {
                 dataAmount =  $scope.data.amount.replace(/\./g,'');
                 dataAmount = Number(dataAmount);
             }
@@ -391,7 +391,7 @@ angular.module('myteam.controllers', [])
 
     $scope.confirmAccept = function (){
         console.log($scope.data.amount);
-        if($scope.detail.ref != null && $scope.detail.ref.categoryType == 'Medical Overlimit') {
+        if($scope.detail.ref != undefined && $scope.detail.ref.categoryType != undefined && $scope.detail.ref.categoryType == 'Medical Overlimit') {
           if(parseInt($scope.data.amount)<=0) {
               alert("Please fill out correct amount !!");
               return false;

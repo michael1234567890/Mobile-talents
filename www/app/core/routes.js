@@ -521,7 +521,7 @@ angular.module('talent.routes', [])
         }
       })
 
-    $urlRouterProvider.otherwise('/app/home')
+    $urlRouterProvider.otherwise('/app/myhr')
 
 
 

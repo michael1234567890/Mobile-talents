@@ -22,7 +22,7 @@
             <div class="row">
                 <div class="input-field col">
                     <p for="first_name">Name</p>
-                    <input id="first_name" type="text" class="validate" ng-model="family.name">
+                    <input id="first_name" placeholder="Enter Name" type="text" class="validate" ng-model="family.name">
                     
                 </div>
                 
@@ -31,7 +31,7 @@
                 
                 <div class="input-field col">
                     <p for="last_name">Place of Birth</p>
-                    <input id="last_name" type="text" class="validate" ng-model="family.birthPlace">
+                    <input id="last_name" placeholder="Enter Place of Birth" type="text" class="validate" ng-model="family.birthPlace">
                     
                 </div>
 
@@ -53,6 +53,7 @@
                    
                   <p style="font-size:13px">Gender</p>
                    <select class="select-dropdown" ng-model="family.gender" >
+                        <option value="">-- Select --</option>
                         <option ng-repeat="gender in selectGender">{{gender.id}}</option>
                   </select>
 
@@ -64,6 +65,7 @@
                    
                   <p style="font-size:13px">Relationship</p>
                    <select class="select-dropdown" ng-model="family.relationship" >
+                        <option value="">-- Select --</option>
                         <option ng-repeat="relationship in selectRelationship">{{relationship.id}}</option>
                   </select>
 
@@ -74,7 +76,7 @@
             <div class="row">
                 <div class="input-field col s12">
                     <p for="textarea1">Address</p>
-                    <textarea  ng-model="family.address" class="materialize-textarea"></textarea>
+                    <textarea  placeholder="Enter Address Details" ng-model="family.address" class="materialize-textarea"></textarea>
                     
                 </div>
             </div>
@@ -83,6 +85,7 @@
                 <div class="input-field col">
                   <p for="first_name" style="font-size:13px">Marital Status</p>
                   <select class="select-dropdown" ng-model="family.maritalStatus" >
+                        <option value="">-- Select --</option>
                         <option ng-repeat="maritalStatus in selectMaritalStatus">{{maritalStatus.id}}</option>
                   </select>
                     
@@ -92,6 +95,7 @@
               <div class="input-field col">
                   <p for="first_name" style="font-size:13px">Blood Type</p>
                   <select class="select-dropdown" ng-model="family.bloodType" >
+                        <option value="">-- Select --</option>
                         <option ng-repeat="bloodType in selectBloodType">{{bloodType.id}}</option>
                   </select>
                     
@@ -101,13 +105,13 @@
              <div class="row">
                 <div class="input-field col">
                     <p for="first_name">Occupation</p>
-                    <input id="first_name" type="text" class="validate" ng-model="family.occupation" >
+                    <input id="first_name" placeholder="e.g. Housewife" type="text" class="validate" ng-model="family.occupation" >
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col">
                     <p for="first_name">Phone</p>
-                    <input id="first_name" type="text" class="validate" ng-model="family.phone" >
+                    <input id="first_name" placeholder="e.g. 02145XXX" type="text" class="validate" ng-model="family.phone" >
                     
                 </div>
             </div>
