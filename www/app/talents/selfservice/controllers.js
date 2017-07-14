@@ -392,7 +392,7 @@ angular.module('selfservice.controllers', [])
           $scope.categoryType = [];
           for(var i=0;i<res.length;i++){
              var objResponse = res[i];
-             var obj = {id:objResponse.categoryTypeExtId,name:objResponse.categoryType};
+             var obj = {id:objResponse.categoryTypeExtId,name:objResponse.categoryType,icon:objResponse.icon};
              $scope.categoryType.push(obj);
           }
           console.log($scope.categoryType);

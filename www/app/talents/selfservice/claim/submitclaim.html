@@ -1,6 +1,7 @@
 <ion-view title="Submit Claim">
-    <ion-content padding="true" class="has-header materialize" scroll="true">
-        <div  class="bg-lightgrey">
+    <ion-content padding="true" class="has-header materialize" scroll="false">
+      <!--
+      <div  class="bg-lightgrey">
                 <p class="bb text-large padding uppercase">Select Expense Category</p>
                  <div class="card hybrid" ng-repeat="item in categoryType" ng-click="gotoListType(item.name,item.id)">
                     <div class="item item-text-wrap item-icon-right">
@@ -9,5 +10,45 @@
                     </div>
                  </div>
       </div>
+    -->
+       <ion-scroll class="bg-lightgrey" direction="y" style="height:100%">
+            <div style="height:700px">
+                <div class="row" ng-repeat="item in categoryType | filter: searchFilter track by $index" ng-if="$index % 3==0">
+
+                    <div class="col">
+                        <div class="card contact animated bounceIn item-remove-animate"  ng-if="categoryType[$index] !== undefined" style="margin-right:10px;margin-bottom:10px;min-height:100px">
+                            <div class="item item-image item-text-wrap" ng-click="gotoListType(categoryType[$index + 0].name,categoryType[$index + 0].id)">
+                                <div><img ng-src="{{categoryType[$index + 0].icon}}"></div>
+                               <!-- <h2 class="lead text-small mt">{{categoryType[$index].name}}</h2>-->
+                                <p class="">{{categoryType[$index].name}}</p>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="card contact animated bounceIn item-remove-animate"  ng-if="categoryType[$index + 1] !== undefined" style="margin-right:10px;margin-bottom:10px;min-height:100px" >
+                            <div class="item item-image item-text-wrap" ng-click="gotoListType(categoryType[$index + 1].name,categoryType[$index + 1].id)">
+                                <div><img ng-src="{{categoryType[$index + 1].icon}}"></div>
+                                <!--<h2 class="lead text-small mt">{{categoryType[$index + 1].name}}</h2>-->
+                                <p class="">{{categoryType[$index + 1].name}}</p>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card contact animated bounceIn item-remove-animate"  ng-if="categoryType[$index + 2] !== undefined" style="margin-right:0px;margin-bottom:10px;min-height:100px">
+                            <div class="item item-image item-text-wrap" ng-click="gotoListType(categoryType[$index + 2].name,categoryType[$index + 2].id)">
+                                <div><img ng-src="{{categoryType[$index + 2].icon}}"></div>
+                                <!--<h2 class="lead text-small mt">{{categoryType[$index + 2].name}}</h2>-->
+                                <p class="">{{categoryType[$index + 2].name}}</p>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ion-scroll>
+
     </ion-content>
 </ion-view>

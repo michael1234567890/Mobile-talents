@@ -63,6 +63,8 @@ angular.module('intro.controllers', [])
                     console.log(res)    
                 } else {
                     Main.setSession('token',res);
+                    console.log("Token");
+                    console.log(Main.getSession("token"));
                     getUserReference();
                     //$state.go("app.home");
                 }

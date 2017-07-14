@@ -1,12 +1,11 @@
 <ion-view title="My Address">
-   
     <ion-content class="has-header" scroll="true">
         <ion-refresher pulling-text="Pull to refresh"
              refreshing-text="Loading..."
              refreshing-icon="ion-loading-c"
              pulling-icon="ion-ios7-arrow-thin-down"
              on-refresh="refresh()">
-            </ion-refresher>
+        </ion-refresher>
         <div  class="bg-lightgrey">
             <div >
                 <div class="card hybrid" ng-repeat="item in address | filter: searchFilter  | orderBy: 'publishedDate':true " ng-click="goToDetails(item.idx)">

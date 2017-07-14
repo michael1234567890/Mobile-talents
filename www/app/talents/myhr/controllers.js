@@ -31,9 +31,12 @@ angular.module('myhr.controllers', [])
    	}
    	// invalid access token error: "invalid_token" 401
    	function getProfile(){
-   		var accessToken = Main.getSession("token").access_token;
-   		var urlApi = Main.getUrlApi() + '/api/myprofile';
-   		Main.requestApi(accessToken,urlApi,successProfile, $scope.errorRequest);
+      if(Main.getSession("token") != null){
+          var accessToken = Main.getSession("token").access_token;
+          var urlApi = Main.getUrlApi() + '/api/myprofile';
+          Main.requestApi(accessToken,urlApi,successProfile, $scope.errorRequest);
+      }
+   		
    	}
    
     initMethod();

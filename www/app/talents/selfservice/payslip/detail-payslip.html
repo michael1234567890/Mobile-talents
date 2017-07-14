@@ -4,27 +4,27 @@
 <div ng-repeat="header in listHeader" ng-if="type=='latest'">
 <ion-item style="background-color: #11c1f3 ;">
 <div class="row" style="margin-bottom: 1px;">
-  <div class="col col-75 no-padding"><h3 class="light">Employee No</h3></div>   
+  <div class="col col-40 no-padding"><h3 class="light">Employee No</h3></div>   
   <div class="col no-padding">{{header.employeeTransient.assignment.employeeNo}}</div>
 </div>
 <div class="row" style="margin-bottom: 1px;">
-  <div class="col col-75 no-padding"><h3 class="light">Full Name</h3></div>   
+  <div class="col col-40 no-padding"><h3 class="light">Full Name</h3></div>   
   <div class="col no-padding">{{header.employeeTransient.name}}</div>
 </div>
 <div class="row" style="margin-bottom: 1px;">
-  <div class="col col-75 no-padding"><h3 class="light">Position</h3></div>   
+  <div class="col col-40 no-padding"><h3 class="light">Position</h3></div>   
   <div class="col no-padding">{{header.employeeTransient.assignment.positionName}}</div>
 </div>
 <div class="row" style="margin-bottom: 1px;">
-  <div class="col col-75 no-padding"><h3 class="light">Organization</h3></div>   
+  <div class="col col-40 no-padding"><h3 class="light">Organization</h3></div>   
   <div class="col no-padding">{{header.employeeTransient.assignment.organizationName}}</div>
 </div>
 <div class="row" style="margin-bottom: 1px;">
-  <div class="col col-75 no-padding"><h3 class="light">Status</h3></div>   
+  <div class="col col-40 no-padding"><h3 class="light">Status</h3></div>   
   <div class="col no-padding">{{header.taxStatus}}</div>
 </div>
 <div class="row" style="margin-bottom: 1px;">
-  <div class="col col-75 no-padding"><h3 class="light">Period</h3></div>   
+  <div class="col col-40 no-padding"><h3 class="light">Period</h3></div>   
   <div class="col no-padding"> {{ header.periodDate | date :  "MMM-yyyy" }}</div>
 </div>
 
@@ -87,7 +87,7 @@
 </div>
 <div class="row">
   <div class="col col-60"><h3>Total Potongan</h3></div>     
-  <div class="col"><h4 style="float: right;">Rp. {{header.totalDeduction+header.taxGross  | number:0}}</h4></div>
+  <div class="col"><h4 style="float: right;">Rp. {{header.totalDeduction| number:0}}</h4></div>
 </div>
 <div class="row">
   <div class="col col-60"><h3>Penerimaan</h3></div>     
@@ -106,28 +106,28 @@
 <ion-item style="background-color: #11c1f3 ;">
 
 <div class="row" style="margin-bottom: 1px;">
-  <div class="col col-75 no-padding"><h3 class="light">Employee No</h3></div>   
+  <div class="col col-40 no-padding"><h3 class="light">Employee No</h3></div>   
   <div class="col no-padding">{{header.employeeTransient.assignment.employeeNo}}</div>
 </div>
 <div class="row" style="margin-bottom: 1px;">
-  <div class="col col-75 no-padding"><h3 class="light">Full Name</h3></div>   
+  <div class="col col-40 no-padding"><h3 class="light">Full Name</h3></div>   
   <div class="col no-padding">{{header.employeeTransient.name}}</div>
 </div>
 
 <div class="row" style="margin-bottom: 1px;">
-  <div class="col col-75 no-padding"><h3 class="light">Position</h3></div>   
+  <div class="col col-40 no-padding"><h3 class="light">Position</h3></div>   
   <div class="col no-padding">{{header.employeeTransient.assignment.positionName}}</div>
 </div>
 <div class="row" style="margin-bottom: 1px;">
-  <div class="col col-75 no-padding"><h3 class="light">Organization</h3></div>   
+  <div class="col col-40 no-padding"><h3 class="light">Organization</h3></div>   
   <div class="col no-padding">{{header.employeeTransient.assignment.organizationName}}</div>
 </div>
 <div class="row" style="margin-bottom: 1px;">
-  <div class="col col-75 no-padding"><h3 class="light">Status</h3></div>   
+  <div class="col col-40 no-padding"><h3 class="light">Status</h3></div>   
   <div class="col no-padding">{{header.taxStatus}}</div>
 </div>
 <div class="row" style="margin-bottom: 1px;">
-  <div class="col col-75 no-padding"><h3 class="light">Period</h3></div>   
+  <div class="col col-40 no-padding"><h3 class="light">Period</h3></div>   
   <div class="col no-padding">{{header.currentYear}}</div>
 </div>
 
@@ -183,7 +183,7 @@
 
 <div class="row">
   <div class="col col-60"><h3>Total Penerimaan</h3></div>     
-  <div class="col"><h4 style="float: right;">Rp. {{header.jumlahPhBruto  | number:0}}</h4></div>
+  <div class="col"><h4 style="float: right;">Rp. {{header.totalAllowance  | number:0}}</h4></div>
 </div>
 <div class="row">
   <div class="col col-60"><h3>Total Potongan</h3></div>     
