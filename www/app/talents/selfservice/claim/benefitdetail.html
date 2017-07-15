@@ -1,0 +1,50 @@
+
+<ion-view title="Detail Request" class="bg-lightgrey">
+
+<ion-content class="has-header" scroll="true">
+
+<div class="item item-divider balanced-bg" style="margin-top:10px">Req ID</div> 
+<div class="list card" ui-sref="tabs.post-detail({post:post})">
+    <div class="item">
+        <h2 class="balanced">Medical</h2>
+        <p class="text-small" am-time-ago="{{post.publishedDate}}">17 Aug 2017</p>
+    </div>
+    <div class="item item-body">
+        <p class="bb text-small padding-horizontal uppercase">Rincian Biaya</p>
+        <div class="edit padding-horizontal">
+            <label class="item item-input">
+                <span class="input-label">Dokter</span>
+                <input type="text" value="1.000.000" disabled>
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Last name</span>
+                <input type="text" value="323.3232" disabled>
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Lab</span>
+                <input type="text" value="323.3232" disabled>
+            </label>
+        </div>
+        <div class="item item-divider right">TOTAL Rp. 12.000.000</div> 
+    </div>
+</div>
+
+<div class="list profile">
+    <div class="item item-divider balanced-bg">Detail Approval</div> 
+    <div class="edit padding-horizontal">
+            <label class="item item-input">
+                <span class="input-label">First name</span>
+                <input type="text">
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Last name</span>
+                <input type="text" value="323.3232" disabled>
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Email</span>
+                <input type="email">
+            </label>
+    </div>
+</div>
+</ion-content>
+</ion-view>

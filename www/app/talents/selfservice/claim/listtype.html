@@ -8,7 +8,7 @@
 
 <ion-view title="{{title}}">
     <ion-content  class="profile has-header" scroll="true">
-     <div class="item padding bg-lightgrey" ng-if="category != 'medical overlimit'">
+     <div class="item padding bg-lightgrey" ng-if="directType == false">
         <div class="row">
             <div class="input-field col">
                       <p>Transaction Date</p>
@@ -43,8 +43,8 @@
                     <select ng-model="item.value" ng-if="item.type == 'select'">
                         <option ng-repeat="option in item.options track by $index">{{option.id}}</option>
                     </select>
-                    <input  placeholder="0" value="0" ng-keyup="change($event,$index)" type="tel"   ng-model="item.amount">
-                        <!-- <input  placeholder="0"  value="0" ng-keyup="change($event,$index)" type="number" ng-model="item.amount" step="0.01" >-->
+                    <input   placeholder="0" value="0" ng-keyup="change($event,$index)" type="tel"   ng-model="item.amount">
+                        
                 </label>
             </div>
 
@@ -63,7 +63,7 @@
         </div>
         
       </div>
-      <div ng-if="category != 'medical overlimit'">
+      <div ng-if="directType == false">
       <p class="bb text-medium padding uppercase">Total<span class="pull-right text-medium"> Rp.
     {{getTotal() | number:0}}</span></p>
           <div>
@@ -81,8 +81,8 @@
           </div>
     </div>
 
-    <div class="item no-padding" ng-if="category == 'medical overlimit'">
-        <p class="text-small padding">Are you sure want to apply Medical Overlimit ?</p>
+    <div class="item no-padding" ng-if="directType == true">
+        <p class="text-small padding">Are you sure want to apply {{labelCategory}} ?</p>
     </div>
     
     <div class="row">

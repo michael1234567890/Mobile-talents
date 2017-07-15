@@ -1,21 +1,37 @@
+<style>
+
+    .left {
+        text-align: left;
+        float: left;
+        width: 50%;
+    }
+    .right {
+        text-align: right;
+        float: right;
+        width: 50%;
+    }
+    .thicker {
+        font-weight: bold;
+    }
+</style>
 <ion-view title="List Request Benefit" class="bg-lightgrey">
 
-    <ion-content class="has-header bt-grey profile" scroll="true">
-    <ion-refresher pulling-text="Pull to refresh"
+<ion-content class="has-header bt-grey profile" scroll="true">
+<div class="row text-center" style="height:40px">
+            <div class="col font-thin" ng-class="module.type === 'list' ? 'text-medium balanced bb' : ''" ng-click="chooseTab('list')">List</div>
+            <div class="col font-thin" ng-class="module.type === 'needreport' ? 'text-medium balanced bb' : ''" ng-click="chooseTab('needreport')">Need Report</div>
+</div>
+<ion-scroll class="bg-lightgrey" direction="y" style="height:100%">
+ <ion-refresher pulling-text="Pull to refresh"
              refreshing-text="Loading..."
              refreshing-icon="ion-loading-c"
              pulling-icon="ion-ios7-arrow-thin-down"
              on-refresh="refresh()">
-    </ion-refresher>
-<div class="row text-center" style="height:40px">
-            <div class="col font-thin" ng-class="module.type === 'list' ? 'text-large balanced bb' : ''" ng-click="chooseTab('list')">List</div>
-            <div class="col font-thin" ng-class="module.type === 'needreport' ? 'text-large balanced bb' : ''" ng-click="chooseTab('needreport')">Need Report</div>
-</div>
-<ion-scroll class="bg-lightgrey" direction="y" style="height:100%">
+</ion-refresher>
+<!--
 <div ng-if="module.type === 'list'">
    <div class="card" ng-repeat="item in requests | filter: searchFilter ">
             <div class="item item-text-wrap" ng-click="gotoDetailRequest(item.id)" >
-               
                 <h2 class="lead">{{item.categoryType}}</h2>
                 <p>Total Rp. {{item.totalAmount | number : 0}}</p>
                 <p class="text-smaller" am-time-ago="item.createdDate"></p>
@@ -49,7 +65,63 @@
                 <p>You may don't have any request need to report</p>
             </div>  
         </div>
+</div>
+-->
+<div class="list" ng-if="module.type === 'list'">
+    <div class="item item-text-wrap"  ng-repeat="item in requests" ng-click="gotoBenefitDetail($index)">
+        <div class="row">
+            <div class="left"><h5 style="color: #949494;">{{item.createdDate | date: 'dd MMM yyyy'}}</h5></div>
+            <div class="right"><h5 class="energized ">{{item.status}}</h5></div>
+        </div>
+        <div class="row">
+            <div><h5 class="uppercase no-margin no-padding thicker">order id</h5></div> &nbsp;&nbsp;&nbsp;
+            <h5 class="uppercase no-margin no-padding thicker">#1234567890</h5>
+        </div>
+        <div class="row">
+            <div class="uppercase"><h2 class="thicker">{{item.categoryType}}</h2></div>
+        </div>
+        <div class="row">
+            <div class="uppercase"><h5 class="positive no-margin no-padding thicker">Rp. {{item.totalAmount | number : 0}}</h5></div>
+        </div>
+        <!--
+        <h2 class="lead">{{item.categoryType}}</h2>
+        <p class="text-small">Rp. {{item.totalAmount | number : 0}}</p>-->
     </div>
+    <div class="item" ng-if="requests.length == 0" >
+            <div class="col col-100">
+                <h2>Data not found</h2>
+                <p>You may don't have any Benefit request</p>
+            </div>  
+    </div>
+</div>
+
+<div class="list" ng-if="module.type === 'needreport'">
+    <div class="item item-text-wrap"  ng-repeat="item in needReportRequests" ng-click="gotoListType($index)">
+        <div class="row">
+            <div class="left"><h5 style="color: #949494;">{{item.createdDate | date: 'dd MMM yyyy'}}</h5></div>
+            <div class="right"><h5 class="energized ">{{item.status}}</h5></div>
+        </div>
+        <div class="row">
+            <div><h5 class="uppercase no-margin no-padding thicker">order id</h5></div> &nbsp;&nbsp;&nbsp;
+            <h5 class="uppercase no-margin no-padding thicker">#1234567890</h5>
+        </div>
+        <div class="row">
+            <div class="uppercase"><h2 class="thicker">{{item.categoryType}}</h2></div>
+        </div>
+        <div class="row">
+            <div class="uppercase"><h5 class="positive no-margin no-padding thicker">Rp. {{item.totalAmount | number : 0}}</h5></div>
+        </div>
+        <!--
+        <h2 class="lead">{{item.categoryType}}</h2>
+        <p class="text-small">Rp. {{item.totalAmount | number : 0}}</p>-->
+    </div>
+    <div class="item" ng-if="needReportRequests.length == 0" >
+            <div class="col col-100">
+                <h2>Data not found</h2>
+                <p>You may don't have any request need to report</p>
+            </div>  
+        </div>
+</div>
 </ion-scroll>
 </ion-content>
 </ion-view>

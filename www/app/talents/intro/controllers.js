@@ -66,6 +66,7 @@ angular.module('intro.controllers', [])
                     console.log("Token");
                     console.log(Main.getSession("token"));
                     getUserReference();
+                    $rootScope.dataUser = {};
                     //$state.go("app.home");
                 }
             }, function(error, status) {

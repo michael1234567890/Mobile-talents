@@ -302,6 +302,15 @@ angular.module('talent.routes', [])
           }
         }
       })
+      .state('app.benefitdetail', {
+        url: '/benefitdetail',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/claim/benefitdetail.html',
+            controller: 'BenefitDetailCtrl'
+          }
+        }
+      })
 
       .state('app.spdadvanceadd', {
         url: '/spdadvanceadd/:categoryType/:extId',
