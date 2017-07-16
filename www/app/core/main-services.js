@@ -69,6 +69,15 @@
             return val;
         }
 
+         function getIdfromValue(array,val){
+            var id = "";
+            for (var i = array.length - 1; i >= 0; i--) {
+                if(array[i].name==val)
+                    id = array[i].id;
+            };
+            return id;
+        }
+
         var currentUser = getUserFromToken();
        // var getValuefromId = getValuefromId(array,id);
         
@@ -79,6 +88,9 @@
 
              getValuefromId : function(array,id){
                 return getValuefromId(array,id);
+             },
+             getIdfromValue : function(array,val){
+                return getIdfromValue(array,val);
              },
              getSelectMonth : function(){
                 return selectMonth;

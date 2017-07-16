@@ -303,7 +303,7 @@ angular.module('talent.routes', [])
         }
       })
       .state('app.benefitdetail', {
-        url: '/benefitdetail',
+        url: '/benefitdetail/:id',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/selfservice/claim/benefitdetail.html',
