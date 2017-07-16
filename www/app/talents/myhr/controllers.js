@@ -554,7 +554,9 @@ angular.module('myhr.controllers', [])
 
     console.log($scope.address);
     $scope.selectStayStatus = Main.getSelectStayStatus();
-    $scope.selectProvince = Main.getSelectProvince();
+    var arrCompanyRef = Main.getSession("profile").companyReference;
+    var refSelectProvince = Main.getDataReference(arrCompanyRef,'address','province','indonesia');
+    $scope.selectProvince = []; // Main.getSelectProvince();
     $scope.selectCity=Main.getSelectCity();
     $scope.selectCountry=Main.getSelectCountry();
    
@@ -585,6 +587,9 @@ angular.module('myhr.controllers', [])
     initMethod();
     
     function initMethod(){
+        if(refSelectProvince != undefined && refSelectProvince != '') {
+              $scope.selectProvince = JSON.parse(refSelectProvince);
+        }
         
     }
     // invalid access token error: "invalid_token" 401
@@ -608,7 +613,12 @@ angular.module('myhr.controllers', [])
     
 
     $scope.selectStayStatus = Main.getSelectStayStatus();
-    $scope.selectProvince = Main.getSelectProvince();
+    var arrCompanyRef = Main.getSession("profile").companyReference;
+    var refSelectProvince = Main.getDataReference(arrCompanyRef,'address','province','indonesia');
+    $scope.selectProvince = []; // Main.getSelectProvince();
+   
+
+    // $scope.selectProvince = Main.getSelectProvince();
     $scope.selectCity=Main.getSelectCity();
     $scope.selectCountry=Main.getSelectCountry();
 
@@ -655,7 +665,9 @@ angular.module('myhr.controllers', [])
     initMethod();
     
     function initMethod(){
-       
+        if(refSelectProvince != undefined && refSelectProvince != '') {
+              $scope.selectProvince = JSON.parse(refSelectProvince);
+        }
     }
     // invalid access token error: "invalid_token" 401
     function verificationForm(address){

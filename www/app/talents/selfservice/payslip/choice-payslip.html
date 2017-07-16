@@ -6,28 +6,26 @@
             <div class="row">
                 <div class="input-field col">
                       <p for="first_name">Year</p>
-                      <select ng-model="payslip.year" disabled="true">
+                      <select ng-model="payslip.year" ng-disabled="payslipType == 'latest'">
                             <option ng-repeat="year in selectYear">{{year.id}}</option>
                       </select>
-                    
                 </div>
                 
             </div>
             <div class="row">
                 <div class="input-field col">
                       <p for="first_name">Month</p>
-                      <select ng-model="payslip.month" disabled="true">
+                      <select ng-model="payslip.month" ng-disabled="payslipType == 'latest'">
                             <option ng-repeat="month in selectMonth">{{month.name}}</option>
                       </select>
                     
                 </div>
-                
             </div>
 
             <p class="bb text-medium padding uppercase">Select Type</p>
             <br>
             <ion-list>
-              <ion-radio ng-model="choice.select" ng-value="'latest'">Monthly</ion-radio>
+              <ion-radio ng-model="choice.select" ng-value="'monthly'">Monthly</ion-radio>
               <ion-radio ng-model="choice.select" ng-value="'yearly'">Yearly</ion-radio>
             </ion-list>
             <div class="row">

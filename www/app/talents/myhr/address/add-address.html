@@ -49,10 +49,13 @@
             <div class="row">
                 <div class="input-field col">
                   <p for="first_name">City</p>
+                  <!--
                   <select ng-model="address.city">
                         <option value="">-- Select --</option>
                         <option ng-repeat="city in selectCity">{{city.id}}</option>
                   </select>
+                  -->
+                  <input placeholder="Enter City" ng-model="address.city" type="text" class="validate">
                 </div>
 
             </div>

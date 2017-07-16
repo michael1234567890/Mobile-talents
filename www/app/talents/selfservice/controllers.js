@@ -7,7 +7,9 @@ angular.module('selfservice.controllers', [])
 })
 
 .controller('SubmitAttendanceCtrl', function($compile,$filter,$cordovaGeolocation,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
-    var serverTime = $filter('date')(Date.now(), "yyyy-MM-dd HH:mm:ss");
+    alert("This feature is not available");
+    $scope.goBack('app.selfservice');
+    /*var serverTime = $filter('date')(Date.now(), "yyyy-MM-dd HH:mm:ss");
     var clockTick = null;
     $scope.tickInterval = 1000;
     $scope.clock = "Load server time";
@@ -183,7 +185,7 @@ angular.module('selfservice.controllers', [])
         getCurrentLocation();
     }
 
-    initModule();
+    initModule();*/
 })
 
 .controller('ChoicePayslipCtrl', function($ionicLoading,$compile,$filter,$cordovaGeolocation,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
@@ -191,22 +193,23 @@ angular.module('selfservice.controllers', [])
         $state.go("login");
     }
     $scope.selectMonth = Main.getSelectMonth();
-    $scope.selectYear = Main.getSelectYear();
+   // $scope.selectYear = Main.getSelectYear();
     $scope.payslip = {};
-    $scope.payslip.year = '2017';
-    $scope.payslip.month = '02';
     $scope.choice = {};
     $scope.choiceSelect="";
-    $scope.choice.select = "latest";
-   
-
+    $scope.choice.select = "monthly";
+    $scope.payslipType = Main.getSession("profile").companySettings.payslipType;
+    var arrCompanyRef = Main.getSession("profile").companyReference;
+    var refYear = Main.getDataReference(arrCompanyRef,'payslip',null,'selectYear');
+    var year ="0";
+    var month = "0";
     var successRequest = function (res){
       $ionicLoading.hide();
       if(res.length == 0 ){
           alert("Data Not Found");
       }else {
         $rootScope.payslipSelected = res;
-        $state.go("app.detailpayslip",{'year':'0','month':'0','type':$scope.choiceSelect});
+        $state.go("app.detailpayslip",{'year':year,'month':month,'type':$scope.choiceSelect});
       }
     }
 
@@ -221,9 +224,17 @@ angular.module('selfservice.controllers', [])
       var url = "";
       var strData="";
       var data="";
-      if(choice.select == 'latest') {
+      if(choice.select == 'monthly') {
         url = Main.getUrlApi() + '/api/user/payroll';
-        strData = {payrollType:'latest'};
+        var strData ="";
+        if($scope.payslipType == 'monthly') {
+            month = Main.getIdfromValue($scope.selectMonth,$scope.payslip.month);
+            year = $scope.payslip.year;
+            strData = {payrollType:$scope.payslipType,month:month,year:year};
+        } else {
+            strData = {payrollType:$scope.payslipType};
+        }
+          
         data = JSON.stringify(strData);
       }else {
         url = Main.getUrlApi() + '/api/user/payroll/yearly';
@@ -256,7 +267,16 @@ angular.module('selfservice.controllers', [])
     }
 
     function initModule(){
-        getLatestMonth();
+        if(refYear != undefined && refYear != '') {
+             $scope.selectYear = JSON.parse(refYear);
+        }
+        $scope.payslip.year = $filter('date')(new Date(),'yyyy');
+        $scope.payslip.month = $filter('date')(new Date(),'MMM').toUpperCase();
+
+        if($scope.payslipType == "latest"){
+            getLatestMonth();
+        }
+          
     }
 
     initModule();
@@ -333,8 +353,8 @@ angular.module('selfservice.controllers', [])
     $scope.listHeader = [];
     var year = $stateParams.year;
     var month = $stateParams.month;
-
     $scope.type = $stateParams.type;
+    $scope.payslipType = Main.getSession("profile").companySettings.payslipType;
     function getPaySlip (){
         console.log($rootScope.payslipSelected);
         if($rootScope.payslipSelected != null) {
@@ -346,6 +366,9 @@ angular.module('selfservice.controllers', [])
     }
 
     $scope.printPdf = function(type){
+        console.log("type",type);
+        console.log("$scope.payslipType",$scope.payslipType);
+        
         var profile = Main.getSession("profile");
         if(profile.employeeTransient.assignment.employment == null) {
             alert("Employment is null");
@@ -354,12 +377,15 @@ angular.module('selfservice.controllers', [])
         var employment_id = profile.employeeTransient.assignment.employment;
         var accessToken = Main.getSession("token").access_token;
         var url = "";
-        if(type=='latest')
-          url = Main.getPrintBaseUrl() + "/monthlylatest?employment_id="+employment_id+"&session_id="+accessToken;
-        else if(type=='yearly')
+        if(type=='monthly'){
+          url = Main.getPrintBaseUrl() + "/monthly/latest?employment_id="+employment_id+"&session_id="+accessToken;
+          if($scope.payslipType == 'monthly') 
+            url = Main.getPrintBaseUrl() + "/monthly?employment_id="+employment_id+"&year="+year+"&month="+month+"&session_id="+accessToken;
+        
+        }else{
           url = Main.getPrintBaseUrl() + "/yearly?employment_id="+employment_id+"&session_id="+accessToken;
-        else 
-          url = Main.getPrintBaseUrl() + "?employment_id="+employment_id+"&year="+year+"&month="+month+"&session_id="+accessToken;
+        } 
+
         window.open(encodeURI(url), '_system', 'location=yes');
         return false;
     }
@@ -458,7 +484,7 @@ angular.module('selfservice.controllers', [])
     $scope.title = categoryType;
     $scope.category = categoryType.toLowerCase();
     $scope.requestHeader = {};
-    $scope.requestHeader.transactionDate = new Date();
+    $scope.requestHeader.startDate = new Date();
     $scope.requestHeader.origin = "";
     $scope.requestHeader.destination = "";
     $scope.requestHeader.attachments = []; 
@@ -467,7 +493,7 @@ angular.module('selfservice.controllers', [])
     var datepicker = {
       callback: function (val) {  //Mandatory
         console.log('Return value from the datepicker popup is : ' + val, new Date(val));
-        $scope.requestHeader.transactionDate = val;
+        $scope.requestHeader.startDate = val;
       },
       inputDate: new Date(),      //Optional
       mondayFirst: true,          //Optional
@@ -581,7 +607,7 @@ angular.module('selfservice.controllers', [])
         });
         
         $scope.requestHeader.module = "Benefit";
-        $scope.requestHeader.transactionDate = $filter('date')(new Date($scope.requestHeader.transactionDate),'yyyy-MM-dd');
+        $scope.requestHeader.startDate = $filter('date')(new Date($scope.requestHeader.startDate),'yyyy-MM-dd');
         $scope.requestHeader.categoryType = categoryType;
         $scope.requestHeader.categoryTypeExtId = categoryTypeExtId;
         // if($scope.category != 'medical overlimit') {
@@ -668,11 +694,48 @@ angular.module('selfservice.controllers', [])
  })
 
 .controller('BenefitDetailCtrl', function($stateParams,$ionicLoading, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+        $state.go("login");
+    }
+
+
+    $scope.header = {};
+    var id = $stateParams.id;
     
+    function successRequest(res) {
+        $ionicLoading.hide();
+        if(res != null){
+            $scope.header = res;
+            if($scope.header.categoryType == 'Medical') {
+              var arrDetail = [];
+              if($scope.header.details.length > 0) {
+                arrDetail = JSON.parse($scope.header.details[0].data);
+              }
+              $scope.header.details = arrDetail;
+          }
+        }
+            
+    }
+
+    function getDetailHeader (id){
+
+        $ionicLoading.show({
+            template: '<ion-spinner></ion-spinner>'
+         });
+
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/tmrequest/'+id;
+        Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
+    }
+    
+    function initMethod(){
+      getDetailHeader(id);
+    }
+    initMethod();
  })
 
 .controller('BenefitClaimListCtrl', function($ionicPopover,$ionicLoading,$rootScope, $scope,$state , AuthenticationService, Main) {
-  if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
 
@@ -754,11 +817,24 @@ angular.module('selfservice.controllers', [])
     var categoryTypeExtId = $stateParams.extId;
     $scope.requestHeader = {};
     $scope.detail = {amount:0,type:"Advance"};
-    $scope.requestHeader.transactionDate = new Date();
+    $scope.requestHeader.startDate = new Date();
+    $scope.requestHeader.endDate = new Date();
+    var messageValidation = "";
     var datepicker = {
       callback: function (val) {  //Mandatory
         console.log('Return value from the datepicker popup is : ' + val, new Date(val));
-        $scope.requestHeader.transactionDate = val;
+        $scope.requestHeader.startDate = val;
+      },
+      inputDate: new Date(),      //Optional
+      mondayFirst: true,          //Optional
+      dateFormat:"yyyy-MM-dd",
+      closeOnSelect: false,       //Optional
+      templateType: 'popup'       //Optional
+    };
+
+    var datepicker1 = {
+      callback: function (val) {  //Mandatory
+        $scope.requestHeader.endDate = val;
       },
       inputDate: new Date(),      //Optional
       mondayFirst: true,          //Optional
@@ -779,6 +855,10 @@ angular.module('selfservice.controllers', [])
       ionicDatePicker.openDatePicker(datepicker);
     };
 
+    $scope.openDatePicker1 = function(){
+      ionicDatePicker.openDatePicker(datepicker1);
+    };
+
     var successRequest = function (res){
       $ionicLoading.hide();
       alert(res.message);
@@ -787,22 +867,36 @@ angular.module('selfservice.controllers', [])
 
     $scope.submitForm = function(){
 
+       var detailSubmit = {};
+       detailSubmit = $scope.detail;
+       console.log("detailSubmit",detailSubmit);
+    if(verificationForm(detailSubmit)){
        
        $ionicLoading.show({
           template: '<ion-spinner></ion-spinner>'
         });
-        
-        var dataAmount  = $scope.detail.amount.replace(/\./g,'');
+       detailSubmit.amount = ""+detailSubmit.amount;
+       var dataAmount;
+        if(detailSubmit.amount.indexOf(".") !== -1) {
+            dataAmount = detailSubmit.amount.replace(/\./g,'');
+        }else {
+            dataAmount = detailSubmit.amount;
+        }
+       // var dataAmount  = detailSubmit.amount.replace(/\./g,'');
         dataAmount = Number(dataAmount);
-        $scope.detail.amount = dataAmount;  
+        // $scope.detail.amount = dataAmount; 
+        detailSubmit.amount = dataAmount;  
+
         $scope.requestHeader.module = "Benefit";
-        $scope.requestHeader.transactionDate = $filter('date')(new Date($scope.requestHeader.transactionDate),'yyyy-MM-dd');
+        $scope.requestHeader.startDate = $filter('date')(new Date($scope.requestHeader.startDate),'yyyy-MM-dd');
+        $scope.requestHeader.endDate = $filter('date')(new Date($scope.requestHeader.endDate),'yyyy-MM-dd');
         $scope.requestHeader.categoryType = categoryType;
         $scope.requestHeader.categoryTypeExtId = categoryTypeExtId;
         $scope.requestHeader.origin = $scope.detail.origin;
         $scope.requestHeader.destination = $scope.detail.destination;
         var requestDetail = [];
-        requestDetail.push($scope.detail);
+        // requestDetail.push($scope.detail);
+        requestDetail.push(detailSubmit);
         $scope.requestHeader.details = requestDetail;
         
         /*var attachment = [];
@@ -821,6 +915,32 @@ angular.module('selfservice.controllers', [])
         var data = JSON.stringify($scope.requestHeader);
         
         Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
+      } else {
+          alert(messageValidation);
+      }
+    }
+
+    function verificationForm(dataSpd){
+     
+        if(dataSpd.origin == undefined){
+            messageValidation = "Origin can't empty";
+            return false;
+        }
+
+        if(dataSpd.destination == undefined){
+            messageValidation = "Destination can't empty";
+            return false;
+        }
+
+        if(dataSpd.amount == undefined || dataSpd.amount == 0){
+            messageValidation = "Amount can't empty";
+            return false;
+        }
+
+       
+        return true;
+          
+
     }
 
 
