@@ -78,11 +78,14 @@
                 $scope.globalprofile = {
                     fullname : 'Hendra Ramdhan'
                 }
+
+                $rootScope.data = {};
+
                 $rootScope.user = {
                     id: 1,
                     name: 'Adam Ionic',
                     email: 'adamionic@email.com',
-                    photo: 'img/users/1.jpg',
+                    photo: 'img/1491892621_profle.png',
                     city: 'Cambridge, United Kingdom'
                 }
                 $scope.contacts = appService.getContacts();
@@ -179,7 +182,7 @@ he
             }
             // intro
             function initIntro() {
-
+                $scope.forgot = {email:""};
                 $scope.gotoHome = function () {
                     $scope.closeAll();
                     $ionicLoading.show({
@@ -237,6 +240,32 @@ he
                 $scope.closeForgot = function () {
                     $scope.modalForgot.hide();
                 };
+
+                $scope.forgotAction = function(){
+                    $ionicLoading.show({
+                        template: 'Reset Passsword...'
+                    });
+
+                    var formData = {
+                        email: $scope.forgot.email,
+                    }
+                    formData = JSON.stringify(formData);
+
+                   Main.forgot(formData, function(res) {
+                        $ionicLoading.hide();
+                        alert(res.message)
+                    }, function(error, status) {
+                        $ionicLoading.hide();
+                        var err = "Please check your internet connection";
+                        if(status == 500) {
+                            err = error.message;
+                        }else if(status == 400 || status==401){
+                            err = "Problem with server. Please try again later !"
+                        }
+                        appService.showAlert('Error', err, 'Close', 'button-assertive', null);
+                       
+                    })
+                }
 
                 $scope.uploadUserPhoto = function () {
                     $ionicActionSheet.show({

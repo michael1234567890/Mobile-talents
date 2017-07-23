@@ -1,12 +1,7 @@
 <ion-view title="My Request" class="bg-lightgrey">
 
     <ion-content class="has-header bt-grey profile" scroll="true">
-    <ion-refresher pulling-text="Pull to refresh"
-             refreshing-text="Loading..."
-             refreshing-icon="ion-loading-c"
-             pulling-icon="ion-ios7-arrow-thin-down"
-             on-refresh="refresh()">
-    </ion-refresher>
+    
     
     <div class="row text-center" style="font-size:100%; height:40px">
             <div class="col font-thin" ng-class="module.type === 'personalia' ? 'text-large balanced bb' : ''" ng-click="chooseTab('personalia')">Personalia</div>
@@ -15,6 +10,12 @@
     </div>
     
 <ion-scroll class="bg-lightgrey" direction="y" style="height:100%">
+    <ion-refresher pulling-text="Pull to refresh"
+             refreshing-text="Loading..."
+             refreshing-icon="ion-loading-c"
+             pulling-icon="ion-ios7-arrow-thin-down"
+             on-refresh="refresh()">
+    </ion-refresher>
     <div ng-if="module.type === 'personalia'">
      <div class="card" ng-repeat="item in requests | filter: searchFilter ">
             <div class="item item-avatar item-text-wrap" ng-if="item.task=='SUBMITFAMILY'" ng-click="gotoDetailRequest(item.id)" >

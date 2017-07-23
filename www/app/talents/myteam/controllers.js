@@ -475,7 +475,7 @@ angular.module('myteam.controllers', [])
               $scope.detail.ref = JSON.parse($scope.detail.data);
 
            $rootScope.address.push($scope.detail.ref);
-      }else if($scope.detail.task == 'SUBMITBENEFIT' ){
+      }else if($scope.detail.task == 'SUBMITBENEFIT' || $scope.detail.task == 'SUBMITBENEFIT1' || $scope.detail.task == 'SUBMITBENEFIT2' || $scope.detail.task == 'SUBMITBENEFIT3' || $scope.detail.task == 'SUBMITBENEFIT4' || $scope.detail.task == 'SUBMITBENEFIT5'  ){
           if($scope.detail.ref.categoryType == 'Medical') {
               var arrDetail = [];
               if($scope.detail.ref.details.length > 0) {

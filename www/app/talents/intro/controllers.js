@@ -2,6 +2,10 @@ angular.module('intro.controllers', [])
 .controller('LoginCtrl',function( $timeout,$ionicHistory, $ionicLoading, appService, $state,$localStorage, $rootScope, $scope, $location,  Main) {
 	$scope.usertalent = {username:'',password:''};
 	//$scope.email = "hendra.ramdhan@gmail.com";
+
+    $scope.forgotAction = function(){
+        alert("Forgot Action");
+    }
   $scope.goToSignup = function () {
         $state.go('signup');
         $ionicHistory.nextViewOptions({

@@ -15,12 +15,11 @@
     }
 </style>
 <ion-view title="List Request Benefit" class="bg-lightgrey">
-
-<ion-content class="has-header bt-grey profile" scroll="true">
-<div class="row text-center" style="height:40px">
-            <div class="col font-thin" ng-class="module.type === 'list' ? 'text-medium balanced bb' : ''" ng-click="chooseTab('list')">List</div>
-            <div class="col font-thin" ng-class="module.type === 'needreport' ? 'text-medium balanced bb' : ''" ng-click="chooseTab('needreport')">Need Report</div>
-</div>
+<ion-content class="has-header bt-grey profile">
+    <div class="row text-center" style="height:40px">
+                <div class="col font-thin" ng-class="module.type === 'list' ? 'text-medium balanced bb' : ''" ng-click="chooseTab('list')">List</div>
+                <div class="col font-thin" ng-class="module.type === 'needreport' ? 'text-medium balanced bb' : ''" ng-click="chooseTab('needreport')">Need Report</div>
+    </div>
 <ion-scroll class="bg-lightgrey" direction="y" style="height:100%">
  <ion-refresher pulling-text="Pull to refresh"
              refreshing-text="Loading..."
@@ -28,46 +27,8 @@
              pulling-icon="ion-ios7-arrow-thin-down"
              on-refresh="refresh()">
 </ion-refresher>
-<!--
-<div ng-if="module.type === 'list'">
-   <div class="card" ng-repeat="item in requests | filter: searchFilter ">
-            <div class="item item-text-wrap" ng-click="gotoDetailRequest(item.id)" >
-                <h2 class="lead">{{item.categoryType}}</h2>
-                <p>Total Rp. {{item.totalAmount | number : 0}}</p>
-                <p class="text-smaller" am-time-ago="item.createdDate"></p>
-                <span class="item-note calm">
-                        {{item.status}}
-                </span>
-            </div>
-    </div>
-    <div class="item" ng-if="requests.length == 0" >
-            <div class="col col-100">
-                <h2>Data not found</h2>
-                <p>You may don't have any Benefit request</p>
-            </div>  
-    </div>
-</div>
-<div ng-if="module.type === 'needreport'">
-         <div class="card" ng-repeat="item in needReportRequests | filter: searchFilter ">
-                <div class="item item-text-wrap" ng-click="gotoListType($index)" >
-                    
-                    <h2 class="lead">{{item.categoryType}}</h2>
-                    <p>Total Rp. {{item.totalAmount | number : 0}}</p>
-                    <p class="text-smaller" am-time-ago="item.createdDate"></p>
-                    <span class="item-note calm">
-                        {{item.status}}
-                    </span>
-                </div>
-         </div>
-         <div class="item" ng-if="needReportRequests.length == 0" >
-            <div class="col col-100">
-                <h2>Data not found</h2>
-                <p>You may don't have any request need to report</p>
-            </div>  
-        </div>
-</div>
--->
-<div class="list" ng-if="module.type === 'list'">
+
+<div  ng-if="module.type === 'list'">
     <div class="item item-text-wrap"  ng-repeat="item in requests" ui-sref="app.benefitdetail({id: item.id})">
         <div class="row">
             <div class="left"><h5 style="color: #949494;">{{item.createdDate | date: 'dd MMM yyyy'}}</h5></div>
@@ -95,7 +56,7 @@
     </div>
 </div>
 
-<div class="list" ng-if="module.type === 'needreport'">
+<div ng-if="module.type === 'needreport'">
     <div class="item item-text-wrap"  ng-repeat="item in needReportRequests" ng-click="gotoListType($index)">
         <div class="row">
             <div class="left"><h5 style="color: #949494;">{{item.createdDate | date: 'dd MMM yyyy'}}</h5></div>

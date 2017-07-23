@@ -302,6 +302,7 @@ angular.module('talent.routes', [])
           }
         }
       })
+
       .state('app.benefitdetail', {
         url: '/benefitdetail/:id',
         views: {
@@ -313,7 +314,7 @@ angular.module('talent.routes', [])
       })
 
       .state('app.spdadvanceadd', {
-        url: '/spdadvanceadd/:categoryType/:extId',
+        url: '/spdadvanceadd/:categoryType/:extId/:workflow',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/selfservice/claim/spdadvanceadd.html',
@@ -324,11 +325,21 @@ angular.module('talent.routes', [])
 
      
       .state('app.benefitlisttype', {
-        url: '/benefitlisttype/:categoryType/:extId',
+        url: '/benefitlisttype/:categoryType/:extId/:workflow',
         views: {
           'menuContent': {
-            templateUrl: 'app/talents/selfservice/claim/listtype.html',
+            templateUrl: 'app/talents/selfservice/claim/benefitlisttype.html',
             controller: 'BenefitListtypeCtrl'
+          }
+        }
+      })
+
+      .state('app.benefitconfirmation', {
+        url: '/benefitconfirmation',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/claim/benefitconfirmation.html',
+            controller: 'BenefitConfirmationCtrl'
           }
         }
       })

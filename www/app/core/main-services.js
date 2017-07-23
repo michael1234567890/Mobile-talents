@@ -4,11 +4,12 @@
 
     angular.module('main.services', [])
     .factory('Main', function($q, $timeout, $http, $localStorage){
-        // var baseUrl = "http://192.168.43.162:8080";
-        // var printBaseUrl = "http://192.168.43.162/spice/payslippdf"
+        // var hostname = "http://192.168.43.162";
+        var hostname = "http://localhost";
+        var printBaseUrl = hostname + "/talents/payslippdf"
+        var baseUrl = hostname + ":8080";
+        
 
-        var printBaseUrl = "http://localhost/spice/payslippdf"
-        var baseUrl = "http://localhost:8080";
         var basicAuthentication = 'Basic dGFsZW50czpzZWNyZXQ=';
         var timeoutms = 15000; // 15 sec
 
@@ -140,6 +141,17 @@
                 var deferred = $q.defer();
                // $http.post(baseUrl + '/oauth/token?grant_type=password&username='+data.username+'&password='+data.password, data)
                 $http.post(baseUrl + '/oauth/token?grant_type=password&username='+data.username+'&password='+data.password, {headers:{'Authorization':'Basic dGFsZW50czpzZWNyZXQ='}, timeout:deferred.promise})
+                .success(success)
+                .error(error)
+
+                $timeout(function() {
+                    deferred.resolve(); // this aborts the request!
+                }, timeoutms);
+
+            },forgot: function(data, success, error) {
+                console.log(data);
+                var deferred = $q.defer();
+                 $http.post(baseUrl + '/api/resetpassword',data,{timeout:deferred.promise})
                 .success(success)
                 .error(error)
 

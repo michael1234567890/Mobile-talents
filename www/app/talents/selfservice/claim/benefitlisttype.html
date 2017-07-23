@@ -5,29 +5,48 @@
     border-radius:5px;
 }
 </style>
-<ion-view title="{{title}}">
+<ion-view title="Title kosong">
     <ion-content  class="profile has-header" scroll="true">
      <div class="item padding bg-lightgrey" ng-if="directType == false">
-        <div class="row">
-            <div class="input-field col">
+        <div class="row" ng-if="category != 'perjalanan dinas'">
+            <div class="input-field col" >
                       <p>Transaction Date</p>
                         <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()">
                             {{requestHeader.startDate| date: "yyyy-MM-dd"}}
                         </ionic-datepicker>
             </div>
         </div>
-        <div class="row" ng-if="category == 'perjalanan dinas'">
-            <div class="input-field col">
-                <p>Origin</p>
-                <input  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" type="text" class="validate"  ng-model="requestHeader.origin">
-                
-            </div>
-        </div>
+        
 
         <div class="row" ng-if="category == 'perjalanan dinas'">
+            <div class="input-field col padding-horizontal">
+                <p>Origin</p>
+                <input  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" type="text" class="validate"  ng-model="requestHeader.origin">
+            </div>
             <div class="input-field col">
                 <p>Destination</p>
                 <input  style="border: solid 2px #c9c9c9;" type="text" class="validate input-talents" ng-model="requestHeader.destination">
+            </div>
+        </div>
+        <div class="row" ng-if="category == 'perjalanan dinas'">
+            <div class="input-field col padding-horizontal">
+                      <p>Start Date</p>
+                        <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()">
+                            {{requestHeader.startDate| date: "yyyy-MM-dd"}}
+                        </ionic-datepicker>
+            </div>
+            <div class="input-field col">
+                      <p>End Date</p>
+                        <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker1()">
+                            {{requestHeader.endDate| date: "yyyy-MM-dd"}}
+                        </ionic-datepicker>
+            </div>
+        </div>
+        <div class="row" ng-if="category == 'perjalanan dinas'">
+            <div class="input-field col">
+                <p>Remark</p>
+                <input  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" type="text" class="validate"  ng-model="requestHeader.remark">
+                
             </div>
         </div>
        
@@ -36,10 +55,14 @@
         <div class="edit padding-horizontal">
             
             <div ng-if="category != 'perjalanan dinas'" >
-                 
+
                  <label  class="item item-input" ng-repeat="item in listtype track by $index">
+                    
                     <span class="input-label" ng-if="item.type != 'select'"><b>{{item.name}}</b></span> 
-                    <select ng-model="item.value" ng-if="item.type == 'select'">
+            
+                   <!-- <span class="input-label"><b>{{item.name}}</b></span> -->
+                    <select ng-model="item.value" ng-if="item.type == 'select'" style="font-size:13px">
+                        
                         <option ng-repeat="option in item.options track by $index">{{option.id}}</option>
                     </select>
                     <input   placeholder="0" value="0" ng-keyup="change($event,$index)" type="tel"   ng-model="item.amount">
@@ -50,9 +73,13 @@
             <div ng-if="category == 'perjalanan dinas'" >
                  
                  <label  class="item item-input" ng-repeat="item in listtype track by $index">
+                    
                     <span class="input-label" ng-if="item.type != 'select'"><b>{{item.name}}</b></span> 
-                    <select ng-model="item.value" ng-if="item.type == 'select'">
-                        <option ng-repeat="option in item.options track by $index">{{option.id}}</option>
+            
+                    <!-- <span class="input-label"><b>{{item.name}}</b></span> -->
+                    <select ng-model="item.value" ng-if="item.type == 'select'" style="font-size:13px">
+                       
+                        <option ng-selected="$index ==0" ng-repeat="option in item.options track by $index">{{option.id}}</option>
                     </select>
                     <!--
                     <input  placeholder="0" value="0" ng-keyup="change($event,$index)" type="number"   ng-model="item.amount" step="0.01"> -->
@@ -80,12 +107,15 @@
           </div>
     </div>
 
-    <div class="item no-padding" ng-if="directType == true">
-        <p class="text-small padding">Are you sure want to apply {{labelCategory}} ?</p>
+    <div class="item padding" ng-if="directType == true">
+        <div class="container text-center">
+                <br><br>
+                <p class="text-medium text-wrap">Are you sure want to apply {{labelCategory}} ?  <br>Default <b> Rp. {{defaultValue | number:0}}</b></p>
+        </div>
     </div>
     
     <div class="row">
-        <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Submit</button>
+        <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Next</button>
     </div>
     </ion-content>
 </ion-view>

@@ -12,12 +12,12 @@
       </div>
     -->
        <ion-scroll class="bg-lightgrey" direction="y" style="height:100%">
-            <div style="height:700px">
+            <div style="height:100%">
                 <div class="row" ng-repeat="item in categoryType | filter: searchFilter track by $index" ng-if="$index % 3==0">
 
                     <div class="col">
-                        <div class="card contact animated bounceIn item-remove-animate"  ng-if="categoryType[$index] !== undefined" style="margin-right:10px;margin-bottom:10px;min-height:100px">
-                            <div class="item item-image item-text-wrap" ng-click="gotoListType(categoryType[$index + 0].categoryType,categoryType[$index + 0].categoryTypeExtId,$index + 0)">
+                        <div class="card contact"  ng-if="categoryType[$index] !== undefined" style="margin-right:10px;margin-bottom:10px;min-height:100px">
+                            <div class="item item-image item-text-wrap" ng-click="gotoListType(categoryType[$index + 0].categoryType,categoryType[$index + 0].categoryTypeExtId,$index + 0,categoryType[$index + 0].workflow)">
                                 <div><img ng-src="{{categoryType[$index + 0].icon}}"></div>
                                <!-- <h2 class="lead text-small mt">{{categoryType[$index].name}}</h2>-->
                                 <p class="" ng-if="categoryType[$index + 0].directType==false">{{categoryType[$index].label}}</p>
@@ -28,8 +28,8 @@
                     </div>
 
                     <div class="col">
-                        <div class="card contact animated bounceIn item-remove-animate"  ng-if="categoryType[$index + 1] !== undefined" style="margin-right:10px;margin-bottom:10px;min-height:100px" >
-                            <div class="item item-image item-text-wrap" ng-click="gotoListType(categoryType[$index + 1].categoryType,categoryType[$index + 1].categoryTypeExtId,$index + 1)">
+                        <div class="card contact"  ng-if="categoryType[$index + 1] !== undefined" style="margin-right:10px;margin-bottom:10px;min-height:100px" >
+                            <div class="item item-image item-text-wrap" ng-click="gotoListType(categoryType[$index + 1].categoryType,categoryType[$index + 1].categoryTypeExtId,$index + 1,categoryType[$index + 1].workflow)">
                                 <div><img ng-src="{{categoryType[$index + 1].icon}}"></div>
                                
                                 <p class="" ng-if="categoryType[$index + 1].directType==false">{{categoryType[$index + 1].label}}</p>
@@ -39,8 +39,8 @@
                         </div>
                     </div>
                     <div class="col">
-                        <div class="card contact animated bounceIn item-remove-animate"  ng-if="categoryType[$index + 2] !== undefined" style="margin-right:0px;margin-bottom:10px;min-height:100px">
-                            <div class="item item-image item-text-wrap" ng-click="gotoListType(categoryType[$index + 2].categoryType,categoryType[$index + 2].categoryTypeExtId,$index + 2)">
+                        <div class="card contact"  ng-if="categoryType[$index + 2] !== undefined" style="margin-right:0px;margin-bottom:10px;min-height:100px">
+                            <div class="item item-image item-text-wrap" ng-click="gotoListType(categoryType[$index + 2].categoryType,categoryType[$index + 2].categoryTypeExtId,$index + 2,categoryType[$index + 2].workflow)">
                                 <div><img ng-src="{{categoryType[$index + 2].icon}}"></div>
                                 <!--<h2 class="lead text-small mt">{{categoryType[$index + 2].name}}</h2>-->
                                 <p class="" ng-if="categoryType[$index + 2].directType==false">{{categoryType[$index + 2].label}}</p>
@@ -50,6 +50,13 @@
                         </div>
                     </div>
                 </div>
+                <div class="item" ng-if="categoryType.length == 0" >
+                    <div class="col col-100">
+                        <h2>Benefit Type is not found</h2>
+                        <p>You may don't allow to request Benefit</p>
+                    </div>  
+                </div>
+
             </div>
         </ion-scroll>
 
