@@ -167,6 +167,7 @@ he
                     });
                     Main.destroySession("profile");
                     Main.destroySession("token");
+                    Main.destroySession("balance");
                     $timeout(function () {
 
                         $ionicLoading.hide();

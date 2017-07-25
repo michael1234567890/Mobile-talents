@@ -190,6 +190,16 @@ angular.module('talent.routes', [])
         }
       })
 
+       .state('app.selfservicesuccess', {
+        url: '/selfservicesuccess',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/selfservice-success.html',
+            controller: 'SelfServiceCtrl'
+          }
+        }
+      })
+
        .state('app.homeleave', {
         url: '/homeleave',
         views: {

@@ -4,7 +4,7 @@
 
     angular.module('main.services', [])
     .factory('Main', function($q, $timeout, $http, $localStorage){
-        // var hostname = "http://192.168.43.162";
+       // var hostname = "http://192.168.43.162";
         var hostname = "http://localhost";
         var printBaseUrl = hostname + "/talents/payslippdf"
         var baseUrl = hostname + ":8080";
