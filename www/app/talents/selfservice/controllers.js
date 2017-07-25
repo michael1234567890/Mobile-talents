@@ -422,17 +422,33 @@ angular.module('selfservice.controllers', [])
           $rootScope.benefitCategory = res;
           $scope.categoryType = [];
           $scope.categoryType = $rootScope.benefitCategory;
-          console.log($scope.categoryType);
-          /*for(var i=0;i<res.length;i++){
-             var objResponse = res[i];
-             var obj = {id:objResponse.categoryTypeExtId,name:objResponse.categoryType,icon:objResponse.icon,directType:objResponse.directType,label:objResponse.label};
-             $scope.categoryType.push(obj);
-          }
-          console.log($scope.categoryType);
-          */
+          
+      }
+    }
+
+    var successBalance = function (res){
+
+      if(res.length > 0) {
+          var sessionBalance = [];
+          for (var i = res.length - 1; i >= 0; i--) {
+              var type = res[i].type;
+              var value = res[i].balanceEnd;
+              var obj = {id:type.toLowerCase(),name:value};
+              sessionBalance.push(obj);
+          };
+          Main.setSession("balance",sessionBalance);
+          
       }
     }
     
+    function getBalanceSaveToSession(){
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/tmbalance/type';
+        var body ={"module":"Benefit"};
+        var data = JSON.stringify(body);
+        Main.postRequestApi(accessToken,urlApi,data,successBalance,$scope.errorRequest);
+    }
+
     function getListCategory(){
         $ionicLoading.show({
           template: '<ion-spinner></ion-spinner>'
@@ -448,25 +464,25 @@ angular.module('selfservice.controllers', [])
           getListCategory();
         else
           $scope.categoryType = $rootScope.benefitCategory;
-
-        console.log("categoryType");
-        console.log($scope.categoryType);
-     
+        
+        if(Main.getSession("balance") == undefined)
+          getBalanceSaveToSession();
     }
 
     initModule();
 })
-
 
 .controller('BenefitListtypeCtrl', function(appService,$ionicActionSheet,$cordovaCamera,ionicDatePicker, $stateParams, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     var categoryType = $stateParams.categoryType;
     console.log("categoryType",categoryType);
     var categoryTypeExtId = $stateParams.extId;
     var workflow = $stateParams.workflow;
+    var messageValidation = "";
     $scope.directType = false;
     $scope.labelCategory = "Label";
     $scope.defaultValue = 1;
     var objDirectType = {};
+
     if($rootScope.selectedBenefitCategory != undefined){
         $scope.directType = $rootScope.selectedBenefitCategory.directType;
         $scope.labelCategory = $rootScope.selectedBenefitCategory.label;
@@ -476,50 +492,51 @@ angular.module('selfservice.controllers', [])
                 objDirectType =  $rootScope.selectedBenefitCategory.listRequestType[0];
         }
     }
+
     var sessionLopName = "kacamata"+"."+categoryType;
     $scope.defaultImage = "img/placeholder.png";
     $scope.checkLoginSession();
     $scope.arrLensa = [];
     $scope.listtype = []; 
+    $scope.images = []; 
+
     var listTypeSelected = [];
     $scope.titleCategory = categoryType;
     $scope.category = categoryType.toLowerCase();
     $scope.requestHeader = {};
-    $scope.requestHeader.startDate = new Date();
-     $scope.requestHeader.endDate = new Date();
-    $scope.requestHeader.origin = "";
-    $scope.requestHeader.destination = "";
-    $scope.requestHeader.attachments = []; 
-    $scope.images = []; 
     
+     $scope.$on('$ionicView.beforeEnter', function () {
+          initModule();
+      });
+
     var datepicker = {
-      callback: function (val) {  //Mandatory
-        $scope.requestHeader.startDate = val;
-      },
-      inputDate: new Date(),      //Optional
-      mondayFirst: true,          //Optional
-      dateFormat:"yyyy-MM-dd",
-      closeOnSelect: false,       //Optional
-      templateType: 'popup'       //Optional
+        callback: function (val) {  //Mandatory
+          $scope.requestHeader.startDate = val;
+        },
+        inputDate: new Date(),      //Optional
+        mondayFirst: true,          //Optional
+        dateFormat:"yyyy-MM-dd",
+        closeOnSelect: false,       //Optional
+        templateType: 'popup'       //Optional
     };
 
     var datepicker1 = {
-      callback: function (val) {  //Mandatory
-        $scope.requestHeader.endDate = val;
-      },
-      inputDate: new Date(),      //Optional
-      mondayFirst: true,          //Optional
-      dateFormat:"yyyy-MM-dd",
-      closeOnSelect: false,       //Optional
-      templateType: 'popup'       //Optional
+        callback: function (val) {  //Mandatory
+          $scope.requestHeader.endDate = val;
+        },
+        inputDate: new Date(),      //Optional
+        mondayFirst: true,          //Optional
+        dateFormat:"yyyy-MM-dd",
+        closeOnSelect: false,       //Optional
+        templateType: 'popup'       //Optional
     };
 
     $scope.openDatePicker = function(){
-      ionicDatePicker.openDatePicker(datepicker);
+        ionicDatePicker.openDatePicker(datepicker);
     };
 
     $scope.openDatePicker1 = function(){
-      ionicDatePicker.openDatePicker(datepicker1);
+        ionicDatePicker.openDatePicker(datepicker1);
     };
 
     $scope.change = function(event,index){
@@ -527,8 +544,37 @@ angular.module('selfservice.controllers', [])
       value = value
         .replace(/\D/g, "")
         .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-      // alert(value);
       $scope.listtype[index].amount = value;
+    }
+
+    function getBalance(type){
+        type = type.toLowerCase();
+        console.log(Main.getSession("balance"));
+        if(Main.getSession("balance") != undefined) {
+            return Main.getValuefromId(Main.getSession("balance"),type);
+        }
+        return 0;
+    }
+
+    $scope.multiple = function(event,index){
+        var value = event.target.value;
+        var name = $scope.listtype[index].name;
+
+        if($scope.listtype[index].type == "select"){
+            name = $scope.listtype[index].value;
+        }
+
+        var balance = getBalance(name);
+        if(balance == undefined || balance == 0)
+          balance = 1;
+        else
+          balance = Number(balance);
+
+        value = ""+value * balance;
+        value= value
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        $scope.listtype[index].amount = value;
     }
 
     $scope.getTotal = function(){
@@ -537,29 +583,21 @@ angular.module('selfservice.controllers', [])
         for(var i = 0; i < $scope.listtype.length; i++){
           var obj = $scope.listtype[i];
           var objpush = {};
-          console.log('Amount : ' + obj.amount);
           if(obj.amount != null){
               var number = obj.amount.toString();
               if(number != '0'){
                   objpush = obj;
                   var amount = obj.amount;
-                  //number  = obj.amount.replace('.','');
-                  //obj.amount = number;
-                  //listTypeSelected.push(obj);
-
                   obj.amount = number;
-                  // number = amount.replace('.','');
                   number = amount.replace(/\./g,'');
-//                  objpush.amount = number;
-
               }
               total += Number(number);
           }
-            
           
         }
         return total;
     }
+    
     $scope.removeChoice = function(){
         var lastItem = $scope.requestHeader.attachments.length-1;
         $scope.requestHeader.attachments.splice(lastItem);
@@ -609,88 +647,123 @@ angular.module('selfservice.controllers', [])
 
 
     var successRequest1 = function (res){
-      $ionicLoading.hide();
-      alert(res.message);
-      $scope.goBack('app.submitclaim');
+        $ionicLoading.hide();
+        alert(res.message);
+        $scope.goBack('app.submitclaim');
     }
 
     var successRequest = function (res){
-      $ionicLoading.hide();
-      $rootScope.data.requestBenefitVerification = res;
-      $state.go("app.benefitconfirmation");
+        $ionicLoading.hide();
+        $rootScope.data.requestBenefitVerification = res;
+        $state.go("app.benefitconfirmation");
+    }
+
+    function verificationForm(reqHeader){
+       if(reqHeader.categoryType == 'Perjalanan Dinas') {
+            if(reqHeader.origin == undefined || reqHeader.origin == ""){
+              messageValidation = "Origin can't empty";
+              return false;
+            }
+
+            if(reqHeader.destination == undefined || reqHeader.destination == ""){
+                messageValidation = "Destination can't empty";
+                return false;
+            }
+
+            if(reqHeader.remark == undefined || reqHeader.remark == ""){
+                messageValidation = "Remark can't empty";
+                return false;
+            }
+      }
+        return true;
     }
 
 
 
     $scope.submitForm = function(){
-       
-        $ionicLoading.show({
-          template: '<ion-spinner></ion-spinner>'
-        });
-        
         $scope.requestHeader.module = "Benefit";
         $scope.requestHeader.startDate = $filter('date')(new Date($scope.requestHeader.startDate),'yyyy-MM-dd');
         
         $scope.requestHeader.categoryType = categoryType;
         $scope.requestHeader.categoryTypeExtId = categoryTypeExtId;
         $scope.requestHeader.workflow = workflow;
-        
-        // if($scope.category != 'medical overlimit') {
-         if($scope.directType != true){
-            var requestDetail = [];
-            angular.forEach($scope.listtype, function(value, key){
-                  var obj ={};
-                  if(value.type == 'select'){
-                    obj.type = value.value;
-                  }else {
-                    obj.type = value.name;
-                  }
-                  
-                  var number = value.amount.toString();
-                  if(number != '0'){
-                      number = number.replace(/\./g,'');
-                  }
-                  obj.amount = number;
-                  // obj.amount = value.amount;
-                  
-                  requestDetail.push(obj);
-            })
-            $scope.requestHeader.details = requestDetail;
-            var attachment = [];
-            if($scope.requestHeader.attachments.length > 0) {
-                for (var i = $scope.requestHeader.attachments.length - 1; i >= 0; i--) {
-                    var objAttchament = {"image":$scope.requestHeader.attachments[i].image};
-                    attachment.push(objAttchament);
-                };
+
+        if(verificationForm($scope.requestHeader)){
+            $ionicLoading.show({
+              template: '<ion-spinner></ion-spinner>'
+            });
+            
+            // if($scope.category != 'medical overlimit') {
+             if($scope.directType != true){
+                var requestDetail = [];
+                angular.forEach($scope.listtype, function(value, key){
+                      var obj ={};
+                      if(value.type == 'select'){
+                        obj.type = value.value;
+                      }else {
+                        obj.type = value.name;
+                      }
+                      
+                      var number = value.amount.toString();
+                      if(number != '0'){
+                          number = number.replace(/\./g,'');
+                      }
+                      obj.amount = number; 
+                      if(value.qty != undefined)
+                        obj.qty = value.qty;
+                      requestDetail.push(obj);
+                })
+                $scope.requestHeader.details = requestDetail;
+                var attachment = [];
+                if($scope.requestHeader.attachments.length > 0) {
+                    for (var i = $scope.requestHeader.attachments.length - 1; i >= 0; i--) {
+                        var objAttchament = {"image":$scope.requestHeader.attachments[i].image};
+                        attachment.push(objAttchament);
+                    };
+                }
+                $scope.requestHeader.attachments = attachment; 
+            }else {
+                var requestDetail = [];
+                var obj = {};
+                obj.type = objDirectType.type;
+                obj.amount = $scope.defaultValue;
+                requestDetail.push(obj);
+                $scope.requestHeader.details = requestDetail;
             }
-            $scope.requestHeader.attachments = attachment; 
+            var accessToken = Main.getSession("token").access_token;
+            // var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/benefit';
+            var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/verificationbenefit';
+            var data = JSON.stringify($scope.requestHeader);
+            
+            Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
+
         }else {
-            var requestDetail = [];
-            var obj = {};
-            obj.type = objDirectType.type;
-            obj.amount = $scope.defaultValue;
-            requestDetail.push(obj);
-            $scope.requestHeader.details = requestDetail;
+          alert(messageValidation);
         }
-        var accessToken = Main.getSession("token").access_token;
-        // var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/benefit';
-        var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/verificationbenefit';
-        var data = JSON.stringify($scope.requestHeader);
         
-        Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
     }
 
    
+    function initData(){
+        $scope.requestHeader.startDate = new Date();
+        $scope.requestHeader.endDate = new Date();
+        $scope.requestHeader.origin = "";
+        $scope.requestHeader.destination = "";
+        $scope.requestHeader.attachments = []; 
+        $scope.images = []; 
+        console.log("initdata");
+    }
 
     function initModule() {
-
+        initData();
+        $rootScope.data.requestBenefitVerification = {};
         if($scope.category == 'kacamata') {
             var arrLensa = [{id:"Lensa Monofocus Non Cylindris"},{id:"Lensa Monofocus Cylindris"},{id:"Lensa Bifokus Non Cylindris"},{id:"Lensa Bifokus Cylindris"}];
-            $scope.listtype = [{id:"frame",name:"Frame",amount:0},{id:"lensa", name:"Lensa",amount:0,type:"select",options:arrLensa}];
+            $scope.listtype = [{id:"frame",name:"Frame",amount:0},{id:"lensa", name:"Lensa",amount:0,type:"select",options:arrLensa,value:"Lensa Monofocus Non Cylindris"}];
         }else if($scope.category == 'perjalanan dinas'){
             var uangsaku = [{id:"Uang Saku Dalam Negeri"},{id:"Uang Saku Luar Negeri"}];
             var uangmakan = [{id:"Uang Makan Dalam Negeri"},{id:"Uang Makan Luar Negeri"}];
-            $scope.listtype = [{id:"taxi",name:"Taxi",amount:0},{id:"transport",name:"Transport",amount:0},{id:"hotel",name:"Hotel",amount:0},{id:"rentalmobil",name:"Rental Mobil",amount:0},{id:"mileage",name:"Mileage",amount:0},{id:"uangmakan", name:"Uang Makan",amount:0,type:"select",options:uangmakan},{id:"uangsaku", name:"Uang Saku",amount:0,type:"select",options:uangsaku},{id:"laundry",name:"Laundry",amount:0},{id:"tolparkirbensin",name:"Tol Parkir Bensin",amount:0},{id:"other",name:"Other",amount:0}];
+            $scope.listtype = [{id:"ticket",name:"Ticket",amount:0},{id:"taxi",name:"Taxi",amount:0},{id:"transport",name:"Transport",amount:0},{id:"hotel",name:"Hotel",amount:0,input:true,satuan:"days",qty:0},{id:"rentalmobil",name:"Rental Mobil",amount:0},{id:"mileage",name:"Mileage",amount:0,input:true,satuan:"KM",qty:0},{id:"uangmakan", name:"Uang Makan",amount:0, value:"Uang Makan Dalam Negeri",type:"select",options:uangmakan, input:true,satuan:"days",qty:0},{id:"uangsaku", name:"Uang Saku",value:"Uang Saku Dalam Negeri",amount:0,type:"select",options:uangsaku,input:true,satuan:"days",qty:0},{id:"laundry",name:"Laundry",amount:0},{id:"tolparkirbensin",name:"Tol Parkir Bensin",amount:0},{id:"other",name:"Other",amount:0}];
         }else if($scope.category == 'reimbursement'){
             $scope.listtype = [{id:"personalexpenses",name:"Personal Expenses",amount:0},{id:"communication",name:"Communication (pulsa)",amount:0},{id:"sportmembership",name:"Sport membership",amount:0}];
         }else if($scope.category == 'other'){
@@ -698,15 +771,13 @@ angular.module('selfservice.controllers', [])
         }else if($scope.category == 'medical'){
             $scope.listtype = [{id:"dokter",name:"Dokter",amount:0},{id:"obat",name:"Apotik / Obat",amount:0},{id:"lab",name:"Lab / R.S",amount:0},{id:"lainlain",name:"Lain-lain",amount:0}];
         }else if($scope.category == 'mutasi'){
-            $scope.listtype = [{id:"perabot",name:"Sumbangan perabot",amount:0},{id:"sekolah",name:"Pendaftaran sekolah",amount:0},{id:"rumahoperasional",name:"Sumbangan rumah operasional",amount:0}];
+            $scope.listtype = [{id:"sekolah",name:"Pendaftaran sekolah",amount:0},{id:"rumahoperasional",name:"Sumbangan rumah operasional",amount:0}];
         }
 
-        console.log($rootScope.needReportSelected);
         if($rootScope.needReportSelected != undefined) {
             $scope.requestHeader.origin = $rootScope.needReportSelected.origin;
             $scope.requestHeader.destination = $rootScope.needReportSelected.destination;
             $scope.requestHeader.linkRefHeader = $rootScope.needReportSelected.id;
-          
         }
         
         
@@ -716,17 +787,67 @@ angular.module('selfservice.controllers', [])
 })
 
 
-.controller('BenefitConfirmationCtrl', function($stateParams,$ionicLoading, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('BenefitConfirmationCtrl', function(appService,$ionicActionSheet,$cordovaCamera,$stateParams,$ionicLoading, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
       var benefitVerification = $rootScope.data.requestBenefitVerification;
       console.log(benefitVerification);
       $scope.totalClaim = 0;
       $scope.totalSubmitedClaim = 0;
       $scope.totalCurrentClaim = 0;
+      $scope.defaultImage = "img/placeholder.png";
+      $scope.images = [];  
+      $scope.requestHeader = {};
+      $scope.requestHeader.attachments = []; 
 
       var successRequest = function (res){
           $ionicLoading.hide();
-          alert(res.message);
+          $scope.goTo("app.selfservicesuccess");
       }
+      $scope.removeChoice = function(){
+        var lastItem = $scope.requestHeader.attachments.length-1;
+        $scope.requestHeader.attachments.splice(lastItem);
+        $scope.images.splice(lastItem);
+    }
+
+    $scope.addPicture = function () {
+          if($scope.images.length > 4) {
+            alert("Only 5 pictures can be upload");
+            return false;
+          }
+          $ionicActionSheet.show({
+              buttons: [{
+                  text: 'Take Picture'
+              }, {
+                      text: 'Select From Gallery'
+                  }],
+              buttonClicked: function (index) {
+                  switch (index) {
+                      case 0: // Take Picture
+                          document.addEventListener("deviceready", function () {
+                              $cordovaCamera.getPicture(appService.getCameraOptions()).then(function (imageData) {
+                                  $scope.images.push({'image':"data:image/jpeg;base64," + imageData});
+                                  $scope.requestHeader.attachments.push({'image': imageData});
+                              }, function (err) {
+                                  appService.showAlert('Error', err, 'Close', 'button-assertive', null);
+                              });
+                          }, false);
+
+                          break;
+                      case 1: // Select From Gallery
+                          document.addEventListener("deviceready", function () {
+                              $cordovaCamera.getPicture(appService.getLibraryOptions()).then(function (imageData) {
+                                   $scope.images.push({'image':"data:image/jpeg;base64," + imageData});
+                                   $scope.requestHeader.attachments.push({'image': imageData});
+                              }, function (err) {
+                                  appService.showAlert('Error', err, 'Close', 'button-assertive', null);
+                              });
+                          }, false);
+                          break;
+                  }
+                  return true;
+              }
+          });
+      };
+
 
       $scope.submitForm = function(){
           $ionicLoading.show({
@@ -734,12 +855,28 @@ angular.module('selfservice.controllers', [])
           });
           var accessToken = Main.getSession("token").access_token;
           var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/benefit';
+          var attachment = [];
+          if($scope.requestHeader.attachments.length > 0) {
+              for (var i = $scope.requestHeader.attachments.length - 1; i >= 0; i--) {
+                  var objAttchament = {"image":$scope.requestHeader.attachments[i].image};
+                  attachment.push(objAttchament);
+              };
+          }
+          benefitVerification.attachments = attachment; 
+
           var data = JSON.stringify(benefitVerification);
           Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
 
 
       }
+      $scope.$on('$ionicView.beforeEnter', function () {
+          initMethod();
+      });
+
       function initMethod(){
+          $scope.images = [];  
+          $scope.requestHeader = {};
+          $scope.requestHeader.attachments = []; 
           if(benefitVerification != null && benefitVerification.details.length > 0) {
              for (var i = benefitVerification.details.length - 1; i >= 0; i--) {
                 $scope.totalClaim += benefitVerification.details[i].totalClaim;
@@ -748,6 +885,7 @@ angular.module('selfservice.controllers', [])
              };
           }
       }
+      
       initMethod();
 
  })
@@ -770,11 +908,14 @@ angular.module('selfservice.controllers', [])
         $ionicLoading.hide();
         if(res != null){
             $scope.header = res;
+            console.log("$scope.header",$scope.header)
             if($scope.header.categoryType == 'Medical') {
               var arrDetail = [];
               if($scope.header.details.length > 0) {
+                console.log("$scope.header.details[0].data",$scope.header.details[0].data);
                 arrDetail = JSON.parse($scope.header.details[0].data);
               }
+              console.log("arrDetail",arrDetail);
               $scope.header.details = arrDetail;
           }
         }
@@ -916,6 +1057,8 @@ angular.module('selfservice.controllers', [])
       $scope.detail.amount = value;
     }
 
+
+
     $scope.openDatePicker = function(){
       ionicDatePicker.openDatePicker(datepicker);
     };
@@ -1002,11 +1145,8 @@ angular.module('selfservice.controllers', [])
             messageValidation = "Amount can't empty";
             return false;
         }
-
-       
         return true;
           
-
     }
 
 

@@ -11,7 +11,7 @@
     }
 </style>
 <ion-view title="Confirmation">
-    <ion-content  class="has-header" scroll="true">
+    <ion-content  class="profile has-header" scroll="true">
     <ion-list class="padding">
         <div class="row padding">
             <div class="left"><p class="text-medium">Total Claim</p></div>
@@ -30,11 +30,26 @@
             <div class="right"><h2 class="lead text-medium" >Rp. {{totalCurrentClaim | number : 0}}</h2></div>
         </div>
 
-    <div class="row padding">
-        <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Submit</button>
+</ion-list>
+    <div >
+                <div class="item item-divider">Attach Supporting Document</div> 
+                    <div class="row">
+                        <button class="btn waves-effect button-small waves-light button button-stable  button-block waves-effect waves-light" ng-click="addPicture()">Add Attachment</button>
+                    </div>
+                <div class="row post" >
+                    <div class="col" ng-repeat="items in images" ><img height="90px"  ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
+                   
+                </div>
+                <div class="row center">
+                     <div class="col" style="min-height:90px" ng-if="images.length==0"><img ng-src="{{defaultImage}}" height="90px" ></div>
+                </div>
     </div>
 
+    <div class="row padding">
+        <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-disabled="totalCurrentClaim == 0" ng-click="submitForm()">Submit</button>
+    </div>
 
-    </ion-list>
+</div>
+
     </ion-content>
 </ion-view>

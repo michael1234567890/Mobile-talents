@@ -1,11 +1,22 @@
+
+<ion-view title="{{titleCategory}}">
 <style type="text/css">
 .input-talents {
     width:100%; 
     border-color:#ddd; 
     border-radius:5px;
 }
+.left {
+        text-align: left;
+        float: left;
+        width: 60%;
+    }
+.right {
+    text-align: right;
+    float: right;
+    width: 40%;
+}
 </style>
-<ion-view title="Title kosong">
     <ion-content  class="profile has-header" scroll="true">
      <div class="item padding bg-lightgrey" ng-if="directType == false">
         <div class="row" ng-if="category != 'perjalanan dinas'">
@@ -70,21 +81,23 @@
                 </label>
             </div>
 
-            <div ng-if="category == 'perjalanan dinas'" >
+            <div ng-if="category == 'perjalanan dinas'"  >
+                 
                  
                  <label  class="item item-input" ng-repeat="item in listtype track by $index">
-                    
-                    <span class="input-label" ng-if="item.type != 'select'"><b>{{item.name}}</b></span> 
-            
-                    <!-- <span class="input-label"><b>{{item.name}}</b></span> -->
-                    <select ng-model="item.value" ng-if="item.type == 'select'" style="font-size:13px">
+                    <span class="input-label col col-40" ng-if="item.type != 'select'" style="font-size:11px"><b>{{item.name}}</b></span> 
+                    <select class="col col-40" ng-model="item.value" ng-if="item.type == 'select'" style="font-size:10px">
                        
                         <option ng-selected="$index ==0" ng-repeat="option in item.options track by $index">{{option.id}}</option>
                     </select>
-                    <!--
-                    <input  placeholder="0" value="0" ng-keyup="change($event,$index)" type="number"   ng-model="item.amount" step="0.01"> -->
+                    <div class="row" style="float:right" ng-if="item.input == true">
+                     <input style="float:right" class="col col-50" ng-keyup="multiple($event,$index)"  placeholder="0" value="0" type="number"   ng-model="item.qty">
+                     <h6 class="col col-50" style="margin-top: 0px;">{{item.satuan}}</h6>
+                    </div>
+
                     <input  placeholder="0" value="0" ng-keyup="change($event,$index)" type="tel"   ng-model="item.amount">
-                </label>
+                </label> 
+
             </div>
         </div>
         
@@ -92,6 +105,7 @@
       <div ng-if="directType == false">
       <p class="bb text-medium padding uppercase">Total<span class="pull-right text-medium"> Rp.
     {{getTotal() | number:0}}</span></p>
+    <!--
           <div>
                 <div class="item item-divider">Attach Supporting Document</div> 
                     <div class="row">
@@ -105,12 +119,13 @@
                      <div class="col" style="min-height:90px" ng-if="images.length==0"><img ng-src="{{defaultImage}}" height="90px" ></div>
                 </div>
           </div>
+    -->
     </div>
 
     <div class="item padding" ng-if="directType == true">
         <div class="container text-center">
                 <br><br>
-                <p class="text-medium text-wrap">Are you sure want to apply {{labelCategory}} ?  <br>Default <b> Rp. {{defaultValue | number:0}}</b></p>
+                <p class="text-small text-wrap">Are you sure want to apply {{labelCategory}} ?  <br>Default <b> Rp. {{defaultValue | number:0}}</b></p>
         </div>
     </div>
     
