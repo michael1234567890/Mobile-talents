@@ -1,13 +1,47 @@
 <ion-view title="My Team">
 
-    <ion-content class="has-header" scroll="true">
-        <ion-refresher pulling-text="Pull to refresh"
+  <ion-content class="has-header" scroll="false">
+       
+        <ion-scroll class="bg-lightgrey" direction="y" style="height:100%">
+             <ion-refresher pulling-text="Pull to refresh"
              refreshing-text="Loading..."
              refreshing-icon="ion-loading-c"
              pulling-icon="ion-ios7-arrow-thin-down"
              on-refresh="refresh()">
-    </ion-refresher>
-        <div style="height:95%; overflow:scroll" class="bg-lightgrey">
+            </ion-refresher>
+            <div style="height:100%" ng-if="team.length > 0">
+                <div class="row" ng-repeat="contact in team | filter: searchFilter track by $index" ng-if="$index % 2==0">
+
+                    <div class="col">
+                        <div class="card contact animated bounceIn item-remove-animate" ng-if="team[$index] !== undefined">
+                            <div class="item item-image item-text-wrap" ng-click="goToDetails(team[$index].idx)">
+                                <div><img ng-src="{{contacts[$index].photo}}"></div>
+                                <h2 class="lead text-small mt">{{team[$index].firstName}} {{team[$index].lastName}}</h2>
+                                <p class="">{{team[$index].assignment.positionName}}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="card contact animated bounceIn item-remove-animate" ng-if="team[$index + 1] !== undefined">
+                            <div class="item item-image item-text-wrap" ng-click="goToDetails(team[$index + 1].idx)">
+                                <div><img ng-src="{{contacts[$index + 1].photo}}"></div>
+                                <h2 class="lead text-small mt">{{team[$index + 1].firstName}} {{team[$index + 1].lastName}}</h2>
+                                <p class="">{{team[$index + 1].assignment.positionName}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item" ng-if="team.length == 0" >
+                    <div class="col col-100">
+                    <h2>No Team available</h2>
+                        <p>Please pull to refresh</p>
+                    </div>  
+                </div>
+        </ion-scroll>
+
+        <div style="height:100%; overflow:scroll" class="bg-lightgrey">
             <div >
                 <div class="card hybrid" ng-repeat="post in team | filter: searchFilter  | orderBy: 'publishedDate':true " ng-click="goToDetails(post.idx)">
 
@@ -25,12 +59,7 @@
                         <i class="icon ion-ios-arrow-right pull-right"></i>
                     </div>
                 </div>
-                <div class="item" ng-if="team.length == 0" >
-                    <div class="col col-100">
-                    <h2>No Team available</h2>
-                        <p>You may don't have any member</p>
-                    </div>  
-                </div>
+                
 
             </div>
         </div>

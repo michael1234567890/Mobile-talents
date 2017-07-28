@@ -368,8 +368,6 @@ angular.module('selfservice.controllers', [])
     }
 
     $scope.printPdf = function(type){
-        console.log("type",type);
-        console.log("$scope.payslipType",$scope.payslipType);
         
         var profile = Main.getSession("profile");
         if(profile.employeeTransient.assignment.employment == null) {
@@ -403,12 +401,16 @@ angular.module('selfservice.controllers', [])
     $scope.gotoListType = function(name,extId,index,workflow){
         console.log("index " + index);
         if(index != undefined)
-          $rootScope.selectedBenefitCategory = $rootScope.benefitCategory[index];
+            $rootScope.selectedBenefitCategory = $rootScope.benefitCategory[index];
+        
         if(name.toLowerCase() == 'spd advance'){
              $state.go("app.spdadvanceadd",{categoryType:name,extId:extId,workflow:workflow});
         }else if(name.toLowerCase() == 'perjalanan dinas'){
             $rootScope.needReportSelected = undefined;
             $state.go("app.benefitlisttype",{categoryType:name,extId:extId,workflow:workflow});
+        }else if(name.toLowerCase() == 'reimbursement'){
+            $rootScope.needReportSelected = undefined;
+            $state.go("app.benefitlisttype",{categoryType:name,extId:extId,workflow:workflow,singleinput:true});
         }else {
             $state.go("app.benefitlisttype",{categoryType:name,extId:extId,workflow:workflow});
         }
@@ -474,7 +476,6 @@ angular.module('selfservice.controllers', [])
 
 .controller('BenefitListtypeCtrl', function(appService,$ionicActionSheet,$cordovaCamera,ionicDatePicker, $stateParams, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     var categoryType = $stateParams.categoryType;
-    console.log("categoryType",categoryType);
     var categoryTypeExtId = $stateParams.extId;
     var workflow = $stateParams.workflow;
     var messageValidation = "";
@@ -483,15 +484,7 @@ angular.module('selfservice.controllers', [])
     $scope.defaultValue = 1;
     var objDirectType = {};
 
-    if($rootScope.selectedBenefitCategory != undefined){
-        $scope.directType = $rootScope.selectedBenefitCategory.directType;
-        $scope.labelCategory = $rootScope.selectedBenefitCategory.label;
-        $scope.defaultValue = $rootScope.selectedBenefitCategory.defaultValue;
-        if($scope.directType == true) {
-              if($rootScope.selectedBenefitCategory.listRequestType.length > 0)
-                objDirectType =  $rootScope.selectedBenefitCategory.listRequestType[0];
-        }
-    }
+    
 
     var sessionLopName = "kacamata"+"."+categoryType;
     $scope.defaultImage = "img/placeholder.png";
@@ -505,9 +498,10 @@ angular.module('selfservice.controllers', [])
     $scope.category = categoryType.toLowerCase();
     $scope.requestHeader = {};
     
-     $scope.$on('$ionicView.beforeEnter', function () {
-          initModule();
-      });
+    $scope.$on('$ionicView.beforeEnter', function (event,data) {
+          if(data.direction != undefined && data.direction!='back')
+            initModule();
+    });
 
     var datepicker = {
         callback: function (val) {  //Mandatory
@@ -544,7 +538,9 @@ angular.module('selfservice.controllers', [])
       value = value
         .replace(/\D/g, "")
         .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-      $scope.listtype[index].amount = value;
+
+      if($scope.listtype[index] != undefined)
+          $scope.listtype[index].amount = value;
     }
 
     function getBalance(type){
@@ -653,9 +649,14 @@ angular.module('selfservice.controllers', [])
     }
 
     var successRequest = function (res){
-        $ionicLoading.hide();
         $rootScope.data.requestBenefitVerification = res;
-        $state.go("app.benefitconfirmation");
+        $ionicLoading.hide();
+        if($scope.requestHeader.categoryType.toLowerCase() == 'medical overlimit'){
+            $scope.goTo("app.selfservicesuccess");
+        }else {
+            $state.go("app.benefitconfirmation");
+        }
+        
     }
 
     function verificationForm(reqHeader){
@@ -683,6 +684,7 @@ angular.module('selfservice.controllers', [])
     $scope.submitForm = function(){
         $scope.requestHeader.module = "Benefit";
         $scope.requestHeader.startDate = $filter('date')(new Date($scope.requestHeader.startDate),'yyyy-MM-dd');
+        $scope.requestHeader.endDate = $filter('date')(new Date($scope.requestHeader.endDate),'yyyy-MM-dd');
         
         $scope.requestHeader.categoryType = categoryType;
         $scope.requestHeader.categoryTypeExtId = categoryTypeExtId;
@@ -694,7 +696,7 @@ angular.module('selfservice.controllers', [])
             });
             
             // if($scope.category != 'medical overlimit') {
-             if($scope.directType != true){
+             if($scope.directType != true || $scope.defaultValue==0){
                 var requestDetail = [];
                 angular.forEach($scope.listtype, function(value, key){
                       var obj ={};
@@ -704,11 +706,15 @@ angular.module('selfservice.controllers', [])
                         obj.type = value.name;
                       }
                       
-                      var number = value.amount.toString();
-                      if(number != '0'){
-                          number = number.replace(/\./g,'');
+                      if(value.amount != undefined) {
+                           var number = value.amount.toString();
+                            if(number != '0'){
+                                number = number.replace(/\./g,'');
+                            }
+                            obj.amount = number; 
                       }
-                      obj.amount = number; 
+                     
+                      
                       if(value.qty != undefined)
                         obj.qty = value.qty;
                       requestDetail.push(obj);
@@ -733,6 +739,9 @@ angular.module('selfservice.controllers', [])
             var accessToken = Main.getSession("token").access_token;
             // var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/benefit';
             var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/verificationbenefit';
+            if($scope.requestHeader.categoryType.toLowerCase() == 'medical overlimit'){
+                urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/benefit';
+            }
             var data = JSON.stringify($scope.requestHeader);
             
             Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
@@ -759,25 +768,55 @@ angular.module('selfservice.controllers', [])
         $rootScope.data.requestBenefitVerification = {};
         if($scope.category == 'kacamata') {
             var arrLensa = [{id:"Lensa Monofocus Non Cylindris"},{id:"Lensa Monofocus Cylindris"},{id:"Lensa Bifokus Non Cylindris"},{id:"Lensa Bifokus Cylindris"}];
-            $scope.listtype = [{id:"frame",name:"Frame",amount:0},{id:"lensa", name:"Lensa",amount:0,type:"select",options:arrLensa,value:"Lensa Monofocus Non Cylindris"}];
+            $scope.listtype = [{id:"frame",name:"Frame"},{id:"lensa", name:"Lensa",type:"select",options:arrLensa,value:"Lensa Monofocus Non Cylindris"}];
         }else if($scope.category == 'perjalanan dinas'){
             var uangsaku = [{id:"Uang Saku Dalam Negeri"},{id:"Uang Saku Luar Negeri"}];
             var uangmakan = [{id:"Uang Makan Dalam Negeri"},{id:"Uang Makan Luar Negeri"}];
-            $scope.listtype = [{id:"ticket",name:"Ticket",amount:0},{id:"taxi",name:"Taxi",amount:0},{id:"transport",name:"Transport",amount:0},{id:"hotel",name:"Hotel",amount:0,input:true,satuan:"days",qty:0},{id:"rentalmobil",name:"Rental Mobil",amount:0},{id:"mileage",name:"Mileage",amount:0,input:true,satuan:"KM",qty:0},{id:"uangmakan", name:"Uang Makan",amount:0, value:"Uang Makan Dalam Negeri",type:"select",options:uangmakan, input:true,satuan:"days",qty:0},{id:"uangsaku", name:"Uang Saku",value:"Uang Saku Dalam Negeri",amount:0,type:"select",options:uangsaku,input:true,satuan:"days",qty:0},{id:"laundry",name:"Laundry",amount:0},{id:"tolparkirbensin",name:"Tol Parkir Bensin",amount:0},{id:"other",name:"Other",amount:0}];
+            $scope.listtype = [{id:"ticket",name:"Ticket"},{id:"taxi",name:"Taxi"},{id:"transport",name:"Transport"},{id:"hotel",name:"Hotel",input:true,satuan:"days"},{id:"rentalmobil",name:"Rental Mobil"},{id:"mileage",name:"Mileage",input:true,satuan:"KM"},{id:"uangmakan", name:"Uang Makan", value:"Uang Makan Dalam Negeri",type:"select",options:uangmakan, input:true,satuan:"days"},{id:"uangsaku", name:"Uang Saku",value:"Uang Saku Dalam Negeri",type:"select",options:uangsaku,input:true,satuan:"days"},{id:"laundry",name:"Laundry"},{id:"tolparkirbensin",name:"Tol Parkir Bensin"},{id:"other",name:"Other"}];
         }else if($scope.category == 'reimbursement'){
-            $scope.listtype = [{id:"personalexpenses",name:"Personal Expenses",amount:0},{id:"communication",name:"Communication (pulsa)",amount:0},{id:"sportmembership",name:"Sport membership",amount:0}];
+            $scope.listtype = [{id:"personalexpenses",name:"Personal Expenses"},{id:"communication",name:"Communication (pulsa)"},{id:"sportmembership",name:"Sport membership"}];
         }else if($scope.category == 'other'){
-            $scope.listtype = [{id:"cutibesar",name:"Cuti Besar",amount:0}];
+            $scope.listtype = [{id:"cutibesar",name:"Cuti Besar"}];
         }else if($scope.category == 'medical'){
-            $scope.listtype = [{id:"dokter",name:"Dokter",amount:0},{id:"obat",name:"Apotik / Obat",amount:0},{id:"lab",name:"Lab / R.S",amount:0},{id:"lainlain",name:"Lain-lain",amount:0}];
+            $scope.listtype = [{id:"dokter",name:"Dokter"},{id:"obat",name:"Apotik / Obat"},{id:"lab",name:"Lab / R.S"},{id:"lainlain",name:"Lain-lain"}];
         }else if($scope.category == 'mutasi'){
-            $scope.listtype = [{id:"sekolah",name:"Pendaftaran sekolah",amount:0},{id:"rumahoperasional",name:"Sumbangan rumah operasional",amount:0}];
+            $scope.listtype = [{id:"sekolah",name:"Pendaftaran sekolah"},{id:"rumahoperasional",name:"Sumbangan rumah operasional"}];
         }
 
+        if($rootScope.selectedBenefitCategory != undefined){
+            $scope.directType = $rootScope.selectedBenefitCategory.directType;
+            $scope.labelCategory = $rootScope.selectedBenefitCategory.label;
+            $scope.defaultValue = $rootScope.selectedBenefitCategory.defaultValue;
+            if($scope.directType == true) {
+
+                  if($scope.defaultValue != 0 && $rootScope.selectedBenefitCategory.listRequestType.length > 0)
+                    objDirectType =  $rootScope.selectedBenefitCategory.listRequestType[0];
+
+                  if($scope.defaultValue == 0){
+                      var arrListType = $rootScope.selectedBenefitCategory.listRequestType;
+                      $scope.listtype = [];
+                      for (var i = arrListType.length - 1; i >= 0; i--) {
+                          var obj = {name:arrListType[i].type};
+                          $scope.listtype.push(obj);
+                      };
+                      
+                      console.log("$scope.listtype",$scope.listtype);
+                  }
+            }
+        }
+
+
+
+
         if($rootScope.needReportSelected != undefined) {
+            console.log($rootScope.needReportSelected);
             $scope.requestHeader.origin = $rootScope.needReportSelected.origin;
+            $scope.requestHeader.remark = $rootScope.needReportSelected.remark;
             $scope.requestHeader.destination = $rootScope.needReportSelected.destination;
             $scope.requestHeader.linkRefHeader = $rootScope.needReportSelected.id;
+            $scope.requestHeader.startDate = $filter('date')(new Date($rootScope.needReportSelected.startDate),'yyyy-MM-dd');
+            $scope.requestHeader.endDate = $filter('date')(new Date($rootScope.needReportSelected.endDate),'yyyy-MM-dd');
+       
         }
         
         
@@ -789,10 +828,6 @@ angular.module('selfservice.controllers', [])
 
 .controller('BenefitConfirmationCtrl', function(appService,$ionicActionSheet,$cordovaCamera,$stateParams,$ionicLoading, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
       var benefitVerification = $rootScope.data.requestBenefitVerification;
-      console.log(benefitVerification);
-      $scope.totalClaim = 0;
-      $scope.totalSubmitedClaim = 0;
-      $scope.totalCurrentClaim = 0;
       $scope.defaultImage = "img/placeholder.png";
       $scope.images = [];  
       $scope.requestHeader = {};
@@ -850,23 +885,30 @@ angular.module('selfservice.controllers', [])
 
 
       $scope.submitForm = function(){
-          $ionicLoading.show({
-            template: '<ion-spinner></ion-spinner>'
-          });
-          var accessToken = Main.getSession("token").access_token;
-          var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/benefit';
-          var attachment = [];
-          if($scope.requestHeader.attachments.length > 0) {
-              for (var i = $scope.requestHeader.attachments.length - 1; i >= 0; i--) {
-                  var objAttchament = {"image":$scope.requestHeader.attachments[i].image};
-                  attachment.push(objAttchament);
-              };
+
+          if($scope.requestHeader.attachments.length > -1 ) {
+              $ionicLoading.show({
+                template: '<ion-spinner></ion-spinner>'
+              });
+              var accessToken = Main.getSession("token").access_token;
+              var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/benefit';
+              var attachment = [];
+              if($scope.requestHeader.attachments.length > 0) {
+                  for (var i = $scope.requestHeader.attachments.length - 1; i >= 0; i--) {
+                      var objAttchament = {"image":$scope.requestHeader.attachments[i].image};
+                      attachment.push(objAttchament);
+                  };
+              }
+              benefitVerification.startDate = $filter('date')(new Date(benefitVerification.startDate),'yyyy-MM-dd');
+              benefitVerification.endDate = $filter('date')(new Date(benefitVerification.endDate),'yyyy-MM-dd');
+              benefitVerification.attachments = attachment; 
+
+              var data = JSON.stringify(benefitVerification);
+              Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
+          }else {
+              alert("You must add at least 1 attachment.");
           }
-          benefitVerification.attachments = attachment; 
-
-          var data = JSON.stringify(benefitVerification);
-          Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
-
+          
 
       }
       $scope.$on('$ionicView.beforeEnter', function () {
@@ -874,6 +916,10 @@ angular.module('selfservice.controllers', [])
       });
 
       function initMethod(){
+          benefitVerification = $rootScope.data.requestBenefitVerification;
+          $scope.totalClaim = 0;
+          $scope.totalSubmitedClaim = 0;
+          $scope.totalCurrentClaim = 0;
           $scope.images = [];  
           $scope.requestHeader = {};
           $scope.requestHeader.attachments = []; 
@@ -920,6 +966,12 @@ angular.module('selfservice.controllers', [])
           }
         }
             
+    }
+
+    $scope.printReport = function (employee,uuid){
+        var url = Main.getPrintReportUrl() + "/spd?employee="+employee+"&uuid="+uuid;
+        window.open(encodeURI(url), '_system', 'location=yes');
+        return false;
     }
 
     function getDetailHeader (id){

@@ -10,14 +10,14 @@
       
                 <div class="card hybrid" style="padding:0px 0px" ng-repeat="item in family | filter: searchFilter  | orderBy: 'publishedDate':true " ng-click="goToDetails(item.idx)">
 
-                    <div class="item item-avatar item-icon-left item-icon-right">
-                        <img ng-src="img/users/female.png">
+                    <div class="item item-icon-right">
+                        <!-- <img ng-src="img/users/female.png">-->
                         <div class="inner-content">
-                            <h2 class="lead balanced">{{item.name}}</h2>
-                            <p>{{item.relationship}}</p>
+                            <h2 class="balanced text-medium"><b>{{item.name}}</b></h2>
+                            <p class="text-small">{{item.relationship}}</p>
                         
                         </div>
-                        <span class="item-note calm" ng-if="item.status=='pending'">
+                        <span class="item-note calm text-smaller" ng-if="item.status=='pending'">
                           Pending
                         </span>
                         <i class="icon ion-ios-arrow-right pull-right"></i>

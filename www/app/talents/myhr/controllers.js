@@ -442,6 +442,9 @@ angular.module('myhr.controllers', [])
         if(family.name == undefined){
             messageValidation = "Name can't empty";
             return false;
+        }else if(family.birthPlace == undefined){
+            messageValidation = "Place of Birth can't empty";
+            return false;
         }else if(family.birthDate == undefined){
             messageValidation = "Date of Birth can't empty";
             return false;
@@ -1090,6 +1093,7 @@ angular.module('myhr.controllers', [])
     $scope.maritalStatus.images = []; 
     $scope.maritalStatus.imagesData = []; 
     $scope.imageData ;
+    var messageValidation = "";
 
     $scope.removeChoice = function(){
         var lastItem = $scope.maritalStatus.imagesData.length-1;
@@ -1227,8 +1231,24 @@ angular.module('myhr.controllers', [])
     }
 
 
+    function validationForm(selected){
+        if(selected == undefined || selected == ""){
+            messageValidation = "You must pick your new marital status!";
+            return false;
+        }
+
+        if(selected == $scope.currentStatus) {
+            messageValidation = "You can not pick the same marital status!";
+            return false;
+        }
+        return true;
+    }
+
+
     $scope.send = function (){
-      var confirmPopup = $ionicPopup.confirm({
+
+      if(validationForm($scope.selected)){
+          var confirmPopup = $ionicPopup.confirm({
             title: 'Confirm',
             template: '<h5>Are you sure the data submitted is correct ?</h5>',
             cancelText: 'Cancel',
@@ -1261,6 +1281,10 @@ angular.module('myhr.controllers', [])
               }
               
           });
+      }else {
+          alert(messageValidation);
+      }
+      
 
        
 

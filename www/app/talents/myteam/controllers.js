@@ -485,7 +485,10 @@ angular.module('myteam.controllers', [])
           }else if($scope.detail.ref.categoryType == 'Medical Overlimit'){
               if($scope.detail.ref.details.length > 0){
                   var obj = $scope.detail.ref.details[0];
-                  $scope.data.amount = obj.amount;
+                  $scope.data.amount = ""+obj.amount;
+                   $scope.data.amount =  $scope.data.amount.replace(/\D/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
               }
                
           }

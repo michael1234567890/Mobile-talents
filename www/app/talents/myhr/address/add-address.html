@@ -5,7 +5,7 @@
         <div class="item no-padding">
             <div class="row">
                 <div class="input-field col s12">
-                    <p for="textarea1">Address</p>
+                    <p for="textarea1">Address *</p>
                     <textarea  placeholder="Enter your Address detail" ng-model="address.address" class="materialize-textarea"></textarea>
                    
                 </div>
@@ -26,7 +26,7 @@
 
             <div class="row">
                 <div class="input-field col">
-                      <p for="first_name">Country</p>
+                      <p for="first_name">Country *</p>
                       <select ng-model="address.country">
                             <option value="">-- Select --</option>
                             <option ng-repeat="country in selectCountry">{{country.id}}</option>
@@ -37,7 +37,7 @@
             </div>
             <div class="row">
                 <div class="input-field col">
-                      <p for="first_name">Province</p>
+                      <p for="first_name">Province *</p>
                       <select ng-model="address.province">
                         <option value="">-- Select --</option>
                             <option ng-repeat="province in selectProvince">{{province.id}}</option>
@@ -48,7 +48,7 @@
             </div>
             <div class="row">
                 <div class="input-field col">
-                  <p for="first_name">City</p>
+                  <p for="first_name">City *</p>
                   <!--
                   <select ng-model="address.city">
                         <option value="">-- Select --</option>
@@ -81,7 +81,7 @@
             </div>
             <div class="row">
                 <div class="input-field col">
-                 <p for="first_name">Stay Status</p>
+                 <p for="first_name">Stay Status *</p>
                   <select ng-model="address.stayStatus">
                         <option value="">-- Select --</option>
                         <option ng-repeat="stayStatus in selectStayStatus">{{stayStatus.id}}</option>
@@ -92,7 +92,7 @@
             
             <div class="row">
                 
-                <button class="btn button-small waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Submit</button>
+                <button class="btn button-medium waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Submit</button>
             </div>
 
         </div>

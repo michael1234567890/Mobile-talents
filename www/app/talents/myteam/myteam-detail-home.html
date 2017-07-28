@@ -3,11 +3,10 @@
     <ion-content class="has-header bt-grey profile" scroll="true">
 
     <div class="card hybrid">
-        <div class="item item-thumbnail-left item-text-wrap">
-            <img ng-src="{{user.photo}}" style="max-width:100px">
-            <h2 class="lead text-medium" style="padding-left:0px">{{detail.fullName}}</h2>
-            <h3>{{detail.assignment.positionName}}</h3>
-            <p style="font-size:14px">{{detail.assignment.organizationName}}</p>
+        <div class="item item-avatar item-text-wrap">
+            <img ng-src="{{user.photo}}">
+            <h2 class="lead text-small mt">{{detail.fullName}}</h2>
+            <p style="text-small">{{detail.assignment.positionName}}</p>
         </div>
     </div>
     <div class="list">

@@ -18,8 +18,8 @@
 }
 </style>
     <ion-content  class="profile has-header" scroll="true">
-     <div class="item padding bg-lightgrey" ng-if="directType == false">
-        <div class="row" ng-if="category != 'perjalanan dinas'">
+     <div class="item padding bg-lightgrey" ng-if="directType == false || defaultValue==0">
+        <div class="row" ng-if="category != 'perjalanan dinas' ">
             <div class="input-field col" >
                       <p>Transaction Date</p>
                         <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()">
@@ -62,7 +62,7 @@
         </div>
        
         <p class="bb text-medium padding">Please fill out your expense</p>
-            <br>
+        <br>
         <div class="edit padding-horizontal">
             
             <div ng-if="category != 'perjalanan dinas'" >
@@ -76,7 +76,7 @@
                         
                         <option ng-repeat="option in item.options track by $index">{{option.id}}</option>
                     </select>
-                    <input   placeholder="0" value="0" ng-keyup="change($event,$index)" type="tel"   ng-model="item.amount">
+                    <input   placeholder="Rp. 0" value="0" ng-keyup="change($event,$index)" type="tel"   ng-model="item.amount">
                         
                 </label>
             </div>
@@ -84,7 +84,7 @@
             <div ng-if="category == 'perjalanan dinas'"  >
                  
                  
-                 <label  class="item item-input" ng-repeat="item in listtype track by $index">
+                 <div  class="item item-input" ng-repeat="item in listtype track by $index">
                     <span class="input-label col col-40" ng-if="item.type != 'select'" style="font-size:11px"><b>{{item.name}}</b></span> 
                     <select class="col col-40" ng-model="item.value" ng-if="item.type == 'select'" style="font-size:10px">
                        
@@ -95,38 +95,37 @@
                      <h6 class="col col-50" style="margin-top: 0px;">{{item.satuan}}</h6>
                     </div>
 
-                    <input  placeholder="0" value="0" ng-keyup="change($event,$index)" type="tel"   ng-model="item.amount">
-                </label> 
+                    <input  placeholder="Rp. 0" value="0" ng-keyup="change($event,$index)" type="tel"   ng-model="item.amount">
+                </div> 
 
             </div>
         </div>
         
       </div>
-      <div ng-if="directType == false">
-      <p class="bb text-medium padding uppercase">Total<span class="pull-right text-medium"> Rp.
-    {{getTotal() | number:0}}</span></p>
-    <!--
-          <div>
-                <div class="item item-divider">Attach Supporting Document</div> 
-                    <div class="row">
-                        <button class="btn waves-effect button-small waves-light button button-stable  button-block waves-effect waves-light" ng-click="addPicture()">Add Attachment</button>
-                    </div>
-                <div class="row post" >
-                    <div class="col" ng-repeat="items in images" ><img height="90px"  ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
-                   
-                </div>
-                <div class="row center">
-                     <div class="col" style="min-height:90px" ng-if="images.length==0"><img ng-src="{{defaultImage}}" height="90px" ></div>
-                </div>
-          </div>
-    -->
-    </div>
+    
 
-    <div class="item padding" ng-if="directType == true">
-        <div class="container text-center">
+    <div class="item padding" ng-if="directType == true && defaultValue!=0">
+        <div class="container text-center" ng-if="defaultValue != 0">
                 <br><br>
                 <p class="text-small text-wrap">Are you sure want to apply {{labelCategory}} ?  <br>Default <b> Rp. {{defaultValue | number:0}}</b></p>
         </div>
+<!--
+        <p class="bb text-medium padding">Please fill out your expense</p>
+        <br>
+        <div class="edit padding-horizontal">  
+            <div ng-if="defaultValue == 0"  ng-repeat="item in listtype track by $index" >
+                     <label  class="item item-input">
+                        <span class="input-label"><b>{{item.name}}</b></span> 
+                        <input   placeholder="Rp. 0" value="0" ng-keyup="change($event,$index)" type="tel"   ng-model="item.amount">
+                    </label>
+            </div>
+        </div>-->
+    </div>
+
+    <div ng-if="directType == false || defaultValue==0">
+      <p class="bb text-medium padding uppercase">Total<span class="pull-right text-medium"> Rp.
+    {{getTotal() | number:0}}</span></p>
+    
     </div>
     
     <div class="row">

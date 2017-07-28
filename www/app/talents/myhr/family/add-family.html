@@ -21,7 +21,7 @@
            <div class="item item-divider">Information</div> 
             <div class="row">
                 <div class="input-field col">
-                    <p for="first_name">Name</p>
+                    <p for="first_name">Name *</p>
                     <input id="first_name" placeholder="Enter Name" type="text" class="validate" ng-model="family.name">
                     
                 </div>
@@ -30,7 +30,7 @@
             <div class="row">
                 
                 <div class="input-field col">
-                    <p for="last_name">Place of Birth</p>
+                    <p for="last_name">Place of Birth *</p>
                     <input id="last_name" placeholder="Enter Place of Birth" type="text" class="validate" ng-model="family.birthPlace">
                     
                 </div>
@@ -38,7 +38,7 @@
                 
             </div>
             <div class="input-field col">
-                  <p for="first_name">Date of Birth</p>
+                  <p for="first_name">Date of Birth *</p>
                  
                     <!-- <button class="button button-block button-outline button-positive" ion-datetime-picker ng-model="family.birthDate">
                         {{family.birthDate| date: "yyyy-MM-dd"}}
@@ -51,7 +51,7 @@
             <div class="row">
                 <div class="input-field col">
                    
-                  <p style="font-size:13px">Gender</p>
+                  <p style="font-size:13px">Gender *</p>
                    <select class="select-dropdown" ng-model="family.gender" >
                         <option value="">-- Select --</option>
                         <option ng-repeat="gender in selectGender">{{gender.id}}</option>
@@ -63,7 +63,7 @@
             <div class="row">
                 <div class="input-field col">
                    
-                  <p style="font-size:13px">Relationship</p>
+                  <p style="font-size:13px">Relationship *</p>
                    <select class="select-dropdown" ng-model="family.relationship" >
                         <option value="">-- Select --</option>
                         <option ng-repeat="relationship in selectRelationship">{{relationship.id}}</option>
@@ -93,7 +93,7 @@
             </div>
             <div class="row">
               <div class="input-field col">
-                  <p for="first_name" style="font-size:13px">Blood Type</p>
+                  <p for="first_name" style="font-size:13px">Blood Type *</p>
                   <select class="select-dropdown" ng-model="family.bloodType" >
                         <option value="">-- Select --</option>
                         <option ng-repeat="bloodType in selectBloodType">{{bloodType.id}}</option>
@@ -130,7 +130,7 @@
               </div>
             </div>
             <div class="row">
-                <button class="btn waves-effect button-small waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Submit</button>
+                <button class="btn waves-effect button-medium waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Submit</button>
               
             </div>
        </div>

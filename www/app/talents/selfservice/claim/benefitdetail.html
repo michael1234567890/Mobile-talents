@@ -6,18 +6,33 @@
 <div class="item item-divider balanced-bg" style="margin-top:10px">Req ID</div> 
 <div class="list card">
     <div class="item">
-        <h2 class="balanced"><b>{{header.categoryType}}</b></h2>
-        <p class="text-small">{{header.requestDate | date: 'dd MMM yyyy'}}</p>
+        <div class="row">
+            <h2 class="balanced col col-70" ><b>{{header.categoryType}}</b></h2>
+            <p class="text-small">{{header.requestDate | date: 'dd MMM yyyy'}}</p>
+        </div>
+        <div class="list no-padding" ng-if="header.categoryType == 'Perjalanan Dinas' || header.categoryType == 'SPD Advance'">
+              <div class="item item-icon-left text-small" href="#">
+                <i class="icon ion-location text-larger"></i>
+                {{header.origin}} - {{header.destination}}
+              </div>
+              <div class="item item-icon-left text-small" href="#">
+                <i class="icon ion-calendar text-larger"></i>
+                {{header.startDate | date: 'dd MMM yyyy'}} - {{header.endDate | date: 'dd MMM yyyy'}}
+              </div>
+        </div>
+        
     </div>
+
     <div class="item item-body">
         <p class="bb text-small padding-horizontal uppercase">Expenses</p>
         <div class="edit padding-horizontal" >
             <label class="item item-input" ng-repeat="item in header.details">
-                <span class="input-label">{{item.type}}</span>
-                <input type="text" value="Rp. {{item.amount | number:0}}"  disabled>
+                <span class="input-label col col-60">{{item.type}}</span>
+                <input class="col col-40" type="text" value="Rp. {{item.amount | number:0}}"  disabled>
             </label>
         </div>
-        <div class="item item-divider" style="text-align:right">TOTAL Rp. {{header.totalAmount | number:0}}</div> 
+        <div class="item item-divider" style="text-align:right">TOTAL Rp. {{header.totalAmount | number:0}}</div> <br>
+        <div ng-if="header.refRequestHeaderObj != null"  class="item item-divider dark-bg" style="text-align:right">{{header.refRequestHeaderObj.categoryType}} - TOTAL Rp. {{header.refRequestHeaderObj.totalAmount | number:0}}</div> 
     </div>
 </div>
 
@@ -39,5 +54,8 @@
             </label>
     </div>
 </div> -->
+    <div class="row" ng-if="header.categoryType == 'Perjalanan Dinas'">
+        <button class="btn button-small waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="printReport(header.employee,header.uuid)">Print Report</button>
+    </div>
 </ion-content>
 </ion-view>
