@@ -42,21 +42,22 @@
         <div class="row" ng-if="category == 'perjalanan dinas'">
             <div class="input-field col padding-horizontal">
                       <p>Start Date</p>
-                        <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()">
+                        <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()" style="margin-top: 2px;margin-bottom: 5px; line-height: 34px;min-height: 34px;">
                             {{requestHeader.startDate| date: "yyyy-MM-dd"}}
                         </ionic-datepicker>
             </div>
             <div class="input-field col">
                       <p>End Date</p>
-                        <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker1()">
+                        <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker1()" style="margin-top: 2px;margin-bottom: 5px; line-height: 34px;min-height: 34px;">
                             {{requestHeader.endDate| date: "yyyy-MM-dd"}}
                         </ionic-datepicker>
             </div>
         </div>
         <div class="row" ng-if="category == 'perjalanan dinas'">
-            <div class="input-field col">
-                <p>Remark</p>
-                <input  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" type="text" class="validate"  ng-model="requestHeader.remark">
+            <div class="input-field col padding-horizontal">
+                <p>Remark </p>
+                <!-- <input  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" type="text" class="validate"  ng-model="requestHeader.remark">-->
+                <textarea style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" placeholder="input remark" rows="1" ng-model="requestHeader.remark" maxlength="254"></textarea>
                 
             </div>
         </div>
@@ -67,7 +68,7 @@
             
             <div ng-if="category != 'perjalanan dinas'" >
 
-                 <label  class="item item-input" ng-repeat="item in listtype track by $index">
+                 <div  class="item item-input" ng-repeat="item in listtype track by $index">
                     
                     <span class="input-label" ng-if="item.type != 'select'"><b>{{item.name}}</b></span> 
             
@@ -78,7 +79,7 @@
                     </select>
                     <input   placeholder="Rp. 0" value="0" ng-keyup="change($event,$index)" type="tel"   ng-model="item.amount">
                         
-                </label>
+                </div>
             </div>
 
             <div ng-if="category == 'perjalanan dinas'"  >
@@ -129,7 +130,7 @@
     </div>
     
     <div class="row">
-        <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Next</button>
+        <button ng-disabled = "getTotal() == 0 && (directType == false || defaultValue==0)"class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Next</button>
     </div>
     </ion-content>
 </ion-view>

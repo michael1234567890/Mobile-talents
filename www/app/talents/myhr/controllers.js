@@ -58,7 +58,6 @@ angular.module('myhr.controllers', [])
     console.log(Main.getSession("token"));
 
     var successRequest = function (res){
-    	console.log(res);
     	$scope.personal = res;
       $scope.personal.showMaritalStatus = $scope.personal.maritalStatus;
       if($scope.personal.maritalStatusDataApproval != null) {
@@ -74,11 +73,11 @@ angular.module('myhr.controllers', [])
     }
 
    	initMethod();
-   	//31acd2e6-e891-4628-a24e-58e408664516
-   	function initMethod(){
+  
+  	function initMethod(){
    		getPersonal();
    	}
-   	// invalid access token error: "invalid_token" 401
+  
    	function getPersonal(){
    		var accessToken = Main.getSession("token").access_token;
    		var urlApi = Main.getUrlApi() + '/api/myprofile/personal';
@@ -187,7 +186,7 @@ angular.module('myhr.controllers', [])
 })
 
 
-.controller('EditFamilyCtrl', function($filter, $ionicHistory,$stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('EditFamilyCtrl', function(ionicDatePicker,$filter, $ionicHistory,$stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
   
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
@@ -215,6 +214,21 @@ angular.module('myhr.controllers', [])
       console.log(res);
       //$scope.family = res;
     }
+
+     var datepicker = {
+      callback: function (val) {  //Mandatory
+        $scope.family.birthDate = val;
+      },
+      inputDate: new Date(),      //Optional
+      mondayFirst: true,          //Optional
+      dateFormat:"yyyy-MM-dd",
+      closeOnSelect: false,       //Optional
+      templateType: 'popup'       //Optional
+    };
+
+    $scope.openDatePicker = function(){
+      ionicDatePicker.openDatePicker(datepicker);
+    };
 
     var errorRequest = function (err, status){
       $ionicLoading.hide();
@@ -551,6 +565,7 @@ angular.module('myhr.controllers', [])
     }
 
     var addressIdx = $stateParams.idx;
+    var messageValidation = "";
     $scope.address = {};
     if(addressIdx != null)
       $scope.address = $rootScope.address[addressIdx];
@@ -564,16 +579,20 @@ angular.module('myhr.controllers', [])
     $scope.selectCountry=Main.getSelectCountry();
    
     $scope.submitForm = function(){
-        var dataSubmit = {address: $scope.address.address, rt: $scope.address.rt, rw:$scope.address.rw, country:$scope.address.country, province:$scope.address.province, city:$scope.address.city, zipCode:$scope.address.zipCode, phone: $scope.address.phone, stayStatus : $scope.address.stayStatus};
-        verificationForm();
-        $ionicLoading.show({
-          template: 'Submit...'
-        });
-        var accessToken = Main.getSession("token").access_token;
-        var urlApi = Main.getUrlApi() + '/api/user/address/'+$scope.address.id;
-        var data = JSON.stringify(dataSubmit);
-        console.log("data Submit", data);
-        Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
+        if(verificationForm($scope.address)) {
+            var dataSubmit = {address: $scope.address.address, rt: $scope.address.rt, rw:$scope.address.rw, country:$scope.address.country, province:$scope.address.province, city:$scope.address.city, zipCode:$scope.address.zipCode, phone: $scope.address.phone, stayStatus : $scope.address.stayStatus};
+            $ionicLoading.show({
+              template: 'Submit...'
+            });
+            var accessToken = Main.getSession("token").access_token;
+            var urlApi = Main.getUrlApi() + '/api/user/address/'+$scope.address.id;
+            var data = JSON.stringify(dataSubmit);
+            console.log("data Submit", data);
+            Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
+        }else {
+            alert(messageValidation);
+        }
+        
 
     }
 
@@ -596,8 +615,25 @@ angular.module('myhr.controllers', [])
         
     }
     // invalid access token error: "invalid_token" 401
-    function verificationForm(){
-
+    function verificationForm(address){
+       
+        if(address.address == undefined || address.address==''){
+            messageValidation = "Address can't empty";
+            return false;
+        }else if(address.country == undefined || address.country == ''){
+            messageValidation = "Country can't empty";
+            return false;
+        }else if(address.province == undefined || address.province ==''){
+            messageValidation = "Province can't empty";
+            return false;
+        }else if(address.city == undefined || address.city == ''){
+            messageValidation = "City can't empty";
+            return false;
+        }else if(address.stayStatus == undefined || address.stayStatus=='' ){
+            messageValidation = "Stay Status can't empty";
+            return false;
+        }
+        return true;
     }
 
    
@@ -683,7 +719,7 @@ angular.module('myhr.controllers', [])
         }else if(address.province == undefined){
             messageValidation = "Province can't empty";
             return false;
-        }else if(address.city == undefined){
+        }else if(address.city == undefined || address.city == ''){
             messageValidation = "City can't empty";
             return false;
         }else if(address.stayStatus == undefined){
@@ -1077,11 +1113,15 @@ angular.module('myhr.controllers', [])
 
 
 .controller('ChangeMaritalStatusCtrl', function($ionicPopup, $ionicActionSheet,appService,$ionicHistory,$cordovaCamera,$stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
-    $scope.itens = [
+    /*$scope.itens = [
           { title: "Single", checked: false },
           { title: "Married", checked: false }
-    ];
+    ];*/
 
+    var arrCompanyRef = Main.getSession("profile").companyReference;
+    var arrItens = Main.getDataReference(arrCompanyRef,'personal','information','maritalstatus');
+    $scope.itens = JSON.parse(arrItens);
+    console.log($scope.itens);
     var dataapprovalId = $stateParams.dataApprovalId;
     $scope.currentStatus = $stateParams.currentStatus;
     $scope.showButton = true;

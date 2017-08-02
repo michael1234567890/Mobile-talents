@@ -1,3 +1,4 @@
+<ion-view title="Confirmation" cache-view="false">
 <style>
     .left {
         text-align: left;
@@ -10,28 +11,30 @@
         width: 40%;
     }
 </style>
-<ion-view title="Confirmation">
     <ion-content  class="profile has-header" scroll="true">
     <ion-list class="padding">
         <div class="row padding">
             <div class="left"><p class="text-medium">Total Claim</p></div>
             <div class="right"><h2 class="lead text-medium" >Rp. {{totalClaim | number : 0}}</h2></div>
         </div>
-<hr class="no-margin">
-
-
-        <div class="row padding">
+        <hr class="no-margin" ng-if="totalSubmitedClaim > 0">
+        <div class="row padding" ng-if="totalSubmitedClaim > 0">
             <div class="left"><p class="text-medium">Total Submited Claim</p></div>
             <div class="right"><h2 class="lead text-medium" >Rp. {{totalSubmitedClaim | number : 0}}</h2></div>
         </div>
-<hr class="no-margin">
+        <hr class="no-margin">
         <div class="row padding">
-            <div class="left"><p class="text-medium">Total Current Claim</p></div>
-            <div class="right"><h2 class="lead text-medium" >Rp. {{totalCurrentClaim | number : 0}}</h2></div>
+            <div class="left"><p class="text-medium"><b>Total Current Claim</b></p></div>
+            <div class="right"><h2 class="lead text-medium" ><b>Rp. {{totalCurrentClaim | number : 0}}</b></h2></div>
+        </div>
+        <hr class="no-margin">
+        <div class="row padding" ng-if="lastClaimDate != ''">
+            <div class="left"><p class="text-small">Last Claim Date</p></div>
+            <div class="right"><h2 class="lead text-small" >{{lastClaimDate}}</h2></div>
         </div>
 
 </ion-list>
-    <div >
+<div class="list" >
                 <div class="item item-divider">Attach Supporting Document</div> 
                     <div class="row">
                         <button class="btn waves-effect button-small waves-light button button-stable  button-block waves-effect waves-light" ng-click="addPicture()">Add Attachment</button>
@@ -43,10 +46,11 @@
                 <div class="row center">
                      <div class="col" style="min-height:90px" ng-if="images.length==0"><img ng-src="{{defaultImage}}" height="90px" ></div>
                 </div>
-    </div>
+    
 
-    <div class="row padding">
-        <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-disabled="totalCurrentClaim == 0" ng-click="submitForm()">Submit</button>
+    <div class="row">
+        <button class="btn button-small  waves-effect waves-light button button-calm  button-block waves-effect waves-light"  ng-click="goBack('app.benefitlisttype')">Cancel</button>&nbsp;
+        <button class="btn button-small waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-disabled="totalCurrentClaim == 0" ng-click="submitForm()">Submit</button>
     </div>
 
 </div>

@@ -474,7 +474,7 @@ angular.module('selfservice.controllers', [])
     initModule();
 })
 
-.controller('BenefitListtypeCtrl', function(appService,$ionicActionSheet,$cordovaCamera,ionicDatePicker, $stateParams, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('BenefitListtypeCtrl', function($timeout,appService,$ionicActionSheet,$cordovaCamera,ionicDatePicker, $stateParams, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     var categoryType = $stateParams.categoryType;
     var categoryTypeExtId = $stateParams.extId;
     var workflow = $stateParams.workflow;
@@ -482,6 +482,7 @@ angular.module('selfservice.controllers', [])
     $scope.directType = false;
     $scope.labelCategory = "Label";
     $scope.defaultValue = 1;
+    $scope.total = 0;
     var objDirectType = {};
 
     
@@ -501,6 +502,7 @@ angular.module('selfservice.controllers', [])
     $scope.$on('$ionicView.beforeEnter', function (event,data) {
           if(data.direction != undefined && data.direction!='back')
             initModule();
+        
     });
 
     var datepicker = {
@@ -594,54 +596,7 @@ angular.module('selfservice.controllers', [])
         return total;
     }
     
-    $scope.removeChoice = function(){
-        var lastItem = $scope.requestHeader.attachments.length-1;
-        $scope.requestHeader.attachments.splice(lastItem);
-        $scope.images.splice(lastItem);
-    }
-
-    $scope.addPicture = function () {
-          if($scope.images.length > 2) {
-            alert("Only 3 pictures can be upload");
-            return false;
-          }
-          $ionicActionSheet.show({
-              buttons: [{
-                  text: 'Take Picture'
-              }, {
-                      text: 'Select From Gallery'
-                  }],
-              buttonClicked: function (index) {
-                  switch (index) {
-                      case 0: // Take Picture
-                          document.addEventListener("deviceready", function () {
-                              $cordovaCamera.getPicture(appService.getCameraOptions()).then(function (imageData) {
-                                  $scope.images.push({'image':"data:image/jpeg;base64," + imageData});
-                                  $scope.requestHeader.attachments.push({'image': imageData});
-                              }, function (err) {
-                                  appService.showAlert('Error', err, 'Close', 'button-assertive', null);
-                              });
-                          }, false);
-
-                          break;
-                      case 1: // Select From Gallery
-                          document.addEventListener("deviceready", function () {
-                              $cordovaCamera.getPicture(appService.getLibraryOptions()).then(function (imageData) {
-                                   $scope.images.push({'image':"data:image/jpeg;base64," + imageData});
-                                   $scope.requestHeader.attachments.push({'image': imageData});
-                              }, function (err) {
-                                  appService.showAlert('Error', err, 'Close', 'button-assertive', null);
-                              });
-                          }, false);
-                          break;
-                  }
-                  return true;
-              }
-          });
-      };
-
-
-
+    
     var successRequest1 = function (res){
         $ionicLoading.hide();
         alert(res.message);
@@ -649,17 +604,20 @@ angular.module('selfservice.controllers', [])
     }
 
     var successRequest = function (res){
-        $rootScope.data.requestBenefitVerification = res;
-        $ionicLoading.hide();
-        if($scope.requestHeader.categoryType.toLowerCase() == 'medical overlimit'){
-            $scope.goTo("app.selfservicesuccess");
-        }else {
-            $state.go("app.benefitconfirmation");
-        }
-        
+        $timeout(function () {
+            $rootScope.data.requestBenefitVerification = res;
+            $ionicLoading.hide();
+            if($scope.requestHeader.categoryType.toLowerCase() == 'medical overlimit'){
+                $scope.goTo("app.selfservicesuccess");
+            }else {
+                $state.go("app.benefitconfirmation");
+            }
+        }, 1000);
+
     }
 
     function verificationForm(reqHeader){
+       console.log(reqHeader);
        if(reqHeader.categoryType == 'Perjalanan Dinas') {
             if(reqHeader.origin == undefined || reqHeader.origin == ""){
               messageValidation = "Origin can't empty";
@@ -736,6 +694,7 @@ angular.module('selfservice.controllers', [])
                 requestDetail.push(obj);
                 $scope.requestHeader.details = requestDetail;
             }
+
             var accessToken = Main.getSession("token").access_token;
             // var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/benefit';
             var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/verificationbenefit';
@@ -821,10 +780,8 @@ angular.module('selfservice.controllers', [])
         
         
     }
-
     initModule();
 })
-
 
 .controller('BenefitConfirmationCtrl', function(appService,$ionicActionSheet,$cordovaCamera,$stateParams,$ionicLoading, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
       var benefitVerification = $rootScope.data.requestBenefitVerification;
@@ -833,15 +790,21 @@ angular.module('selfservice.controllers', [])
       $scope.requestHeader = {};
       $scope.requestHeader.attachments = []; 
 
+      $scope.$on('$ionicView.beforeEnter', function (event,data) {
+          console.log('enter');
+          initMethod();
+      });
+
       var successRequest = function (res){
           $ionicLoading.hide();
           $scope.goTo("app.selfservicesuccess");
       }
+
       $scope.removeChoice = function(){
         var lastItem = $scope.requestHeader.attachments.length-1;
         $scope.requestHeader.attachments.splice(lastItem);
         $scope.images.splice(lastItem);
-    }
+      }
 
     $scope.addPicture = function () {
           if($scope.images.length > 4) {
@@ -885,15 +848,14 @@ angular.module('selfservice.controllers', [])
 
 
       $scope.submitForm = function(){
-
-          if($scope.requestHeader.attachments.length > -1 ) {
+          if($scope.requestHeader.attachments.length > -1) {
               $ionicLoading.show({
                 template: '<ion-spinner></ion-spinner>'
               });
               var accessToken = Main.getSession("token").access_token;
               var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/benefit';
               var attachment = [];
-              if($scope.requestHeader.attachments.length > 0) {
+              if($scope.requestHeader.attachments.length > -1) {
                   for (var i = $scope.requestHeader.attachments.length - 1; i >= 0; i--) {
                       var objAttchament = {"image":$scope.requestHeader.attachments[i].image};
                       attachment.push(objAttchament);
@@ -908,18 +870,16 @@ angular.module('selfservice.controllers', [])
           }else {
               alert("You must add at least 1 attachment.");
           }
-          
-
       }
-      $scope.$on('$ionicView.beforeEnter', function () {
-          initMethod();
-      });
+
+      
 
       function initMethod(){
           benefitVerification = $rootScope.data.requestBenefitVerification;
           $scope.totalClaim = 0;
           $scope.totalSubmitedClaim = 0;
           $scope.totalCurrentClaim = 0;
+          $scope.lastClaimDate = "";
           $scope.images = [];  
           $scope.requestHeader = {};
           $scope.requestHeader.attachments = []; 
@@ -929,6 +889,12 @@ angular.module('selfservice.controllers', [])
                 $scope.totalSubmitedClaim += benefitVerification.details[i].totalSubmitedClaim;
                 $scope.totalCurrentClaim += benefitVerification.details[i].totalCurrentClaim;
              };
+
+             if(benefitVerification.details.length == 1){
+                if(benefitVerification.details[0].lastClaimDate != undefined)
+                  $scope.lastClaimDate = $filter('date')(new Date(benefitVerification.details[0].lastClaimDate),'yyyy-MM-dd');
+             }
+
           }
       }
       
@@ -1050,10 +1016,36 @@ angular.module('selfservice.controllers', [])
       $ionicLoading.hide();
       $scope.$broadcast('scroll.refreshComplete');
     }
+
+     var successBalance = function (res){
+      if(res.length > 0) {
+          var sessionBalance = [];
+          for (var i = res.length - 1; i >= 0; i--) {
+              var type = res[i].type;
+              var value = res[i].balanceEnd;
+              var obj = {id:type.toLowerCase(),name:value};
+              sessionBalance.push(obj);
+          };
+          Main.setSession("balance",sessionBalance);        
+      }
+    }
+
+    function getBalanceSaveToSession(){
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/tmbalance/type';
+        var body ={"module":"Benefit"};
+        var data = JSON.stringify(body);
+        Main.postRequestApi(accessToken,urlApi,data,successBalance,$scope.errorRequest);
+    }
+
+
     initMethod();
 
     function initMethod(){
-      $scope.chooseTab('list');
+        $scope.chooseTab('list');
+        
+        if(Main.getSession('balance') == undefined)
+            getBalanceSaveToSession();
     }
    
 
