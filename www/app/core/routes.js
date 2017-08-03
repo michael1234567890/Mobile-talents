@@ -335,7 +335,7 @@ angular.module('talent.routes', [])
 
      
       .state('app.benefitlisttype', {
-        url: '/benefitlisttype/:categoryType/:extId/:workflow',
+        url: '/benefitlisttype/:categoryType/:extId/:workflow/:singleinput',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/selfservice/claim/benefitlisttype.html',

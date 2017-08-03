@@ -4,9 +4,14 @@
 
     angular.module('main.services', [])
     .factory('Main', function($q, $timeout, $http, $localStorage){
-       // var hostname = "http://192.168.43.162";
-        var hostname = "http://localhost";
-        var printBaseUrl = hostname + "/talents/payslippdf"
+        //var hostname = "http://192.168.43.211";
+        var hostname = "http://192.168.43.162";
+        //var hostname = "http://localhost";
+        var phphost =  hostname + "/talents";
+
+        var printBaseUrl = hostname + "/talents/payslippdf";
+        var printReportUrl = phphost + "/printpdf";
+
         var baseUrl = hostname + ":8080";
         
 
@@ -18,11 +23,10 @@
             targetWidth : 750,
             targetHeight:550
         };
-        var selectMaritalStatus = [{id:"Single"},{id:"Married"}];
+        var selectMaritalStatus = [{id:"Single"},{id:"Married"},{id:"Divorce"}];
         var selectBloodType = [{id:"A"},{id:"B"},{id:"AB"},{id:"O"}];
         var selectFamilyRelationShip = [{id:"Ayah"},{id:"Ibu"},{id:"Suami"},{id:"Istri"},{id:"Anak"}];
         var selectGender = [{id:"Male"},{id:"Female"}];
-
         var selectStayStatus = [{id:"Owned"},{id:"Contract"},{id:"Live with parent"}];
         var selectProvince = [{id:"Jakarta Special Capital Region"}];
         var selectCity = [{id:"South Jakarta"},{id:"North Jakarta"},{id:"West Jakarta"},{id:"East Jakarta"}];
@@ -103,6 +107,9 @@
 
              getPrintBaseUrl : function(){
                 return printBaseUrl;
+             },
+             getPrintReportUrl : function(){
+                return printReportUrl;
              },
 
              getUrlApi : function(){
