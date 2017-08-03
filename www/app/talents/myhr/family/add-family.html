@@ -1,3 +1,5 @@
+
+<ion-view title="Add Family">
 <style type="text/css">
 
 .remove{
@@ -13,8 +15,6 @@
     line-height: 100%;   
 }
 </style>
-<ion-view title="Family">
-   
     <ion-content padding="true" class="has-header materialize" scroll="true" >
         
         <div class="item no-padding">
@@ -83,7 +83,7 @@
             
             <div class="row">
                 <div class="input-field col">
-                  <p for="first_name" style="font-size:13px">Marital Status</p>
+                  <p for="first_name" style="font-size:13px">Marital Status *</p>
                   <select class="select-dropdown" ng-model="family.maritalStatus" >
                         <option value="">-- Select --</option>
                         <option ng-repeat="maritalStatus in selectMaritalStatus">{{maritalStatus.id}}</option>

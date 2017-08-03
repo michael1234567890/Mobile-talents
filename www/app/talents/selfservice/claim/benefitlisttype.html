@@ -30,23 +30,23 @@
         
 
         <div class="row" ng-if="category == 'perjalanan dinas'">
-            <div class="input-field col padding-horizontal">
+            <div class="input-field col padding-horizontal" style="margin-top:5px">
                 <p>Origin</p>
                 <input  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" type="text" class="validate"  ng-model="requestHeader.origin">
             </div>
-            <div class="input-field col">
+            <div class="input-field col" style="margin-top:5px">
                 <p>Destination</p>
                 <input  style="border: solid 2px #c9c9c9;" type="text" class="validate input-talents" ng-model="requestHeader.destination">
             </div>
         </div>
         <div class="row" ng-if="category == 'perjalanan dinas'">
-            <div class="input-field col padding-horizontal">
+            <div class="input-field col padding-horizontal" style="margin-top:5px">
                       <p>Start Date</p>
                         <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()" style="margin-top: 2px;margin-bottom: 5px; line-height: 34px;min-height: 34px;">
                             {{requestHeader.startDate| date: "yyyy-MM-dd"}}
                         </ionic-datepicker>
             </div>
-            <div class="input-field col">
+            <div class="input-field col" style="margin-top:5px">
                       <p>End Date</p>
                         <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker1()" style="margin-top: 2px;margin-bottom: 5px; line-height: 34px;min-height: 34px;">
                             {{requestHeader.endDate| date: "yyyy-MM-dd"}}
@@ -54,12 +54,17 @@
             </div>
         </div>
         <div class="row" ng-if="category == 'perjalanan dinas'">
-            <div class="input-field col padding-horizontal">
+            <div class="input-field col padding-horizontal" style="margin-top:5px">
                 <p>Remark </p>
                 <!-- <input  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" type="text" class="validate"  ng-model="requestHeader.remark">-->
-                <textarea style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" placeholder="input remark" rows="1" ng-model="requestHeader.remark" maxlength="254"></textarea>
+                <textarea style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" placeholder="input remark" rows="1" ng-model="requestHeader.remark" maxlength="100"></textarea>
                 
             </div>
+        </div>
+        <div class="row" ng-if="category == 'perjalanan dinas'">
+            <ion-checkbox ng-model="requestHeader.pulangKampung" style="border-width: 0px;background-color:#fafafc;padding-left: 50px;">
+                <p>Pulang Kampung</p>
+            </ion-checkbox>
         </div>
        
         <p class="bb text-medium padding">Please fill out your expense</p>

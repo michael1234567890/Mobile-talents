@@ -193,6 +193,7 @@ angular.module('myhr.controllers', [])
     }
 
     var familyIdx = $stateParams.idx;
+    var messageValidation = "";
     console.log("familyIdx",familyIdx)
     $scope.familyData = {};
     if(familyIdx != null)
@@ -257,24 +258,54 @@ angular.module('myhr.controllers', [])
       console.log(status);
     }
 
+    // invalid access token error: "invalid_token" 401
+    function verificationForm(family){
+        if(family.name == undefined || family.name==''){
+            messageValidation = "Name can't be empty";
+            return false;
+        }else if(family.birthPlace == undefined || family.birthPlace==''){
+            messageValidation = "Place of Birth can't be empty";
+            return false;
+        }else if(family.birthDate == undefined){
+            messageValidation = "Date of Birth can't be empty";
+            return false;
+        }else if(family.gender ==undefined || family.gender=='') {
+            messageValidation = "Gender can't be empty";
+            return false;
+        }else if(family.relationship ==undefined || family.relationship=='') {
+            messageValidation = "Relationship can't be empty";
+            return false;
+        }else if(family.maritalStatus ==undefined || family.maritalStatus =='') {
+            messageValidation = "Marital Status can't be empty";
+            return false;
+        }else if(family.bloodType ==undefined || family.bloodType=='' ) {
+            messageValidation = "Blood Type can't be empty";
+            return false;
+        }
+
+        return true;
+    }
+
 
     $scope.submitForm = function (){
-        $ionicLoading.show({
-          template: 'Processing...'
-        });
+        if(verificationForm($scope.family)) {
+           $ionicLoading.show({
+              template: 'Processing...'
+            });
 
-        var birthDate = null;
-        if($scope.family.birthDate != null) 
-          birthDate = $filter('date')($scope.family.birthDate,'yyyy-MM-dd'); 
+            var birthDate = null;
+            if($scope.family.birthDate != null) 
+              birthDate = $filter('date')($scope.family.birthDate,'yyyy-MM-dd'); 
 
-        var dataEdit = {name:$scope.family.name,birthPlace:$scope.family.birthPlace,birthDate:birthDate,gender:$scope.family.gender,relationship:$scope.family.relationship,address:$scope.family.address,maritalStatus:$scope.family.maritalStatus,bloodType:$scope.family.bloodType,occupation:$scope.family.occupation,phone:$scope.family.phone};
-        var accessToken = Main.getSession("token").access_token;
-        var urlApi = Main.getUrlApi() + '/api/user/family/'+$scope.family.id;
-        var data = JSON.stringify(dataEdit);
-        console.log(data);
-        Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
-
-        console.log(dataEdit);
+            var dataEdit = {name:$scope.family.name,birthPlace:$scope.family.birthPlace,birthDate:birthDate,gender:$scope.family.gender,relationship:$scope.family.relationship,address:$scope.family.address,maritalStatus:$scope.family.maritalStatus,bloodType:$scope.family.bloodType,occupation:$scope.family.occupation,phone:$scope.family.phone};
+            var accessToken = Main.getSession("token").access_token;
+            var urlApi = Main.getUrlApi() + '/api/user/family/'+$scope.family.id;
+            var data = JSON.stringify(dataEdit);
+            console.log(data);
+            Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
+        }else {
+          alert(messageValidation);
+        }
     }
 
     console.log("$scope.family",$scope.family)
@@ -451,28 +482,29 @@ angular.module('myhr.controllers', [])
     function initMethod(){
         
     }
+    
     // invalid access token error: "invalid_token" 401
     function verificationForm(family){
-        if(family.name == undefined){
-            messageValidation = "Name can't empty";
+        if(family.name == undefined || family.name==''){
+            messageValidation = "Name can't be empty";
             return false;
-        }else if(family.birthPlace == undefined){
-            messageValidation = "Place of Birth can't empty";
+        }else if(family.birthPlace == undefined || family.birthPlace==''){
+            messageValidation = "Place of Birth can't be empty";
             return false;
         }else if(family.birthDate == undefined){
-            messageValidation = "Date of Birth can't empty";
+            messageValidation = "Date of Birth can't be empty";
             return false;
-        }else if(family.gender ==undefined) {
-            messageValidation = "Gender can't empty";
+        }else if(family.gender ==undefined || family.gender=='') {
+            messageValidation = "Gender can't be empty";
             return false;
-        }else if(family.relationship ==undefined) {
-            messageValidation = "Relationship can't empty";
+        }else if(family.relationship ==undefined || family.relationship=='') {
+            messageValidation = "Relationship can't be empty";
             return false;
-        }else if(family.maritalStatus ==undefined) {
-            messageValidation = "Marital Status can't empty";
+        }else if(family.maritalStatus ==undefined || family.maritalStatus =='') {
+            messageValidation = "Marital Status can't be empty";
             return false;
-        }else if(family.bloodType ==undefined) {
-            messageValidation = "Blood Type can't empty";
+        }else if(family.bloodType ==undefined || family.bloodType=='' ) {
+            messageValidation = "Blood Type can't be empty";
             return false;
         }
 
@@ -618,19 +650,19 @@ angular.module('myhr.controllers', [])
     function verificationForm(address){
        
         if(address.address == undefined || address.address==''){
-            messageValidation = "Address can't empty";
+            messageValidation = "Address can't be empty";
             return false;
         }else if(address.country == undefined || address.country == ''){
-            messageValidation = "Country can't empty";
+            messageValidation = "Country can't be empty";
             return false;
         }else if(address.province == undefined || address.province ==''){
-            messageValidation = "Province can't empty";
+            messageValidation = "Province can't be empty";
             return false;
         }else if(address.city == undefined || address.city == ''){
-            messageValidation = "City can't empty";
+            messageValidation = "City can't be empty";
             return false;
         }else if(address.stayStatus == undefined || address.stayStatus=='' ){
-            messageValidation = "Stay Status can't empty";
+            messageValidation = "Stay Status can't be empty";
             return false;
         }
         return true;
@@ -649,8 +681,6 @@ angular.module('myhr.controllers', [])
     }
     var messageValidation = "";
     $scope.address = {};
-    
-
     $scope.selectStayStatus = Main.getSelectStayStatus();
     var arrCompanyRef = Main.getSession("profile").companyReference;
     var refSelectProvince = Main.getDataReference(arrCompanyRef,'address','province','indonesia');
@@ -710,20 +740,20 @@ angular.module('myhr.controllers', [])
     }
     // invalid access token error: "invalid_token" 401
     function verificationForm(address){
-        if(address.address == undefined){
-            messageValidation = "Address can't empty";
+        if(address.address == undefined || address.address == ''){
+            messageValidation = "Address can't be empty";
             return false;
-        }else if(address.country == undefined){
-            messageValidation = "Country can't empty";
+        }else if(address.country == undefined || address.country ==''){
+            messageValidation = "Country can't be empty";
             return false;
-        }else if(address.province == undefined){
-            messageValidation = "Province can't empty";
+        }else if(address.province == undefined || address.province == ''){
+            messageValidation = "Province can't be empty";
             return false;
         }else if(address.city == undefined || address.city == ''){
-            messageValidation = "City can't empty";
+            messageValidation = "City can't be empty";
             return false;
-        }else if(address.stayStatus == undefined){
-            messageValidation = "Stay Status can't empty";
+        }else if(address.stayStatus == undefined || address.stayStatus == ''){
+            messageValidation = "Stay Status can't be empty";
             return false;
         }
         return true;
@@ -989,11 +1019,14 @@ angular.module('myhr.controllers', [])
 
     // invalid access token error: "invalid_token" 401
     function verificationForm(certification){
-        if(certification.name == undefined){
-            messageValidation = "Name can't empty";
+        if(certification.name == undefined || certification.name=='' ){
+            messageValidation = "Name can't be empty";
             return false;
-        }else if(certification.type == undefined){
-            messageValidation = "Type can't empty";
+        }else if(certification.type == undefined || certification.type==''){
+            messageValidation = "Type can't be empty";
+            return false;
+        }else if(certification.principle == undefined || certification.principle==''){
+            messageValidation = "Principle can't be empty";
             return false;
         }
         return true;
@@ -1278,7 +1311,7 @@ angular.module('myhr.controllers', [])
         }
 
         if(selected == $scope.currentStatus) {
-            messageValidation = "You can not pick the same marital status!";
+            messageValidation = "You can't pick the same marital status!";
             return false;
         }
         return true;

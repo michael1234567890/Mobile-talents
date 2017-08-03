@@ -23,6 +23,10 @@ angular.module('myteam.controllers', [])
       for(var i=0;i<$scope.team.length;i++) {
       	var obj = $scope.team[i];
       	obj.idx = i;
+        
+        if(obj.photoProfile == null || obj.photoProfile == '')
+          obj.photoProfile = "img/1491892621_profle.png";
+
       	$rootScope.team.push(obj);
       }
       $scope.team = $rootScope.team;

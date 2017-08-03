@@ -6,13 +6,13 @@
             <div class="row">
                 <div class="input-field col">
                     <input id="name" ng-model="certification.name" type="text" class="validate">
-                    <label for="first_name">Certification Name</label>
+                    <label for="first_name">Name *</label>
                 </div>
             </div>
              <div class="row">
                 <div class="input-field col s6">
                     <input  ng-model="certification.no" type="text" class="validate">
-                    <label for="first_name">No</label>
+                    <label for="first_name">No </label>
                 </div>
             </div>
             <!--
@@ -31,7 +31,7 @@
             <div class="row">
                 <div class="input-field col">
                     <input  ng-model="certification.principle" type="text" class="validate">
-                    <label for="first_name">Principle</label>
+                    <label for="first_name">Principle *</label>
                 </div>
             </div>
              <div class="row">
@@ -42,9 +42,10 @@
             </div>
              <div class="row">
                 <div class="input-field col s12">
-                    <p style="font-size:13px">Type</p>
+                    <p style="font-size:13px">Type *</p>
                     <!-- <input  ng-model="certification.type" type="text" class="validate">-->
                     <select class="select-dropdown" ng-model="certification.type" >
+                        <option value="">-- Select --</option>
                         <option ng-repeat="type in selectCertificationType">{{type.id}}</option>
                   </select>
                     

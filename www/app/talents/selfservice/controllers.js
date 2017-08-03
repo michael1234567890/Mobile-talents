@@ -620,17 +620,17 @@ angular.module('selfservice.controllers', [])
        console.log(reqHeader);
        if(reqHeader.categoryType == 'Perjalanan Dinas') {
             if(reqHeader.origin == undefined || reqHeader.origin == ""){
-              messageValidation = "Origin can't empty";
+              messageValidation = "Origin can't be empty";
               return false;
             }
 
             if(reqHeader.destination == undefined || reqHeader.destination == ""){
-                messageValidation = "Destination can't empty";
+                messageValidation = "Destination can't be empty";
                 return false;
             }
 
             if(reqHeader.remark == undefined || reqHeader.remark == ""){
-                messageValidation = "Remark can't empty";
+                messageValidation = "Remark can't be empty";
                 return false;
             }
       }
@@ -640,6 +640,7 @@ angular.module('selfservice.controllers', [])
 
 
     $scope.submitForm = function(){
+        
         $scope.requestHeader.module = "Benefit";
         $scope.requestHeader.startDate = $filter('date')(new Date($scope.requestHeader.startDate),'yyyy-MM-dd');
         $scope.requestHeader.endDate = $filter('date')(new Date($scope.requestHeader.endDate),'yyyy-MM-dd');
@@ -716,7 +717,9 @@ angular.module('selfservice.controllers', [])
         $scope.requestHeader.startDate = new Date();
         $scope.requestHeader.endDate = new Date();
         $scope.requestHeader.origin = "";
+        $scope.requestHeader.pulangKampung =false;
         $scope.requestHeader.destination = "";
+        $scope.requestHeader.remark = "";
         $scope.requestHeader.attachments = []; 
         $scope.images = []; 
         console.log("initdata");
@@ -848,7 +851,7 @@ angular.module('selfservice.controllers', [])
 
 
       $scope.submitForm = function(){
-          if($scope.requestHeader.attachments.length > -1) {
+          if($scope.requestHeader.attachments.length > 0) {
               $ionicLoading.show({
                 template: '<ion-spinner></ion-spinner>'
               });
@@ -989,8 +992,8 @@ angular.module('selfservice.controllers', [])
     $scope.gotoListType = function(index){
           console.log("index " + index);
           $rootScope.needReportSelected = $scope.needReportRequests[index];
-          var perjalananDinas = {id:"0124D0000008guqQAA",name:"Perjalanan Dinas"}
-          $state.go("app.benefitlisttype",{categoryType:perjalananDinas.name,extId:perjalananDinas.id});
+          var perjalananDinas = {id:"0124D0000008guqQAA",name:"Perjalanan Dinas",workflow:"SUBMITBENEFIT2"}
+          $state.go("app.benefitlisttype",{categoryType:perjalananDinas.name,extId:perjalananDinas.id,workflow:perjalananDinas.workflow,singleinput:false});
     }
 
     $scope.gotoBenefitDetail = function(index){
@@ -1176,17 +1179,17 @@ angular.module('selfservice.controllers', [])
     function verificationForm(dataSpd){
      
         if(dataSpd.origin == undefined){
-            messageValidation = "Origin can't empty";
+            messageValidation = "Origin can't be empty";
             return false;
         }
 
         if(dataSpd.destination == undefined){
-            messageValidation = "Destination can't empty";
+            messageValidation = "Destination can't be empty";
             return false;
         }
 
         if(dataSpd.amount == undefined || dataSpd.amount == 0){
-            messageValidation = "Amount can't empty";
+            messageValidation = "Amount can't be empty";
             return false;
         }
         return true;
