@@ -1,16 +1,12 @@
 <ion-view title="Submit Claim">
     <ion-content padding="true" class="has-header materialize" scroll="false">
-      <!--
-      <div  class="bg-lightgrey">
-                <p class="bb text-large padding uppercase">Select Expense Category</p>
-                 <div class="card hybrid" ng-repeat="item in categoryType" ng-click="gotoListType(item.name,item.id)">
-                    <div class="item item-text-wrap item-icon-right">
-                        <h2 class="lead text-meidum" style="padding-left:0px">{{item.name}}</h2>
-                        <i class="icon ion-ios-arrow-right pull-right"></i>
-                    </div>
-                 </div>
-      </div>
-    -->
+       <ion-scroll direction="x" style="width:auto">
+            <div class="row text-center" style="height:40px">
+                <div class="col font-thin text-medium balanced bb" ng-click="goTo('app.submitclaim')"><b>Request</b></div>
+                <div class="col font-thin" ng-click="goTo('app.benefitclaimlist')"><b>List</b></div>
+                <div class="col font-thin" ng-click="goTo('app.benefitclaimneedreport')"><b>Need Report</b></div>
+            </div>
+        </ion-scroll>
        <ion-scroll class="bg-lightgrey" direction="y" style="height:100%">
             <div style="height:100%">
                 <div class="row" ng-repeat="item in categoryType | filter: searchFilter track by $index" ng-if="$index % 3==0">

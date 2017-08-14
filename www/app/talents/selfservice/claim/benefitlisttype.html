@@ -53,18 +53,20 @@
                         </ionic-datepicker>
             </div>
         </div>
-        <div class="row" ng-if="category == 'perjalanan dinas'">
-            <div class="input-field col padding-horizontal" style="margin-top:5px">
+        <div class="row" ng-if="category == 'perjalanan dinas' || category == 'mutasi' ">
+            <div class="input-field col padding-horizontal" style="margin-top:10px">
                 <p>Remark </p>
-                <!-- <input  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" type="text" class="validate"  ng-model="requestHeader.remark">-->
-                <textarea style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" placeholder="input remark" rows="1" ng-model="requestHeader.remark" maxlength="100"></textarea>
+                <textarea style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" rows="2" ng-model="requestHeader.remark" maxlength="100"></textarea>
                 
             </div>
         </div>
         <div class="row" ng-if="category == 'perjalanan dinas'">
-            <ion-checkbox ng-model="requestHeader.pulangKampung" style="border-width: 0px;background-color:#fafafc;padding-left: 50px;">
-                <p>Pulang Kampung</p>
-            </ion-checkbox>
+             <div class="input-field col padding-horizontal" style="margin-top:5px">
+                <select ng-model="requestHeader.spdType" style="font-size:13px">
+                    <option value="">-- Select SPD Type --</option>        
+                    <option ng-repeat="option in arrSpdType track by $index">{{option.id}}</option>
+                </select>
+            </div>
         </div>
        
         <p class="bb text-medium padding">Please fill out your expense</p>
@@ -80,7 +82,7 @@
                    <!-- <span class="input-label"><b>{{item.name}}</b></span> -->
                     <select ng-model="item.value" ng-if="item.type == 'select'" style="font-size:13px">
                         
-                        <option ng-repeat="option in item.options track by $index">{{option.id}}</option>
+                        <option   ng-repeat="option in item.options track by $index">{{option.id}}</option>
                     </select>
                     <input   placeholder="Rp. 0" value="0" ng-keyup="change($event,$index)" type="tel"   ng-model="item.amount">
                         
@@ -92,7 +94,7 @@
                  
                  <div  class="item item-input" ng-repeat="item in listtype track by $index">
                     <span class="input-label col col-40" ng-if="item.type != 'select'" style="font-size:11px"><b>{{item.name}}</b></span> 
-                    <select class="col col-40" ng-model="item.value" ng-if="item.type == 'select'" style="font-size:10px">
+                    <select class="col col-40" ng-model="item.value" ng-change="changeBalance(item.value,$index)"  ng-if="item.type == 'select'" style="font-size:10px">
                        
                         <option ng-selected="$index ==0" ng-repeat="option in item.options track by $index">{{option.id}}</option>
                     </select>
@@ -113,7 +115,8 @@
     <div class="item padding" ng-if="directType == true && defaultValue!=0">
         <div class="container text-center" ng-if="defaultValue != 0">
                 <br><br>
-                <p class="text-small text-wrap">Are you sure want to apply {{labelCategory}} ?  <br>Default <b> Rp. {{defaultValue | number:0}}</b></p>
+                <p ng-if="defaultValue != 1"class="text-small text-wrap">Are you sure want to apply {{labelCategory}} ?  <br>Default <b> Rp. {{defaultValue | number:0}}</b></p>
+                <p ng-if="defaultValue == 1"class="text-small text-wrap">Are you sure want to apply {{labelCategory}} ? </p>
         </div>
 <!--
         <p class="bb text-medium padding">Please fill out your expense</p>

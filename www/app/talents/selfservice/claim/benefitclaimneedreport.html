@@ -19,14 +19,12 @@
     <ion-scroll direction="x" style="width:auto">
             <div class="row text-center" style="height:40px">
                 <div class="col font-thin" ng-click="goTo('app.submitclaim')"><b>Request</b></div>
-                <div class="col font-thin text-medium balanced bb" ng-click="goTo('app.benefitclaimlist')"><b>List</b></div>
-                <div class="col font-thin" ng-click="goTo('app.benefitclaimneedreport')"><b>Need Report</b></div>
+                <div class="col font-thin" ng-click="goTo('app.benefitclaimlist')"><b>List</b></div>
+                <div class="col font-thin  text-medium balanced bb" ng-click="goTo('app.benefitclaimneedreport')"><b>Need Report</b></div>
             </div>
     </ion-scroll>
-
-
 <ion-scroll class="bg-lightgrey" direction="y" style="height:100%">
-
+ 
  <ion-refresher pulling-text="Pull to refresh"
      refreshing-text="Loading..."
      refreshing-icon="ion-loading-c"
@@ -34,13 +32,15 @@
      on-refresh="refresh()">
 </ion-refresher>
 
-    <div class="item item-text-wrap"  ng-repeat="item in requests" ui-sref="app.benefitdetail({id: item.id})">
+
+<div class="item item-text-wrap"  ng-repeat="item in needReportRequests" ng-click="gotoListType($index)">
         <div class="row">
             <div class="left"><h5 style="color: #949494;">{{item.createdDate | date: 'dd MMM yyyy'}}</h5></div>
             <div class="right"><h5 class="energized ">{{item.status}}</h5></div>
         </div>
         <div class="row">
-            <h5 class="uppercase no-margin no-padding thicker"><b>#{{item.reqNo}}</b></h5>
+            
+            <h5 class="uppercase no-margin no-padding thicker">#{{item.reqNo}}</h5>
         </div>
         <div class="row">
             <div class="uppercase"><h2 class="thicker">{{item.categoryType}}</h2></div>
@@ -49,14 +49,13 @@
             <div class="uppercase"><h5 class="positive no-margin no-padding thicker">Rp. {{item.totalAmount | number : 0}}</h5></div>
         </div>
     </div>
-    <div class="item" ng-if="requests.length == 0" >
+    <div class="item" ng-if="needReportRequests.length == 0" >
             <div class="col col-100">
                 <h2>Data not found</h2>
                 <p>Pull to refresh</p>
             </div>  
     </div>
-
-
 </ion-scroll>
+
 </ion-content>
 </ion-view>

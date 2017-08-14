@@ -29,8 +29,18 @@
             </div>
         </div>
         
+        <div class="row">
+            <div class="input-field col">
+                <p>SPD Type</p>
+                <select ng-model="detail.spdType" style="font-size:13px">
+                    <option value="">-- Select SPD Type --</option>        
+                    <option ng-repeat="option in arrSpdType track by $index">{{option.id}}</option>
+                </select>
+                
+            </div>
+        </div>
 
-         <div class="row">
+        <div class="row">
             <div class="input-field col">
                 <p>Amount</p>
                 <input  id="disabled" ng-keyup="change($event,$index)" type="tel" class="validate" ng-model="detail.amount">
@@ -40,8 +50,9 @@
 
         <div class="row">
             <div class="input-field col">
-                <input  id="disabled" type="text" class="validate" ng-model="detail.remark">
-                <label for="destination">Remark</label>
+                <p for="destination">Remark</p>
+                <textarea style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" rows="2" ng-model="detail.remark" maxlength="240"></textarea>
+                
             </div>
         </div>
 

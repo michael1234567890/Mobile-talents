@@ -4,25 +4,24 @@
 
     <div class="card hybrid">
         <div class="item item-avatar item-text-wrap">
-            <img ng-src="{{user.photo}}">
-            <h2 class="lead text-medium">{{detail.employeeRequest.name}}</h2>
-            <h3>{{detail.employeeRequest.assignment.positionName}}</h3>
-            <p style="font-size:14px">{{detail.employeeRequest.assignment.organizationName}}</p>
+            <img ng-src="{{detail.photoProfile}}">
+            <h2 class="lead text-small">{{detail.employeeRequest.name}}</h2>
+            <h3 class="text-smaller">{{detail.employeeRequest.assignment.positionName}}</h3>
+            <p class="text-smaller">{{detail.employeeRequest.assignment.organizationName}}</p>
         </div>
     </div>
     <div class="list">
         <div class="item item-text-wrap" >
-            <h2 class="talents">Request Type</h2>
-            <!-- <p class="text-small" >{{detail.taskTitle}}</p>-->
-            <p class="text-small" >{{detail.description}}</p>
+            <p class="text-small">Request Type</p>
+            <h2 class="lead text-small" >{{detail.description}}</h2>
         </div>
         <div ng-if="detail.task == 'CHANGEMARITALSTATUS'">
                 <div class="item item-text-wrap" >
-                    <h2 class="talents">Description</h2>
-                    <p class="text-small" >{{detail.taskDescription}} </p>
+                    <p class="text-small">Description</p>
+                    <h2 class="lead text-small" >{{detail.taskDescription}} </h2>
                 </div>
                 <div class="item item-text-wrap" >
-                    <h2 class="talents">Attachment</h2>
+                    <p class="text-small">Attachment</p>
                     <div class="row post" >
                         <div class="col" ng-repeat="items in detail.attachments" style="width:90px;height:90px" ><img width="90px" height="90px"  ng-src="{{items.image}}" ng-click="openImagePreview(items.image)" /></div>
                     </div>
@@ -73,20 +72,40 @@
                 </div>
                 
         </div>
-        <div ng-if="detail.task == 'SUBMITBENEFIT' || detail.task == 'SUBMITBENEFIT1'  || detail.task == 'SUBMITBENEFIT2' || detail.task == 'SUBMITBENEFIT3' || detail.task == 'SUBMITBENEFIT4' || detail.task == 'SUBMITBENEFIT5'">
+        <!--<div ng-if="detail.task == 'SUBMITBENEFIT' || detail.task == 'SUBMITBENEFIT1'  || detail.task == 'SUBMITBENEFIT2' || detail.task == 'SUBMITBENEFIT3' || detail.task == 'SUBMITBENEFIT4' || detail.task == 'SUBMITBENEFIT5'">-->
+        <div ng-if="detail.module == 'benefit'">
                 <div class="item item-text-wrap" >
-                    <h2 class="talents">Category</h2>
-                    <p class="text-small" >{{detail.ref.categoryType}}</p>
+                    <p class="text-small">Category</p>
+                    <h2 class="lead text-small" >{{detail.ref.categoryType}}</h2>
                 </div>
+                <div class="list no-padding" ng-if="detail.ref.categoryType == 'Perjalanan Dinas' || detail.ref.categoryType == 'SPD Advance'" >
+                      <div class="item item-icon-left text-small" href="#">
+                        <i class="icon ion-location text-larger"></i>
+                        {{detail.ref.origin}} - {{detail.ref.destination}}
+                      </div>
+                      <div class="item item-icon-left text-small" href="#">
+                        <i class="icon ion-calendar text-larger"></i>
+                        {{detail.ref.startDate | date: 'dd MMM yyyy'}} - {{detail.ref.endDate | date: 'dd MMM yyyy'}}
+                      </div>
+                      <div class="item item-icon-left text-small" href="#">
+                        <i class="icon ion-ios-compose-outline text-larger"></i>
+                        {{detail.ref.remark}}
+                      </div>
+                </div>
+
                 <div ng-if="detail.ref.categoryType != 'Medical Overlimit'" class="edit padding-horizontal" ng-repeat="obj in detail.ref.details">
                     <label class="item item-input" style="margin-bottom:0px">
-                        <span class="input-label">{{obj.type}}</span>
-                        <input  type="text" value="Rp. {{obj.amount | number:0}}">
+                        <span class="input-label text-small">{{obj.type}}</span>
+                        <input disabled type="text" value="Rp. {{obj.amount | number:0}}">
                         
                     </label>
                 </div>
                 <p ng-if="detail.ref.categoryType != 'Medical Overlimit'" class="text-medium padding uppercase">Total<span class="pull-right text-medium"> Rp.
                 {{detail.ref.totalAmount | number:0}}</span></p>
+
+                <p ng-if="detail.ref.categoryType != 'Medical Overlimit' && detail.ref.refRequestHeaderObj != null" class="text-medium padding uppercase">{{detail.ref.refRequestHeaderObj.categoryType}}<span class="pull-right text-medium"> Rp.
+                {{detail.ref.refRequestHeaderObj.totalAmount | number:0}}</span></p>
+
 
                  <div class="item item-text-wrap" ng-if="detail.ref.categoryType != 'Medical Overlimit'">
                     <h2 class="talents">Attachment</h2>
@@ -104,16 +123,16 @@
         </div>
         <div ng-if="detail.task == 'SUBMITADDRESS' || detail.task == 'CHANGEADDRESS'">
                 <div class="item item-text-wrap" >
-                    <h2 class="talents">Address</h2>
-                    <p class="text-small" >{{detail.ref.address}} RT.{{detail.ref.rt}} RW.{{detail.ref.rw}} </p>
+                    <p class="text-small">Address</p>
+                    <h2 class="lead text-small" >{{detail.ref.address}} RT.{{detail.ref.rt}} RW.{{detail.ref.rw}} </h2>
                 </div>
                 <div class="item item-text-wrap" >
-                    <h2 class="talents">City</h2>
-                    <p class="text-small" >{{detail.ref.city}}</p>
+                    <p class="text-small">City</p>
+                    <h2 class="lead text-small" >{{detail.ref.city}}</h2>
                 </div>
                 <div class="item item-text-wrap" >
-                    <h2 class="talents">Province</h2>
-                    <p class="text-small" >{{detail.ref.province}}</p>
+                    <p class="text-small">Province</p>
+                    <h2 class="lead text-small" >{{detail.ref.province}}</h2>
                 </div>
                 <div class="row">
                   <button class="btn waves-effect button-small waves-light button button-stable  button-block waves-effect waves-light" ng-click="viewMoreAddress()">View More</button>
@@ -128,13 +147,23 @@
                 </div>
                 
         </div>
-        <div class="row" ng-if= "needApproval == 'true'">
+        <!--
+        <div class="row" ng-if= "needApproval == 'true'" >
                 <button class="btn button-small  waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="confirmReject()">Reject</button>&nbsp;
                 <button class="btn button-small waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="confirmAccept()">Approve</button>
 
-        </div>
+        </div>-->
+
     </div>
     
         
     </ion-content>
+    <ion-footer-bar class="bar-light" style="border-top:0px;height:50px;margin-bottom:2px" ng-if= "needApproval == 'true'" >
+        <div class="col">
+        <button class="btn button-small  waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="confirmReject()">Reject</button></div>
+        <div class="col">
+        <button class="btn button-small waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="confirmAccept()">Approve</button>
+        </div>
+
+    </ion-footer-bar>
 </ion-view>

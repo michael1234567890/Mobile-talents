@@ -3,7 +3,7 @@
 
 <ion-content class="has-header" scroll="true">
 
-<div class="item item-divider balanced-bg" style="margin-top:10px">Req ID</div> 
+<div class="item item-divider balanced-bg" style="margin-top:10px">{{header.reqNo}}</div> 
 <div class="list card">
     <div class="item">
         <div class="row">
@@ -28,7 +28,7 @@
         <div class="edit padding-horizontal" >
             <label class="item item-input" ng-repeat="item in header.details">
                 <span class="input-label col col-60">{{item.type}}</span>
-                <input class="col col-40" type="text" value="Rp. {{item.amount | number:0}}"  disabled>
+                <input class="col col-40" style="padding-right:5px" type="text" value="Rp. {{item.amount | number:0}}"  disabled>
             </label>
         </div>
         <div class="item item-divider" style="text-align:right">TOTAL Rp. {{header.totalAmount | number:0}}</div> <br>
@@ -54,7 +54,7 @@
             </label>
     </div>
 </div> -->
-    <div class="row" ng-if="header.categoryType == 'Perjalanan Dinas'">
+    <div class="row" ng-if="header.categoryType == 'Perjalanan Dinas' && header.status=='approved'">
         <button class="btn button-small waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="printReport(header.employee,header.uuid)">Print Report</button>
     </div>
 </ion-content>

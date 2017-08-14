@@ -5,42 +5,29 @@
         <div class="item no-padding">
             <div class="row">
                 <div class="input-field col">
-                    <input id="name" ng-model="certification.name" type="text" class="validate">
+                    <input id="name" maxlength="99" ng-model="certification.name" type="text" class="validate">
                     <label for="first_name">Name *</label>
                 </div>
             </div>
              <div class="row">
                 <div class="input-field col s6">
-                    <input  ng-model="certification.no" type="text" class="validate">
+                    <input  maxlength="20" ng-model="certification.no" type="text" class="validate">
                     <label for="first_name">No </label>
                 </div>
             </div>
-            <!--
             <div class="row">
                 <div class="input-field col">
-                   <input  ng-model="certification.date" type="text" class="validate">
-                    <label for="first_name">Date</label>
-                </div>
-
-                <div class="input-field col">
-                   <input  ng-model="certification.expired" type="text" class="validate">
-                    <label for="first_name">Exp Date</label>
-                </div>
-            </div>
-        -->
-            <div class="row">
-                <div class="input-field col">
-                    <input  ng-model="certification.principle" type="text" class="validate">
-                    <label for="first_name">Principle *</label>
+                    <input  maxlength="50" ng-model="certification.principle" type="text" class="validate">
+                    <label for="first_name">Principle</label>
                 </div>
             </div>
              <div class="row">
                 <div class="input-field col">
-                    <input  ng-model="certification.year" type="text" class="validate">
+                    <input maxlength="4" ng-model="certification.year" type="tel" class="validate">
                     <label for="first_name">Year</label>
                 </div>
             </div>
-             <div class="row">
+            <div class="row">
                 <div class="input-field col s12">
                     <p style="font-size:13px">Type *</p>
                     <!-- <input  ng-model="certification.type" type="text" class="validate">-->
@@ -51,10 +38,20 @@
                     
                 </div>
             </div>
+            <div class="row" ng-show="certification.type=='Period'">
+                <div class="input-field col s12">
+                    <p style="font-size:13px">Expired</p>
+                    <!-- <input  ng-model="certification.type" type="text" class="validate">-->
+                    <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()">
+                            {{certification.expired| date: "yyyy-MM-dd"}}
+                    </ionic-datepicker>
+                    
+                </div>
+            </div>
             <div class="row">
                 <div class="input-field col s12">
                     <p>Description</p>
-                    <textarea  ng-model="certification.description" class="materialize-textarea"></textarea>
+                    <textarea maxlength="240" ng-model="certification.description" class="materialize-textarea"></textarea>
                     
                 </div>
             </div>

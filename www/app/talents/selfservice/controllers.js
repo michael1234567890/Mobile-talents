@@ -399,17 +399,16 @@ angular.module('selfservice.controllers', [])
     $scope.categoryType = [];
 
     $scope.gotoListType = function(name,extId,index,workflow){
-        console.log("index " + index);
+        
+        $rootScope.needReportSelected = undefined;
         if(index != undefined)
-            $rootScope.selectedBenefitCategory = $rootScope.benefitCategory[index];
+            $rootScope.selectedBenefitCategory = Main.getSession("categoryType")[index]; //$rootScope.benefitCategory[index];
         
         if(name.toLowerCase() == 'spd advance'){
              $state.go("app.spdadvanceadd",{categoryType:name,extId:extId,workflow:workflow});
         }else if(name.toLowerCase() == 'perjalanan dinas'){
-            $rootScope.needReportSelected = undefined;
             $state.go("app.benefitlisttype",{categoryType:name,extId:extId,workflow:workflow});
         }else if(name.toLowerCase() == 'reimbursement'){
-            $rootScope.needReportSelected = undefined;
             $state.go("app.benefitlisttype",{categoryType:name,extId:extId,workflow:workflow,singleinput:true});
         }else {
             $state.go("app.benefitlisttype",{categoryType:name,extId:extId,workflow:workflow});
@@ -418,14 +417,14 @@ angular.module('selfservice.controllers', [])
     }
 
     var successRequest = function (res){
-      $ionicLoading.hide();
-      if(res.length > 0) {
-          $rootScope.benefitCategory = [];
-          $rootScope.benefitCategory = res;
-          $scope.categoryType = [];
-          $scope.categoryType = $rootScope.benefitCategory;
-          
-      }
+        $timeout(function () {
+            if(res.length > 0) {
+                Main.setSession("categoryType",res);
+                $scope.categoryType = res;
+                
+            }
+            $ionicLoading.hide();
+        }, 1000);
     }
 
     var successBalance = function (res){
@@ -462,10 +461,10 @@ angular.module('selfservice.controllers', [])
 
 
     function initModule() {
-        if($rootScope.benefitCategory == undefined)
+        if(Main.getSession("categoryType") == undefined)
           getListCategory();
         else
-          $scope.categoryType = $rootScope.benefitCategory;
+          $scope.categoryType = Main.getSession("categoryType");
         
         if(Main.getSession("balance") == undefined)
           getBalanceSaveToSession();
@@ -476,6 +475,7 @@ angular.module('selfservice.controllers', [])
 
 .controller('BenefitListtypeCtrl', function($timeout,appService,$ionicActionSheet,$cordovaCamera,ionicDatePicker, $stateParams, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     var categoryType = $stateParams.categoryType;
+    console.log("categoryType",categoryType);
     var categoryTypeExtId = $stateParams.extId;
     var workflow = $stateParams.workflow;
     var messageValidation = "";
@@ -484,10 +484,6 @@ angular.module('selfservice.controllers', [])
     $scope.defaultValue = 1;
     $scope.total = 0;
     var objDirectType = {};
-
-    
-
-    var sessionLopName = "kacamata"+"."+categoryType;
     $scope.defaultImage = "img/placeholder.png";
     $scope.checkLoginSession();
     $scope.arrLensa = [];
@@ -497,12 +493,14 @@ angular.module('selfservice.controllers', [])
     var listTypeSelected = [];
     $scope.titleCategory = categoryType;
     $scope.category = categoryType.toLowerCase();
+    console.log("category",$scope.category);
     $scope.requestHeader = {};
+    $scope.arrSpdType = [{id:"regular"},{id:"pulang kampung"},{id:"mutasi"},{id:"training"},{id:"assessment"}];
     
     $scope.$on('$ionicView.beforeEnter', function (event,data) {
-          if(data.direction != undefined && data.direction!='back')
-            initModule();
-        
+        if(data.direction != undefined && data.direction!='back')
+          initModule();
+      
     });
 
     var datepicker = {
@@ -535,6 +533,11 @@ angular.module('selfservice.controllers', [])
         ionicDatePicker.openDatePicker(datepicker1);
     };
 
+    $scope.changeBalance = function(selected,index) {
+        var qty = $scope.listtype[index].qty;
+        changeMultiple(selected,qty,index);
+    }
+
     $scope.change = function(event,index){
       var value = event.target.value;
       value = value
@@ -554,9 +557,29 @@ angular.module('selfservice.controllers', [])
         return 0;
     }
 
+    function changeMultiple (name,qty,index){
+        var balance = getBalance(name);
+        if(balance == undefined || balance == 0)
+          balance = 1;
+        else
+          balance = Number(balance);
+
+        if(qty!=undefined && qty!=""){
+            value = ""+qty * balance;
+            value= value
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            $scope.listtype[index].amount = value;
+        }
+        
+    }
     $scope.multiple = function(event,index){
+
         var value = event.target.value;
         var name = $scope.listtype[index].name;
+        
+        if(name == 'Hotel')
+          return false;
 
         if($scope.listtype[index].type == "select"){
             name = $scope.listtype[index].value;
@@ -569,6 +592,7 @@ angular.module('selfservice.controllers', [])
           balance = Number(balance);
 
         value = ""+value * balance;
+        
         value= value
           .replace(/\D/g, "")
           .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -633,6 +657,11 @@ angular.module('selfservice.controllers', [])
                 messageValidation = "Remark can't be empty";
                 return false;
             }
+
+            if(reqHeader.spdType == undefined || reqHeader.spdType == ""){
+                messageValidation = "SPD Type can't be empty";
+                return false;
+            }
       }
         return true;
     }
@@ -644,7 +673,6 @@ angular.module('selfservice.controllers', [])
         $scope.requestHeader.module = "Benefit";
         $scope.requestHeader.startDate = $filter('date')(new Date($scope.requestHeader.startDate),'yyyy-MM-dd');
         $scope.requestHeader.endDate = $filter('date')(new Date($scope.requestHeader.endDate),'yyyy-MM-dd');
-        
         $scope.requestHeader.categoryType = categoryType;
         $scope.requestHeader.categoryTypeExtId = categoryTypeExtId;
         $scope.requestHeader.workflow = workflow;
@@ -750,7 +778,6 @@ angular.module('selfservice.controllers', [])
             $scope.labelCategory = $rootScope.selectedBenefitCategory.label;
             $scope.defaultValue = $rootScope.selectedBenefitCategory.defaultValue;
             if($scope.directType == true) {
-
                   if($scope.defaultValue != 0 && $rootScope.selectedBenefitCategory.listRequestType.length > 0)
                     objDirectType =  $rootScope.selectedBenefitCategory.listRequestType[0];
 
@@ -775,6 +802,7 @@ angular.module('selfservice.controllers', [])
             $scope.requestHeader.origin = $rootScope.needReportSelected.origin;
             $scope.requestHeader.remark = $rootScope.needReportSelected.remark;
             $scope.requestHeader.destination = $rootScope.needReportSelected.destination;
+            $scope.requestHeader.spdType = $rootScope.needReportSelected.spdType;
             $scope.requestHeader.linkRefHeader = $rootScope.needReportSelected.id;
             $scope.requestHeader.startDate = $filter('date')(new Date($rootScope.needReportSelected.startDate),'yyyy-MM-dd');
             $scope.requestHeader.endDate = $filter('date')(new Date($rootScope.needReportSelected.endDate),'yyyy-MM-dd');
@@ -858,7 +886,7 @@ angular.module('selfservice.controllers', [])
               var accessToken = Main.getSession("token").access_token;
               var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/benefit';
               var attachment = [];
-              if($scope.requestHeader.attachments.length > -1) {
+              if($scope.requestHeader.attachments.length > 0) {
                   for (var i = $scope.requestHeader.attachments.length - 1; i >= 0; i--) {
                       var objAttchament = {"image":$scope.requestHeader.attachments[i].image};
                       attachment.push(objAttchament);
@@ -960,60 +988,56 @@ angular.module('selfservice.controllers', [])
     initMethod();
  })
 
-.controller('BenefitClaimListCtrl', function($ionicPopover,$ionicLoading,$rootScope, $scope,$state , AuthenticationService, Main) {
+
+.controller('BenefitClaimNeedReportCtrl', function($ionicPopover,$ionicLoading,$rootScope, $scope,$state , AuthenticationService, Main) {
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
 
+
     $scope.requests = [];
     $scope.needReportRequests = [];
     $scope.module = {};
-
-    $scope.$on('$ionicView.beforeEnter', function () {
-        console.log("$ionicView.beforeEnter");
-        if( $rootScope.refreshRequestApprovalCtrl) {
-            console.log("refresh AddressCtrl");
-            initMethod();
-        }
-        $rootScope.refreshRequestApprovalCtrl = false;
-    });
-
-    $scope.chooseTab = function(tab){
-        $scope.module.type = tab;
-        if(tab === 'list')
-          $scope.requests = [];
-        else if(tab === 'needreport')
-          $scope.needReportRequests = [];
-
-        getListBenefit(tab);
-        // getCountNeedApproval();
-    }
+    console.log("session requestType", Main.getSession("categoryType"));
 
     $scope.gotoListType = function(index){
-          console.log("index " + index);
-          $rootScope.needReportSelected = $scope.needReportRequests[index];
-          var perjalananDinas = {id:"0124D0000008guqQAA",name:"Perjalanan Dinas",workflow:"SUBMITBENEFIT2"}
-          $state.go("app.benefitlisttype",{categoryType:perjalananDinas.name,extId:perjalananDinas.id,workflow:perjalananDinas.workflow,singleinput:false});
+        $rootScope.needReportSelected = $scope.needReportRequests[index];
+
+        console.log("needReport",$rootScope.needReportSelected );
+        if(Main.getSession("categoryType") != undefined) {
+            var arrCategoryType = Main.getSession("categoryType");
+            var objPerjalananDinas = null;
+            for (var i = 0; i < arrCategoryType.length; i++) {
+                obj = arrCategoryType[i];
+                if(obj.categoryType.toLowerCase() == "perjalanan dinas") 
+                  objPerjalananDinas = obj;
+            };  
+
+            if(objPerjalananDinas!= null) {
+                //var perjalananDinas = {id:"0124D0000008guqQAA",name:"Perjalanan Dinas",workflow:"SUBMITBENEFIT2"};
+                $rootScope.selectedBenefitCategory = undefined;
+                var perjalananDinas = {id:objPerjalananDinas.categoryTypeExtId,name:objPerjalananDinas.categoryType,workflow:objPerjalananDinas.workflow};
+                $state.go("app.benefitlisttype",{categoryType:perjalananDinas.name,extId:perjalananDinas.id,workflow:perjalananDinas.workflow,singleinput:false});
+            }
+        }
+        
+        
     }
 
     $scope.gotoBenefitDetail = function(index){
-          $state.go("app.benefitdetail");
+        $state.go("app.benefitdetail");
     }
 
     $scope.refresh = function(){
-      $scope.chooseTab($scope.module.type);    
+      initMethod(); 
     }
    
     var successRequest = function (res){
+      $scope.needReportRequests = [];
       for(var i=0;i<res.length;i++) {
-        var obj = res[i];
-        obj.idx = i; 
-        if($scope.module.type == 'list') {
-            $scope.requests.push(obj);
-        }else {
-            $scope.needReportRequests.push(obj);
-        }
-
+          var obj = res[i];
+          obj.idx = i; 
+          $scope.needReportRequests.push(obj);
        }
 
       $ionicLoading.hide();
@@ -1045,21 +1069,62 @@ angular.module('selfservice.controllers', [])
     initMethod();
 
     function initMethod(){
-        $scope.chooseTab('list');
-        
+        getNeedReportList();
         if(Main.getSession('balance') == undefined)
             getBalanceSaveToSession();
     }
    
 
-    function getListBenefit(tab){
+    function getNeedReportList(){
+      $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner>'
+        });
+      var accessToken = Main.getSession("token").access_token;
+      var     urlApi = Main.getUrlApi() + '/api/user/tmrequest/needreport?module=Benefit';
+      Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
+    }
+})
+
+.controller('BenefitClaimListCtrl', function($ionicPopover,$ionicLoading,$rootScope, $scope,$state , AuthenticationService, Main) {
+    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+        $state.go("login");
+    }
+
+    $scope.requests = [];
+    $scope.module = {};
+    $scope.gotoBenefitDetail = function(index){
+          $state.go("app.benefitdetail");
+    }
+
+    $scope.refresh = function(){
+        initMethod();  
+    }
+   
+    var successRequest = function (res){
+      $scope.requests = [];
+      for(var i=0;i<res.length;i++) {
+          var obj = res[i];
+          obj.idx = i; 
+          $scope.requests.push(obj);
+       }
+
+      $ionicLoading.hide();
+      $scope.$broadcast('scroll.refreshComplete');
+    }
+
+    initMethod();
+
+    function initMethod(){
+        getListBenefit();
+    }
+   
+
+    function getListBenefit(){
       $ionicLoading.show({
           template: '<ion-spinner></ion-spinner>'
         });
       var accessToken = Main.getSession("token").access_token;
       var urlApi = Main.getUrlApi() + '/api/user/tmrequest?module=Benefit';
-      if(tab == 'needreport')
-          urlApi = Main.getUrlApi() + '/api/user/tmrequest/needreport?module=Benefit';
       Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
     }
 })
@@ -1069,10 +1134,10 @@ angular.module('selfservice.controllers', [])
     var categoryTypeExtId = $stateParams.extId;
     var workflow = $stateParams.workflow;
     $scope.requestHeader = {};
-    $scope.detail = {amount:0,type:"Advance"};
-    $scope.requestHeader.startDate = new Date();
-    $scope.requestHeader.endDate = new Date();
     var messageValidation = "";
+    $scope.arrSpdType = [{id:"regular"},{id:"pulang kampung"},{id:"mutasi"},{id:"training"},{id:"assessment"}];
+   
+
     var datepicker = {
       callback: function (val) {  //Mandatory
         console.log('Return value from the datepicker popup is : ' + val, new Date(val));
@@ -1105,6 +1170,12 @@ angular.module('selfservice.controllers', [])
     }
 
 
+    $scope.$on('$ionicView.beforeEnter', function (event,data) {        
+        initModule();
+    });
+
+
+
 
     $scope.openDatePicker = function(){
       ionicDatePicker.openDatePicker(datepicker);
@@ -1124,12 +1195,12 @@ angular.module('selfservice.controllers', [])
 
        var detailSubmit = {};
        detailSubmit = $scope.detail;
-       console.log("detailSubmit",detailSubmit);
     if(verificationForm(detailSubmit)){
        
        $ionicLoading.show({
           template: '<ion-spinner></ion-spinner>'
         });
+
        detailSubmit.amount = ""+detailSubmit.amount;
        var dataAmount;
         if(detailSubmit.amount.indexOf(".") !== -1) {
@@ -1137,11 +1208,9 @@ angular.module('selfservice.controllers', [])
         }else {
             dataAmount = detailSubmit.amount;
         }
-       // var dataAmount  = detailSubmit.amount.replace(/\./g,'');
+       
         dataAmount = Number(dataAmount);
-        // $scope.detail.amount = dataAmount; 
         detailSubmit.amount = dataAmount;  
-
         $scope.requestHeader.module = "Benefit";
         $scope.requestHeader.workflow = workflow;
         $scope.requestHeader.startDate = $filter('date')(new Date($scope.requestHeader.startDate),'yyyy-MM-dd');
@@ -1149,9 +1218,10 @@ angular.module('selfservice.controllers', [])
         $scope.requestHeader.categoryType = categoryType;
         $scope.requestHeader.categoryTypeExtId = categoryTypeExtId;
         $scope.requestHeader.origin = $scope.detail.origin;
+        $scope.requestHeader.spdType = $scope.detail.spdType;
         $scope.requestHeader.destination = $scope.detail.destination;
+        $scope.requestHeader.remark = $scope.detail.remark;
         var requestDetail = [];
-        // requestDetail.push($scope.detail);
         requestDetail.push(detailSubmit);
         $scope.requestHeader.details = requestDetail;
         
@@ -1178,13 +1248,18 @@ angular.module('selfservice.controllers', [])
 
     function verificationForm(dataSpd){
      
-        if(dataSpd.origin == undefined){
+        if(dataSpd.origin == undefined || dataSpd.origin ==''){
             messageValidation = "Origin can't be empty";
             return false;
         }
 
-        if(dataSpd.destination == undefined){
+        if(dataSpd.destination == undefined || dataSpd.destination == ''){
             messageValidation = "Destination can't be empty";
+            return false;
+        }
+
+        if(dataSpd.spdType == undefined || dataSpd.spdType == ''){
+            messageValidation = "SPD Type can't be empty";
             return false;
         }
 
@@ -1192,8 +1267,15 @@ angular.module('selfservice.controllers', [])
             messageValidation = "Amount can't be empty";
             return false;
         }
+
         return true;
           
+    }
+
+    function initModule(){
+        $scope.detail = {amount:0,type:"Advance",remark:"",origin:"",destination:""};
+        $scope.requestHeader.startDate = new Date();
+        $scope.requestHeader.endDate = new Date();
     }
 
 

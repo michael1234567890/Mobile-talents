@@ -30,7 +30,6 @@ angular.module('myteam.controllers', [])
       	$rootScope.team.push(obj);
       }
       $scope.team = $rootScope.team;
-      console.log($scope.team);
     }
 
     var errorProfile = function (err, status){
@@ -204,7 +203,7 @@ angular.module('myteam.controllers', [])
 
     $scope.$on('$ionicView.beforeEnter', function () {
         console.log("$ionicView.beforeEnter");
-        if( $rootScope.refreshRequestApprovalCtrl) {
+        if($rootScope.refreshRequestApprovalCtrl) {
             console.log("refresh AddressCtrl");
             initMethod();
         }
@@ -263,30 +262,35 @@ angular.module('myteam.controllers', [])
       //$scope.general.countApproval = res.length;
       // $rootScope.countApproval = res.length;
       for(var i=0;i<res.length;i++) {
-        var obj = res[i];
-        obj.idx = i;
-        if($scope.module.type == 'personalia') {
-            if(res[i].task == 'CHANGEMARITALSTATUS') {
-               var change = res[i].data;
-               var objData = JSON.parse(change);
-               obj.taskDescription = "Change marital status from "+res[i].employeeRequest.maritalStatus + " to " + objData.maritalStatus;
-            }else if(res[i].task == 'SUBMITFAMILY'){
-              obj.taskDescription = "Add new family";
-            }
-        }
+          var obj = res[i];
+          obj.idx = i;
+          if($scope.module.type == 'personalia') {
+              if(res[i].task == 'CHANGEMARITALSTATUS') {
+                 var change = res[i].data;
+                 var objData = JSON.parse(change);
+                 obj.taskDescription = "Change marital status from "+res[i].employeeRequest.maritalStatus + " to " + objData.maritalStatus;
+              }else if(res[i].task == 'SUBMITFAMILY'){
+                obj.taskDescription = "Add new family";
+              }
+          }
 
-        obj.employeeRequest.fullName = obj.employeeRequest.firstName;
-        if(obj.employeeRequest.middleName != null)
-            obj.employeeRequest.fullName += " " + obj.employeeRequest.middleName;
+          obj.employeeRequest.fullName = obj.employeeRequest.firstName;
+          if(obj.employeeRequest.middleName != null)
+              obj.employeeRequest.fullName += " " + obj.employeeRequest.middleName;
 
-        if(obj.employeeRequest.lastName != null)
-            obj.employeeRequest.fullName += " " + obj.employeeRequest.lastName;
-        
-        if($scope.module.type == 'personalia') {
-            $scope.requests.push(obj);
-        }else {
-            $scope.benefitRequests.push(obj);
-        }
+          if(obj.employeeRequest.lastName != null)
+              obj.employeeRequest.fullName += " " + obj.employeeRequest.lastName;
+          
+          if($scope.module.type == 'personalia') {
+              $scope.requests.push(obj);
+          }else {
+              $scope.benefitRequests.push(obj);
+          }
+
+          obj.photoProfile = "img/1491892511_profle.png";
+          if(obj.employeeRequestPhotoProfile != null)
+                obj.photoProfile = obj.employeeRequestPhotoProfile;
+
 
        }
 
@@ -418,7 +422,8 @@ angular.module('myteam.controllers', [])
     $scope.confirmReject = function (){
         var confirmPopup = $ionicPopup.confirm({
             title: 'Reason Rejected',
-            template: '<input class="calm" type="text " ng-model="confirm.reasonReject" >',
+            //template: '<input class="calm" type="text " ng-model="confirm.reasonReject" >',
+            template: '<textarea rows="2" maxlength="50" class="calm" style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" ng-model="confirm.reasonReject" ></textarea>',
             cancelText: 'Cancel',
             scope: $scope,
             okText: 'Yes'
@@ -498,7 +503,11 @@ angular.module('myteam.controllers', [])
           }
       }
 
-      
+      $scope.detail.photoProfile = "img/1491892511_profle.png";
+      if($scope.detail.employeeRequestPhotoProfile != null)
+          $scope.detail.photoProfile = $scope.detail.employeeRequestPhotoProfile;
+         
+
       $scope.detail.employeeRequest.fullName = $scope.detail.employeeRequest.firstName;
       if($scope.detail.employeeRequest.middleName != null)
           $scope.detail.employeeRequest.fullName += " " + $scope.detail.employeeRequest.middleName;
@@ -507,10 +516,10 @@ angular.module('myteam.controllers', [])
           $scope.detail.employeeRequest.fullName += " " + $scope.detail.employeeRequest.lastName;
   
       if($scope.detail.attachments.length > 0){
-          
+    
           $scope.attachment = $scope.detail.attachments[0].image;
       }else{
-        console.log("gak kesini");
+        $scope.detail.attachments = [];
       } 
 
     }

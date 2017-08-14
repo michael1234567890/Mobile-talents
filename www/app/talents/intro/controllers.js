@@ -84,7 +84,9 @@ angular.module('intro.controllers', [])
                 }else {
                     err = "Problem with server. Please try again later !"
                 }
-                appService.showAlert('Error', err, 'Close', 'button-assertive', null);
+
+                // appService.showAlert('Error', err, 'Close', 'button-assertive', null);
+                appService.showAlert('Error', err, 'Close', 'button2', null);
                
             })
      };

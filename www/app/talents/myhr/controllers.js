@@ -1,14 +1,12 @@
 angular.module('myhr.controllers', [])
 
 .controller('MyHRCtrl',['$rootScope', '$scope','$state' , 'AuthenticationService', 'Main', function($rootScope, $scope,$state , AuthenticationService, Main) {
-  
-    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
-        $state.go("login");
-    }
 
-    //$scope.profile.fullname = $scope.profile.employeeTransient.name;
     console.log("profile", $scope.profile);
     $scope.$on('$ionicView.beforeEnter', function () {
+         if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+            $state.go("login");
+          }
          $scope.profile = Main.getSession("profile");
     });
 
@@ -866,7 +864,7 @@ angular.module('myhr.controllers', [])
     }
   })
 
-.controller('AddCertificationCtrl', function($ionicPopup, appService,$ionicActionSheet,$cordovaCamera,$ionicHistory,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('AddCertificationCtrl', function($filter,ionicDatePicker,$ionicPopup, appService,$ionicActionSheet,$cordovaCamera,$ionicHistory,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
 
   if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
@@ -879,6 +877,21 @@ angular.module('myhr.controllers', [])
     $scope.imageCertification = {};
     $scope.imageCertification.images = [];
     $scope.imageCertification.imagesData = [];
+    $scope.certification.expired = new Date();
+    var datepicker = {
+        callback: function (val) {  //Mandatory
+          $scope.certification.expired = val;
+        },
+        inputDate: new Date(),      //Optional
+        mondayFirst: true,          //Optional
+        dateFormat:"yyyy-MM-dd",
+        closeOnSelect: false,       //Optional
+        templateType: 'popup'       //Optional
+    };
+
+    $scope.openDatePicker = function(){
+        ionicDatePicker.openDatePicker(datepicker);
+    };
 
     var messageValidation = ""
 
@@ -968,6 +981,19 @@ angular.module('myhr.controllers', [])
 
     $scope.submitForm = function(){
       if(verificationForm($scope.certification)){
+        if($scope.imageCertification.imagesData.length < 0) {
+            alert("You must add at least 1 attachment.");
+            return false;
+        }
+
+        if($scope.certification.type != 'Period') {
+            $scope.certification.expired = null;
+        }else {
+            $scope.certification.expired = $filter('date')(new Date($scope.certification.expired),'yyyy-MM-dd');
+        }
+
+       
+
         var confirmPopup = $ionicPopup.confirm({
             title: 'Confirm',
             template: '<h5>Are you sure the data submitted is correct ?</h5>',
@@ -987,6 +1013,7 @@ angular.module('myhr.controllers', [])
                   }
 
                   $scope.certification.attachments = attachments;
+
                   var accessToken = Main.getSession("token").access_token;
                   var urlApi = Main.getUrlApi() + '/api/myprofile/certification';
                   var data = JSON.stringify($scope.certification);
@@ -1013,8 +1040,8 @@ angular.module('myhr.controllers', [])
     initMethod();
     
     function initMethod(){
-        // $scope.selectCertificationType = [{id:"Period"},{id:"Lifetime"}];
-        $scope.selectCertificationType = [{id:"Lifetime"}];
+        
+        $scope.selectCertificationType = [{id:"Lifetime"},{id:"Period"}];
     }
 
     // invalid access token error: "invalid_token" 401
