@@ -462,7 +462,7 @@ angular.module('selfservice.controllers', [])
 
     function initModule() {
         if(Main.getSession("categoryType") == undefined)
-          getListCategory();
+            getListCategory();
         else
           $scope.categoryType = Main.getSession("categoryType");
         
@@ -470,7 +470,10 @@ angular.module('selfservice.controllers', [])
           getBalanceSaveToSession();
     }
 
-    initModule();
+     $scope.$on('$ionicView.beforeEnter', function (event,data) {
+          initModule();
+      
+    });
 })
 
 .controller('BenefitListtypeCtrl', function($timeout,appService,$ionicActionSheet,$cordovaCamera,ionicDatePicker, $stateParams, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
