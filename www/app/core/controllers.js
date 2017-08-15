@@ -21,36 +21,18 @@
             initData();
             initProfile();
             initIntro();
-            initNews();
+            //initNews();
            
-            initDashboard();
-            initShop();
-            initChat();
-            initCalendar();
+            //initDashboard();
+            //initShop();
+            //initChat();
+            //initCalendar();
             initAnimate();
             $scope.globalprofile = {};
-           $rootScope.$on('$stateChangeStart', function(event,next, nextParam,fromState){
+            $rootScope.$on('$stateChangeStart', function(event,next, nextParam,fromState){
                 initProfile();
                 console.log("Global change state");
-               
-               
-                /*if(AuthenticationService.getSession("user") == undefined) {
-                    console.log("User masih kosong");
-                    if(next.name !== 'login'){
-                        console.log('go to login');
-                        var page = "login";
-                        window.location.href = "#/login";
-                        $state.go(page);
-                        $ionicHistory.nextViewOptions({
-                            disableAnimate: true,
-                            disableBack: true
-                        });
-                        
-                    }
-                    // go to login page 
-                   
-                }*/
-           });
+            });
 
             function initAnimate() {
                 function testAnim(x) {
@@ -82,11 +64,7 @@
                 $rootScope.data = {};
 
                 $rootScope.user = {
-                    id: 1,
-                    name: 'Adam Ionic',
-                    email: 'adamionic@email.com',
-                    photo: 'img/1491892621_profle.png',
-                    city: 'Cambridge, United Kingdom'
+                    photo: 'img/1491892621_profle.png'
                 }
                 $scope.contacts = appService.getContacts();
                 $scope.searchPopover = $ionicPopover.fromTemplate(searchTemplate, {
@@ -96,6 +74,7 @@
                 $scope.getSearch = function (search) {
                     $scope.searchFilter = search;
                 }
+               
                 /*
 
                 $cordovaGeolocation.getCurrentPosition({ timeout: 10000, enableHighAccuracy: true }).then(
@@ -117,7 +96,6 @@ he
                         disableBack: true
                     });
                 }
-
 
 
                 $scope.goBack = function (ui_sref) {
@@ -151,8 +129,6 @@ he
                     alert("Please Check your connection.");
                   }
                   $ionicLoading.hide();
-                  console.log(err);
-                  console.log(status);
                 }
 
                 $scope.checkLoginSession = function(){
@@ -168,6 +144,19 @@ he
                     Main.destroySession("profile");
                     Main.destroySession("token");
                     Main.destroySession("balance");
+                    Main.destroySession("categoryType");
+                    $rootScope.refreshRequestApprovalCtrl = true;
+                    
+                    if($rootScope.user != undefined) {
+                        delete $rootScope.user;
+                    }
+
+                    if($rootScope.countApproval != undefined)
+                        delete $rootScope.countApproval;
+                    
+                    if($rootScope.team != undefined)
+                        delete $rootScope.team;
+                    
                     $timeout(function () {
 
                         $ionicLoading.hide();
@@ -310,472 +299,30 @@ he
                 }
             }
 
-            // news
-            function initNews() {
-                $scope.newsPopover = $ionicPopover.fromTemplate(newsTemplate, {
-                    scope: $scope
-                });
-
-                $scope.news = {
-                    type: 'classic',
-                    items: appService.getNews()
-                }
-
-                if ($state.is('tabs.post-detail') || $state.is('tabs.comments') || $state.is('tabs.likes')) {
-                    $stateParams.post === null ? $scope.post = appService.getRandomObject($scope.news.items) : $scope.post = $stateParams.post;
-
-                }
-                $scope.gotoComments = function () {
-                    $state.go('tabs.comments');
-                    $ionicHistory.nextViewOptions({
-                        disableAnimate: true,
-                        disableBack: true
-                    });
-                }
-                $scope.gotoLikes = function () {
-                    $state.go('tabs.likes');
-                    $ionicHistory.nextViewOptions({
-                        disableAnimate: true,
-                        disableBack: true
-                    });
-                }
-
-                $scope.like = function (post) {
-                    post.likes === undefined ? post.likes = [] : null;
-                    if ($scope.liked == true) {
-                        $scope.liked = false;
-                        post.likes.splice(_.findIndex(post.likes, ['name', $rootScope.user.name]));
-                    } else {
-                        $scope.liked = true;
-                        post.likes.push({ name: $rootScope.user.name, photo: $rootScope.user.photo, publishedDate: new Date() });
-                    }
-                }
-
-                $scope.comment = function (input) {
-                    $scope.commentMessage = '';
-                    $scope.post.comments === undefined ? $scope.post.comments = [] : null;
-                    $scope.post.comments.push({ text: input, name: $rootScope.user.name, photo: $rootScope.user.photo, publishedDate: new Date() });
-
-                }
-
-                $scope.share = function (post) {
-                    document.addEventListener("deviceready", function () {
-                        $cordovaSocialSharing.share(post.summary, post.title, post.image)
-                            .then(function (result) {
-                                appService.showAlert('Post Shared', result, 'Ok', 'button-balanced', null);
-                            }, function (err) {
-                                appService.showAlert('Error Occured', err, 'Ok', 'button-assertive', null);
-                            });
-                    }, false);
-                }
-            }
-
             // profile
             function initProfile() {
+                console.log("rootScope",$rootScope);
                 $scope.general = {};
                
                 if(Main.getSession('profile')!=null && Main.getSession('profile') !=undefined ) {
                     $scope.profile = Main.getSession('profile');
                     $scope.profile.fullname = $scope.profile.employeeTransient.name;
-                    if($rootScope.countApproval == null)
+
+                    if($rootScope.countApproval == undefined)
                         $scope.general.countApproval = $scope.profile.needApproval;
                     else 
                         $scope.general.countApproval = $rootScope.countApproval;
+                    
+                    if($rootScope.user == undefined)
+                        $rootScope.user = {};
 
                     if($scope.profile.image != undefined) {
                         $rootScope.user.photo = $scope.profile.image;
+                    }else {
+                        $rootScope.user.photo = 'img/1491892621_profle.png';
                     }
                 }
             }
-
-            // dashboard
-            function initDashboard() {
-                chartData();
-
-                $scope.viewDate = new Date();
-                $scope.notifyTimes = ['at set time', '15 mins before', '30 mins before', '45 mins before', 'an hour before'];
-                $scope.notifications = appService.getNotifications();
-                getDateEvents(moment($scope.viewDate._d).startOf('day')._d);
-
-                $scope.decrementDate = function (item) {
-                    if (angular.isUndefined($scope.viewDate._d)) $scope.viewDate = moment($scope.viewDate).startOf('day').subtract(1, 'days');
-                    else $scope.viewDate = moment($scope.viewDate._d).startOf('day').subtract(1, 'days');
-                    getDateEvents($scope.viewDate._d)
-                };
-
-                $scope.incrementDate = function (item) {
-                    if (angular.isUndefined($scope.viewDate._d)) $scope.viewDate = moment($scope.viewDate).startOf('day').add(1, 'days');
-                    else $scope.viewDate = moment($scope.viewDate._d).startOf('day').add(1, 'day');
-                    getDateEvents($scope.viewDate._d)
-                };
-                function getDateEvents(date) {
-                    var range = moment().range(date, moment(date).endOf('day'));
-                    $scope.seletedDateEvents = [];
-                    angular.forEach($scope.notifications, function (value, key) {
-                        if (moment(value.startsAt).within(range)) {
-                            $scope.seletedDateEvents.push(value);
-                        }
-                    });
-                }
-
-                if ($state.is('create-edit-reminder')) {
-                    $stateParams.reminder !== null ? $scope.reminder = angular.copy($stateParams.reminder) : $scope.reminder = { type: 'Add Task', startsAt: new Date(), endsAt: new Date(), allDay: true, remindTime: [] };
-                    $stateParams.type !== null ? $scope.reminder.type = angular.copy($stateParams.type) : null;
-                }
-
-                $scope.reminderPopover = $ionicPopover.fromTemplate(reminderTemplate, {
-                    scope: $scope
-                });
-
-                $ionicModal.fromTemplateUrl('app/dashboard/remind-at-modal.html', {
-                    scope: $scope,
-                    animation: 'fade-in-scale'
-                }).then(function (modal) {
-                    $scope.modalRemindAt = modal;
-                });
-                $scope.openRemindAt = function () {
-                    $scope.modalRemindAt.show();
-                };
-                $scope.closeRemindAt = function () {
-                    $scope.modalRemindAt.hide();
-                };
-
-                $scope.notifyCheck = function (index, item) {
-                    if (angular.isUndefined($scope.reminder.remindTime[index])) {
-                        $scope.reminder.remindTime[index] = item;
-                    } else {
-                        $scope.reminder.remindTime[index] = false;
-                    }
-                }
-
-                $scope.saveReminder = function () {
-                    if ($scope.reminderForm.$valid) {
-                        if ($stateParams.reminder === null) {
-                            $rootScope.notifications.push($scope.reminder);
-                        } else {
-                            $rootScope.notifications.splice($rootScope.notifications.indexOf(_.find($rootScope.notifications, function (obj) { return obj == $stateParams.reminder })), 1, $scope.reminder);
-                        }
-                    } else {
-                        appService.showAlert('Form Invalid', '<p class="text-center">A title and start date is required</p>', 'Ok', 'button-assertive', null);
-                    }
-                }
-
-                function chartData() {
-                    $scope.line_labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
-                    $scope.line_data = [
-                        [65, 59, 80, 81, 56, 55, 40],
-                        [28, 48, 40, 19, 86, 27, 90]
-                    ];
-
-                    $scope.doughnut_labels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
-                    $scope.doughnut_data = [300, 500, 100];
-                }
-            }
-
-            // shop
-            function initShop() {
-                $scope.list_type = 'grid';
-                $scope.sizes = [6, 7, 8, 9, 10, 11, 12];
-                $scope.products = appService.getProducts();
-
-                if ($state.is('tabs.cards')) {
-                    $scope.product === undefined ? $scope.product = appService.getRandomObject($scope.products) : null;
-                }
-
-                $scope.cart === undefined ? $scope.cart = [] : null;
-
-
-                $scope.selectProductDetails = function (product) {
-                    $scope.product = product;
-                    $scope.openProductDetails();
-                }
-                
-                $scope.addToCart = function (product) {
-                    $scope.products.splice(_.findIndex($scope.products, ['id', product.id]), 1, product);
-                    $scope.cart.push(product);
-                    $scope.closeProductDetails();
-                    Materialize.toast('<i class="icon ion-ios-cart-outline"></i> Item added to basket', 4000)
-                };
-
-                $scope.makePayment = function () {
-                    appService.Loading('show');
-                    $timeout(function () {
-                        appService.Loading();
-                        $scope.goTo('tabs.thanks');
-                    }, 2580);
-                    Materialize.toast('<i class="icon ion-ios-checkmark-outline"></i> Payment has been successful', 4000)
-                };
-
-                $ionicModal.fromTemplateUrl('app/shop/product-preview.html', {
-                    scope: $scope,
-                    animation: 'fade-in-scale'
-                }).then(function (modal) {
-                    $scope.modalProductPreview = modal;
-                });
-                $scope.openProductPreview = function (item) {
-                    $scope.product = item;
-                    $scope.modalProductPreview.show();
-                };
-                $scope.closeProductPreview = function () {
-                    $scope.product = undefined;
-                    $scope.modalProductPreview.hide();
-                };
-
-                $ionicModal.fromTemplateUrl('app/shop/product-details.html', {
-                    scope: $scope,
-                    animation: 'jelly'
-                }).then(function (modal) {
-                    $scope.modalProductDetails = modal;
-                });
-
-                $scope.openProductDetails = function (item) {
-                    $scope.modalProductDetails.show();
-                };
-
-                $scope.closeProductDetails = function () {
-                    $scope.modalProductDetails.hide();
-                };
-
-                $scope.changeListType = function () {
-                    if ($scope.list_type === 'list') {
-                        $scope.list_type = 'grid';
-                    } else if ($scope.list_type === 'grid2') {
-                        $scope.list_type = 'list';
-                    }
-                    else $scope.list_type = 'grid2';
-                }
-            }
-
-            // calendar
-            function initCalendar() {
-                $scope.calendarView = 'month';
-                $scope.viewDate = new Date();
-                $scope.events = $scope.notifications;
-
-                $scope.eventClicked = function (event) {
-                    //alert.show('Clicked', event);
-                };
-
-                $scope.eventEdited = function (event) {
-                    //alert.show('Edited', event);
-                };
-
-                $scope.eventDeleted = function (event) {
-                    //alert.show('Deleted', event);
-                };
-
-                $scope.eventTimesChanged = function (event) {
-                    //alert.show('Dropped or resized', event);
-                };
-
-                $scope.toggle = function ($event, field, event) {
-                    $event.preventDefault();
-                    $event.stopPropagation();
-                    event[field] = !event[field];
-                };
-
-                $scope.viewChangeClicked = function (nextView, date) {
-                    $scope.viewDate = date;
-                    $scope.seletedDateEvents = [];
-                    if (nextView === 'day') {
-                        angular.forEach($scope.events, function (value, key) {
-                            var range = moment().range(value.startsAt, value.endsAt);
-                            if (range.contains(date)) {
-                                $scope.seletedDateEvents.push(value);
-                            }
-                        });
-                        return false;
-                    }
-                };
-
-                $scope.getDayEvents = function () {
-                    $scope.selectedDate = new Date();
-                    angular.forEach($scope.events, function (value, key) {
-                        var range = moment().range(value.startsAt, value.endsAt);
-                        if (range.contains(new Date())) {
-                            $scope.seletedDateEvents.push(value);
-                        }
-                    });
-                }
-
-            }
-
-            // conversations & chat
-            function initChat() {
-                $scope.contactPopover = $ionicPopover.fromTemplate(contactTemplate, {
-                    scope: $scope
-                });
-
-                var randomMessages = appService.getRandomMessages()
-                $scope.conversations = appService.getMessages();
-                var viewScroll = $ionicScrollDelegate.$getByHandle('chatScroll');
-                var footerBar, scroller, txtInput;
-
-                $scope.$on('$ionicView.beforeEnter', function () {
-                    $state.is('tabs.chat') ? $scope.chat = {} : null;
-                });
-
-                $scope.$on('$ionicView.enter', function () {
-                    if ($state.is('tabs.chat')) {
-                        $scope.chat = {};
-                        appService.Loading('show');
-                        if ($stateParams.chat == null) {
-                            $scope.chat = appService.getRandomObject($scope.conversations);
-                        } else {
-                            if ($stateParams.chat.conversation) {
-                                $scope.chat = _.find($scope.conversations, ['conversation', $stateParams.chat.conversation]);
-                            } else {
-                                $scope.chat = {
-                                    conversation: $scope.conversations.length + 1,
-                                    recepientid: $stateParams.chat.id,
-                                    recepientname: $stateParams.chat.name,
-                                    recepientphoto: $stateParams.chat.photo,
-                                    messages: []
-                                }
-                            }
-
-                        }
-                        $timeout(function () {
-                            appService.Loading();
-                        }, 250);
-
-                        $timeout(function () {
-                            viewScroll.scrollBottom(true);
-                            footerBar = document.body.querySelector('#chat .bar-footer');
-                            scroller = document.body.querySelector('#chat .scroll-content');
-                        }, 0);
-                    }
-                });
-
-                $scope.sendChat = function (item) {
-                    appService.KeepKeyboardOpen('#textChat');
-                    var message = {
-                        sentAt: new Date(),
-                        name: $rootScope.user.name,
-                        photo: $rootScope.user.photo,
-                        text: item,
-                        senderid: $rootScope.user.id
-                    };
-
-                    $timeout(function () {
-                        $scope.chat.messages.push(message);
-                        appService.KeepKeyboardOpen('#textChat');
-                        viewScroll.scrollBottom(true);
-                    }, 0);
-
-                    $scope.input = '';
-
-                    $timeout(function () {
-                        $scope.chat.messages.push({
-                            sentAt: new Date(),
-                            name: $scope.chat.recepientname,
-                            photo: $scope.chat.recepientphoto,
-                            text: randomMessages[Math.floor(Math.random() * randomMessages.length)],
-                            senderid: $scope.chat.recepientid
-                        });
-
-                        appService.KeepKeyboardOpen('#textChat');
-                        viewScroll.scrollBottom(true);
-                    }, 2000);
-                }
-
-                $scope.onMessageHold = function (e, itemIndex, chat) {
-
-                    $ionicActionSheet.show({
-                        buttons: [{
-                            text: 'Copy Text'
-                        }, {
-                                text: 'Delete Message'
-                            }],
-                        buttonClicked: function (index) {
-                            switch (index) {
-                                case 0:
-                                    $cordovaClipboard.copy(chat.text).then(function () {
-                                    }, function () {
-                                    });
-                                    break;
-                                case 1:
-                                    $scope.chat.messages.splice(itemIndex, 1);
-                                    $timeout(function () {
-                                        viewScroll.resize();
-                                    }, 0);
-                                    break;
-                            }
-                            return true;
-                        }
-                    });
-                };
-
-                $scope.sendPhoto = function () {
-                    var message = {
-                        sentAt: new Date(),
-                        name: $rootScope.user.name,
-                        photo: $rootScope.user.photo,
-                        senderid: $rootScope.user.id
-                    };
-                    $ionicActionSheet.show({
-                        buttons: [{
-                            text: 'Take Picture'
-                        }, {
-                                text: 'Select From Gallery'
-                            }],
-                        buttonClicked: function (index) {
-                            switch (index) {
-                                case 0: // Take Picture
-                                    document.addEventListener("deviceready", function () {
-                                        $cordovaCamera.getPicture(appService.getCameraOptions()).then(function (imageData) {
-                                            message.text = '<img src="' + "data:image/jpeg;base64," + imageData + '" style="max-width: 300px">';
-                                            $timeout(function () {
-                                                $scope.chat.messages.push(message);
-                                                viewScroll.scrollBottom(true);
-                                            }, 0);
-                                        }, function (err) {
-                                            appService.showAlert('Error', err, 'Close', 'button-assertive', null);
-                                        });
-                                    }, false);
-                                    break;
-                                case 1: // Select From Gallery
-                                    document.addEventListener("deviceready", function () {
-                                        $cordovaCamera.getPicture(appService.getLibraryOptions()).then(function (imageData) {
-                                            message.text = '<img src="' + "data:image/jpeg;base64," + imageData + '" style="width: 500px;height:500px">';
-                                            $timeout(function () {
-                                                $scope.chat.messages.push(message);
-                                                viewScroll.scrollBottom(true);
-                                            }, 0);
-                                        }, function (err) {
-                                            appService.showAlert('Error', err, 'Close', 'button-assertive', null);
-                                        });
-                                    }, false);
-                                    break;
-                            }
-                            return true;
-                        }
-                    });
-                };
-
-                // I emit this event from the monospaced.elastic directive, read line 480
-                //add the following after line 168 of lib/angular-elastic/elastic.js
-                //scope.$emit('taResize', $ta); 
-                $scope.$on('taResize', function (e, ta) {
-                    console.log('taResize');
-                    if (!ta) return;
-
-                    var taHeight = ta[0].offsetHeight;
-                    console.log('taHeight: ' + taHeight);
-
-                    if (!footerBar) return;
-
-                    var newFooterHeight = taHeight + 30;
-                    newFooterHeight = (newFooterHeight > 44) ? newFooterHeight : 44;
-
-                    footerBar.style.height = newFooterHeight + 'px';
-                    scroller.style.bottom = newFooterHeight + 'px';
-                });
-            }
-
-
-
-
         })
 
 
@@ -804,6 +351,7 @@ var searchTemplate =
     '</div>' +
     '</ion-content>' +
     '</ion-popover-view>';
+    
 var contactTemplate =
     '<ion-popover-view class="right large">' +
     '<ion-content>' +

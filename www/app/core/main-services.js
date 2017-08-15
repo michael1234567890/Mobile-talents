@@ -4,9 +4,9 @@
 
     angular.module('main.services', [])
     .factory('Main', function($q, $timeout, $http, $localStorage){
-        //var hostname = "http://192.168.43.211";
-        var hostname = "http://192.168.43.162";
-        //var hostname = "http://localhost";
+        //var hostname = "http://192.168.43.162";
+        //var hostname = "http://45.76.147.40"
+        var hostname = "http://localhost";
         var phphost =  hostname + "/talents";
 
         var printBaseUrl = hostname + "/talents/payslippdf";
@@ -243,9 +243,6 @@
             },
             destroySession : function (key){
                 return localStorage.removeItem(key);
-            },
-            getUrlApi : function(){
-                return baseUrl;
             },
             getTakePictureOptions : function(){
                 return takePictureOptions;

@@ -313,6 +313,18 @@ angular.module('talent.routes', [])
         }
       })
 
+      .state('app.benefitclaimneedreport', {
+        url: '/benefitclaimneedreport',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/claim/benefitclaimneedreport.html',
+            controller: 'BenefitClaimNeedReportCtrl'
+          }
+        }
+      })
+
+      
+
       .state('app.benefitdetail', {
         url: '/benefitdetail/:id',
         views: {

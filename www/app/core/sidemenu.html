@@ -26,14 +26,14 @@
     </ion-side-menu>
 -->
  <!-- Left menu -->
-  <ion-side-menu side="left">
+  <ion-side-menu  >
     <ion-content>
 
       <!-- User profile -->
       <div class="profile positive-bg text-center padding">
         <a ui-sref="app.profile" class="header">
           <img class="profile-picture circle" menu-close src="{{user.photo}}">
-          <h5 class="light" style="font-weight:bold">{{profile.fullname}}</h5>
+          <h5 class="light" style="font-weight:bold">{{profile.fullname}} <br>{{profile.employeeTransient.assignment.employeeNo}}</h5>
         </a>
       </div>
 
