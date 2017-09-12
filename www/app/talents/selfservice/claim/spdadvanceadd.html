@@ -42,7 +42,15 @@
 
         <div class="row">
             <div class="input-field col">
-                <p>Amount</p>
+                <p for="destination">Estimated Expenses & Items </p>
+                <textarea placeholder="eg. Hotel Rp. 400.000, Ticket Rp. 200.000 "style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" rows="2" ng-model="detail.data" maxlength="240"></textarea>
+                
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col">
+                <p>Total Amount</p>
                 <input  id="disabled" ng-keyup="change($event,$index)" type="tel" class="validate" ng-model="detail.amount">
                 
             </div>
@@ -51,7 +59,7 @@
         <div class="row">
             <div class="input-field col">
                 <p for="destination">Remark</p>
-                <textarea style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" rows="2" ng-model="detail.remark" maxlength="240"></textarea>
+                <textarea placeholder="eg. Business trip"style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" rows="2" ng-model="detail.remark" maxlength="240"></textarea>
                 
             </div>
         </div>

@@ -161,70 +161,24 @@ angular.module('leave.controllers', [])
 })
 
 
-.controller('ListLeaveCtrl', function($ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('ListLeaveCtrl', function(appService,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
 
-    $scope.leaves = [];
-
+    $scope.leaves = appService.getLeaves();
+    console.log("leaves " + $scope.leaves.length);
    
-
-    $scope.refresh = function(){
-      initMethod();
-    }
-    
-    var successRequest = function (res){
-      $ionicLoading.hide();
-      console.log(res);
-      $scope.leaves = res;
-      
-      $scope.$broadcast('scroll.refreshComplete');
-
-    }
-
-    var errorRequest = function (err, status){
-      $ionicLoading.hide();
-      if(status == 401) {
-        var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
-        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-      }else {
-        alert("Check your connection");
-      }
-      console.log(err);
-      console.log(status);
-    }
-
-    var successRefreshToken = function(res){
-      Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
-    }
-    var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
-    }
-
-    function getLeaves(){
-      $ionicLoading.show({
-          template: 'Loading ...'
-      });
-      var accessToken = Main.getSession("token").access_token;
-      var urlApi = Main.getUrlApi() + '/api/user/leave';
-      Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
-    }
-
-    function initMethod(){
-      getLeaves();      
-    }
-
-    initMethod();
    
     
 
 
+})
+
+.controller('DetailLeaveCtrl', function($ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+ 
+ 
 })
 
 .controller('ChooseLeaveCtrl', function($ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {

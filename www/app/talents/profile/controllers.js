@@ -12,9 +12,6 @@ angular.module('profile.controllers', [])
     if($scope.profile.employeeTransient.lastName != null)
       $scope.profile.fullName += " " + $scope.profile.employeeTransient.lastName;
     
-    console.log($scope.profile);
-  
-
 })
 
 .controller('EditProfileCtrl', function(appService,$cordovaCamera,$ionicActionSheet,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
@@ -24,18 +21,16 @@ angular.module('profile.controllers', [])
     }
     $scope.imageData = $rootScope.user.photo;
     $scope.profile = Main.getSession("profile");
-    $scope.image = "";
     console.log($scope.profile);
+    $scope.image = "";
+    $scope.data = {};
+    $scope.data.handphone = $scope.profile.employeeTransient.mobilePhone;
 
     var successRefreshToken = function(res){
       Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
     }
 
     var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
     }
 
     var successRequest = function (res){
@@ -43,7 +38,7 @@ angular.module('profile.controllers', [])
         alert(res.message);
         if($scope.image != "")
            $rootScope.user.photo = "data:image/jpeg;base64," + $scope.image;
-        goBack("app.profile");
+        $scope.goBack("app.profile");
       
     }
 
@@ -51,7 +46,6 @@ angular.module('profile.controllers', [])
         $ionicLoading.hide();
         if(status == 401) {
           var refreshToken = Main.getSession("token").refresh_token
-          console.log("need refresh token");
           Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
         }else {
             if(status==500)
@@ -59,8 +53,6 @@ angular.module('profile.controllers', [])
             else
               alert("Please Check your connection");
         }
-        console.log(err);
-        console.log(status);
     }
 
 
@@ -76,7 +68,7 @@ angular.module('profile.controllers', [])
                   switch (index) {
                       case 0: // Take Picture
                           document.addEventListener("deviceready", function () {
-                              $cordovaCamera.getPicture(appService.getCameraOptions()).then(function (imageData) {
+                              $cordovaCamera.getPicture(appService.getCameraOptionsProfile()).then(function (imageData) {
                                   $scope.imageData = "data:image/jpeg;base64," + imageData;
                                   $scope.image = imageData;
                               }, function (err) {
@@ -87,7 +79,7 @@ angular.module('profile.controllers', [])
                           break;
                       case 1: // Select From Gallery
                           document.addEventListener("deviceready", function () {
-                              $cordovaCamera.getPicture(appService.getLibraryOptions()).then(function (imageData) {
+                              $cordovaCamera.getPicture(appService.getLibraryOptionsProfile()).then(function (imageData) {
                                    $scope.imageData = "data:image/jpeg;base64," + imageData;
                                    $scope.image = imageData;
                               }, function (err) {
@@ -102,7 +94,7 @@ angular.module('profile.controllers', [])
     };
 
     $scope.save = function(){
-          var data = {};
+          
           if($scope.image != "") {
               $ionicLoading.show({
                   template: 'Processing...'
@@ -157,7 +149,6 @@ angular.module('profile.controllers', [])
       $ionicLoading.hide();
       // $scope.goTo('tabs.thanks');
       alert(res.message);
-      console.log(res);
       $scope.user = res;
       $scope.goBack("app.profile");
     }
@@ -169,8 +160,6 @@ angular.module('profile.controllers', [])
       }else {
         alert("Check your connection");
       }
-      console.log(err);
-      console.log(status);
     }
 
 

@@ -5,33 +5,27 @@
     </ion-nav-buttons>
 
     <ion-content class="has-header bt-grey profile" scroll="true">
-        <!-- <div class="header">
-            <img ng-src="{{user.photo}}">
-            <!--<span class="badge badge-balanced">3</span>-->
-            <!-- <h2 class="lead text-medium">{{personal.firstName}} {{personal.lastName}}</h2>
-            <p style="font-size:14px">{{personal.assignment.jobTitle.jobTitle}}</p>
-        </div>-->
         <div class="card hybrid">
             <div class="item item-thumbnail-left item-text-wrap" >
                 <img ng-src="{{user.photo}}" style="max-width:100px">
-                <h2 class="lead text-medium" style="padding-left:0px">{{personal.name}}</h2>
-                <h3>{{personal.assignment.positionName}}</h3>
-                <p style="font-size:14px">{{personal.assignment.organizationName}}</p>
+                <h4  style="padding-left:0px">{{personal.name}}</h4>
+                <p class="text-small">{{personal.assignment.positionName}}</p>
+                <p class="text-smaller">{{personal.assignment.organizationName}}</p>
             </div>
         </div>
 
         <div class="list">
             <div class="item item-text-wrap" >
-                <p class="text-small">Place of Birth</p>
-                <h2 class="lead text-small" >{{personal.birthPlace}}</h2>
+                <p class="text-small">Place and Date of Birth</p>
+                <h2 class="lead text-small" >{{personal.birthPlace}} , {{personal.birthDate}}</h2>
             </div>
             <div class="item item-text-wrap" >
-                <p class="text-small">Date of Birth</p>
-                <h2 class="lead text-small" >{{personal.birthDate}}</h2>
+                <p class="text-small">Gender</p>
+                <h2 class="lead text-small" >{{personal.gender}}</h2>
             </div>
             <div class="item item-text-wrap item-icon-right" ng-click="goChangeMaritalStatus(personal.maritalStatus,personal.maritalStatusDataApproval)">
                 <p class="text-small">Marital Status</p>
-                <p class="text-small" >{{personal.showMaritalStatus}}</p>
+                <h2 class="lead text-small" >{{personal.showMaritalStatus}}</h2>
                 <span class="item-note calm" ng-if="personal.maritalStatusDataApproval !=null" style="font-size:12px;color">
                     Waiting Approval
                 </span>

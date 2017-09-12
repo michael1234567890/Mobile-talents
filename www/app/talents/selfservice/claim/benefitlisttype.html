@@ -26,6 +26,15 @@
                             {{requestHeader.startDate| date: "yyyy-MM-dd"}}
                         </ionic-datepicker>
             </div>
+
+        </div>
+        <div class="row" ng-if="category == 'kacamata' || category == 'medical' ">
+            <div class="input-field col " style="margin-top:10px">
+                <p ng-if="category=='kacamata'">Optical Store </p>
+                <p ng-if="category=='medical'">Hospital Name</p>
+                <textarea style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" rows="2" ng-model="requestHeader.remark" maxlength="100"></textarea>
+                
+            </div>
         </div>
         
 
@@ -54,7 +63,7 @@
             </div>
         </div>
         <div class="row" ng-if="category == 'perjalanan dinas' || category == 'mutasi' ">
-            <div class="input-field col padding-horizontal" style="margin-top:10px">
+            <div class="input-field col" style="margin-top:10px">
                 <p>Remark </p>
                 <textarea style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" rows="2" ng-model="requestHeader.remark" maxlength="100"></textarea>
                 
@@ -118,17 +127,6 @@
                 <p ng-if="defaultValue != 1"class="text-small text-wrap">Are you sure want to apply {{labelCategory}} ?  <br>Default <b> Rp. {{defaultValue | number:0}}</b></p>
                 <p ng-if="defaultValue == 1"class="text-small text-wrap">Are you sure want to apply {{labelCategory}} ? </p>
         </div>
-<!--
-        <p class="bb text-medium padding">Please fill out your expense</p>
-        <br>
-        <div class="edit padding-horizontal">  
-            <div ng-if="defaultValue == 0"  ng-repeat="item in listtype track by $index" >
-                     <label  class="item item-input">
-                        <span class="input-label"><b>{{item.name}}</b></span> 
-                        <input   placeholder="Rp. 0" value="0" ng-keyup="change($event,$index)" type="tel"   ng-model="item.amount">
-                    </label>
-            </div>
-        </div>-->
     </div>
 
     <div ng-if="directType == false || defaultValue==0">

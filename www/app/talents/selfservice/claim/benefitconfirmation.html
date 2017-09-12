@@ -37,7 +37,7 @@
 <div class="list" >
                 <div class="item item-divider">Attach Supporting Document</div> 
                     <div class="row">
-                        <button class="btn waves-effect button-small waves-light button button-stable  button-block waves-effect waves-light" ng-click="addPicture()">Add Attachment</button>
+                      <button class="button button-block button-outline button-positive" ng-click="addPicture()"><i class="icon ion-ios-camera-outline"></i> Add Attachment</button>
                     </div>
                 <div class="row post" >
                     <div class="col" ng-repeat="items in images" ><img height="90px"  ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>

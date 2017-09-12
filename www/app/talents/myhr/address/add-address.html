@@ -4,27 +4,6 @@
         
         <div class="item no-padding">
             <div class="row">
-                <div class="input-field col s12">
-                    <p for="textarea1">Address *</p>
-                    <textarea  placeholder="Enter your Address detail" ng-model="address.address" class="materialize-textarea"></textarea>
-                   
-                </div>
-            </div>
-             <div class="row">
-                <div class="input-field col s6">
-                     <p for="textarea1">RT</p>
-                    <input id="first_name" placeholder="e.g. 01" ng-model="address.rt" type="text" class="validate">
-                  
-                </div>
-                <div class="input-field col s6">
-                    <p for="textarea1">RW</p>
-                    <input  type="text" ng-model="address.rw" placeholder="e.g. 02" class="validate">
-                   
-                </div>
-        
-            </div>
-
-            <div class="row">
                 <div class="input-field col">
                       <p for="first_name">Country *</p>
                       <select ng-model="address.country">
@@ -49,18 +28,51 @@
             <div class="row">
                 <div class="input-field col">
                   <p for="first_name">City *</p>
-                  <!--
-                  <select ng-model="address.city">
-                        <option value="">-- Select --</option>
-                        <option ng-repeat="city in selectCity">{{city.id}}</option>
-                  </select>
-                  -->
                   <input placeholder="Enter City" ng-model="address.city" type="text" class="validate">
                 </div>
 
             </div>
-           
-             
+           <div class="row">
+                <div class="input-field col s6">
+                     <p for="textarea1">District *</p>
+                    <input id="first_name" placeholder="Enter District" ng-model="address.district" type="text" class="validate">
+                  
+                </div>
+                <div class="input-field col s6">
+                    <p for="textarea1">Sub District *</p>
+                    <input  type="text" ng-model="address.subdistrict" placeholder="Enter Sub District" class="validate">
+                   
+                </div>
+            </div>
+             <div class="row">
+                <div class="input-field col s6">
+                     <p for="textarea1">RT *</p>
+                    <input id="first_name" placeholder="e.g. 01" ng-model="address.rt" type="text" class="validate">
+                  
+                </div>
+                <div class="input-field col s6">
+                    <p for="textarea1">RW *</p>
+                    <input  type="text" ng-model="address.rw" placeholder="e.g. 02" class="validate">
+                   
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="input-field col s12">
+                    <p for="textarea1">Address *</p>
+                    <textarea  placeholder="Enter your Address detail" ng-model="address.address" class="materialize-textarea"></textarea>
+                   
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col">
+                 <p for="first_name">Stay Status *</p>
+                  <select ng-model="address.stayStatus">
+                        <option value="">-- Select --</option>
+                        <option ng-repeat="stayStatus in selectStayStatus">{{stayStatus.id}}</option>
+                  </select>
+                </div>
+            </div>
             <div class="row">
                 <div class="input-field col">
                     <p for="first_name">ZIP Code</p>
@@ -75,19 +87,7 @@
                    
                 </div>
             </div>
-
-            <div class="row">
-                
-            </div>
-            <div class="row">
-                <div class="input-field col">
-                 <p for="first_name">Stay Status *</p>
-                  <select ng-model="address.stayStatus">
-                        <option value="">-- Select --</option>
-                        <option ng-repeat="stayStatus in selectStayStatus">{{stayStatus.id}}</option>
-                  </select>
-                </div>
-            </div>
+            
 
             
             <div class="row">

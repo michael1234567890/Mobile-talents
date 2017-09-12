@@ -1,33 +1,17 @@
-<ion-view hide-nav-bar="true" class="bg-lightgrey">
-
-    <ion-header-bar>
-        <div class="row text-center">
-            <div class="col font-thin text-large dark" ng-click="goBack('app.profile')">Cancel</div>
-            <div class="col font-thin text-large balanced bl-grey" ng-click="save()">Save</div>
-        </div>
-    </ion-header-bar>
-
-    <ion-content class="profile has-header bt-grey">
-        <p class="bb text-smaller padding-horizontal uppercase">Change Photo Profile</p>
+<ion-view title="Change Photo profile">
+    <ion-content class="profile has-header bt-grey" scroll="true">
         <div class="header edit">
             <img ng-src="{{imageData}}" ng-click="takePicture()">
         </div>
-
-        <!--
-        <div class="edit padding-horizontal">
-            <label class="item item-input">
-                <span class="input-label">Full Name</span>
-                <input type="text" ng-model="profile.fullName" disabled>
-            </label>
-            
-            <label class="item item-input">
-                <span class="input-label">Email</span>
-                <input type="email" ng-model="profile.email" disabled>
-            </label>
-        </div>-->
-
-
-       
+        <div class="item no-padding">
+        
+	         <div class="row text-center">
+	            <!--<div class="col font-thin text-large dark" ng-click="goBack('app.profile')">Cancel</div>
+	             <div class="col font-thin text-large balanced bl-grey" ng-click="save()">Save</div>-->
+	            <button class="btn waves-effect button-small waves-light button button-balanced  button-block waves-effect waves-light" ng-click="save()">Submit</button>
+	        </div>
+        </div>
+        
 
     </ion-content>
 </ion-view>

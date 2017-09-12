@@ -200,7 +200,6 @@ angular.module('selfservice.controllers', [])
     $scope.choice.select = "monthly";
     $scope.payslipType = Main.getSession("profile").companySettings.payslipType;
     var arrCompanyRef = Main.getSession("profile").companyReference;
-    console.log("arrCompanyRef",arrCompanyRef);
     var refYear = Main.getDataReference(arrCompanyRef,'payslip',null,'selectYear');
     var year ="0";
     var month = "0";
@@ -217,7 +216,6 @@ angular.module('selfservice.controllers', [])
     
 
     $scope.submitForm = function(choice){
-      console.log(choice.select);
       $scope.choiceSelect = choice.select;
       $ionicLoading.show({
           template: 'Loading...'
@@ -250,12 +248,9 @@ angular.module('selfservice.controllers', [])
       $ionicLoading.hide();
       if(res!= null && res.periodDate != null) {
           arrPeriodDate = res.periodDate.split("-");
-          console.log(arrPeriodDate);
           $scope.payslip.year = arrPeriodDate[0];
           $scope.payslip.month = Main.getValuefromId($scope.selectMonth,arrPeriodDate[1]);
-          console.log($scope.payslip.month);
       }
-      console.log(res);
     }
 
     function getLatestMonth(){
@@ -268,7 +263,6 @@ angular.module('selfservice.controllers', [])
     }
 
     function initModule(){
-        console.log(refYear);
         if(refYear != undefined && refYear != '') {
              $scope.selectYear = JSON.parse(refYear);
         }
@@ -305,7 +299,6 @@ angular.module('selfservice.controllers', [])
       $ionicLoading.hide();
       if(status == 401) {
         var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
         Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
       }else {
          if(status==500)
@@ -313,8 +306,6 @@ angular.module('selfservice.controllers', [])
           else
             alert("Please Check your connection");
       }
-      console.log(err);
-      console.log(status);
     }
 
     function getPaySlip(payrollType,year,month){
@@ -358,7 +349,6 @@ angular.module('selfservice.controllers', [])
     $scope.type = $stateParams.type;
     $scope.payslipType = Main.getSession("profile").companySettings.payslipType;
     function getPaySlip (){
-        console.log($rootScope.payslipSelected);
         if($rootScope.payslipSelected != null) {
             $scope.listHeader = $rootScope.payslipSelected;
         }
@@ -438,7 +428,6 @@ angular.module('selfservice.controllers', [])
               sessionBalance.push(obj);
           };
           Main.setSession("balance",sessionBalance);
-          
       }
     }
     
@@ -478,7 +467,6 @@ angular.module('selfservice.controllers', [])
 
 .controller('BenefitListtypeCtrl', function($timeout,appService,$ionicActionSheet,$cordovaCamera,ionicDatePicker, $stateParams, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     var categoryType = $stateParams.categoryType;
-    console.log("categoryType",categoryType);
     var categoryTypeExtId = $stateParams.extId;
     var workflow = $stateParams.workflow;
     var messageValidation = "";
@@ -496,7 +484,6 @@ angular.module('selfservice.controllers', [])
     var listTypeSelected = [];
     $scope.titleCategory = categoryType;
     $scope.category = categoryType.toLowerCase();
-    console.log("category",$scope.category);
     $scope.requestHeader = {};
     $scope.arrSpdType = [{id:"regular"},{id:"pulang kampung"},{id:"mutasi"},{id:"training"},{id:"assessment"}];
     
@@ -553,7 +540,6 @@ angular.module('selfservice.controllers', [])
 
     function getBalance(type){
         type = type.toLowerCase();
-        console.log(Main.getSession("balance"));
         if(Main.getSession("balance") != undefined) {
             return Main.getValuefromId(Main.getSession("balance"),type);
         }
@@ -644,7 +630,6 @@ angular.module('selfservice.controllers', [])
     }
 
     function verificationForm(reqHeader){
-       console.log(reqHeader);
        if(reqHeader.categoryType == 'Perjalanan Dinas') {
             if(reqHeader.origin == undefined || reqHeader.origin == ""){
               messageValidation = "Origin can't be empty";
@@ -753,7 +738,6 @@ angular.module('selfservice.controllers', [])
         $scope.requestHeader.remark = "";
         $scope.requestHeader.attachments = []; 
         $scope.images = []; 
-        console.log("initdata");
     }
 
     function initModule() {
@@ -792,7 +776,6 @@ angular.module('selfservice.controllers', [])
                           $scope.listtype.push(obj);
                       };
                       
-                      console.log("$scope.listtype",$scope.listtype);
                   }
             }
         }
@@ -801,7 +784,6 @@ angular.module('selfservice.controllers', [])
 
 
         if($rootScope.needReportSelected != undefined) {
-            console.log($rootScope.needReportSelected);
             $scope.requestHeader.origin = $rootScope.needReportSelected.origin;
             $scope.requestHeader.remark = $rootScope.needReportSelected.remark;
             $scope.requestHeader.destination = $rootScope.needReportSelected.destination;
@@ -825,7 +807,6 @@ angular.module('selfservice.controllers', [])
       $scope.requestHeader.attachments = []; 
 
       $scope.$on('$ionicView.beforeEnter', function (event,data) {
-          console.log('enter');
           initMethod();
       });
 
@@ -882,7 +863,7 @@ angular.module('selfservice.controllers', [])
 
 
       $scope.submitForm = function(){
-          if($scope.requestHeader.attachments.length > 0) {
+          if($scope.requestHeader.attachments.length > -1) {
               $ionicLoading.show({
                 template: '<ion-spinner></ion-spinner>'
               });
@@ -941,27 +922,73 @@ angular.module('selfservice.controllers', [])
     
  })
 
-.controller('BenefitDetailCtrl', function($stateParams,$ionicLoading, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('BenefitDetailCtrl', function($ionicPopup,$stateParams,$ionicLoading, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+    $scope.confirm = {};
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
-
-
+    $scope.isAdmin = Main.getSession("profile").isAdmin;
     $scope.header = {};
     var id = $stateParams.id;
+    console.log(Main.getSession("profile"));
+    
+    var successApprove = function(res){
+        $ionicLoading.hide();
+        alert(res.message);
+        $scope.goBack('app.formrequestsearching');
+
+    }
+
+
+    var sendApproval = function(action,id,reason){
+        var data = {};
+        if(action == 'approved')
+          data = {"id":id,"status":action};
+        else
+          data = {"id":id,"status":action,"reasonReject":reason};
+
+        $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner>'
+        });
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/workflow/actionapproval';
+        var data = JSON.stringify(data);
+
+        Main.postRequestApi(accessToken,urlApi,data,successApprove,$scope.errorRequest);
+
+    }
+
+
+    $scope.confirmReject = function (idDataApproval){
+        var confirmPopup = $ionicPopup.confirm({
+            title: 'Reason Rejected',
+            template: '<textarea rows="2" maxlength="50" class="calm" style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" ng-model="confirm.reasonReject" ></textarea>',
+            cancelText: 'Cancel',
+            scope: $scope,
+            okText: 'Yes'
+          }).then(function(res) {
+              if (res) {
+                  var reason = $scope.confirm.reasonReject;
+                 
+                  if(reason == undefined || reason == "")
+                    alert("Reason reject can not empty");
+                  else
+                    sendApproval('rejected',idDataApproval,reason);
+              }
+              
+          });
+    }
+
     
     function successRequest(res) {
         $ionicLoading.hide();
         if(res != null){
             $scope.header = res;
-            console.log("$scope.header",$scope.header)
             if($scope.header.categoryType == 'Medical') {
               var arrDetail = [];
               if($scope.header.details.length > 0) {
-                console.log("$scope.header.details[0].data",$scope.header.details[0].data);
                 arrDetail = JSON.parse($scope.header.details[0].data);
               }
-              console.log("arrDetail",arrDetail);
               $scope.header.details = arrDetail;
           }
         }
@@ -969,7 +996,8 @@ angular.module('selfservice.controllers', [])
     }
 
     $scope.printReport = function (employee,uuid){
-        var url = Main.getPrintReportUrl() + "/spd?employee="+employee+"&uuid="+uuid;
+        
+        var url = Main.getPrintReportUrl() + "/spd?employee="+employee+"&uuid="+uuid+"&category="+$scope.header.categoryType;
         window.open(encodeURI(url), '_system', 'location=yes');
         return false;
     }
@@ -1001,12 +1029,10 @@ angular.module('selfservice.controllers', [])
     $scope.requests = [];
     $scope.needReportRequests = [];
     $scope.module = {};
-    console.log("session requestType", Main.getSession("categoryType"));
 
     $scope.gotoListType = function(index){
         $rootScope.needReportSelected = $scope.needReportRequests[index];
 
-        console.log("needReport",$rootScope.needReportSelected );
         if(Main.getSession("categoryType") != undefined) {
             var arrCategoryType = Main.getSession("categoryType");
             var objPerjalananDinas = null;
@@ -1143,7 +1169,6 @@ angular.module('selfservice.controllers', [])
 
     var datepicker = {
       callback: function (val) {  //Mandatory
-        console.log('Return value from the datepicker popup is : ' + val, new Date(val));
         $scope.requestHeader.startDate = val;
       },
       inputDate: new Date(),      //Optional
@@ -1268,6 +1293,11 @@ angular.module('selfservice.controllers', [])
 
         if(dataSpd.amount == undefined || dataSpd.amount == 0){
             messageValidation = "Amount can't be empty";
+            return false;
+        }
+
+        if(dataSpd.remark == undefined || dataSpd.remark == ""){
+            messageValidation = "Remark can't be empty";
             return false;
         }
 

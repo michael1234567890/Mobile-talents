@@ -3,8 +3,8 @@
 
 <ion-content class="has-header" scroll="true">
 
-<div class="item item-divider balanced-bg" style="margin-top:10px">{{header.reqNo}}</div> 
-<div class="list card">
+<div class="item item-divider balanced-bg" style="margin-top:10px"><span class="pull-left">{{header.reqNo}}</span><span class="pull-right text-small calm">{{header.status}}</span></div> 
+<div class="list">
     <div class="item">
         <div class="row">
             <h2 class="balanced col col-70" ><b>{{header.categoryType}}</b></h2>
@@ -19,6 +19,14 @@
                 <i class="icon ion-calendar text-larger"></i>
                 {{header.startDate | date: 'dd MMM yyyy'}} - {{header.endDate | date: 'dd MMM yyyy'}}
               </div>
+              <div class="item item-icon-left text-small" href="#">
+                <i class="icon ion-ios-list-outline text-larger"></i>
+                {{header.spdType}}
+              </div>
+              <div class="item item-icon-left text-small" href="#">
+                <i class="icon ion-ios-compose-outline text-larger"></i>
+                {{header.remark}}
+              </div>
         </div>
         
     </div>
@@ -31,7 +39,7 @@
                 <input class="col col-40" style="padding-right:5px" type="text" value="Rp. {{item.amount | number:0}}"  disabled>
             </label>
         </div>
-        <div class="item item-divider" style="text-align:right">TOTAL Rp. {{header.totalAmount | number:0}}</div> <br>
+        <div class="item item-divider" style="text-align:right">TOTAL CLAIM Rp. {{header.totalAmount | number:0}}</div> <br>
         <div ng-if="header.refRequestHeaderObj != null"  class="item item-divider dark-bg" style="text-align:right">{{header.refRequestHeaderObj.categoryType}} - TOTAL Rp. {{header.refRequestHeaderObj.totalAmount | number:0}}</div> 
     </div>
 </div>
@@ -54,8 +62,11 @@
             </label>
     </div>
 </div> -->
-    <div class="row" ng-if="header.categoryType == 'Perjalanan Dinas' && header.status=='approved'">
+    <div class="row" ng-if="(header.categoryType == 'Perjalanan Dinas' && header.status=='approved') || header.categoryType == 'SPD Advance'">
         <button class="btn button-small waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="printReport(header.employee,header.uuid)">Print Report</button>
+    </div>
+    <div class="row" ng-if="isAdmin==true && header.status=='approved'">
+        <button class="btn button-small waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="confirmReject(header.dataApproval.id)">Reject</button>
     </div>
 </ion-content>
 </ion-view>

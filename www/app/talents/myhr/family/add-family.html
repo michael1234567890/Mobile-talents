@@ -23,19 +23,15 @@
                 <div class="input-field col">
                     <p for="first_name">Name *</p>
                     <input id="first_name" placeholder="Enter Name" type="text" class="validate" ng-model="family.name">
-                    
                 </div>
                 
             </div>
             <div class="row">
-                
                 <div class="input-field col">
                     <p for="last_name">Place of Birth *</p>
                     <input id="last_name" placeholder="Enter Place of Birth" type="text" class="validate" ng-model="family.birthPlace">
                     
                 </div>
-
-                
             </div>
             <div class="input-field col">
                   <p for="first_name">Date of Birth *</p>
@@ -47,10 +43,19 @@
                             {{family.birthDate| date: "yyyy-MM-dd"}}
                     </ionic-datepicker>
 
-                </div>
+            </div>
             <div class="row">
                 <div class="input-field col">
-                   
+                  <p style="font-size:13px">Alive Status</p>
+                   <select class="select-dropdown" ng-model="family.aliveStatus" >
+                        <option value="">-- Select --</option>
+                        <option ng-repeat="alive in selectAliveStatus">{{alive.id}}</option>
+                  </select>
+
+                </div>
+            </div>
+           <div class="row">
+                <div class="input-field col">
                   <p style="font-size:13px">Gender *</p>
                    <select class="select-dropdown" ng-model="family.gender" >
                         <option value="">-- Select --</option>
@@ -118,7 +123,7 @@
             <div ng-if="isEdit != true">
               <div class="item item-divider">Attach Supporting Document</div> 
               <div class="row">
-                  <button class="btn waves-effect button-small waves-light button button-stable  button-block waves-effect waves-light" ng-click="addPicture()">Add Attachment</button>
+                  <button class="button button-block button-outline button-positive" ng-click="addPicture()"><i class="icon ion-ios-camera-outline"></i> Add Attachment</button>
               </div>
               <div class="row post" >
             

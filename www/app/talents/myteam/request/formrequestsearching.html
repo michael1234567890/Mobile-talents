@@ -1,6 +1,5 @@
-<ion-view title="List Request Benefit" class="bg-lightgrey">
+<ion-view title="Find Request" class="bg-lightgrey">
 <style>
-
     .left {
         text-align: left;
         float: left;
@@ -15,26 +14,26 @@
         font-weight: bold;
     }
 </style>
-<ion-content class="has-header bt-grey profile" scroll="false">
-    <ion-scroll direction="x" style="width:auto">
-            <div class="row text-center" style="height:40px">
-                <div class="col font-thin" ng-click="goTo('app.submitclaim')"><b>Request</b></div>
-                <div class="col font-thin text-medium balanced bb" ng-click="goTo('app.benefitclaimlist')"><b>List</b></div>
-                <div class="col font-thin" ng-click="goTo('app.benefitclaimneedreport')"><b>Need Report</b></div>
-            </div>
-    </ion-scroll>
-
-
+<ion-content class="has-header bt-grey" scroll="false">
+    <div class="list">
+          <div class="item item-input-inset">
+            <label class="item-input-wrapper" >
+              <input type="text" ng-model="formSearching.search"  placeholder="Request No">
+            </label>
+            <button class="button button-small button-calm" ng-click="find()">
+              Search &nbsp;
+            </button>
+          </div>
+    </div>
 <ion-scroll class="bg-lightgrey" direction="y" style="height:100%">
-
- <ion-refresher pulling-text="Pull to refresh"
-     refreshing-text="Loading..."
-     refreshing-icon="ion-loading-c"
-     pulling-icon="ion-ios7-arrow-thin-down"
-     on-refresh="refresh()">
-</ion-refresher>
-
-    <div class="item item-text-wrap"  ng-repeat="item in requests" ui-sref="app.benefitdetail({id: item.id})">
+    <div class="card" ng-repeat="item in requests" ui-sref="app.benefitdetail({id: item.id})">
+      <div class="item item-avatar item-text-wrap" >
+                <img ng-if="item.dataApproval.employeeRequestPhotoProfile!=null" ng-src="{{item.dataApproval.employeeRequestPhotoProfile}}">
+                <img ng-if="item.dataApproval.employeeRequestPhotoProfile==null" ng-src="img/1491892511_profle.png">
+                <h2 class="lead">{{item.dataApproval.employeeRequest.name}}</h2>
+                <!-- <p>{{item.taskDescription}}</p>-->
+      </div>
+      <div class="item item-text-wrap" >
         <div class="row">
             <div class="left"><h5 style="color: #949494;">{{item.createdDate | date: 'dd MMM yyyy'}}</h5></div>
             <div class="right"><h5 class="energized ">{{item.status}}</h5></div>
@@ -49,14 +48,12 @@
             <div class="uppercase"><h5 class="positive no-margin no-padding thicker">Rp. {{item.totalAmount | number : 0}}</h5></div>
         </div>
     </div>
-    <div class="item" ng-if="requests.length == 0" >
+    <div class="item" ng-if="requests.length == 0 && actionFind==true" >
             <div class="col col-100">
                 <h2>Data not found</h2>
-                <p>Pull to refresh</p>
             </div>  
     </div>
 
-
-</ion-scroll>
+    </div>
 </ion-content>
 </ion-view>

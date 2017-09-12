@@ -18,51 +18,46 @@
     </ion-refresher>
     <div ng-if="module.type === 'personalia'">
      <div class="card" ng-repeat="item in requests | filter: searchFilter ">
-            <div class="item item-avatar item-text-wrap" ng-if="item.task=='SUBMITFAMILY'" ng-click="gotoDetailRequest(item.id)" >
-                <img ng-src="img/1491892511_profle.png">
+            <div class="item item-text-wrap" ng-if="item.task=='SUBMITFAMILY'" ng-click="gotoDetailRequest(item.id)" >
                 <h2 class="lead">{{item.employeeRequest.name}}</h2>
                 <p>{{item.description}}</p>
-                <p class="text-smaller" am-time-ago="item.modifiedDate"></p>
+                <p class="text-smaller">{{item.modifiedDate | date: 'dd MMM yyyy HH:mm'}}</p>
                 <span class="item-note calm">
                     {{item.processingStatus}}
                 </span>
                 
             </div>
-            <div class="item item-avatar item-text-wrap" ng-if="item.task=='SUBMITADDRESS'" ng-click="gotoDetailRequest(item.id)" >
-                <img ng-src="img/1491892511_profle.png">
+            <div class="item item-text-wrap" ng-if="item.task=='SUBMITADDRESS'" ng-click="gotoDetailRequest(item.id)" >
                 <h2 class="lead">{{item.employeeRequest.name}}</h2>
                 <p>{{item.description}}</p>
-                <p class="text-smaller" am-time-ago="item.modifiedDate"></p>
+                <p class="text-smaller">{{item.modifiedDate | date: 'dd MMM yyyy HH:mm'}}</p>
                 <span class="item-note calm">
                     {{item.processingStatus}}
                 </span>
                 
             </div>
-            <div class="item item-avatar item-text-wrap" ng-if="item.task=='CHANGEFAMILY'" ng-click="gotoDetailRequest(item.id)" >
-                <img ng-src="img/1491892511_profle.png">
+            <div class="item item-text-wrap" ng-if="item.task=='CHANGEFAMILY'" ng-click="gotoDetailRequest(item.id)" >
                 <h2 class="lead">{{item.employeeRequest.name}}</h2>
                 <p>{{item.description}}</p>
-                <p class="text-smaller" am-time-ago="item.modifiedDate"></p>
+                <p class="text-smaller">{{item.modifiedDate | date: 'dd MMM yyyy HH:mm'}}</p>
                 <span class="item-note calm">
                     {{item.processingStatus}}
                 </span>
                 
             </div>
-            <div class="item item-avatar item-text-wrap" ng-if="item.task=='CHANGEADDRESS'" ng-click="gotoDetailRequest(item.id)" >
-                <img ng-src="img/1491892511_profle.png">
+            <div class="item item-text-wrap" ng-if="item.task=='CHANGEADDRESS'" ng-click="gotoDetailRequest(item.id)" >
                 <h2 class="lead">{{item.employeeRequest.name}}</h2>
                 <p>{{item.description}}</p>
-                <p class="text-smaller" am-time-ago="item.modifiedDate"></p>
+                <p class="text-smaller" >{{item.modifiedDate | date: 'dd MMM yyyy HH:mm'}}</p>
                 <span class="item-note calm">
                     {{item.processingStatus}}
                 </span>
                 
             </div>
-            <div class="item item-avatar item-text-wrap" ng-if="item.task=='CHANGEMARITALSTATUS'" ng-click="gotoDetailRequest(item.id)" >
-                <img ng-src="img/1491892511_profle.png">
+            <div class="item item-text-wrap" ng-if="item.task=='CHANGEMARITALSTATUS'" ng-click="gotoDetailRequest(item.id)" >
                 <h2 class="lead">{{item.employeeRequest.name}}</h2>
                 <p>{{item.taskDescription}}</p>
-                <p class="text-smaller" am-time-ago="item.modifiedDate"></p>
+                <p class="text-smaller">{{item.modifiedDate | date: 'dd MMM yyyy HH:mm'}}</p>
                 <span class="item-note calm">
                     {{item.processingStatus}}
                 </span>
@@ -76,7 +71,7 @@
                 <div class="row">
                     <div class="col col-10"><img ng-src="img/1491892511_profle.png"></div>
                     <div class="col col-80" style="valign:center"><h2 class="lead">{{item.employeeRequest.firstName}} {{item.employeeRequest.lastName}}</h2></div>
-                    <div class="col col-10"><p class="text-smaller pull-right" style="right:32px" am-time-ago="item.modifiedDate"></p></div>
+                    <div class="col col-10"><p class="text-smaller pull-right" style="right:32px" >{{item.modifiedDate | date: 'dd MMM yyyy HH:mm'}}</p></div>
                 </div>
                 <div class="row item">
                     <div class="col col-10"><span class="item item-icon-left" >
@@ -104,6 +99,13 @@
             </div>
 
         </div>
+        
+        <div class="row" ng-if="requests.length != 0"  ng-show="isLoadMorePersonalShow">
+            <div class="col col-100">
+                    <button class="button button-block button-outline button-positive" ng-click="loadMorePersonal()">Load More Results</button>
+            </div>  
+        </div>
+
         <div class="item" ng-if="requests.length == 0" >
             <div class="col col-100">
                 <h2>No request available</h2>
@@ -113,18 +115,23 @@
     </div>
     <div ng-if="module.type === 'benefit'">
          <div class="card" ng-repeat="item in benefitRequests | filter: searchFilter ">
-                <div class="item item-avatar item-text-wrap" ng-click="gotoDetailRequest(item.id)" >
-                    <img ng-src="img/1491892511_profle.png">
-                    <h2 class="lead">{{item.employeeRequest.name}}</h2>
-                    <p class="text-small" >{{item.ref.categoryType}}</p>
-                    <p class="text-small" >Total : Rp. {{item.ref.totalAmount | number:0}}</p>
-                    <p class="text-smaller" am-time-ago="item.modifiedDate"></p>
+                <div class="item item-text-wrap" ng-click="gotoDetailRequest(item.id)" >
+                   
+                    <h2 class="lead">{{item.ref.categoryType}}</h2>
+                    <p class="text-small" ng-if="item.ref.categoryType!='Medical Overlimit'" >Total : Rp. {{item.ref.totalAmount | number:0}}</p>
+                    <p class="text-smaller" >{{item.modifiedDate | date: 'dd MMM yyyy HH:mm'}}</p>
                     <span class="item-note calm">
                         {{item.processingStatus}}
                     </span>
                 
                 </div>
          </div>
+          <div class="row" ng-if="benefitRequests.length != 0"  ng-show="isLoadMoreBenefitShow">
+            <div class="col col-100">
+                    <button class="button button-block button-outline button-positive" ng-click="loadMoreBenefit()">Load More Results</button>
+            </div>  
+        </div>
+
          <div class="item" ng-if="benefitRequests.length == 0" >
             <div class="col col-100">
                 <h2>No request available</h2>

@@ -1,0 +1,53 @@
+
+<ion-view title="Detail Request" class="bg-lightgrey">
+
+<ion-content class="has-header" scroll="true">
+
+<div class="item item-divider" style="margin-top:10px"><span class="pull-left">#43278</span><span class="pull-right text-small energized"><b>Pending</b></span></div> 
+<div class="list">
+    <div class="item">
+        <div class="list no-padding">
+              <div class="item item-icon-left text-small uppercase" href="#">
+                <i class="icon ion-ios-list-outline text-larger"></i>
+                <b>Permission</b>
+              </div>
+              <div class="item item-icon-left text-small" href="#">
+                <i class="icon ion-calendar text-larger"></i>
+                20 Mei 2017 - 21 Mei 2017
+              </div>
+              <div class="item item-icon-left text-small" href="#">
+                <i class="icon ion-ios-compose-outline text-larger"></i>
+                Cuti mengunjungi Orang Tua
+              </div>
+              <div class="item item-icon-left text-small" href="#">
+                <i class="icon ion-clock text-larger"></i>
+                19 Mei 2017 17:00
+              </div>
+        </div>
+        
+    </div>
+</div>
+
+<!--
+<div class="list profile">
+    <div class="item item-divider balanced-bg">Detail Approval</div> 
+    <div class="edit padding-horizontal">
+            <label class="item item-input">
+                <span class="input-label">First name</span>
+                <input type="text">
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Last name</span>
+                <input type="text" value="323.3232" disabled>
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Email</span>
+                <input type="email">
+            </label>
+    </div>
+</div> -->
+    <div class="row" ng-if="header.categoryType == 'Perjalanan Dinas' && header.status=='approved'">
+        <button class="btn button-small waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="printReport(header.employee,header.uuid)">Print Report</button>
+    </div>
+</ion-content>
+</ion-view>

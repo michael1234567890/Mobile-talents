@@ -54,7 +54,6 @@ angular.module('intro.controllers', [])
                 template: 'Signing processing...'
             });
 
-			console.log($scope.usertalent);
             var formData = {
                 username: $scope.usertalent.username,
                 password: $scope.usertalent.password,
@@ -64,11 +63,8 @@ angular.module('intro.controllers', [])
            Main.signin(formData, function(res) {
                 $ionicLoading.hide();
                 if (res.type == false) {
-                    console.log(res)    
                 } else {
                     Main.setSession('token',res);
-                    console.log("Token");
-                    console.log(Main.getSession("token"));
                     getUserReference();
                     $rootScope.dataUser = {};
                     //$state.go("app.home");
@@ -135,8 +131,6 @@ angular.module('intro.controllers', [])
             var accessToken = null;
             var urlApi = Main.getUrlApi() + '/api/register';
             var data = JSON.stringify($scope.user);
-            console.log("User register");
-            console.log(data);
             Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
         }else {
             alert(messageValidation);
@@ -148,7 +142,6 @@ angular.module('intro.controllers', [])
       $ionicLoading.hide();
       // $scope.goTo('tabs.thanks');
       alert(res.message);
-      console.log(res);
       $scope.user = res;
       $scope.goBack("login");
     }
@@ -160,18 +153,12 @@ angular.module('intro.controllers', [])
       }else {
         alert("Check your connection");
       }
-      console.log(err);
-      console.log(status);
     }
 
     var successRefreshToken = function(res){
      
-      console.log("token session");
-      console.log(Main.getSession("token"));
     }
     var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
     }
 
     initMethod();

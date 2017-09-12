@@ -5,20 +5,20 @@
     <div class="card hybrid">
         <div class="item item-avatar item-text-wrap">
             <img ng-src="{{detail.photoProfile}}">
-            <h2 class="lead text-small">{{detail.employeeRequest.name}}</h2>
+            <h2 class="lead text-medium">{{detail.employeeRequest.name}}</h2>
             <h3 class="text-smaller">{{detail.employeeRequest.assignment.positionName}}</h3>
-            <p class="text-smaller">{{detail.employeeRequest.assignment.organizationName}}</p>
+            <p class="text-small">Grade :  {{detail.employeeRequest.assignment.gradeName}}</p>
         </div>
     </div>
     <div class="list">
         <div class="item item-text-wrap" >
             <p class="text-small">Request Type</p>
-            <h2 class="lead text-small" >{{detail.description}}</h2>
+            <h2 class="lead text-medium" >{{detail.description}}</h2>
         </div>
         <div ng-if="detail.task == 'CHANGEMARITALSTATUS'">
                 <div class="item item-text-wrap" >
                     <p class="text-small">Description</p>
-                    <h2 class="lead text-small" >{{detail.taskDescription}} </h2>
+                    <h2 class="lead text-medium" >{{detail.taskDescription}} </h2>
                 </div>
                 <div class="item item-text-wrap" >
                     <p class="text-small">Attachment</p>
@@ -33,7 +33,7 @@
         <div ng-if="detail.task == 'SUBMITLEAVE'">
                 <div class="item item-text-wrap" >
                     <h2 class="talents">Leave Type</h2>
-                    <p class="text-small" >Casual</p>
+                    <p class="text-medium" >Casual</p>
                 </div>
                 <div class="item item-text-wrap" >
                     <h2 class="talents">From Date</h2>
@@ -52,15 +52,17 @@
 
         <div ng-if="detail.task == 'SUBMITFAMILY' || detail.task == 'CHANGEFAMILY'">
                 <div class="item item-text-wrap" >
-                    <h2 class="talents">Name</h2>
-                    <p class="text-small" >{{detail.ref.name}}</p>
+                     <p class="text-small">Name</p>
+                    <h2 class="lead text-medium" >{{detail.ref.name}}</h2>
+
                 </div>
                 <div class="item item-text-wrap" >
-                    <h2 class="talents">Relation Type</h2>
-                    <p class="text-small" >{{detail.ref.relationship}}</p>
+                    <p class="text-small">Relation Type</p>
+                    <h2 class="lead text-medium" >{{detail.ref.relationship}}</h2>
+                    
                 </div>
                 <div class="row">
-                  <button class="btn waves-effect button-small waves-light button button-stable  button-block waves-effect waves-light" ng-click="viewMoreFamily()">View More</button>
+                  <button class="button button-medium  button-block button-outline button-positive" ng-click="viewMoreFamily()">View More</button>
                 </div>
                  <div class="item item-text-wrap" >
                     <h2 class="talents">Attachment</h2>
@@ -76,7 +78,7 @@
         <div ng-if="detail.module == 'benefit'">
                 <div class="item item-text-wrap" >
                     <p class="text-small">Category</p>
-                    <h2 class="lead text-small" >{{detail.ref.categoryType}}</h2>
+                    <h2 class="lead text-medium" >{{detail.ref.categoryType}}</h2>
                 </div>
                 <div class="list no-padding" ng-if="detail.ref.categoryType == 'Perjalanan Dinas' || detail.ref.categoryType == 'SPD Advance'" >
                       <div class="item item-icon-left text-small" href="#">
@@ -86,6 +88,10 @@
                       <div class="item item-icon-left text-small" href="#">
                         <i class="icon ion-calendar text-larger"></i>
                         {{detail.ref.startDate | date: 'dd MMM yyyy'}} - {{detail.ref.endDate | date: 'dd MMM yyyy'}}
+                      </div>
+                      <div class="item item-icon-left text-small" href="#">
+                        <i class="icon ion-ios-list-outline text-larger"></i>
+                        {{detail.ref.spdType}}
                       </div>
                       <div class="item item-icon-left text-small" href="#">
                         <i class="icon ion-ios-compose-outline text-larger"></i>
@@ -115,49 +121,49 @@
                     
                 </div>
 
-                <div class="item item-text-wrap" ng-if="detail.ref.categoryType == 'Medical Overlimit'">
+                <div class="item item-text-wrap" ng-if="detail.ref.categoryType == 'Medical Overlimit' && detail.currentApprovalLevel > 0 && needApproval=='true'">
                     <h2 class="talents">Amount</h2>
-                    <input   ng-model="data.amount" ng-keyup="change($event,$index)" type="tel">
+                    <input  disabled ng-model="data.amount" ng-keyup="change($event,$index)" type="tel">
                 </div>
                 
         </div>
         <div ng-if="detail.task == 'SUBMITADDRESS' || detail.task == 'CHANGEADDRESS'">
                 <div class="item item-text-wrap" >
                     <p class="text-small">Address</p>
-                    <h2 class="lead text-small" >{{detail.ref.address}} RT.{{detail.ref.rt}} RW.{{detail.ref.rw}} </h2>
+                    <h2 class="lead text-medium" >{{detail.ref.address}} RT.{{detail.ref.rt}} RW.{{detail.ref.rw}} </h2>
                 </div>
                 <div class="item item-text-wrap" >
                     <p class="text-small">City</p>
-                    <h2 class="lead text-small" >{{detail.ref.city}}</h2>
+                    <h2 class="lead text-medium" >{{detail.ref.city}}</h2>
                 </div>
                 <div class="item item-text-wrap" >
                     <p class="text-small">Province</p>
-                    <h2 class="lead text-small" >{{detail.ref.province}}</h2>
+                    <h2 class="lead text-medium" >{{detail.ref.province}}</h2>
                 </div>
                 <div class="row">
-                  <button class="btn waves-effect button-small waves-light button button-stable  button-block waves-effect waves-light" ng-click="viewMoreAddress()">View More</button>
+                  <button class="button button-medium button-block button-outline button-positive" ng-click="viewMoreAddress()">View More</button>
                 </div>
                  <div class="item item-text-wrap" >
                     <h2 class="talents">Attachment</h2>
                     <div class="row post" >
                         <div class="col" ng-repeat="items in detail.attachments" style="width:90px;height:90px" ><img width="90px" height="90px"  ng-src="{{items.image}}" ng-click="openImagePreview(items.image)" /></div>
                     </div>
-                    <!-- 
-                    <div class="col" style="min-height:90px"><a ng-click="gotoAddPhoto()"><img ng-src="{{attachment}}" height="90px" ></a></div> -->
+                    
                 </div>
                 
         </div>
-        <!--
+        
         <div class="row" ng-if= "needApproval == 'true'" >
                 <button class="btn button-small  waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="confirmReject()">Reject</button>&nbsp;
                 <button class="btn button-small waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="confirmAccept()">Approve</button>
 
-        </div>-->
+        </div>
 
     </div>
     
         
     </ion-content>
+    <!--
     <ion-footer-bar class="bar-light" style="border-top:0px;height:50px;margin-bottom:2px" ng-if= "needApproval == 'true'" >
         <div class="col">
         <button class="btn button-small  waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="confirmReject()">Reject</button></div>
@@ -165,5 +171,5 @@
         <button class="btn button-small waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="confirmAccept()">Approve</button>
         </div>
 
-    </ion-footer-bar>
+    </ion-footer-bar> -->
 </ion-view>

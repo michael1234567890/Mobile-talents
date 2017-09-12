@@ -1,44 +1,53 @@
 <ion-view title="Detail Address" class="bg-lightgrey">
 
     <ion-nav-buttons side="right">
-        <button class="button button-dark button-clear icon ion-ios-compose-outline" ng-click="goEditAddress()"></button>
+        <button ng-if="canEdit == 'true' && address.status !='pending'" class="button button-dark button-clear icon ion-ios-compose-outline" ng-click="goEditAddress()"></button>
     </ion-nav-buttons>
 
     <ion-content class="has-header bt-grey profile" scroll="true">
         
         <div class="list">
-            <div class="item item-text-wrap" >
-                <p class="text-small">Address</p>
-                <h2 class="lead text-small" >{{address.address}}</h2>
-            </div>
-            <div class="item item-text-wrap" >
-                <p class="text-small">RT / RW</p>
-                <h2 class="lead text-small" >{{address.rt}} / {{address.rw}}</h2>
-            </div>
-            <div class="item item-text-wrap" >
-                <p class="text-small">City</p>
-                <h2 class="lead text-small" >{{address.city}}</h2>
+             <div class="item item-text-wrap" >
+                <p class="text-small">Country</p>
+                <h2 class="lead text-medium" >{{address.country}}</h2>
             </div>
             <div class="item item-text-wrap" >
                 <p class="text-small">Province</p>
-                <h2 class="lead text-small" >{{address.province}}</h2>
+                <h2 class="lead text-medium" >{{address.province}}</h2>
+            </div>
+             <div class="item item-text-wrap" >
+                <p class="text-small">City</p>
+                <h2 class="lead text-medium" >{{address.city}}</h2>
             </div>
             <div class="item item-text-wrap" >
-                <p class="text-small">Country</p>
-                <h2 class="lead text-small" >{{address.country}}</h2>
+                <p class="text-small">District</p>
+                <h2 class="lead text-medium" >{{address.district}}</h2>
+            </div>
+            <div class="item item-text-wrap" >
+                <p class="text-small">Sub District</p>
+                <h2 class="lead text-medium" >{{address.subdistrict}}</h2>
+            </div>
+            <div class="item item-text-wrap" >
+                <p class="text-small">RT / RW</p>
+                <h2 class="lead text-medium" >{{address.rt}} / {{address.rw}}</h2>
+            </div>
+            <div class="item item-text-wrap" >
+                <p class="text-small">Address</p>
+                <h2 class="lead text-medium" >{{address.address}}</h2>
+            </div>
+             <div class="item item-text-wrap" >
+                <p class="text-small">Stay Status</p>
+                <h2 class="lead text-medium" >{{address.stayStatus}}</h2>
             </div>
             <div class="item item-text-wrap" >
                 <p class="text-small">Phone</p>
-                <h2 class="lead text-small" >{{address.phone}}</h2>
+                <h2 class="lead text-medium" >{{address.phone}}</h2>
             </div>
             <div class="item item-text-wrap" >
                 <p class="text-small">Zip Code</p>
-                <h2 class="lead text-small" >{{address.zipCode}}</h2>
+                <h2 class="lead text-medium" >{{address.zipCode}}</h2>
             </div>
-            <div class="item item-text-wrap" >
-                <p class="text-small">Stay Status</p>
-                <h2 class="lead text-small" >{{address.stayStatus}}</h2>
-            </div>
+            
            
         </div>
     </ion-content>

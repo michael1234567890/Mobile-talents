@@ -6,8 +6,8 @@
 
     <ion-content class="has-header bt-grey profile" scroll="true">
         <ion-list>
-            <span class="pull-right calm" style="padding-right:10px" ng-if="dataApprovalStatus!=null">{{dataApprovalStatus}}</span>
-            <div class="item item-divider">Current Marital Status</div>
+            
+            <div class="item item-divider"><span class="pull-left">Current Marital Status</span> <span class="pull-right calm" style="padding-right:10px" ng-if="dataApprovalStatus!=null">{{dataApprovalStatus}}</span></div>
             <label class="item">{{currentStatus}}</label>
             <div class="item item-divider">New Marital Status *</div>
             <ion-checkbox ng-repeat="item in itens"
@@ -18,7 +18,7 @@
 
             <div class="item item-divider">Attach Supporting Document</div>
             <div class="row">
-                  <button class="btn waves-effect button-small waves-light button button-stable  button-block waves-effect waves-light" ng-click="addPicture()">Add Attachment</button>
+                  <button class="button button-block button-outline button-positive" ng-click="addPicture()"><i class="icon ion-ios-camera-outline"></i> Add Attachment</button>
             </div>
             <div class="row post" >
                   <div class="col" style="min-height:90px;width:90px" ng-repeat="items in maritalStatus.images" ><img height="90px"  ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
@@ -29,7 +29,7 @@
                 <div class="col" style="min-height:90px;width:90px" ng-if="maritalStatus.images.length==0"><a ><img ng-src="{{image}}" height="90px" ></a></div>
             </div>
             <div class="row">
-                <button ng-show="showButton==true"class="btn waves-effect waves-light button button-positive button-block waves-effect waves-light" ng-click="send()">Send</button>
+                <button ng-show="showButton==true" class="btn waves-effect waves-light button button-positive button-block waves-effect waves-light" ng-click="send()">Send</button>
             </div>
         </ion-list>
 

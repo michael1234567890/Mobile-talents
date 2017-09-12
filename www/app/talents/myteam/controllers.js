@@ -36,7 +36,6 @@ angular.module('myteam.controllers', [])
       $ionicLoading.hide();
     	if(status == 401) {
     		var refreshToken = Main.getSession("token").refresh_token
-    		console.log("need refresh token");
     		Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
     	}else {
         if(status == -1) {
@@ -46,18 +45,12 @@ angular.module('myteam.controllers', [])
         }
         
       }
-    	console.log(err);
-    	console.log(status);
     }
 
    	var successRefreshToken = function(res){
    		Main.setSession("token",res);
-   		console.log("token session");
-   		console.log(Main.getSession("token"));
    	}
    	var errRefreshToken = function(err, status) {
-   		console.log(err);
-   		console.log(status);
    	}
 
    	initMethod();
@@ -84,19 +77,42 @@ angular.module('myteam.controllers', [])
 
     $scope.requests = [];
     $scope.module = {};
+
+    var i=0;
+    var j=0;
+    var size=Main.getDataDisplaySize();
+    $scope.isLoadMoreBenefitShow = false;
+    $scope.isLoadMorePersonalShow = false;
+
    
     $scope.confirmApprove = $ionicPopover.fromTemplate(contactTemplate, {
         scope: $scope
     });
 
-    $scope.chooseTab = function(tab){
-        $scope.module.type = tab;
-        if(tab === 'personalia')
-          $scope.requests = [];
-        else if(tab === 'benefit')
-          $scope.benefitRequests = [];
+    $scope.loadMorePersonal = function(){
+        j++;
+        console.log(j);
+        getMyApproval('personalia',j);
+    }
 
-        getMyApproval(tab);
+     $scope.loadMoreBenefit = function(){
+        i++;
+        console.log(i);
+        getMyApproval('benefit',i);
+    }
+
+    $scope.chooseTab = function(tab){
+        i=0;
+        j=0;
+        $scope.module.type = tab;
+        if(tab === 'personalia'){
+            $scope.requests = [];
+            getMyApproval(tab,j);
+        }else {
+            $scope.benefitRequests = [];
+            getMyApproval(tab,i);
+        }
+        
     }
 
     $scope.confirmReject = $ionicPopover.fromTemplate(contactTemplate, {
@@ -123,7 +139,6 @@ angular.module('myteam.controllers', [])
         var urlApi = Main.getUrlApi() + '/api/user/workflow/actionapproval';
         var data = JSON.stringify(data);
 
-        console.log(data);
         Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
 
     }
@@ -136,17 +151,17 @@ angular.module('myteam.controllers', [])
    
     var successRequest = function (res){
       
-      for(var i=0;i<res.length;i++) {
-        var obj = res[i];
+      for(var i=0;i<res.data.length;i++) {
+        var obj = res.data[i];
         obj.idx = i;
         if($scope.module.type == 'personalia') {
-            if(res[i].task == 'CHANGEMARITALSTATUS') {
-               var change = res[i].data;
+            if(obj.task == 'CHANGEMARITALSTATUS') {
+               var change = obj.data;
                var objData = JSON.parse(change);
-               obj.taskDescription = "Change marital status from "+res[i].employeeRequest.maritalStatus + " to " + objData.maritalStatus;
-            }else if(res[i].task == 'SUBMITADDRESS'){
+               obj.taskDescription = "Change marital status from "+obj.employeeRequest.maritalStatus + " to " + objData.maritalStatus;
+            }else if(obj.task == 'SUBMITADDRESS'){
                 obj.taskDescription = "Add new Address";
-            }else if(res[i].task == 'SUBMITFAMILY'){
+            }else if(obj.task == 'SUBMITFAMILY'){
                 obj.taskDescription = "Add new family";
             }
         }
@@ -164,59 +179,103 @@ angular.module('myteam.controllers', [])
         }else {
             $scope.benefitRequests.push(obj);
         }
+
+        if($scope.module.type == 'personalia') {
+          if($scope.requests.length == res.totalRecord) 
+            $scope.isLoadMorePersonalShow = false;
+          else
+            $scope.isLoadMorePersonalShow = true;
+        }else if($scope.module.type == 'benefit') {
+          if($scope.benefitRequests.length == res.totalRecord) 
+            $scope.isLoadMoreBenefitShow = false;
+          else
+            $scope.isLoadMoreBenefitShow = true;
+        }
+
           
       }
 
       $ionicLoading.hide();
       $scope.$broadcast('scroll.refreshComplete');
-      console.log($scope.requests);
     }
 
     
 
-    initMethod();
-    //31acd2e6-e891-4628-a24e-58e408664516
+    //initMethod();
+
+    $scope.$on('$ionicView.beforeEnter', function () {
+        initMethod();
+    });
+
+
     function initMethod(){
-      
-      $scope.chooseTab('personalia');
+        $scope.chooseTab('personalia');
     }
+    
     // invalid access token error: "invalid_token" 401
-    function getMyApproval(module){
-      $ionicLoading.show({
-          template: '<ion-spinner></ion-spinner>'
-        });
-      var accessToken = Main.getSession("token").access_token;
-      var urlApi = Main.getUrlApi() + '/api/user/workflow/myrequest?module='+module;
-      Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
+    function getMyApproval(module,page){
+        $ionicLoading.show({
+            template: '<ion-spinner></ion-spinner>'
+          });
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/workflow/myrequest?module='+module+'&page='+page+'&size='+size;
+        Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
     }
 })
 
 .controller('RequestApprovalCtrl', function($ionicPopover,$ionicLoading,$rootScope, $scope,$state , AuthenticationService, Main) {
   if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
-    }
+  }
 
+    var i=0;
+    var j=0;
+    var size=Main.getDataDisplaySize();
 
     $scope.requests = [];
     $scope.benefitRequests = [];
     $scope.module = {};
+    $scope.hasDataBenefit = false;
+    $scope.isLoadMoreBenefitShow = false;
+    $scope.isLoadMorePersonalShow = false;
+
+    $scope.goToSearch = function(){
+      $state.go('app.formrequestsearching');
+    }
+
+    $scope.loadMorePersonal = function(){
+        j++;
+        console.log(j);
+        getNeedApproval('personalia',j);
+    }
+
+     $scope.loadMoreBenefit = function(){
+        i++;
+        console.log(i);
+        getNeedApproval('benefit',i);
+    }
 
     $scope.$on('$ionicView.beforeEnter', function () {
-        console.log("$ionicView.beforeEnter");
         if($rootScope.refreshRequestApprovalCtrl) {
-            console.log("refresh AddressCtrl");
             initMethod();
         }
         $rootScope.refreshRequestApprovalCtrl = false;
     });
 
     $scope.chooseTab = function(tab){
+        i=0;
+        j=0;
         $scope.module.type = tab;
-        if(tab === 'personalia')
-          $scope.requests = [];
-        else if(tab === 'benefit')
-          $scope.benefitRequests = [];
-        getNeedApproval(tab);
+        if(tab === 'personalia'){
+            $scope.requests = [];
+            getNeedApproval(tab,j);
+        }else if(tab === 'benefit'){
+             $scope.benefitRequests = [];
+             getNeedApproval(tab,i);
+        }
+         
+
+        
         getCountNeedApproval();
     }
 
@@ -230,7 +289,6 @@ angular.module('myteam.controllers', [])
     });
 
     $scope.gotoDetailRequest = function(id){
-       // $rootScope.requestSelected = $scope.requests[idx];
         $state.go('app.requestdetail',{'id':id,'needApproval':true});
     }
 
@@ -246,8 +304,6 @@ angular.module('myteam.controllers', [])
         var accessToken = Main.getSession("token").access_token;
         var urlApi = Main.getUrlApi() + '/api/user/workflow/actionapproval';
         var data = JSON.stringify(data);
-
-        console.log(data);
         Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
 
     }
@@ -259,17 +315,18 @@ angular.module('myteam.controllers', [])
 
    
     var successRequest = function (res){
-      //$scope.general.countApproval = res.length;
-      // $rootScope.countApproval = res.length;
-      for(var i=0;i<res.length;i++) {
-          var obj = res[i];
+
+
+      
+      for(var i=0;i<res.data.length;i++) {
+          var obj = res.data[i];
           obj.idx = i;
           if($scope.module.type == 'personalia') {
-              if(res[i].task == 'CHANGEMARITALSTATUS') {
-                 var change = res[i].data;
+              if(res.data[i].task == 'CHANGEMARITALSTATUS') {
+                 var change = obj.data;
                  var objData = JSON.parse(change);
-                 obj.taskDescription = "Change marital status from "+res[i].employeeRequest.maritalStatus + " to " + objData.maritalStatus;
-              }else if(res[i].task == 'SUBMITFAMILY'){
+                 obj.taskDescription = "Change marital status from "+obj.employeeRequest.maritalStatus + " to " + objData.maritalStatus;
+              }else if(res.data[i].task == 'SUBMITFAMILY'){
                 obj.taskDescription = "Add new family";
               }
           }
@@ -290,17 +347,26 @@ angular.module('myteam.controllers', [])
           obj.photoProfile = "img/1491892511_profle.png";
           if(obj.employeeRequestPhotoProfile != null)
                 obj.photoProfile = obj.employeeRequestPhotoProfile;
-
-
        }
+
+      if($scope.module.type == 'personalia') {
+          if($scope.requests.length == res.totalRecord) 
+            $scope.isLoadMorePersonalShow = false;
+          else
+            $scope.isLoadMorePersonalShow = true;
+      }else if($scope.module.type == 'benefit') {
+          if($scope.benefitRequests.length == res.totalRecord) 
+            $scope.isLoadMoreBenefitShow = false;
+          else
+            $scope.isLoadMoreBenefitShow = true;
+      }
 
       $ionicLoading.hide();
       $scope.$broadcast('scroll.refreshComplete');
-      console.log($scope.requests);
+      $scope.$broadcast('scroll.infiniteScrollComplete');
     }
 
     var successRequestCount = function (res){
-        console.log(res);
         if(res!= null) {
             $rootScope.countApproval = res.count;
             $scope.general.countApproval = res.count;
@@ -312,6 +378,8 @@ angular.module('myteam.controllers', [])
     initMethod();
 
     function initMethod(){
+     $scope.requests = [];
+      $scope.benefitRequests = [];
       $scope.chooseTab('personalia');
     }
     // invalid access token error: "invalid_token" 401
@@ -321,12 +389,12 @@ angular.module('myteam.controllers', [])
       Main.requestApi(accessToken,urlApi,successRequestCount, $scope.errorRequest);
     }
 
-    function getNeedApproval(module){
+    function getNeedApproval(module,page){
       $ionicLoading.show({
           template: '<ion-spinner></ion-spinner>'
         });
       var accessToken = Main.getSession("token").access_token;
-      var urlApi = Main.getUrlApi() + '/api/user/workflow/needapproval?module='+module;
+      var urlApi = Main.getUrlApi() + '/api/user/workflow/needapproval?module='+module+'&page='+page+'&size='+size;
       Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
     }
 })
@@ -340,7 +408,6 @@ angular.module('myteam.controllers', [])
     $scope.data.amount = 0;
 
     $scope.needApproval = $stateParams.needApproval;
-    console.log($scope.needApproval);
     var id = $stateParams.id;
     $scope.detail = {};
     $scope.confirm = {reasonReject:""};
@@ -359,7 +426,7 @@ angular.module('myteam.controllers', [])
     }
 
     $scope.viewMoreAddress = function(){
-        $state.go('app.detailaddress',{'idx':0});
+        $state.go('app.detailaddress',{'idx':0,'edit':'false'});
     }
 
     var successApprove = function(res){
@@ -390,17 +457,16 @@ angular.module('myteam.controllers', [])
         var accessToken = Main.getSession("token").access_token;
         var urlApi = Main.getUrlApi() + '/api/user/workflow/actionapproval';
         var data = JSON.stringify(data);
-
-        console.log(data);
         Main.postRequestApi(accessToken,urlApi,data,successApprove,$scope.errorRequest);
 
     }
     
 
     $scope.confirmAccept = function (){
-        console.log($scope.data.amount);
-        if($scope.detail.ref != undefined && $scope.detail.ref.categoryType != undefined && $scope.detail.ref.categoryType == 'Medical Overlimit') {
-          if(parseInt($scope.data.amount)<=0) {
+        if($scope.detail.ref != undefined && $scope.detail.ref.categoryType != undefined && $scope.detail.ref.categoryType == 'Medical Overlimit' && $scope.detail.currentApprovalLevel >0) {
+          var validationAmount =  $scope.data.amount.replace(/\./g,'');
+          validationAmount = Number(validationAmount);
+          if(parseInt(validationAmount)<=1000) {
               alert("Please fill out correct amount !!");
               return false;
           }
@@ -429,7 +495,6 @@ angular.module('myteam.controllers', [])
             okText: 'Yes'
           }).then(function(res) {
               if (res) {
-                  console.log($scope.confirm.reasonReject);
                   var reason = $scope.confirm.reasonReject;
                   if(reason == "")
                     alert("Reason reject can not empty");
@@ -448,10 +513,8 @@ angular.module('myteam.controllers', [])
     });
 
     $scope.openImagePreview = function (item) {
-        console.log(item);
         var product = {id:1,image:item};
         $scope.detailImage = product;
-        console.log($scope.detailImage);
         $scope.modalPopupImage.show();
     };
     $scope.closeImagePreview = function () {
@@ -541,9 +604,14 @@ angular.module('myteam.controllers', [])
         getDetailRequest();
         
     }
+
+     $scope.$on('$ionicView.beforeEnter', function () {
+        initModule();
+    });
+
     
 
-    initModule();
+    //initModule();
 
    // console.log(teamIdx);
 
@@ -583,7 +651,6 @@ angular.module('myteam.controllers', [])
         var urlApi = Main.getUrlApi() + '/api/user/workflow/actionapproval';
         var data = JSON.stringify(data);
 
-        console.log(data);
         Main.postRequestApi(accessToken,urlApi,data,successApprove,errorRequest);
 
     }
@@ -612,10 +679,8 @@ angular.module('myteam.controllers', [])
     });
 
     $scope.openImagePreview = function (item) {
-        console.log(item);
         var product = {id:1,image:item};
         $scope.detailImage = product;
-        console.log($scope.detailImage);
         $scope.modalPopupImage.show();
     };
     $scope.closeImagePreview = function () {
@@ -652,15 +717,12 @@ angular.module('myteam.controllers', [])
           $scope.attachment = $scope.detail.attachments[0].image;
       }
           
-      console.log("$scope.detail");
-      console.log($scope.detail);
     }
 
     var errorRequest = function (err, status){
       $ionicLoading.hide();
       if(status == 401) {
         var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
         Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
       }else {
         if(status == -1) {
@@ -670,18 +732,12 @@ angular.module('myteam.controllers', [])
         }
         
       }
-      console.log(err);
-      console.log(status);
     }
 
     var successRefreshToken = function(res){
       Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
     }
     var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
     }
 
     function getDetailRequest(){
@@ -707,6 +763,44 @@ angular.module('myteam.controllers', [])
 
 })
 
+.controller('FormRequestSearchingCtrl', function($ionicPopup,$ionicPopover,$ionicModal,$ionicLoading,$stateParams,$rootScope, $scope,$state , AuthenticationService, Main) {
+    $scope.formSearching = {search:""};
+    $scope.requests = [];
+    $scope.actionFind = false;
+    var successRequest = function (res){
+      $ionicLoading.hide();
+      $scope.requests = res;
+    }
+
+    $scope.find = function(){
+        $scope.actionFind = true;
+        var searchText = $scope.formSearching.search;
+        if(searchText == "" ||  searchText.length < 5) {
+            alert("Min Request No must be of 5 characters length");
+            return false;
+        }
+        $ionicLoading.show({
+            template: '<ion-spinner></ion-spinner>'
+        });
+
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/tmrequest/findRequestNo?module=benefit&requestNo='+$scope.formSearching.search;
+        Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
+    }
+
+    $scope.$on('$ionicView.beforeEnter', function (event,data) {
+          if(data.direction != "back")
+            initModule();
+    });
+
+    function initModule(){
+        $scope.formSearching = {search:""};
+        $scope.requests = [];
+    }
+
+
+})
+
 
 .controller('DetailTeamCtrl', function($stateParams,$rootScope, $scope,$state , AuthenticationService, Main) {
 	if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
@@ -719,7 +813,6 @@ angular.module('myteam.controllers', [])
     if(teamIdx != null && $rootScope.team != undefined && $rootScope.team[teamIdx] != undefined) {
     	$scope.detail = $rootScope.team[teamIdx];
     	$scope.detail.fullName = $scope.detail.firstName + " " + $scope.detail.lastName;
-    	console.log($scope.detail);
     }
 
    // console.log(teamIdx);

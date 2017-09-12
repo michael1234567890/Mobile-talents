@@ -2,12 +2,9 @@ angular.module('myhr.controllers', [])
 
 .controller('MyHRCtrl',['$rootScope', '$scope','$state' , 'AuthenticationService', 'Main', function($rootScope, $scope,$state , AuthenticationService, Main) {
 
-    console.log("profile", $scope.profile);
     $scope.$on('$ionicView.beforeEnter', function () {
-         if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
-            $state.go("login");
-          }
-         $scope.profile = Main.getSession("profile");
+         
+         initMethod();
     });
 
     $scope.refresh = function(){
@@ -19,12 +16,16 @@ angular.module('myhr.controllers', [])
     var successProfile = function (res){
       $scope.profile = res;
       $scope.profile.fullname = $scope.profile.firstName + " " + $scope.profile.lastName;
-      console.log($scope.profile);
 
     }
 
    	function initMethod(){
-      if(Main.getSession("profile") == null)
+      if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+            $state.go("login");
+      }
+      
+      $scope.profile = Main.getSession("profile");
+      if($scope.profile == undefined)
    		   getProfile();
    	}
    	// invalid access token error: "invalid_token" 401
@@ -53,7 +54,6 @@ angular.module('myhr.controllers', [])
 
     $scope.personal = {};
 
-    console.log(Main.getSession("token"));
 
     var successRequest = function (res){
     	$scope.personal = res;
@@ -96,7 +96,6 @@ angular.module('myhr.controllers', [])
 
     $scope.family = [];
     $scope.$on('$ionicView.beforeEnter', function () {
-        console.log("$ionicView.beforeEnter");
         if( $rootScope.refreshFamilyCtrl) {
            
             initMethod();
@@ -121,11 +120,9 @@ angular.module('myhr.controllers', [])
             disableBack: false
         });
     }
-    console.log(Main.getSession("token"));
 
     var successRequest = function (res){
       $ionicLoading.hide();
-      console.log(res);
       $scope.family = res;
       $rootScope.family = [];
       for(var i=0;i<$scope.family.length;i++) {
@@ -166,7 +163,6 @@ angular.module('myhr.controllers', [])
     }
 
     $scope.canEdit = $stateParams.edit;
-    console.log($scope.canEdit);
     var familyIdx = $stateParams.idx;
     $scope.family = {};
     if(familyIdx != null)
@@ -190,9 +186,13 @@ angular.module('myhr.controllers', [])
         $state.go("login");
     }
 
+    var genderEmp = Main.getSession("profile").employeeTransient.gender;
     var familyIdx = $stateParams.idx;
     var messageValidation = "";
-    console.log("familyIdx",familyIdx)
+    var arrCompanyRef = Main.getSession("profile").companyReference;
+    var refSelectAlive = Main.getDataReference(arrCompanyRef,'myhr','family','alive');
+    $scope.selectAliveStatus = []; // Main.getSelectProvince();
+    
     $scope.familyData = {};
     if(familyIdx != null)
       $scope.family = $rootScope.family[familyIdx];
@@ -206,12 +206,11 @@ angular.module('myhr.controllers', [])
     $scope.selectBloodType = Main.getSelectBloodType();
     $scope.selectGender = Main.getSelectGender();
     $scope.isEdit = true;
+
     var successRequest = function (res){
       $ionicLoading.hide();
       alert(res.message);
       $scope.goBack('app.family');
-      console.log(res);
-      //$scope.family = res;
     }
 
      var datepicker = {
@@ -233,7 +232,6 @@ angular.module('myhr.controllers', [])
       $ionicLoading.hide();
       if(status == 401) {
         var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
         Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
       }else {
           if(status==500)
@@ -242,18 +240,12 @@ angular.module('myhr.controllers', [])
             alert("Please Check your connection");
       }
 
-      console.log(err);
-      console.log(status);
     }
 
     var successRefreshToken = function(res){
       Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
     }
     var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
     }
 
     // invalid access token error: "invalid_token" 401
@@ -279,6 +271,21 @@ angular.module('myhr.controllers', [])
         }else if(family.bloodType ==undefined || family.bloodType=='' ) {
             messageValidation = "Blood Type can't be empty";
             return false;
+        }else if(family.aliveStatus ==undefined || family.aliveStatus=='' ) {
+            messageValidation = "Alive Status can't be empty";
+            return false;
+        }
+
+         if(genderEmp != undefined && family.relationship != undefined) {
+            if(family.relationship == 'Suami' && genderEmp == "Male") {
+                messageValidation = "You can't select this item in relationship. Your gender is '" + genderEmp + "'.";
+                return false;
+            }
+
+            if(family.relationship == 'Istri' && genderEmp == "Female") {
+                messageValidation = "You can't select this item in relationship. Your gender is '" + genderEmp + "'.";
+                return false;
+            }
         }
 
         return true;
@@ -295,18 +302,22 @@ angular.module('myhr.controllers', [])
             if($scope.family.birthDate != null) 
               birthDate = $filter('date')($scope.family.birthDate,'yyyy-MM-dd'); 
 
-            var dataEdit = {name:$scope.family.name,birthPlace:$scope.family.birthPlace,birthDate:birthDate,gender:$scope.family.gender,relationship:$scope.family.relationship,address:$scope.family.address,maritalStatus:$scope.family.maritalStatus,bloodType:$scope.family.bloodType,occupation:$scope.family.occupation,phone:$scope.family.phone};
+            var dataEdit = {aliveStatus:$scope.family.aliveStatus,name:$scope.family.name,birthPlace:$scope.family.birthPlace,birthDate:birthDate,gender:$scope.family.gender,relationship:$scope.family.relationship,address:$scope.family.address,maritalStatus:$scope.family.maritalStatus,bloodType:$scope.family.bloodType,occupation:$scope.family.occupation,phone:$scope.family.phone};
             var accessToken = Main.getSession("token").access_token;
             var urlApi = Main.getUrlApi() + '/api/user/family/'+$scope.family.id;
             var data = JSON.stringify(dataEdit);
-            console.log(data);
             Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
         }else {
           alert(messageValidation);
         }
     }
+    function initMethod(){
+         if(refSelectAlive != undefined && refSelectAlive != '') {
+              $scope.selectAliveStatus = JSON.parse(refSelectAlive);
+        }
+    }
+    initMethod();
 
-    console.log("$scope.family",$scope.family)
     
 })
 
@@ -316,15 +327,19 @@ angular.module('myhr.controllers', [])
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
-    
+    var genderEmp = Main.getSession("profile").employeeTransient.gender;
+
     $scope.image = "img/placeholder.png";
     $scope.family = {};
-
+    console.log(Main.getSession("profile"));
     $scope.selectMaritalStatus = Main.getSelectMaritalStatus();
     $scope.selectRelationship = Main.getSelectFamilyRelationShip();
     $scope.selectBloodType = Main.getSelectBloodType();
     $scope.selectGender = Main.getSelectGender();
-
+    var arrCompanyRef = Main.getSession("profile").companyReference;
+    var refSelectAlive = Main.getDataReference(arrCompanyRef,'myhr','family','alive');
+    $scope.selectAliveStatus = []; // Main.getSelectProvince();
+    
     $scope.imageData = null;
     $scope.isEdit = false;
     $scope.family.images = [];
@@ -403,7 +418,6 @@ angular.module('myhr.controllers', [])
         }
 
         $scope.family.images.push({'image':"img/placeholder.png"});
-        console.log($scope.family.images);
     }
 
     $scope.takePicture = function(){
@@ -455,7 +469,6 @@ angular.module('myhr.controllers', [])
                   var accessToken = Main.getSession("token").access_token;
                   var urlApi = Main.getUrlApi() + '/api/user/family';
                   var data = JSON.stringify($scope.family);
-                  console.log(data);
                   Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
               }
               
@@ -470,7 +483,6 @@ angular.module('myhr.controllers', [])
       alert(res.message);
       $rootScope.refreshFamilyCtrl=true;
       $scope.goBack('app.family');
-      console.log(res);
       //$scope.family = res;
     }
 
@@ -478,7 +490,9 @@ angular.module('myhr.controllers', [])
     initMethod();
     
     function initMethod(){
-        
+        if(refSelectAlive != undefined && refSelectAlive != '') {
+              $scope.selectAliveStatus = JSON.parse(refSelectAlive);
+        }
     }
     
     // invalid access token error: "invalid_token" 401
@@ -504,6 +518,21 @@ angular.module('myhr.controllers', [])
         }else if(family.bloodType ==undefined || family.bloodType=='' ) {
             messageValidation = "Blood Type can't be empty";
             return false;
+        }else if(family.aliveStatus ==undefined || family.aliveStatus=='' ) {
+            messageValidation = "Alive Status can't be empty";
+            return false;
+        }
+
+        if(genderEmp != undefined && family.relationship != undefined) {
+            if(family.relationship == 'Suami' && genderEmp == "Male") {
+                 messageValidation = "You can't select this item in relationship. Your gender is '" + genderEmp + "'.";
+                 return false;
+            }
+
+            if(family.relationship == 'Istri' && genderEmp == "Female") {
+                messageValidation = "You can't select this item in relationship. Your gender is '" + genderEmp + "'.";
+               return false;
+            }
         }
 
         return true;
@@ -520,9 +549,7 @@ angular.module('myhr.controllers', [])
     }
 
     $scope.$on('$ionicView.beforeEnter', function () {
-        console.log("$ionicView.beforeEnter");
         if( $rootScope.refreshAddressCtrl) {
-            console.log("refresh AddressCtrl");
             initMethod();
         }
         $rootScope.refreshAddressCtrl = false;
@@ -545,15 +572,12 @@ angular.module('myhr.controllers', [])
     }
 
     $scope.goToDetails = function (idx) {
-      $state.go('app.detailaddress',{'idx':idx});
+      $state.go('app.detailaddress',{'idx':idx,'edit':'true'});
     };
 
 
-    console.log(Main.getSession("token"));
-
     var successRequest = function (res){
       $ionicLoading.hide();
-      console.log(res);
       $scope.address = res;
       
       $rootScope.address = [];
@@ -600,7 +624,6 @@ angular.module('myhr.controllers', [])
     if(addressIdx != null)
       $scope.address = $rootScope.address[addressIdx];
 
-    console.log($scope.address);
     $scope.selectStayStatus = Main.getSelectStayStatus();
     var arrCompanyRef = Main.getSession("profile").companyReference;
     var refSelectProvince = Main.getDataReference(arrCompanyRef,'address','province','indonesia');
@@ -617,7 +640,6 @@ angular.module('myhr.controllers', [])
             var accessToken = Main.getSession("token").access_token;
             var urlApi = Main.getUrlApi() + '/api/user/address/'+$scope.address.id;
             var data = JSON.stringify(dataSubmit);
-            console.log("data Submit", data);
             Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
         }else {
             alert(messageValidation);
@@ -629,12 +651,9 @@ angular.module('myhr.controllers', [])
     var successRequest = function (res){
       $ionicLoading.hide();
       alert(res.message);
-      console.log(res);
       $scope.goBack("app.address");
       //$scope.family = res;
     }
-
-    
 
     initMethod();
     
@@ -644,27 +663,40 @@ angular.module('myhr.controllers', [])
         }
         
     }
-    // invalid access token error: "invalid_token" 401
+
     function verificationForm(address){
-       
-        if(address.address == undefined || address.address==''){
-            messageValidation = "Address can't be empty";
-            return false;
-        }else if(address.country == undefined || address.country == ''){
+        if(address.country == undefined || address.country ==''){
             messageValidation = "Country can't be empty";
             return false;
-        }else if(address.province == undefined || address.province ==''){
+        }else if(address.province == undefined || address.province == ''){
             messageValidation = "Province can't be empty";
             return false;
         }else if(address.city == undefined || address.city == ''){
             messageValidation = "City can't be empty";
             return false;
-        }else if(address.stayStatus == undefined || address.stayStatus=='' ){
+        }else if(address.district == undefined || address.district == ''){
+            messageValidation = "District can't be empty";
+            return false;
+        }else if(address.subdistrict == undefined || address.subdistrict == ''){
+            messageValidation = "Sub District can't be empty";
+            return false;
+        }else if(address.rt == undefined || address.rt == ''){
+            messageValidation = "RT can't be empty";
+            return false;
+        }else if(address.rw == undefined || address.rw == ''){
+            messageValidation = "RW can't be empty";
+            return false;
+        }else if(address.address == undefined || address.address == ''){
+            messageValidation = "Address can't be empty";
+            return false;
+        }else if(address.stayStatus == undefined || address.stayStatus == ''){
             messageValidation = "Stay Status can't be empty";
             return false;
         }
         return true;
     }
+
+   
 
    
 
@@ -716,13 +748,11 @@ angular.module('myhr.controllers', [])
       } else {
         alert(messageValidation);
       }
-        //console.log($scope.address);
     }
 
     var successRequest = function (res){
       $ionicLoading.hide();
       alert(res.message);
-      console.log(res);
       $rootScope.refreshAddressCtrl = true;
       $scope.goBack("app.address");
       //$scope.family = res;
@@ -738,10 +768,7 @@ angular.module('myhr.controllers', [])
     }
     // invalid access token error: "invalid_token" 401
     function verificationForm(address){
-        if(address.address == undefined || address.address == ''){
-            messageValidation = "Address can't be empty";
-            return false;
-        }else if(address.country == undefined || address.country ==''){
+        if(address.country == undefined || address.country ==''){
             messageValidation = "Country can't be empty";
             return false;
         }else if(address.province == undefined || address.province == ''){
@@ -749,6 +776,21 @@ angular.module('myhr.controllers', [])
             return false;
         }else if(address.city == undefined || address.city == ''){
             messageValidation = "City can't be empty";
+            return false;
+        }else if(address.district == undefined || address.district == ''){
+            messageValidation = "District can't be empty";
+            return false;
+        }else if(address.subdistrict == undefined || address.subdistrict == ''){
+            messageValidation = "Sub District can't be empty";
+            return false;
+        }else if(address.rt == undefined || address.rt == ''){
+            messageValidation = "RT can't be empty";
+            return false;
+        }else if(address.rw == undefined || address.rw == ''){
+            messageValidation = "RW can't be empty";
+            return false;
+        }else if(address.address == undefined || address.address == ''){
+            messageValidation = "Address can't be empty";
             return false;
         }else if(address.stayStatus == undefined || address.stayStatus == ''){
             messageValidation = "Stay Status can't be empty";
@@ -768,8 +810,8 @@ angular.module('myhr.controllers', [])
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
-
     var addressIdx = $stateParams.idx;
+    $scope.canEdit = $stateParams.edit;
     $scope.address = {};
     if(addressIdx != null)
       $scope.address = $rootScope.address[addressIdx];
@@ -800,9 +842,7 @@ angular.module('myhr.controllers', [])
   }
 
   $scope.$on('$ionicView.beforeEnter', function () {
-        console.log("$ionicView.beforeEnter");
       if( $rootScope.refreshCertificationCtrl) {
-          console.log("refresh AddressCtrl");
           initMethod();
       }
       $rootScope.refreshCertificationCtrl = false;
@@ -833,7 +873,6 @@ angular.module('myhr.controllers', [])
 
     var successRequest = function (res){
       $ionicLoading.hide();
-      console.log(res);
       $scope.certification = res;
       $rootScope.certification = [];
       for(var i=0;i<$scope.certification.length;i++) {
@@ -981,7 +1020,8 @@ angular.module('myhr.controllers', [])
 
     $scope.submitForm = function(){
       if(verificationForm($scope.certification)){
-        if($scope.imageCertification.imagesData.length < 0) {
+
+        if($scope.imageCertification.imagesData.length < 1) {
             alert("You must add at least 1 attachment.");
             return false;
         }
@@ -1030,7 +1070,6 @@ angular.module('myhr.controllers', [])
     var successRequest = function (res){
       $ionicLoading.hide();
       alert(res.message);
-      console.log(res);
       $rootScope.refreshCertificationCtrl = true;
       $scope.goBack("app.certification");
       
@@ -1099,10 +1138,8 @@ angular.module('myhr.controllers', [])
     });
 
     $scope.openImagePreview = function (item) {
-        console.log(item);
         var product = {id:1,image:item};
         $scope.detailImage = product;
-        console.log($scope.detailImage);
         $scope.modalPopupImage.show();
     };
     
@@ -1125,7 +1162,6 @@ angular.module('myhr.controllers', [])
       $ionicLoading.hide();
       if(status == 401) {
           var refreshToken = Main.getSession("token").refresh_token
-          console.log("need refresh token");
           Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
       }else {
           if(status==500)
@@ -1138,13 +1174,9 @@ angular.module('myhr.controllers', [])
 
     var successRefreshToken = function(res){
       Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
     }
 
     var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
     }
 
 
@@ -1173,20 +1205,14 @@ angular.module('myhr.controllers', [])
 
 
 .controller('ChangeMaritalStatusCtrl', function($ionicPopup, $ionicActionSheet,appService,$ionicHistory,$cordovaCamera,$stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
-    /*$scope.itens = [
-          { title: "Single", checked: false },
-          { title: "Married", checked: false }
-    ];*/
 
     var arrCompanyRef = Main.getSession("profile").companyReference;
     var arrItens = Main.getDataReference(arrCompanyRef,'personal','information','maritalstatus');
     $scope.itens = JSON.parse(arrItens);
-    console.log($scope.itens);
     var dataapprovalId = $stateParams.dataApprovalId;
     $scope.currentStatus = $stateParams.currentStatus;
     $scope.showButton = true;
     $scope.dataApprovalStatus = null;
-    console.log($stateParams);
 
     $scope.image = "img/placeholder.png";
     $scope.maritalStatus = {};
@@ -1300,7 +1326,6 @@ angular.module('myhr.controllers', [])
     var successRequest = function (res){
       $ionicLoading.hide();
       alert(res.message);
-      console.log(res);
       goBack("app.biodata");
     }
 
@@ -1308,7 +1333,6 @@ angular.module('myhr.controllers', [])
       $ionicLoading.hide();
       if(status == 401) {
           var refreshToken = Main.getSession("token").refresh_token
-          console.log("need refresh token");
           Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
       }else {
           if(status==500)
@@ -1321,13 +1345,9 @@ angular.module('myhr.controllers', [])
 
     var successRefreshToken = function(res){
       Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
     }
 
     var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
     }
 
 
@@ -1376,7 +1396,6 @@ angular.module('myhr.controllers', [])
                   var accessToken = Main.getSession("token").access_token;
                   var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval';
                   var data = JSON.stringify(dataStr);
-                  console.log(dataStr);
                   Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
               }
               
@@ -1394,7 +1413,7 @@ angular.module('myhr.controllers', [])
       $ionicLoading.hide();
       var dataApproval = res;
       $scope.dataApprovalStatus = dataApproval.processingStatus; 
-      if(dataApproval.processingStatus != null && dataApproval.processingStatus.toLowerCase()!='request'){
+      if(dataApproval.processingStatus != null && dataApproval.processingStatus.toLowerCase()=='request'){
           $scope.showButton = false;
           
       }
@@ -1403,7 +1422,6 @@ angular.module('myhr.controllers', [])
             $scope.image = dataApproval.attachments[0].image;
         
 
-      console.log(res);
     }
 
 
