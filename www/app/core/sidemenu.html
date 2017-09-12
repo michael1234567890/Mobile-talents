@@ -52,11 +52,11 @@
          <i class="icon ion-ios-body-outline"></i>
           Self Service
         </div>
-        <div class="item item-icon-left" ui-sref="app.myteam">
+        <div class="item item-icon-left" ui-sref="app.myteam" ng-show="profile.isLeader == true">
          <i class="icon ion-ios-people"></i>
           My Team
         </div>
-        <div class="item item-icon-left" ui-sref="app.requestapproval">
+        <div class="item item-icon-left" ui-sref="app.requestapproval" ng-show="profile.isAdmin==true || profile.isLeader == true">
          <i class="icon ion-email"></i>
           Approval <span class="badge badge-assertive" >{{general.countApproval}}</span>
         </div>

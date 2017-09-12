@@ -8,6 +8,10 @@
             function ($state, $ionicPopup, $ionicActionSheet, $ionicHistory, $ionicLoading, $timeout) {
 
                 return {
+                    getLeaves: function () {
+                        return _leaves;
+                    },
+
                     getNews: function () {
                         return _news;
                     },
@@ -87,7 +91,7 @@
                             correctOrientation: true,
                             targetWidth : 633,
                             targetHeight:633,
-                            allowEdit:true
+                            allowEdit:false
                         };
                     },
                     getLibraryOptions: function () {
@@ -100,13 +104,77 @@
                             correctOrientation: true,
                             targetWidth : 633,
                             targetHeight:633,
+                            allowEdit:false
+                        };
+                    },getCameraOptionsProfile: function () {
+                        return {
+                            quality: 50,
+                            destinationType: Camera.DestinationType.DATA_URL,
+                            sourceType: Camera.PictureSourceType.CAMERA,
+                            encodingType: Camera.EncodingType.JPEG,
+                            saveToPhotoAlbum: true,
+                            correctOrientation: true,
+                            targetWidth : 633,
+                            targetHeight:633,
                             allowEdit:true
                         };
                     },
+                    getLibraryOptionsProfile: function () {
+                        return {
+                            quality: 50,
+                            destinationType: Camera.DestinationType.DATA_URL,
+                            sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+                            encodingType: Camera.EncodingType.JPEG,
+                            saveToPhotoAlbum: false,
+                            correctOrientation: true,
+                            targetWidth : 633,
+                            targetHeight:633,
+                            allowEdit:true
+                        };
+                    }
                 }
             }]);
 })();
 
+var _leaves = [
+    {
+        id: 3,
+        "reqNo": "AT321321",
+        "startDate": "19 Mei 2017",
+        "endDate": "20 Mei 2017",
+        "createdDate": "20 Mei 2017 20:00",
+        "remark": "Mengunjungi Orang Tua",
+        "categoryType": "Sick"
+    },
+    {
+        id: 3,
+        "reqNo": "AT321324",
+        "startDate": "19 Mei 2017",
+        "endDate": "20 Mei 2017",
+        "createdDate": "20 Mei 2017 20:00",
+        "remark": "Mengunjungi Orang Tua",
+        "categoryType": "Annual Leave"
+    },
+    {
+        id: 3,
+        "reqNo": "AT321323",
+        "startDate": "19 Mei 2017",
+        "endDate": "20 Mei 2017",
+        "createdDate": "20 Mei 2017 20:00",
+        "remark": "Mengunjungi Orang Tua",
+        "categoryType": "Permission"
+    },
+    {
+        id: 3,
+        "reqNo": "AT321341",
+        "startDate": "19 Mei 2017",
+        "endDate": "20 Mei 2017",
+        "createdDate": "20 Mei 2017 20:00",
+        "remark": "Mengunjungi Orang Tua",
+        "categoryType": "Permission"
+    }
+
+]
 //Contacts data
 var _contacts = [
     {

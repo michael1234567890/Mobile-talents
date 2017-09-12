@@ -222,7 +222,7 @@ angular.module('talent.routes', [])
 
 
       .state('app.addleave', {
-        url: '/addleave/:idx',
+        url: '/addleave',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/selfservice/leave/add-leave.html',
@@ -237,6 +237,16 @@ angular.module('talent.routes', [])
           'menuContent': {
             templateUrl: 'app/talents/selfservice/leave/leave.html',
             controller: 'ListLeaveCtrl'
+          }
+        }
+      })
+
+      .state('app.detailleave', {
+        url: '/detailleave',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/leave/detail-leave.html',
+            controller: 'DetailLeaveCtrl'
           }
         }
       })
@@ -409,7 +419,7 @@ angular.module('talent.routes', [])
       })
 
        .state('app.detailaddress', {
-        url: '/detailaddress/:idx',
+        url: '/detailaddress/:idx/:edit',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/myhr/address/detail-address.html',
@@ -480,12 +490,22 @@ angular.module('talent.routes', [])
         }
       })
 
-       .state('app.myrequestdetail', {
+      .state('app.myrequestdetail', {
         url: '/myrequestdetail/:id',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/myteam/request/myrequest-detail.html',
             controller: 'MyRequestDetailCtrl'
+          }
+        }
+      })
+
+      .state('app.formrequestsearching', {
+        url: '/formrequestsearching',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/myteam/request/formrequestsearching.html',
+            controller: 'FormRequestSearchingCtrl'
           }
         }
       })

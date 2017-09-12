@@ -4,17 +4,15 @@
 
     angular.module('main.services', [])
     .factory('Main', function($q, $timeout, $http, $localStorage){
+        //var hostname = "http://192.168.43.132";
         //var hostname = "http://192.168.43.162";
-        //var hostname = "http://45.76.147.40"
-        var hostname = "http://localhost";
+        var hostname = "http://45.76.147.40";
+        //var hostname = "http://localhost";
         var phphost =  hostname + "/talents";
-
         var printBaseUrl = hostname + "/talents/payslippdf";
         var printReportUrl = phphost + "/printpdf";
-
         var baseUrl = hostname + ":8080";
         
-
         var basicAuthentication = 'Basic dGFsZW50czpzZWNyZXQ=';
         var timeoutms = 15000; // 15 sec
 
@@ -33,7 +31,8 @@
         var selectCountry = [{id:"Indonesia"}];
         var selectMonth = [{name:"JAN",id:"01"},{name:"FEB",id:"02"},{id:"03",name:"MAR"},{id:"04",name:"APR"},{id:"05",name:"MAY"},{id:"06",name:"JUN"},{id:"07",name:"JUL"},{id:"08",name:"AUG"},{id:"09",name:"SEP"},{id:"10",name:"OCT"},{id:"11",name:"NOV"},{id:"12",name:"DES"}];  
         var selectYear = [{id:"2016"},{id:"2017"}]; 
-       
+        var dataDisplaySize=15;
+
         function changeUser(user) {
             angular.extend(currentUser, user);
         }
@@ -89,6 +88,10 @@
          return {
             save: function(data, success, error) {
                 $http.post(baseUrl + '/signin', data).success(success).error(error)
+             },
+
+             getDataDisplaySize : function(){
+                return dataDisplaySize;
              },
 
              getValuefromId : function(array,id){
