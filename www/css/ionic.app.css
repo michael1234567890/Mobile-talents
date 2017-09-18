@@ -5294,7 +5294,8 @@ ion-tabs.tabs-striped.tabs-color-active-dark .tab-item.tab-item-active, ion-tabs
   overflow: hidden;
   min-height: 100%;
   max-height: 100%;
-  width: 275px;
+  /*width: 275px;*/
+  width: 70%;
   background-color: #fff; }
   .menu .scroll-content {
     z-index: 10; }
@@ -9911,7 +9912,7 @@ p {
   font-size: 0.8em !important; }
 
 .text-medium {
-  font-size: 1.1em !important; }
+  font-size: 1.0em !important; }
 
 .text-large {
   font-size: 1.4em !important; }
@@ -10319,12 +10320,12 @@ p {
 /*
 .menu-open .menu-content.menu-animated {
   -webkit-transform: translate3d(95px, 0px, 0px) !important;
-  transform: translate3d(95px, 0px, 0px) !important; }
+  transform: translate3d(275px, 0px, 0px) !important; }
 */
 
 .menu-open .menu-content.menu-animated {
-  -webkit-transform: translate3d(95px, 0px, 0px) !important;
-  transform: translate3d(255px, 0px, 0px) !important; }
+  -webkit-transform: translate3d(275px, 0px, 0px) !important;
+  transform: translate3d(275px, 0px, 0px) !important; }
 
 #menu {
   background-color: #00635a; }
