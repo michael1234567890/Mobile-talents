@@ -231,8 +231,8 @@ angular.module('talent.routes', [])
         }
       })
 
-      .state('app.leave', {
-        url: '/leave',
+      .state('app.leaves', {
+        url: '/leaves',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/selfservice/leave/leave.html',

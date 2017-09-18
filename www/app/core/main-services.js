@@ -6,8 +6,9 @@
     .factory('Main', function($q, $timeout, $http, $localStorage){
         //var hostname = "http://192.168.43.132";
         //var hostname = "http://192.168.43.162";
-        var hostname = "http://45.76.147.40";
-        //var hostname = "http://localhost";
+        //var hostname = "http://45.76.147.40";
+        var hostname = "http://localhost";
+        var environment = "development"; // development , production
         var phphost =  hostname + "/talents";
         var printBaseUrl = hostname + "/talents/payslippdf";
         var printReportUrl = phphost + "/printpdf";
@@ -88,6 +89,9 @@
          return {
             save: function(data, success, error) {
                 $http.post(baseUrl + '/signin', data).success(success).error(error)
+             },
+             getEnvironment : function(){
+                return environment;
              },
 
              getDataDisplaySize : function(){

@@ -96,6 +96,9 @@ he
                         disableBack: true
                     });
                 }
+                $scope.goToPage = function (page) {
+                    $state.go(page);
+                }
 
 
                 $scope.goBack = function (ui_sref) {
