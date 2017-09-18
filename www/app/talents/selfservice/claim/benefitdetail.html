@@ -36,10 +36,13 @@
         <div class="edit padding-horizontal" >
             <label class="item item-input" ng-repeat="item in header.details">
                 <span class="input-label col col-60">{{item.type}}</span>
-                <input class="col col-40" style="padding-right:5px" type="text" value="Rp. {{item.amount | number:0}}"  disabled>
+                <input class="col col-40" ng-if="header.categoryType != 'Medical Overlimit'" style="padding-right:5px" type="text" value="Rp. {{item.amount | number:0}}"  disabled>
             </label>
         </div>
-        <div class="item item-divider" style="text-align:right">TOTAL CLAIM Rp. {{header.totalAmount | number:0}}</div> <br>
+        <div class="item item-divider" ng-if="header.categoryType != 'Medical Overlimit'" style="text-align:right">TOTAL CLAIM Rp. {{header.totalAmount | number:0}}</div>
+
+        <div class="item item-divider" ng-if="header.categoryType == 'Medical Overlimit'" style="text-align:right">TOTAL CLAIM Rp. -</div> <br>
+
         <div ng-if="header.refRequestHeaderObj != null"  class="item item-divider dark-bg" style="text-align:right">{{header.refRequestHeaderObj.categoryType}} - TOTAL Rp. {{header.refRequestHeaderObj.totalAmount | number:0}}</div> 
     </div>
 </div>

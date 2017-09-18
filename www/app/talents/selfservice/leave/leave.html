@@ -26,20 +26,19 @@
         <div  class="bg-lightgrey">
             <div class="item item-text-wrap" ng-repeat="item in leaves"  ui-sref="app.detailleave">
                 <div class="row">
-                    <div class="left"><h5 class="uppercase no-margin no-padding thicker"><b>#{{item.reqNo}}</b></h5></div>
-                    <!--<div class="right"><h5 class="energized ">pending</h5></div>-->
+                    <div class="left"><h5 class="uppercase no-margin no-padding thicker">{{item.startDate | date: 'dd MMM'}} - {{item.endDate | date: 'dd MMM yyyy'}}</h5></div>
                 </div>
                
                 <div class="row">
                     <div class="uppercase left"><h3 class="thicker">{{item.categoryType}}</h3></div>
-                    <div class="uppercase right"><h5 class="positive no-margin no-padding thicker">2 Days</h5></div>
+                    <div class="uppercase right"><h5 class="positive no-margin no-padding thicker">{{item.totalAmount}} Days</h5></div>
                 </div>
                 <div class="row">
-                    <div class="left"><h5 style="color: #949494;">19 Mei 2017 17:00</h5></div>
-                    <div class="right"><h5 class="energized ">pending</h5></div>
+                    <div class="left"><h5 style="color: #949494;">{{item.createdDate  | date: 'dd MMM yyyy HH:mm'}}</h5></div>
+                    <div class="right"><h5 class="energized ">{{item.status}}</h5></div>
                 </div>
             </div>
-            <div class="item" ng-if="requests.length == 0" >
+            <div class="item" ng-if="leaves.length == 0" >
                     <div class="col col-100">
                         <h2>Data not found</h2>
                         <p>Pull to refresh</p>

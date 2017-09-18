@@ -12,45 +12,28 @@ angular.module('leave.controllers', [])
     
     var successRequest = function (res){
       $ionicLoading.hide();
-      console.log(res);
       $scope.leaves = res;
+      console.log("leaves ....");
+      console.log($scope.leaves );
       $scope.$broadcast('scroll.refreshComplete');
 
     }
 
-    var errorRequest = function (err, status){
-      $ionicLoading.hide();
-      if(status == 401) {
-        var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
-        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-      }else {
-        alert("Check your connection");
-      }
-      console.log(err);
-      console.log(status);
-    }
-
-    var successRefreshToken = function(res){
-      Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
-    }
-    var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
-    }
 
     function getLeaves(){
       $ionicLoading.show({
           template: 'Loading ...'
       });
       var accessToken = Main.getSession("token").access_token;
-      var urlApi = Main.getUrlApi() + '/api/user/leave/pending';
-      Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
+      var urlApi = Main.getUrlApi() + '/api/user/tmrequest/bystatus?module=attendance&status=pending';
+      Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
     }
 
     function initMethod(){
+      if(Main.getEnvironment() == 'production') {
+          alert("This feature is not available");
+          $scope.goBack('app.selfservice');
+      }
       getLeaves();      
     }
 
@@ -59,60 +42,51 @@ angular.module('leave.controllers', [])
 
 })
 
-.controller('AddLeaveCtrl', function($filter, $stateParams, $ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('AddLeaveCtrl', function($filter, $stateParams, $ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main,ionicDatePicker) {
     
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
     var startDate = $filter('date')(new Date(),'yyyy-MM-dd');
     var endDate = $filter('date')(new Date(),'yyyy-MM-dd');
-    
+    var employee= Main.getSession("profile").employeeTransient.id;
+
     $scope.leaveType = {};
-    $scope.leave = {comment:""}
+    $scope.leave = {remark:""};
+    $scope.leave.startDate= new Date();
+    $scope.leave.endDate= new Date();  
+    
+    console.log(Main.getSession("profile"));
 
-    $scope.onezoneDatepicker = { 
-        date: new Date(), 
-        mondayFirst: false, 
-        disablePastDays: false, 
-        disableSwipe: false, 
-        disableWeekend: false, 
-        showDatepicker: false, 
-        showTodayButton: true, 
-        calendarMode: true, 
-        hideCancelButton: false, 
-        hideSetButton: false, 
-        highlights: [ { date: new Date(2016, 6, 6), color: '#8FD4D9', textColor: '#f00', }], 
-        callback: function(value) { 
-            startDate = $filter('date')(new Date(value),'yyyy-MM-dd');
-        } 
-    }
+    var datepicker = {
+        callback: function (val) {  //Mandatory
+          $scope.leave.startDate = val;
+        },
+        inputDate: new Date(),      //Optional
+        mondayFirst: true,          //Optional
+        dateFormat:"yyyy-MM-dd",
+        closeOnSelect: false,       //Optional
+        templateType: 'popup'       //Optional
+    };
 
-    $scope.onezoneDatepicker2 = { 
-        date: new Date(), 
-        mondayFirst: false, 
-        disablePastDays: false, 
-        disableSwipe: false, 
-        disableWeekend: false, 
-        showDatepicker: false, 
-        showTodayButton: true, 
-        calendarMode: true, 
-        hideCancelButton: false, 
-        hideSetButton: false, 
-        highlights: [ { date: new Date(2016, 6, 6), color: '#8FD4D9', textColor: '#f00', }], 
-        callback: function(value) { 
-            endDate = $filter('date')(new Date(value),'yyyy-MM-dd');
-        } 
-    }
+    var datepicker1 = {
+        callback: function (val) {  //Mandatory
+          $scope.leave.endDate = val;
+        },
+        inputDate: new Date(),      //Optional
+        mondayFirst: true,          //Optional
+        dateFormat:"yyyy-MM-dd",
+        closeOnSelect: false,       //Optional
+        templateType: 'popup'       //Optional
+    };
 
-    var successRefreshToken = function(res){
-      Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
-    }
-    var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
-    }
+    $scope.openDatePicker = function(){
+        ionicDatePicker.openDatePicker(datepicker);
+    };
+
+    $scope.openDatePicker1 = function(){
+        ionicDatePicker.openDatePicker(datepicker1);
+    };
 
     var successRequest = function (res){
       $ionicLoading.hide();
@@ -120,139 +94,66 @@ angular.module('leave.controllers', [])
       console.log($scope.requests);
     }
 
-    var errorRequest = function (err, status){
-      $ionicLoading.hide();
-      if(status == 401) {
-        var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
-        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-      }else {
-        alert(err.message);
-      }
 
-      console.log(err);
-      console.log(status);
-    }
-
-
-    $scope.sendRequestLeave = function(){
+    $scope.submitForm = function(){
         var strJson = {leaveType:$scope.leaveType.id,startTime:startDate,endTime:endDate,comment:$scope.leave.comment};
          $ionicLoading.show({
           template: 'Processing...'
         });
+         $scope.leave.module="Attendance";
+         $scope.leave.categoryType="Annual";
+         $scope.leave.type="Annual";
+         $scope.leave.startDate=$filter('date')(new Date($scope.leave.startDate),'yyyy-MM-dd');
+         $scope.leave.endDate=$filter('date')(new Date($scope.leave.endDate),'yyyy-MM-dd');
+         $scope.leave.workflow="SUBMITAT";
+         $scope.leave.employee=employee;
+
         var accessToken = Main.getSession("token").access_token;
-        var urlApi = Main.getUrlApi() + '/api/user/leave';
-        var data = JSON.stringify(strJson);
+        var urlApi = Main.getUrlApi() + '/api/user/tmrequest/attendance';
+        var data = JSON.stringify($scope.leave);
         console.log(data);
-        Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
+        Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
 
     }
 
 
      
-     var leaveIdx = $stateParams.idx;
-     console.log("leaveIdx " + leaveIdx);
-     console.log($rootScope.leaveTypeChoose);
-     if(leaveIdx != null && $rootScope.leaveTypeChoose != undefined) {
-     		$scope.leaveType = $rootScope.leaveTypeChoose[leaveIdx];
+    })
 
-     }
-
-})
-
-
-.controller('ListLeaveCtrl', function(appService,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
-    
+.controller('ListLeaveCtrl', function($ionicPopover,$ionicLoading,$rootScope, $scope,$state , AuthenticationService, Main) {
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
 
-    $scope.leaves = appService.getLeaves();
-    console.log("leaves " + $scope.leaves.length);
+    $scope.leaves = [];
    
-   
-    
-
-
-})
-
-.controller('DetailLeaveCtrl', function($ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
- 
- 
-})
-
-.controller('ChooseLeaveCtrl', function($ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
-    
-    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
-        $state.go("login");
-    }
-
-    // $scope.leaveType = [{id:1, idx:0,name:"Casual",balance:10,used:2},{id:2,idx:1,name:"Pregnance",balance:30,used:10}];
-    $scope.entitlement = [];
-   // $rootScope.leaveTypeChoose = $scope.leaveType;
-
-    $scope.goToLeave = function(idx){
-    	$state.go('app.addleave',{'idx':idx});
+    $scope.gotoBenefitDetail = function(index){
+          $state.go("app.benefitdetail");
     }
 
     $scope.refresh = function(){
-      initMethod();
+        initMethod();  
     }
-    
+   
     var successRequest = function (res){
+      $scope.leaves = res;
       $ionicLoading.hide();
-      console.log(res);
-      $scope.team = res;
-      $rootScope.leaveTypeChoose = [];
-      for(var i=0;i<res.length;i++) {
-        var obj = res[i];
-        obj.idx = i;
-        $rootScope.leaveTypeChoose.push(obj);
-      }
-
-      $scope.entitlement = $rootScope.leaveTypeChoose;
       $scope.$broadcast('scroll.refreshComplete');
-
-    }
-
-    var errorRequest = function (err, status){
-      $ionicLoading.hide();
-      if(status == 401) {
-        var refreshToken = Main.getSession("token").refresh_token
-        console.log("need refresh token");
-        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-      }else {
-        alert("Check your connection");
-      }
-      console.log(err);
-      console.log(status);
-    }
-
-    var successRefreshToken = function(res){
-      Main.setSession("token",res);
-      console.log("token session");
-      console.log(Main.getSession("token"));
-    }
-    var errRefreshToken = function(err, status) {
-      console.log(err);
-      console.log(status);
-    }
-
-    function getEntitlement(){
-      $ionicLoading.show({
-          template: 'Loading ...'
-      });
-      var accessToken = Main.getSession("token").access_token;
-      var urlApi = Main.getUrlApi() + '/api/user/leave/entitlement';
-      Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
-    }
-
-    function initMethod(){
-      getEntitlement();      
     }
 
     initMethod();
 
+    function initMethod(){
+        getListBenefit();
+    }
+   
 
-
+    function getListBenefit(){
+      $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner>'
+        });
+      var accessToken = Main.getSession("token").access_token;
+      var urlApi = Main.getUrlApi() + '/api/user/tmrequest?module=Attendance';
+      Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
+    }
 })

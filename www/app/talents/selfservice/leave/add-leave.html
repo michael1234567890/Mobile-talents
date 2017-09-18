@@ -1,42 +1,49 @@
-<style>
-        .change{
-            border-color: white;
-            padding: 10px;
-        }
-</style>
-
-<ion-view title="My Team">
+<ion-view title="Submit Leave">
     <ion-content class="has-header" scroll="false">
-
-      <div style="height:95%; overflow:scroll" class="bg-lightgrey">
-        <ion-item class="change bg-lightgrey">
-          <p class="bb text-large padding uppercase">{{leaveType.leaveTypeObj.name}}</p>
+      <div  class="item padding bg-lightgrey">
+          <p class="bb text-medium padding uppercase">{{leaveType.leaveTypeObj.name}}</p>
           <div class="row no-padding text-center bt-grey bb-grey" style="height:44px">
-            <div class="col col-25"><p class="bb text-medium padding uppercase">Balance</p></div>
-            <div class="col col-25"><p class="bb text-large padding uppercase">10</p></div>
-            <div class="col col-25 bl-grey"><p class="bb text-medium padding uppercase">Used</p></div>
-            <div class="col col-25 bl-grey"><p class="bb text-large padding uppercase">5</p></div>
-        </div>
-        <br/><br/>
-          <h2>From Date</h2>
-          <onezone-datepicker datepicker-object="onezoneDatepicker">
-          <button class="button button-block button-outline button-positive show-onezone-datepicker">
-              {{onezoneDatepicker.date | date:'yyyy-MM-dd'}} 
-          </button>
-          </onezone-datepicker>
-
-          <h2>To Date</h2>
-          <onezone-datepicker datepicker-object="onezoneDatepicker2">
-          <button class="button button-block button-outline button-positive show-onezone-datepicker">
-              {{onezoneDatepicker2.date | date:'yyyy-MM-dd'}} 
-          </button>
-          </onezone-datepicker>
-          <h2>Comment</h2>
-          <textarea style="border-color:#1479c9" ng-model="leave.comment"></textarea>
+              <div class="col col-25"><p class="bb text-medium padding uppercase">Remaining</p></div>
+              <div class="col col-25"><p class="bb text-large padding uppercase">10</p></div>
+              <div class="col col-25 bl-grey"><p class="bb text-medium padding uppercase">Used</p></div>
+              <div class="col col-25 bl-grey"><p class="bb text-large padding uppercase">5</p></div>
+          </div>
           <div class="row">
-                 <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="sendRequestLeave()">Send</button>
+                <div class="input-field col">
+                    <p for="last_name">Leave Type </p>
+                    <select ng-model="address.province">
+                        <option value="">-- Select --</option>
+                        <option ng-repeat="province in selectProvince">{{province.id}}</option>
+                      </select>
+                </div>
+          </div>
+          <div class="row">
+                <div class="input-field col">
+                    <p for="last_name">From Date </p>
+                    <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()">
+                            {{leave.startDate| date: "yyyy-MM-dd"}}
+                    </ionic-datepicker>
+                </div>
+          </div>
+          <div class="row">
+                <div class="input-field col">
+                    <p for="last_name">To Date </p>
+                    <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker1()">
+                            {{leave.endDate| date: "yyyy-MM-dd"}}
+                    </ionic-datepicker>
+                </div>
+          </div>
+          <div class="row">
+                <div class="input-field col s12">
+                    <p for="textarea1">Reason</p>
+                    <textarea  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" placeholder="Enter your reason" ng-model="leave.remark" ></textarea>
+                    
+                </div>
+           </div>
+           <div class="row">
+                <button class="btn waves-effect button-medium waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Next</button>
+              
             </div>
-        </ion-item>
       </div>
     </ion-content>
 </ion-view>

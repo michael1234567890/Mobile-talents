@@ -863,7 +863,7 @@ angular.module('selfservice.controllers', [])
 
 
       $scope.submitForm = function(){
-          if($scope.requestHeader.attachments.length > -1) {
+          if($scope.requestHeader.attachments.length > 0) {
               $ionicLoading.show({
                 template: '<ion-spinner></ion-spinner>'
               });
@@ -1291,6 +1291,11 @@ angular.module('selfservice.controllers', [])
             return false;
         }
 
+        if(dataSpd.data == undefined || dataSpd.data == ''){
+            messageValidation = "Estimated Expenses & Item can't be empty";
+            return false;
+        }
+
         if(dataSpd.amount == undefined || dataSpd.amount == 0){
             messageValidation = "Amount can't be empty";
             return false;
@@ -1306,7 +1311,7 @@ angular.module('selfservice.controllers', [])
     }
 
     function initModule(){
-        $scope.detail = {amount:0,type:"Advance",remark:"",origin:"",destination:""};
+        $scope.detail = {amount:0,type:"Advance",remark:"",origin:"",destination:"",data:""};
         $scope.requestHeader.startDate = new Date();
         $scope.requestHeader.endDate = new Date();
     }
