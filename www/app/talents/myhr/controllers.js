@@ -259,6 +259,9 @@ angular.module('myhr.controllers', [])
         }else if(family.birthDate == undefined){
             messageValidation = "Date of Birth can't be empty";
             return false;
+        }else if(family.aliveStatus ==undefined || family.aliveStatus=='' ) {
+            messageValidation = "Alive Status can't be empty";
+            return false;
         }else if(family.gender ==undefined || family.gender=='') {
             messageValidation = "Gender can't be empty";
             return false;
@@ -270,9 +273,6 @@ angular.module('myhr.controllers', [])
             return false;
         }else if(family.bloodType ==undefined || family.bloodType=='' ) {
             messageValidation = "Blood Type can't be empty";
-            return false;
-        }else if(family.aliveStatus ==undefined || family.aliveStatus=='' ) {
-            messageValidation = "Alive Status can't be empty";
             return false;
         }
 
@@ -397,7 +397,6 @@ angular.module('myhr.controllers', [])
                       case 1: // Select From Gallery
                           document.addEventListener("deviceready", function () {
                               $cordovaCamera.getPicture(appService.getLibraryOptions()).then(function (imageData) {
-                                  // $rootScope.user.photo = "data:image/jpeg;base64," + imageData;
                                    $scope.family.images.push({'image':"data:image/jpeg;base64," + imageData});
                                    $scope.family.imagesData.push({'image': imageData});
                               }, function (err) {
@@ -483,7 +482,6 @@ angular.module('myhr.controllers', [])
       alert(res.message);
       $rootScope.refreshFamilyCtrl=true;
       $scope.goBack('app.family');
-      //$scope.family = res;
     }
 
     
@@ -509,6 +507,9 @@ angular.module('myhr.controllers', [])
         }else if(family.gender ==undefined || family.gender=='') {
             messageValidation = "Gender can't be empty";
             return false;
+        }else if(family.aliveStatus ==undefined || family.aliveStatus=='' ) {
+            messageValidation = "Alive Status can't be empty";
+            return false;
         }else if(family.relationship ==undefined || family.relationship=='') {
             messageValidation = "Relationship can't be empty";
             return false;
@@ -517,9 +518,6 @@ angular.module('myhr.controllers', [])
             return false;
         }else if(family.bloodType ==undefined || family.bloodType=='' ) {
             messageValidation = "Blood Type can't be empty";
-            return false;
-        }else if(family.aliveStatus ==undefined || family.aliveStatus=='' ) {
-            messageValidation = "Alive Status can't be empty";
             return false;
         }
 
@@ -1088,11 +1086,11 @@ angular.module('myhr.controllers', [])
         if(certification.name == undefined || certification.name=='' ){
             messageValidation = "Name can't be empty";
             return false;
-        }else if(certification.type == undefined || certification.type==''){
-            messageValidation = "Type can't be empty";
-            return false;
         }else if(certification.principle == undefined || certification.principle==''){
             messageValidation = "Principle can't be empty";
+            return false;
+        }else if(certification.type == undefined || certification.type==''){
+            messageValidation = "Type can't be empty";
             return false;
         }
         return true;
