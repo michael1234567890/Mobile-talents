@@ -210,19 +210,19 @@ angular.module('talent.routes', [])
         }
       })
 
-       .state('app.chooseleavetype', {
-        url: '/chooseleavetype',
+       .state('app.chooseleavecategory', {
+        url: '/chooseleavecategory',
         views: {
           'menuContent': {
-            templateUrl: 'app/talents/selfservice/leave/choose-leave-type.html',
-            controller: 'ChooseLeaveCtrl'
+            templateUrl: 'app/talents/selfservice/leave/choose-category.html',
+            controller: 'ChooseLeaveCategoryCtrl'
           }
         }
       })
 
 
       .state('app.addleave', {
-        url: '/addleave',
+        url: '/addleave/:category',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/selfservice/leave/add-leave.html',
@@ -375,7 +375,15 @@ angular.module('talent.routes', [])
           }
         }
       })
-
+      .state('app.leaveconfirmation', {
+        url: '/leaveconfirmation',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/leave/leaveconfirmation.html',
+            controller: 'LeaveConfirmationCtrl'
+          }
+        }
+      })
 
 
       .state('app.changepassword', {
