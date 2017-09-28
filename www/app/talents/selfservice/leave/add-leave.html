@@ -1,36 +1,76 @@
-<ion-view title="Submit Leave">
-    <ion-content class="has-header" scroll="false">
+<ion-view title="Submit {{leaveCategory}}">
+    <ion-content padding="true" class="has-header materialize" scroll="true">
+    
       <div  class="item padding bg-lightgrey">
-          <p class="bb text-medium padding uppercase">{{leaveType.leaveTypeObj.name}}</p>
-          <div class="row no-padding text-center bt-grey bb-grey" style="height:44px">
+          
+          <div ng-if="leaveCategory !='Overtime'" class="row no-padding text-center bt-grey bb-grey" style="height:44px">
               <div class="col col-25"><p class="bb text-medium padding uppercase">Remaining</p></div>
-              <div class="col col-25"><p class="bb text-large padding uppercase">10</p></div>
+              <div class="col col-25"><p class="bb text-large padding uppercase">{{balance.balanceEnd}}</p></div>
               <div class="col col-25 bl-grey"><p class="bb text-medium padding uppercase">Used</p></div>
-              <div class="col col-25 bl-grey"><p class="bb text-large padding uppercase">5</p></div>
+              <div class="col col-25 bl-grey"><p class="bb text-large padding uppercase">{{balance.balanceUsed}}</p></div>
           </div>
           <div class="row">
                 <div class="input-field col">
-                    <p for="last_name">Leave Type </p>
-                    <select ng-model="address.province">
-                        <option value="">-- Select --</option>
-                        <option ng-repeat="province in selectProvince">{{province.id}}</option>
-                      </select>
+                    <p for="last_name">Type </p>
+                    <select ng-model="leave.type" ng-change="onChangeType()">
+                        <option value="">-- Select Type --</option>
+                        <option ng-repeat="item in selectType">{{item.id}}</option>
+                    </select>
                 </div>
           </div>
           <div class="row">
                 <div class="input-field col">
-                    <p for="last_name">From Date </p>
+                    <p for="last_name">Start</p>
                     <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()">
                             {{leave.startDate| date: "yyyy-MM-dd"}}
                     </ionic-datepicker>
                 </div>
           </div>
-          <div class="row">
+          <div class="row" ng-if="leaveCategory !='Overtime' &&  leaveCategory !='Edit Attendance'">
                 <div class="input-field col">
-                    <p for="last_name">To Date </p>
+                    <p for="last_name">End</p>
                     <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker1()">
                             {{leave.endDate| date: "yyyy-MM-dd"}}
                     </ionic-datepicker>
+                </div>
+          </div>
+          <div class="row" ng-if="leaveCategory =='Overtime'">
+                <div class="input-field col">
+                    <p for="last_name">Overtime In </p>
+                    <div class="row">
+                        <div class="col">
+                          <select ng-model="leave.overtimeinhour">
+                            
+                            <option ng-repeat="hour in selectHour">{{hour.id}}</option>
+                          </select>
+                        </div>
+                        <div class="col"><h6>&nbsp;Hours</h6></div>
+                        <div class="col">
+                          <select ng-model="leave.overtimeinmin">
+                            <option ng-repeat="min in selectMinutes">{{min.id}}</option>
+                          </select>
+                        </div>
+                        <div class="col" ><h6>&nbsp;Min</h6></div>
+                    </div>
+                </div>
+          </div>
+          <div class="row" ng-if="leaveCategory =='Overtime'">
+                <div class="input-field col">
+                    <p for="last_name">Overtime Out </p>
+                    <div class="row">
+                        <div class="col">
+                          <select ng-model="leave.overtimeouthour">
+                            <option ng-repeat="hour in selectHour">{{hour.id}}</option>
+                          </select>
+                        </div>
+                        <div class="col"><h6>&nbsp;Hours</h6></div>
+                        <div class="col">
+                          <select ng-model="leave.overtimeoutmin">
+                            <option ng-repeat="min in selectMinutes">{{min.id}}</option>
+                          </select>
+                        </div>
+                        <div class="col"><h6>&nbsp;Min</h6></div>
+                    </div>
                 </div>
           </div>
           <div class="row">

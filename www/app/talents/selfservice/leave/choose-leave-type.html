@@ -1,7 +1,7 @@
 <ion-view title="Leave Request">
     <ion-content padding="true" class="has-header materialize" scroll="true">
         <div  class="bg-lightgrey">
-                <p class="bb text-large padding uppercase">Select Leave Type</p>
+                <p class="bb text-large padding uppercase">Select Categories</p>
                 <br>
                  <div class="card hybrid" ng-repeat="item in entitlement | filter: searchFilter  | orderBy: 'publishedDate':true " ng-click="goToLeave(item.idx)">
                     <div class="item item-text-wrap item-icon-right">

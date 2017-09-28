@@ -504,11 +504,11 @@ angular.module('myhr.controllers', [])
         }else if(family.birthDate == undefined){
             messageValidation = "Date of Birth can't be empty";
             return false;
-        }else if(family.gender ==undefined || family.gender=='') {
-            messageValidation = "Gender can't be empty";
-            return false;
         }else if(family.aliveStatus ==undefined || family.aliveStatus=='' ) {
             messageValidation = "Alive Status can't be empty";
+            return false;
+        }else if(family.gender ==undefined || family.gender=='') {
+            messageValidation = "Gender can't be empty";
             return false;
         }else if(family.relationship ==undefined || family.relationship=='') {
             messageValidation = "Relationship can't be empty";

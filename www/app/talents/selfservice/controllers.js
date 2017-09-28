@@ -444,7 +444,7 @@ angular.module('selfservice.controllers', [])
           template: '<ion-spinner></ion-spinner>'
         });
         var accessToken = Main.getSession("token").access_token;
-        var urlApi = Main.getUrlApi() + '/api/user/tmrequest/type';
+        var urlApi = Main.getUrlApi() + '/api/user/tmrequest/category?module=benefit';
         Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
     }
 
@@ -863,7 +863,7 @@ angular.module('selfservice.controllers', [])
 
 
       $scope.submitForm = function(){
-          if($scope.requestHeader.attachments.length > 0) {
+          if($scope.requestHeader.attachments.length > -1) {
               $ionicLoading.show({
                 template: '<ion-spinner></ion-spinner>'
               });

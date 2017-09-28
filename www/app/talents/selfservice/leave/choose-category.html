@@ -1,0 +1,32 @@
+<ion-view title="Select Category">
+    <ion-content class="has-header" scroll="true">
+        <ion-refresher pulling-text="Pull to refresh"
+             refreshing-text="Loading..."
+             refreshing-icon="ion-loading-c"
+             pulling-icon="ion-ios7-arrow-thin-down"
+             on-refresh="refresh()">
+        </ion-refresher>
+        <div  class="bg-lightgrey">
+      
+                <div class="card hybrid" style="padding:0px 0px" ng-repeat="item in categories" ng-click="goToLeaveForm(item.name)">
+
+                    <div class="item item-icon-right">
+                        <!-- <img ng-src="img/users/female.png">-->
+                        <div class="inner-content">
+                            <h2 class="balanced text-medium"><b>{{item.name}}</b></h2>
+                            <p class="text-small">{{item.description}}</p>
+                        
+                        </div>
+                        
+                        <i class="icon ion-ios-arrow-right pull-right"></i>
+                    </div>
+                </div>
+
+                <div class="item" ng-if="categories.length == 0" >
+                    <div class="col col-100">
+                    <h2>No Category available</h2>
+                    </div>  
+                </div>
+        </div>
+    </ion-content>
+</ion-view>
