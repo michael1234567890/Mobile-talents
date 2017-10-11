@@ -148,6 +148,8 @@ he
                     Main.destroySession("token");
                     Main.destroySession("balance");
                     Main.destroySession("categoryType");
+                    Main.destroySession("tmCategoryType");
+                    
                     $rootScope.refreshRequestApprovalCtrl = true;
                     
                     if($rootScope.user != undefined) {
@@ -160,6 +162,9 @@ he
                     if($rootScope.team != undefined)
                         delete $rootScope.team;
                     
+                    if($rootScope.selectEmployeeSubstitute != undefined)
+                        delete $rootScope.selectEmployeeSubstitute;
+
                     $timeout(function () {
 
                         $ionicLoading.hide();

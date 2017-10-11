@@ -41,7 +41,7 @@ angular.module('intro.controllers', [])
     }
     function getUserReference(){
         $ionicLoading.show({
-            template: 'Get User Reference ...'
+            template: '<ion-spinner></ion-spinner>'
         });
 
         var accessToken = Main.getSession("token").access_token;
@@ -51,7 +51,7 @@ angular.module('intro.controllers', [])
 	$scope.loginAction = function() {
 			//alert("signin");
             $ionicLoading.show({
-                template: 'Signing processing...'
+                template: '<ion-spinner></ion-spinner>'
             });
 
             var formData = {
@@ -126,7 +126,7 @@ angular.module('intro.controllers', [])
 
         if(verificationForm($scope.user)){
             $ionicLoading.show({
-              template: 'Processing...'
+              template: '<ion-spinner></ion-spinner>'
             });
             var accessToken = null;
             var urlApi = Main.getUrlApi() + '/api/register';

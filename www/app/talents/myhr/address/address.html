@@ -15,7 +15,7 @@
                         <h2 class="lead text-small" style="padding-left:0px">{{item.address}}</h2>
                         <p>{{item.city}} , {{item.province}}</p>
                         <p><b>{{item.stayStatus}}</b></p>
-                        <i class="icon ion-ios-arrow-right pull-right"></i>
+                        <i class="icon ion-chevron-right icon-accessory"></i>
                         <span class="item-note calm" ng-if="item.status=='pending'">
                           Pending
                         </span>
@@ -25,7 +25,7 @@
                  <div class="item" ng-if="address.length == 0" >
                     <div class="col col-100">
                     <h2>No Address available</h2>
-                        <p>You may don't have any Address</p>
+                        <p>Please Pull to refresh !</p>
                     </div>  
                 </div>
 
