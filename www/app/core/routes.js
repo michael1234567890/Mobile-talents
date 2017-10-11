@@ -581,6 +581,8 @@ angular.module('talent.routes', [])
         }
       })
 
+
+
       .state('app.edit-profile', {
         url: '/edit-profile',
         views: {
@@ -591,6 +593,47 @@ angular.module('talent.routes', [])
         }
       })
 
+      
+
+      .state('app.addtimesheet', {
+        url: '/addtimesheet',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/timesheet/add-timesheet.html',
+            controller: 'AddTimesheetCtrl'
+          }
+        }
+      })
+
+      .state('app.detailtimesheet', {
+        url: '/detailtimesheet',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/timesheet/detail-timesheet.html',
+            controller: 'DetailTimesheetCtrl'
+          }
+        }
+      })
+
+      .state('app.calendartimesheet', {
+        url: '/calendartimesheet',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/timesheet/calendar-timesheet.html',
+            controller: 'CalendarTimesheetCtrl'
+          }
+        }
+      })
+
+      .state('app.listtimesheet', {
+        url: '/listtimesheet',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/timesheet/list-timesheet.html',
+            controller: 'ListTimesheetCtrl'
+          }
+        }
+      })
     $urlRouterProvider.otherwise('/app/myhr')
 
 
