@@ -47,6 +47,17 @@ $dark:                            #444 !default;
   font-weight: normal;
   font-style: normal; }
 
+@font-face {
+    font-family: 'MavenPro-Regular';
+    src:url('../fonts/MavenPro-Regular.eot');
+    src:url('../fonts/MavenPro-Regular.eot') format('embedded-opentype'),
+        url('../fonts/MavenPro-Regular.woff') format('woff'),
+        url('../fonts/MavenPro-Regular.ttf') format('truetype'),
+        url('../fonts/MavenPro-Regular.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
 .ion, .ionicons,
 .ion-alert:before,
 .ion-alert-circled:before,
@@ -6426,11 +6437,13 @@ button.item.item-button-right {
   padding-top: 8px;
   padding-bottom: 8px;
   min-height: 30px;
-  /*background-color: #f5f5f5;*/
-  background-color: #1479c9;
+  background-color: #387ef5;
+  /*background-color: #1479c9;*/
+  /*background-color: #f8f8f8;*/
   /*color: #222;*/
+  /*color: #fff;*/
   color: #fff;
-  font-weight: 500; }
+  font-weight: 300; }
 
 .platform-ios .item-divider-platform,
 .item-divider-ios {
@@ -7763,7 +7776,7 @@ input[type="tel"],
 input[type="color"] {
   display: block;
   padding-top: 2px;
-  padding-left: 0;
+  padding-left: 5;
   height: 34px;
   color: #111;
   vertical-align: middle;
@@ -8606,7 +8619,7 @@ progress {
   margin: 0;
   padding: 0 12px;
   min-width: 52px;
-  min-height: 47px;
+  min-height: 40px;
   border-width: 1px;
   border-style: solid;
   border-radius: 4px;
@@ -9864,9 +9877,12 @@ span.thumb.active {
   display: none; }
 
 /*-------------END NATIVE---------------- */
-/*-------------BEGIN GENERIC---------------- */
+/*-------------BEGIN GENERIC---------------- 
 body, p, div, span, h1, h2, h3, h4, h5, input, button, select, textarea {
-  font-family: 'Lato', sans-serif !important; }
+  font-family: 'Lato', sans-serif !important; }*/
+
+body, p, div, span, h1, h2, h3, h4, h5, input, button, select, textarea {
+  font-family: 'MavenPro-Regular' !important; }
 
 h2.lead {
   color: #008276 !important;
