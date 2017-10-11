@@ -1,22 +1,29 @@
 <ion-view title="Submit {{leaveCategory}}">
-    <ion-content padding="true" class="has-header materialize" scroll="true">
-    
-      <div  class="item padding bg-lightgrey">
-          
-          <div ng-if="leaveCategory !='Overtime'" class="row no-padding text-center bt-grey bb-grey" style="height:44px">
-              <div class="col col-25"><p class="bb text-medium padding uppercase">Remaining</p></div>
-              <div class="col col-25"><p class="bb text-large padding uppercase">{{balance.balanceEnd}}</p></div>
-              <div class="col col-25 bl-grey"><p class="bb text-medium padding uppercase">Used</p></div>
-              <div class="col col-25 bl-grey"><p class="bb text-large padding uppercase">{{balance.balanceUsed}}</p></div>
+    <ion-content padding="false"  scroll="true">
+    <div class="list">
+      <div  class="item padding">
+        <div ng-if="leaveCategory =='leave' || leaveCategory =='permission' || leaveCategory =='sick'">
+          <div class="row no-padding text-center bt-grey bb-grey" style="height:44px">
+              <div class="col col-40"><p class="bb text-medium padding uppercase">Remaining</p></div>
+              <div class="col col-10 bl-grey"><p class="bb text-large padding uppercase">{{balance.balanceEnd}}</p></div>
+              <div class="col col-40"><p class="bb text-medium padding uppercase">Used</p></div>
+              <div class="col col-10 bl-grey"><p class="bb text-large padding uppercase">{{balance.balanceUsed}}</p></div>
           </div>
-          <div class="row">
-                <div class="input-field col">
-                    <p for="last_name">Type </p>
-                    <select ng-model="leave.type" ng-change="onChangeType()">
-                        <option value="">-- Select Type --</option>
-                        <option ng-repeat="item in selectType">{{item.id}}</option>
-                    </select>
-                </div>
+
+          <div class="item item-divider uppercase">
+            Type
+          </div>
+
+          <div class="item item-icon-right" style="border:0px" modal-select ng-model="leave.type" options="selectType" modal-title="Select a Type" option-property="type" on-select="shoutLoud()">
+              {{labelType}}
+              <i class="icon ion-chevron-right icon-accessory"></i>
+              <div class="option">
+                <h2>{{option.type}}</h2>
+              </div>
+          </div>
+          
+          <div class="item item-divider uppercase">
+            Date
           </div>
           <div class="row">
                 <div class="input-field col">
@@ -34,7 +41,36 @@
                     </ionic-datepicker>
                 </div>
           </div>
-          <div class="row" ng-if="leaveCategory =='Overtime'">
+          
+          <div class="item item-divider uppercase">
+            Subtitute
+          </div>
+          <div class="item item-icon-right" style="border:0px" modal-select ng-model="leave.substituteToEmployment" options-expression=" person in selectEmployeeSubstitute | orderBy:'fullName'" option-property="employment" has-search="true" search-placeholder="Search by name" modal-title="Select Substitute" on-select="onSelectSubstitute()">
+              {{labelSubstitute}}
+              <i class="icon ion-chevron-right icon-accessory"></i>
+              <div class="option">
+                {{option.fullName}}
+              </div>
+          </div>
+          <div class="row">
+                <div class="input-field col s12">
+                    <p for="textarea1">Reason</p>
+                    <textarea  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" rows="3" placeholder="Enter your reason" ng-model="leave.remark" ></textarea>
+                    
+                </div>
+          </div>
+        </div>
+        <div ng-if="leaveCategory == 'overtime'">
+           <div class="row">
+                <div class="input-field col">
+                    <p for="last_name">Date</p>
+                    <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()">
+                            {{leave.startDate| date: "yyyy-MM-dd"}}
+                    </ionic-datepicker>
+                </div>
+          </div>
+
+          <div class="row">
                 <div class="input-field col">
                     <p for="last_name">Overtime In </p>
                     <div class="row">
@@ -54,7 +90,7 @@
                     </div>
                 </div>
           </div>
-          <div class="row" ng-if="leaveCategory =='Overtime'">
+          <div class="row" ng-if="leaveCategory =='overtime'">
                 <div class="input-field col">
                     <p for="last_name">Overtime Out </p>
                     <div class="row">
@@ -75,15 +111,51 @@
           </div>
           <div class="row">
                 <div class="input-field col s12">
-                    <p for="textarea1">Reason</p>
-                    <textarea  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" placeholder="Enter your reason" ng-model="leave.remark" ></textarea>
+                    <p for="textarea1">Notes</p>
+                    <textarea  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" rows="3" placeholder="Enter your notes" ng-model="leave.remark" ></textarea>
                     
                 </div>
-           </div>
+          </div>
+        </div>
+          
+        <div ng-if="leaveCategory == 'attendance edit'">
            <div class="row">
-                <button class="btn waves-effect button-medium waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Next</button>
+                <div class="input-field col">
+                    <p for="last_name">Date</p>
+                    <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()">
+                            {{leave.startDate| date: "yyyy-MM-dd"}}
+                    </ionic-datepicker>
+                </div>
+          </div>
+          <div class="row">
+                <div class="input-field col-50">
+                    <p for="last_name">In</p>
+                    <ionic-timepicker ng-click="openTimePicker1()"> 
+                        <button class="button button-block button-outline button-positive">{{attendanceIn}}</button>
+                    </ionic-timepicker>
+                </div>&nbsp;&nbsp;
+                <div class="input-field col-50">
+                    <p for="last_name">Out</p>
+                    <ionic-timepicker ng-click="openTimePicker2()"> 
+                        <button class="button button-block button-outline button-positive">{{attendanceOut}}</button>
+                    </ionic-timepicker>
+                </div>
+          </div>
+          <div class="row">
+                <div class="input-field col s12">
+                    <p for="textarea1">Notes</p>
+                    <textarea  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" rows="3" placeholder="Enter your notes" ng-model="leave.remark" ></textarea>
+                    
+                </div>
+          </div>
+        </div>
+           <div class="row">
+                <button class="btn button-medium button button-balanced  button-block" style="font-weight:bold;background-color:#FF9800" ng-click="submitForm()">Next</button>
               
             </div>
       </div>
+    </div>
     </ion-content>
 </ion-view>
+
+

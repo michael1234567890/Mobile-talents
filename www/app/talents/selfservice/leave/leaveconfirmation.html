@@ -45,7 +45,26 @@
             <div class="left"><p class="text-small">Total Balance</p></div>
             <div class="right"><h2 class="lead text-small" >{{totalBalance | number : 0}} days</h2></div>
         </div>
-        
+        <hr class="no-margin">
+        <div class="row padding">
+            <div class="left"><p class="text-small">Overtime In</p></div>
+            <div class="right"><h2 class="lead text-small" > {{overtimeIn}} Min</h2></div>
+        </div>
+        <hr class="no-margin">
+        <div class="row padding">
+            <div class="left"><p class="text-small">Overtime Out</p></div>
+            <div class="right"><h2 class="lead text-small" >{{overtimeOut}} Min</h2></div>
+        </div>
+        <hr class="no-margin">
+        <div class="row padding">
+            <div class="left"><p class="text-small">Attendance In</p></div>
+            <div class="right"><h2 class="lead text-small" > {{attendanceInTime | date: 'dd MMM yyyy hh:mm'}} </h2></div>
+        </div>
+        <hr class="no-margin">
+        <div class="row padding">
+            <div class="left"><p class="text-small">Attendance Out</p></div>
+            <div class="right"><h2 class="lead text-small" >{{attendanceOutTime | date: 'dd MMM yyyy hh:mm'}}</h2></div>
+        </div>
         
         
 </ion-list>

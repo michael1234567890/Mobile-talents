@@ -8,11 +8,16 @@
         <div class="header">
             <img ng-src="{{user.photo}}">
             <!--<span class="badge badge-balanced">3</span>-->
-            <h4 class="lead">{{profile.fullName}}</h4>
-            <p class="text-medium">{{profile.employeeTransient.assignment.positionName}} , {{profile.employeeTransient.assignment.organizationName}}</p>
+            <h2 class="lead text-medium">{{profile.fullName}}</h2>
+            <p >{{profile.employeeTransient.assignment.organizationName}}</p>
         </div>
 
         <div class="list">
+            <div class="item item-divider">
+                Information
+            </div>
+
+
             <div class="item item-text-wrap" >
                 <p class="text-small">Employee No</p>
                 <h2 class="lead text-medium" >{{profile.employeeTransient.assignment.employeeNo}}</h2>
@@ -29,9 +34,18 @@
                 <p class="text-small">Company</p>
                 <h2 class="lead text-medium" >{{profile.company.name}}</h2>
             </div>
-        </div>
-          <div class="row">
-                <button class="btn waves-effect waves-light button button-positive button-block waves-effect waves-light" ui-sref="app.changepassword">Change Password</button>
+            <div class="item item-divider">
+                Settings
             </div>
+            <div class="item item-icon-left item-icon-right" ui-sref="app.changepassword" >
+                <i class="icon ion-ios-locked-outline"></i>
+                <h2 class="lead text-medium" >Change Password</h2>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </div>
+        </div>
+        <!--
+        <div class="row">
+                <button class="btn waves-effect waves-light button button-positive button-block waves-effect waves-light" ui-sref="app.changepassword">Change Password</button>
+        </div>-->
     </ion-content>
 </ion-view>

@@ -19,20 +19,15 @@
                         <h2 class="lead text-small" style="padding-left:0px">{{item.name}}</h2>
                         <p><b>{{item.no}} </b> - {{item.principle}}</p>
                         <p>exp : {{item.expired}}</p>
-                        <!--
-                         <span class="interact">
-                            <i class="icon ion-ios-bookmarks-outline"></i>
-                                <i class="icon ion-ios-star-outline bl-grey"></i>
-                                <i class="icon ion-ios-trash-outline bl-grey"></i>
-                        </span>-->
-                        <i class="icon ion-ios-arrow-right pull-right"></i>
+                        
+                        <i class="icon ion-chevron-right icon-accessory"></i>
                     </div>
                         
                 </div>
                 <div class="item" ng-if="certification.length == 0" >
                     <div class="col col-100">
                     <h2>No Certification available</h2>
-                        <p>You may don't have any Certification</p>
+                        <p>Please Pull to refresh !</p>
                     </div>  
                 </div>
         

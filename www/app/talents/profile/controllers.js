@@ -97,7 +97,7 @@ angular.module('profile.controllers', [])
           
           if($scope.image != "") {
               $ionicLoading.show({
-                  template: 'Processing...'
+                  template: '<ion-spinner></ion-spinner>'
               });
               data.image = $scope.image;
               var accessToken = Main.getSession("token").access_token;
@@ -166,7 +166,7 @@ angular.module('profile.controllers', [])
     $scope.sendChangePassword = function(){
     	if(verificationForm($scope.password)){
             $ionicLoading.show({
-              template: 'Processing...'
+              template: '<ion-spinner></ion-spinner>'
             });
             var accessToken = Main.getSession("token").access_token;
             var urlApi = Main.getUrlApi() + '/api/myprofile/changepassword';

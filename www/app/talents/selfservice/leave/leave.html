@@ -24,7 +24,7 @@
              on-refresh="refresh()">
         </ion-refresher>
         <div  class="bg-lightgrey">
-            <div class="item item-text-wrap" ng-repeat="item in leaves"  ui-sref="app.detailleave">
+            <div class="item item-text-wrap item-icon-right" ng-repeat="item in leaves"  ui-sref="app.detailleave">
                 <div class="row">
                     <div class="left"><h5 class="uppercase no-margin no-padding thicker">{{item.startDate | date: 'dd MMM'}} - {{item.endDate | date: 'dd MMM yyyy'}}</h5></div>
                 </div>
@@ -37,15 +37,16 @@
                     <div class="left"><h5 style="color: #949494;">{{item.createdDate  | date: 'dd MMM yyyy HH:mm'}}</h5></div>
                     <div class="right"><h5 class="energized ">{{item.status}}</h5></div>
                 </div>
+                <i class="icon ion-chevron-right icon-accessory"></i>
             </div>
             <div class="item" ng-if="leaves.length == 0" >
                     <div class="col col-100">
                         <h2>Data not found</h2>
-                        <p>Pull to refresh</p>
+                        <p>Please Pull to refresh !</p>
                     </div>  
             </div>
         </div>
     </ion-content>
 
-    <a class="btn-floating btn-large waves-effect waves-light red lighten-1" style="position:fixed; bottom:3%;right:5%;z-index:999" ui-sref="app.addleave"><i class="icons ion-plus"></i></a>
+    <a class="btn-floating btn-large waves-effect waves-light red lighten-1" style="position:fixed; bottom:3%;right:5%;z-index:999" ui-sref="app.chooseleavecategory"><i class="icons ion-plus"></i></a>
 </ion-view>

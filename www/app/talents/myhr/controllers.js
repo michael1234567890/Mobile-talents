@@ -144,7 +144,7 @@ angular.module('myhr.controllers', [])
     // invalid access token error: "invalid_token" 401
     function getFamily(){
       $ionicLoading.show({
-          template: 'Loading...'
+          template: '<ion-spinner></ion-spinner>'
       });
       var accessToken = Main.getSession("token").access_token;
       var urlApi = Main.getUrlApi() + '/api/user/family';
@@ -295,7 +295,7 @@ angular.module('myhr.controllers', [])
     $scope.submitForm = function (){
         if(verificationForm($scope.family)) {
            $ionicLoading.show({
-              template: 'Processing...'
+              template: '<ion-spinner></ion-spinner>'
             });
 
             var birthDate = null;
@@ -454,7 +454,7 @@ angular.module('myhr.controllers', [])
           }).then(function(res) {
               if (res) {
                   $ionicLoading.show({
-                    template: 'Processing...'
+                    template: '<ion-spinner></ion-spinner>'
                   });
                   var attachment = [];
                   if($scope.family.imagesData.length > 0) {
@@ -599,7 +599,7 @@ angular.module('myhr.controllers', [])
     // invalid access token error: "invalid_token" 401
     function getAddress(){
       $ionicLoading.show({
-          template: 'Loading...'
+          template: '<ion-spinner></ion-spinner>'
       });
       var accessToken = Main.getSession("token").access_token;
       var urlApi = Main.getUrlApi() + '/api/user/address';
@@ -633,7 +633,7 @@ angular.module('myhr.controllers', [])
         if(verificationForm($scope.address)) {
             var dataSubmit = {address: $scope.address.address, rt: $scope.address.rt, rw:$scope.address.rw, country:$scope.address.country, province:$scope.address.province, city:$scope.address.city, zipCode:$scope.address.zipCode, phone: $scope.address.phone, stayStatus : $scope.address.stayStatus};
             $ionicLoading.show({
-              template: 'Submit...'
+              template: '<ion-spinner></ion-spinner>'
             });
             var accessToken = Main.getSession("token").access_token;
             var urlApi = Main.getUrlApi() + '/api/user/address/'+$scope.address.id;

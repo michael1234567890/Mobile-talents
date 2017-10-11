@@ -26,21 +26,21 @@
     <ion-content class="has-header" scroll="true">
         <div  class="bg-lightgrey">
                  <div class="card">
-                     <div class="item item-divider" >Summary</div>
+                     <div class="item item-divider" >Total Request</div>
                      <center>
                         <div class="row padding">
                              <div class="col">
-                                <div class="circle" style="border: 1px solid  #ffc900;"><h3 class="energized posisi">5</h3>
-                                <p class="text-smaller" style="font-size:0.6em !important">Annual</p></div> 
+                                <div class="circle" style="border: 1px solid  #ffc900;"><h3 class="energized posisi">{{total.leave}}</h3>
+                                <p class="text-smaller" style="font-size:0.6em !important">Leave</p></div> 
                              </div>
 
                             <div class="col">
-                                    <div class="circle" style="border: 1px solid #33cd5f;"><h3 class="balanced posisi">8</h3>
+                                    <div class="circle" style="border: 1px solid #33cd5f;"><h3 class="balanced posisi">{{total.sick}}</h3>
                                 <p class="text-smaller" style="font-size:0.6em !important">Sick</p></div> 
                              </div>
 
                              <div class="col">
-                                <div class="circle" style="border: 1px solid #ef473a;"><h3 class="assertive posisi">0</h3>
+                                <div class="circle" style="border: 1px solid #ef473a;"><h3 class="assertive posisi">{{total.permission}}</h3>
                                 <p class="text-smaller" style="font-size:0.6em !important">Permission</p></div> 
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                             <div class="col">
                                 <div ng-click="goToPage('app.leaves')" class="item-text-wrap light" style="padding: 5px;" style="padding: 5px;">
                                     <img src="img/talents/attendance-48x48.png"><br>
-                                    <span class="dark" style="font-size: 12.5px;">My Leave</span>
+                                    <span class="dark" style="font-size: 12.5px;">My Leaves</span>
                                 </div>
                             </div>
                             <div class="col">
@@ -68,7 +68,7 @@
                         </center>
                     </div>
                 </div>
-                <div class="item item-divider" >Waiting Approval Leaves</div>
+                <div class="item item-divider" >Waiting Approval</div>
                 <div class="list" >
                     <div class="item" ng-repeat="item in leaves" >
                         

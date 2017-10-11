@@ -6,6 +6,7 @@ angular.module('leave.controllers', [])
     }
 
     $scope.leaves = [];
+    $scope.total = {};
     $scope.refresh = function(){
       initMethod();
     }
@@ -13,46 +14,111 @@ angular.module('leave.controllers', [])
     var successRequest = function (res){
       $ionicLoading.hide();
       $scope.leaves = res;
-      console.log("leaves ....");
-      console.log($scope.leaves );
       $scope.$broadcast('scroll.refreshComplete');
 
+    }
+
+    function getTotalFromArray(array,module,category){
+        for (var i = array.length - 1; i >= 0; i--) {
+            if(array[i].module.toLowerCase() == module && array[i].category.toLowerCase() == category )
+              return array[i].total;
+        };
+        return "-";
+    }
+    var successTotalCategory = function (res){
+      console.log("res total category",res);
+      if(res != undefined && res.length > 0){
+          $scope.total.sick = getTotalFromArray(res,"time management","sick");
+          $scope.total.leave = getTotalFromArray(res,"time management","leave");
+          $scope.total.permission = getTotalFromArray(res,"time management","permission");
+      }
     }
 
 
     function getLeaves(){
       $ionicLoading.show({
-          template: 'Loading ...'
+          template: '<ion-spinner></ion-spinner>'
       });
       var accessToken = Main.getSession("token").access_token;
       var urlApi = Main.getUrlApi() + '/api/user/tmrequest/bystatus?module=Time Management&status=pending';
       Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
     }
 
-    function initMethod(){
+    function getTotalCategory(){
+      $scope.total.permission = "-";
+      $scope.total.leave = "-";
+      $scope.total.sick = "-";
+      var accessToken = Main.getSession("token").access_token;
+      var urlApi = Main.getUrlApi() + '/api/user/tmrequest/totalamount?fromdate=2017-01-01&todate=2017-31-12';
+      Main.requestApi(accessToken,urlApi,successTotalCategory, $scope.errorRequest);
+    }
+
+    function initModule(){
       if(Main.getEnvironment() == 'production') {
           alert("This feature is not available");
           $scope.goBack('app.selfservice');
       }
-      getLeaves();      
+      getLeaves(); 
+      getTotalCategory();     
     }
 
-    initMethod();
+    $scope.$on('$ionicView.beforeEnter', function (event,data) {
+          initModule();
+      
+    });
+
+    initModule();
 
 
 })
 
-.controller('ChooseLeaveCategoryCtrl', function($ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('ChooseLeaveCategoryCtrl', function($timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
+    $scope.categories = [];
 
     $scope.goToLeaveForm = function(category){
         $state.go("app.addleave",{'category':category});
     }
 
-    $scope.categories = [{name:"Leave",description:"Leave Description"},{name:"Permission",description:"Permission Description"},{name:"Sick",description:"Sick Description"},{name:"Overtime",description:"Overtime Description"},{name:"Edit Attendance",description:"Edit Attendance Description"}];
+    //$scope.categories = [{name:"Leave",description:"Leave Description"},{name:"Permission",description:"Permission Description"},{name:"Sick",description:"Sick Description"},{name:"Overtime",description:"Overtime Description"},{name:"Edit Attendance",description:"Edit Attendance Description"}];
+    
+    var successRequest = function (res){
+        $timeout(function () {
+            if(res.length > 0) {
+                Main.setSession("tmCategoryType",res);
+                $scope.categories = res;
+                
+            }
+            $ionicLoading.hide();
+        }, 1000);
+    }
+
+
+    function getListCategory(){
+        $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner>'
+        });
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/tmrequest/category?module=time management';
+        Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
+    }
+
+    function initModule() {
+
+        if(Main.getSession("tmCategoryType") == undefined)
+            getListCategory();
+        else
+          $scope.categories = Main.getSession("tmCategoryType");
+        
+    }
+
+    $scope.$on('$ionicView.beforeEnter', function (event,data) {
+          initModule();
+      
+    });
 
 })
 
@@ -159,6 +225,8 @@ angular.module('leave.controllers', [])
           $scope.images = [];  
           $scope.requestHeader = {};
           $scope.requestHeader.attachments = []; 
+          $scope.overtimeIn =0;
+          $scope.overtimeOut = 0; 
           if(leaveVerification != null) {
                 $scope.categoryType = leaveVerification.categoryType;
                 $scope.total = leaveVerification.total;
@@ -166,7 +234,11 @@ angular.module('leave.controllers', [])
                 $scope.startDate = leaveVerification.startDate;
                 $scope.endDate = leaveVerification.endDate;
                 $scope.totalBalance = leaveVerification.totalBalance;
-
+                $scope.overtimeIn = leaveVerification.overtimeIn;
+                $scope.overtimeOut = leaveVerification.overtimeOut;
+                $scope.attendanceInTime = leaveVerification.attendanceInTime;
+                $scope.attendanceOutTime = leaveVerification.attendanceOutTime;
+          
           }
       }
       
@@ -174,7 +246,7 @@ angular.module('leave.controllers', [])
 
  })
 
-.controller('AddLeaveCtrl', function($timeout,$filter, $stateParams, $ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main,ionicDatePicker) {
+.controller('AddLeaveCtrl', function(ionicTimePicker,$timeout,$filter, $stateParams, $ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main,ionicDatePicker) {
     
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
@@ -182,14 +254,103 @@ angular.module('leave.controllers', [])
     var startDate = $filter('date')(new Date(),'yyyy-MM-dd');
     var endDate = $filter('date')(new Date(),'yyyy-MM-dd');
     var employee= Main.getSession("profile").employeeTransient.id;
-    $scope.leaveCategory = $stateParams.category;
+    $scope.leaveCategory = $stateParams.category.toLowerCase();
     $scope.leaveType = {};
     $scope.selectHour = Main.getSelectHour();
     $scope.selectMinutes = Main.getSelectFiveteenMin();
-    $scope.selectType = [{id:"Annual"}];
-    $scope.leave = {remark:"",startDate:new Date(),endDate:new Date(),remark:"",type:""};
+    $scope.selectType = [];
+    $scope.selectEmployeeSubstitute = [];
+    $scope.labelSubstitute = "Select Substitute ..";
+    $scope.labelType = "Select Type ..";
+    $scope.leave = {};
+    //$scope.leave = {remark:"",startDate:new Date(),endDate:new Date(),remark:"",type:""};
     $scope.balance = {balanceEnd:"-",balanceUsed:"-"};
+    $scope.attendanceIn = "00:00";
+    $scope.attendanceOut = "00:00"; 
+    var module = "time management";
+   
 
+    var timePickerComponent1 = {
+        callback: function (val) {  
+            
+          if (typeof (val) === 'undefined') {
+              console.log('Time not selected');
+           } else {
+              var hours = parseInt(val / 3600);
+              var minutes = (val / 60) % 60;
+              var hourString = ""+hours;
+              var minuteString = ""+minutes;
+
+              if(hourString.length==1)
+                  hourString = "0"+hours;
+
+              if(minuteString.length==1)
+                  minuteString = "0"+minutes;
+
+              $scope.attendanceIn = hourString+":"+minuteString;
+          }
+        },
+        inputTime: 50400,   //Optional
+        format: 24,         //Optional
+        step: 5,           //Optional
+        setLabel: 'Set'    //Optional
+      };
+  
+    $scope.openTimePicker1 = function(){
+      ionicTimePicker.openTimePicker(timePickerComponent1);
+    };
+
+     var timePickerComponent2 = {
+        callback: function (val) {      //Mandatory
+            $scope.leave.attendanceOut = new Date(val * 1000) ;
+            var hours = parseInt(val / 3600);
+            var minutes = (val / 60) % 60;
+            if (typeof (val) === 'undefined') {
+              console.log('Time not selected');
+            } else {
+                var hours = parseInt(val / 3600);
+                var minutes = (val / 60) % 60;
+                var hourString = ""+hours;
+                var minuteString = ""+minutes;
+
+                if(hourString.length==1)
+                    hourString = "0"+hours;
+
+                if(minuteString.length==1)
+                    minuteString = "0"+minutes;
+
+                $scope.attendanceOut = hourString+":"+minuteString;
+            }
+        },
+        inputTime: 50400,   //Optional
+        format: 24,         //Optional
+        step: 5,           //Optional
+        setLabel: 'Set'    //Optional
+      };
+  
+    $scope.openTimePicker2 = function(){
+      ionicTimePicker.openTimePicker(timePickerComponent2);
+    };
+
+
+
+    $scope.shoutLoud = function() {
+      $scope.labelType = $scope.leave.type;
+      getCurrentBalanceType(module,$scope.leaveCategory,$scope.leave.type);
+    }
+
+    function setLabelSubstitute(employmentId,arrEmployee) {
+        if(arrEmployee.length != 0) {
+            for (var i = 0; i < arrEmployee.length; i++) {
+              if(arrEmployee[i].employment == employmentId) 
+                  $scope.labelSubstitute = arrEmployee[i].fullName;
+            };
+        }
+    }
+
+    $scope.onSelectSubstitute = function(){
+        setLabelSubstitute($scope.leave.substituteToEmployment,$rootScope.selectEmployeeSubstitute);
+    }
     
     console.log(Main.getSession("profile"));
 
@@ -248,62 +409,125 @@ angular.module('leave.controllers', [])
     $scope.onChangeType = function(){
          $scope.balance = {balanceEnd:"-",balanceUsed:"-"};
         if($scope.leave.type != ""){
-            var module = "time management";
             getCurrentBalanceType(module,$scope.leaveCategory,$scope.leave.type);
         }
         
     }
 
     $scope.submitForm = function(){
-        var strJson = {leaveType:$scope.leaveType.id,startTime:startDate,endTime:endDate,comment:$scope.leave.comment};
-         $ionicLoading.show({
-          template: 'Processing...'
+         
+       $ionicLoading.show({
+            template: '<ion-spinner></ion-spinner>'
         });
-         $scope.leave.module="Time Management";
-         $scope.leave.categoryType="Leave";
-         $scope.leave.type="Annual";
-         $scope.leave.startDate=$filter('date')(new Date($scope.leave.startDate),'yyyy-MM-dd');
-         $scope.leave.endDate=$filter('date')(new Date($scope.leave.endDate),'yyyy-MM-dd');
-         $scope.leave.workflow="SUBMITAT";
-         $scope.leave.employee=employee;
+       var objCategory = getCategory($stateParams.category);
+       console.log("objCategory",objCategory);
+       $scope.leave.categoryType=$stateParams.category;
+       $scope.leave.startDate=$filter('date')(new Date($scope.leave.startDate),'yyyy-MM-dd');
+       $scope.leave.endDate=$filter('date')(new Date($scope.leave.endDate),'yyyy-MM-dd');
+        var dataPost = {};
+        if($scope.leaveCategory == "attendance edit") {
+            dataPost.startDate = $scope.leave.startDate;
+            dataPost.endDate = dataPost.startDate;
+            dataPost.remark = $scope.leave.remark;
+            //dataPost.type = "Edit Attendance";
+            dataPost.attendanceInTime = dataPost.startDate + " " + $scope.attendanceIn + ":00";
+            dataPost.attendanceOutTime = dataPost.startDate + " " + $scope.attendanceOut + ":00";
+
+        }else if($scope.leaveCategory == 'overtime') {
+            dataPost.startDate = $scope.leave.startDate;
+            dataPost.endDate = dataPost.startDate;
+            dataPost.remark = $scope.leave.remark;
+            //dataPost.type = "Overtime";
+            dataPost.overtimeIn = (parseInt($scope.leave.overtimeinhour) * 60) + parseInt($scope.leave.overtimeinmin) ;
+            dataPost.overtimeOut = (parseInt($scope.leave.overtimeouthour) * 60) + parseInt($scope.leave.overtimeoutmin) ;
+        }else {
+            dataPost.startDate = $scope.leave.startDate;
+            dataPost.endDate = $scope.leave.endDate;
+            dataPost.remark = $scope.leave.remark;
+            dataPost.substituteToEmployment = $scope.leave.substituteToEmployment;
+            
+        }
+
+        dataPost.categoryType = $scope.leave.categoryType;
+        if(objCategory.directType) {
+            var typeSelected = objCategory.listRequestType[0];
+            dataPost.type = typeSelected.type;
+        }else {
+            dataPost.type = $scope.leave.type;
+        }
+        dataPost.workflow="SUBMITAT";
+        dataPost.module="Time Management";
+        dataPost.employee = employee;
+       
         var accessToken = Main.getSession("token").access_token;
-        // var urlApi = Main.getUrlApi() + '/api/user/tmrequest/attendance';
         var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/verificationleave';
-        var data = JSON.stringify($scope.leave);
-        console.log(data);
+        var data = JSON.stringify(dataPost);
+        // console.log(data);
+        // return false;
         Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
 
     }
 
-     var successRequestType = function (res){
-        $timeout(function () {
-            if(res.length > 0) {
-                Main.setSession("tmRequestType",res);
-                $scope.requestType = res;
-                console.log(Main.getSession("tmRequestType"));
-                
-            }
-            $ionicLoading.hide();
-        }, 1000);
-    }
     
-    function getRequestType(){
+
+    function getCategory(categoryType) {
+        var sessTmRequestType = Main.getSession("tmCategoryType");
+         console.log("sessTmRequestType",Main.getSession("tmCategoryType"));
+         for (var i = 0; i < sessTmRequestType.length; i++) {
+            if(sessTmRequestType[i].categoryType == categoryType){
+                return sessTmRequestType[i];
+                break;
+            }
+              
+         };
+         return undefined;
+    }
+    function getListType(categoryType){
+        
+          var objCategory = getCategory(categoryType);
+          if(objCategory != undefined)
+             return objCategory.listRequestType;
+           else
+             return [];
+    }
+    function successGetSubstitute(res){
+        $ionicLoading.hide();
+        $rootScope.selectEmployeeSubstitute = res.data;
+        $scope.selectEmployeeSubstitute = res.data;
+    }
+
+    function getEmployeeSubstitute(){
         $ionicLoading.show({
           template: '<ion-spinner></ion-spinner>'
         });
         var accessToken = Main.getSession("token").access_token;
-        var urlApi = Main.getUrlApi() + '/api/user/tmrequest/type?module=time management';
-        Main.requestApi(accessToken,urlApi,successRequestType, $scope.errorRequest);
+        var urlApi = Main.getUrlApi() + '/api/user/empassignment/byparam?param=organization&page=0&size=100';
+        Main.requestApi(accessToken,urlApi,successGetSubstitute, $scope.errorRequest);
+    
     }
 
-
-    function initModule() {
-        $scope.leave = {remark:"",startDate:new Date(),endDate:new Date(),remark:"",type:""};
+    function initData(){
+        $scope.leave = {remark:"",startDate:new Date(),endDate:new Date(),remark:"",attendanceIn:new Date(),attendanceOut:new Date()};
         $scope.balance = {balanceEnd:"-",balanceUsed:"-"};
-        if(Main.getSession("tmRequestType") == undefined)
-            getRequestType();
-        else
-          $scope.requestType = Main.getSession("tmRequestType");
+        $scope.selectType = getListType($stateParams.category);
+        $scope.labelSubstitute = "Select Substitute ..";
+        $scope.labelType = "Select Type ..";
+        $scope.leave.substituteToEmployment = undefined;
+        $scope.leave.type = undefined;
+        $scope.leave.overtimeinhour = '0';
+        $scope.leave.overtimeinmin = '0';
+        $scope.leave.overtimeouthour = '0';
+        $scope.leave.overtimeoutmin = '0';
+    } 
+    function initModule() {
+        initData();
+        
+        if($rootScope.selectEmployeeSubstitute == undefined){
+            getEmployeeSubstitute();
+        }else {
+            $scope.selectEmployeeSubstitute = $rootScope.selectEmployeeSubstitute;
+        }
+
         
     }
 
