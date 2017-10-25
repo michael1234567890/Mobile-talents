@@ -15,7 +15,7 @@
         'ionic-datepicker'
     ])
 
-        .controller('appCtrl', function ($rootScope, $state, $scope, $stateParams, appService, $ionicHistory, $ionicPopover, $ionicModal,
+        .controller('appCtrl', function (ionicSuperPopup,$rootScope, $state, $scope, $stateParams, appService, $ionicHistory, $ionicPopover, $ionicModal,
             $ionicScrollDelegate, $ionicLoading, $ionicActionSheet, $cordovaCamera, $cordovaSocialSharing, $cordovaGeolocation, $timeout,AuthenticationService, Main) {
             
             initData();
@@ -119,17 +119,20 @@ he
                     }
                 }
 
+                function errorAlert(message){
+                    ionicSuperPopup.show("Error!", message, "error");
+                }
                 $scope.errorRequest = function (err, status){
                   if(status == 401) {
                     $scope.goTo('login');
                   }else if(status == 500) {
                     if(err != null)
-                      alert(err.message);
+                      errorAlert(err.message);
                     else 
-                      alert("Problem with server. Please try again later.");
+                      errorAlert("Problem with server. Please try again later.");
                 
                   }else  {
-                    alert("Please Check your connection.");
+                    errorAlert("Please Check your connection.");
                   }
                   $ionicLoading.hide();
                 }
@@ -144,26 +147,29 @@ he
                     $ionicLoading.show({
                         template: 'Signing out...'
                     });
-                    Main.destroySession("profile");
-                    Main.destroySession("token");
-                    Main.destroySession("balance");
-                    Main.destroySession("categoryType");
-                    Main.destroySession("tmCategoryType");
                     
-                    $rootScope.refreshRequestApprovalCtrl = true;
+                    Main.cleanData();
                     
-                    if($rootScope.user != undefined) {
-                        delete $rootScope.user;
-                    }
+                    // Main.destroySession("profile");
+                    // Main.destroySession("token");
+                    // Main.destroySession("balance");
+                    // Main.destroySession("categoryType");
+                    // Main.destroySession("tmCategoryType");
+                    
+                    // $rootScope.refreshRequestApprovalCtrl = true;
+                    
+                    // if($rootScope.user != undefined) {
+                    //     delete $rootScope.user;
+                    // }
 
-                    if($rootScope.countApproval != undefined)
-                        delete $rootScope.countApproval;
+                    // if($rootScope.countApproval != undefined)
+                    //     delete $rootScope.countApproval;
                     
-                    if($rootScope.team != undefined)
-                        delete $rootScope.team;
+                    // if($rootScope.team != undefined)
+                    //     delete $rootScope.team;
                     
-                    if($rootScope.selectEmployeeSubstitute != undefined)
-                        delete $rootScope.selectEmployeeSubstitute;
+                    // if($rootScope.selectEmployeeSubstitute != undefined)
+                    //     delete $rootScope.selectEmployeeSubstitute;
 
                     $timeout(function () {
 

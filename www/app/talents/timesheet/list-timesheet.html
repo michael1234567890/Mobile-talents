@@ -1,0 +1,73 @@
+<ion-view title="All shift" class="bg-lightgrey">
+
+    <ion-content class="has-header" scroll="false">
+            <div class="row no-padding bb-grey text-center" style="width:auto">
+                <div class="col font-thin balanced bb">All shift</div>
+                <div class="col font-thin" ng-click="goTo('app.pending')">Pending</div>
+                <div class="col font-thin" ng-click="goTo('app.Approved')">Approved</div>
+            </div>
+
+ <ion-content class="has-header materialize" scroll="true" style="font-size:12px">
+    <ion-list>
+ 
+
+ 
+<style>
+
+    .left2 {
+        text-align: left;
+        float: left;
+        width: 100%;
+    }
+    .right2 {
+        text-align: right;
+        float: right;
+        width: 80%;
+    }
+    .square{
+    width: 60px;
+    height: 60px;
+    color: #33cd5f;
+    background:#67818d;
+    margin: 0px;
+    border-radius: 25px;
+    }
+
+    .nopaddingbottom{
+    padding-bottom: 0px;
+    }
+
+    .letak{
+    padding-top: 10px;
+    padding-bottom: 5px;
+    }
+</style>
+
+    <div class="item item-text-wrap nopaddingbottom" ui-sref="app.timesheetdetail">
+        <div class="square left2">
+           <center>
+            <h3 class="letak light">Thu</h3>
+            <h3 class="light">10/12</h3>
+           </center>
+        </div>
+
+        <div class="row right2">
+            <div class="left2">
+                <h3 class="balanced" style="width: 90%">Develop mobile Talents</h3>
+            </div>
+                <i class="icon ion-ios-arrow-right pull-right text-larger"></i>
+        </div>
+
+        <div class="row right2">
+            <div class="uppercase"><h4 class="thicker" style="margin-top: 2px;margin-bottom: 5px;">07.00 - 16.00</h4></div>
+        </div>
+
+        <div class="row">  
+            <div class="uppercase"><h5 class="light no-margin no-padding thicker">.</h5></div>
+        </div>
+    </div>
+    </ion-list>
+  </ion-content>
+
+    </ion-content>
+</ion-view> 

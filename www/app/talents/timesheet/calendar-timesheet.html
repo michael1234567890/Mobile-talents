@@ -1,0 +1,62 @@
+
+<ion-view title="Calendar" id="calendar">
+
+<style>
+    .left2 {
+        text-align: left;
+        float: left;
+        width: 80%;
+    }
+    .right2 {
+        text-align: right;
+        float: right;
+        width: 80%;
+    }
+</style>
+
+    <ion-content class="has-header bt-grey" ng-class="{ 'week': calendarView == 'week'}" scroll="false">
+
+
+        <div class="item item-divider positive-bg" ng-show="calendarView === 'week'">
+            <div class="row">
+                <div class="col"><i class="icon light ion-ios-arrow-back" mwl-date-modifier date="viewDate" decrement="'week'" style="padding: 0 20px 0 0;"></i></div>
+                <div class="col light text-center">{{viewDate | date:'dd MMMM'}} {{viewDate | date:'yyyy'}}</div>
+                <div class="col light text-right"><i class="icon ion-ios-arrow-forward" mwl-date-modifier date="viewDate" increment="'week'" style="padding: 0 0 0 20px;"></i></div>
+            </div>
+        </div>
+
+ 
+        <ion-scroll direction="y" style="height:100%">
+            <div style="height:700px">
+                <mwl-calendar events="events" view="calendarView" view-title="calendarTitle" view-date="viewDate" on-event-click="eventClicked(calendarEvent)" on-view-change-click="viewChangeClicked(calendarNextView, calendarDate)" on-event-times-changed="eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+                    edit-event-html="'<i class=\'icon ion-android-checkbox-outline positive\'></i>'" delete-event-html="'<i class=\'icon ion-close assertive\'></i>'" on-edit-event-click="eventEdited(calendarEvent)" on-delete-event-click="eventDeleted(calendarEvent)"
+                    slide-square-disabled="false">
+                </mwl-calendar>
+                <div ng-if="calendarView === 'week'">
+                    <div class="item item-divider positive-bg font-thin">{{viewDate | date:'dd MMMM'}} {{viewDate | date:'yyyy'}}</div>
+
+                    <div class="list" ng-if="seletedDateEvents.length > 0">
+<div class="item item-text-wrap nopaddingbottom" ui-sref="app.addtimesheet">
+
+        <div class="row">
+            <div class="left2">
+                <h3 class="balanced" style="width: 100%">Develop mobile Talents</h3>
+            </div>
+            <h3 class="text-medium">1h 0m</h3>
+        </div>
+
+        <div class="row">
+            <div class="uppercase"><h4>07.00 - 16.00</h4></div>
+        </div>
+
+        <div class="row" style="padding-top: 10px;">  
+            <div><h3 style="color: #a9afb1">Planning something</h3></div>
+        </div>
+</div>
+                    </div>
+                </div>
+            </div>
+        </ion-scroll>
+
+    </ion-content>
+</ion-view>

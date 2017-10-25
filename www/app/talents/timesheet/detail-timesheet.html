@@ -1,0 +1,80 @@
+<ion-view title="Pending" class="bg-lightgrey">
+   <style>
+
+    .left {
+        text-align: left;
+        float: left;
+        width: 50%;
+    }
+    .right {
+        text-align: right;
+        float: right;
+        width: 50%;
+    }
+
+</style>
+ 
+    <ion-content class="has-header materialize" scroll="true">
+
+        <ion-item style="background-color: #11c1f3 ;">
+
+                <div class="center" style="padding-bottom: 10px;">
+                    <h4 class="light ">Main Office</h4>
+                </div>
+
+                <div class="center">
+                    <h1 class="light text-medium">8 Hr, 30 Min</h1>
+                </div>
+
+                <div class="center">
+                    <h4 class="light">45 Min of overtime</h4>
+                </div>
+        </ion-item>
+
+
+            <div class="item item-divider">
+                <h3>Shift Timelime</h3>
+            </div>
+
+
+        <div class="list">
+          <a class="item item-icon-left text-medium">
+            <i class="icon ion-calendar text-larger"></i>
+            Date
+            <span class="item-note">
+             <h2 class="lead text-medium">12-11-1990</h2> 
+            </span>
+          </a>
+
+          <a class="item item-icon-left text-medium">
+            <i class="icon ion-clock text-larger"></i>
+            Clock In
+            <span class="item-note">
+             <h2 class="lead text-medium">9.00 a.m</h2> 
+            </span>
+          </a>
+
+          <a class="item item-icon-left text-medium">
+            <i class="icon ion-clock text-larger"></i>
+            Clock Out
+            <span class="item-note">
+             <h2 class="lead text-medium">19.00 p.m</h2> 
+            </span>
+          </a>
+
+        <div class="card row no-margin">
+            <div class="row"">
+                <div class="col text-medium" style="padding-left: 8px;"><i class="icon ion-clipboard text-larger"></i></div>
+                <div class="col text-medium" style="padding-left: 12px;">Activity</div>
+                <div class="col col-75 text-medium balanced"></div>   
+            </div>
+          <div ng-repeat="new in news" ng-init="limit =20; moreShown = false" style="width: 70%;">
+            <h2 class="text-medium no-margin pre" style="color: #008276;">{{new.Isi| limitTo: limit}}</h2> 
+              <a  class="text-right" ng-show="new.Isi.length > limit" href ng-click="limit=new.Isi.length; moreShown = true"><h6 class="assertive no-margin"> more</h6></a>
+            <a  class="text-right" ng-show="moreShown" href ng-click="limit=20; moreShown = false"><h6 class="assertive no-margin">  Less </h6></a>
+          </div>
+        </div>
+        </div>
+        
+    </ion-content>
+</ion-view>

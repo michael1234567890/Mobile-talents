@@ -6,7 +6,8 @@ angular.module('intro.controllers', [])
     $scope.forgotAction = function(){
         alert("Forgot Action");
     }
-  $scope.goToSignup = function () {
+
+    $scope.goToSignup = function () {
         $state.go('signup');
         $ionicHistory.nextViewOptions({
             disableAnimate: true,
@@ -86,6 +87,14 @@ angular.module('intro.controllers', [])
                
             })
      };
+
+    function initModule(){
+        Main.cleanData();
+    }
+    $scope.$on('$ionicView.beforeEnter', function (event,data) {
+          initModule();
+      
+    });
 })
 
 

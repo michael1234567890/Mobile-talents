@@ -1,94 +1,111 @@
 <ion-view title="Confirmation" cache-view="false">
-<style>
-    .left {
-        text-align: left;
-        float: left;
-        width: 60%;
-    }
-    .right {
-        text-align: right;
-        float: right;
-        width: 40%;
-    }
-</style>
+
     <ion-content  class="profile has-header" scroll="true">
-    <ion-list class="padding">
-        
-        <div class="row padding">
-            <div class="left"><p class="text-small">Category</p></div>
-            <div class="right"><h2 class="lead text-small" >{{categoryType}}</h2></div>
-        </div>
-
-        <hr class="no-margin">
-        <div class="row padding">
-            <div class="left"><p class="text-small">Type</p></div>
-            <div class="right"><h2 class="lead text-small" >{{type}}</h2></div>
-        </div>
-
-        <hr class="no-margin">
-        <div class="row padding">
-            <div class="left"><p class="text-small">Start Date</p></div>
-            <div class="right"><h2 class="lead text-small" >{{startDate | date: 'dd MMM yyyy'}}</h2></div>
-        </div>
-        <hr class="no-margin">
-        <div class="row padding">
-            <div class="left"><p class="text-small">End Date</p></div>
-            <div class="right"><h2 class="lead text-small" >{{endDate | date: 'dd MMM yyyy'}}</h2></div>
-        </div>
-        <hr class="no-margin">
-        <div class="row padding">
-            <div class="left"><p class="text-small">Total Request</p></div>
-            <div class="right"><h2 class="lead text-small" >{{total | number : 0}} days</h2></div>
-        </div>
-        <hr class="no-margin">
-        <div class="row padding">
-            <div class="left"><p class="text-small">Total Balance</p></div>
-            <div class="right"><h2 class="lead text-small" >{{totalBalance | number : 0}} days</h2></div>
-        </div>
-        <hr class="no-margin">
-        <div class="row padding">
-            <div class="left"><p class="text-small">Overtime In</p></div>
-            <div class="right"><h2 class="lead text-small" > {{overtimeIn}} Min</h2></div>
-        </div>
-        <hr class="no-margin">
-        <div class="row padding">
-            <div class="left"><p class="text-small">Overtime Out</p></div>
-            <div class="right"><h2 class="lead text-small" >{{overtimeOut}} Min</h2></div>
-        </div>
-        <hr class="no-margin">
-        <div class="row padding">
-            <div class="left"><p class="text-small">Attendance In</p></div>
-            <div class="right"><h2 class="lead text-small" > {{attendanceInTime | date: 'dd MMM yyyy hh:mm'}} </h2></div>
-        </div>
-        <hr class="no-margin">
-        <div class="row padding">
-            <div class="left"><p class="text-small">Attendance Out</p></div>
-            <div class="right"><h2 class="lead text-small" >{{attendanceOutTime | date: 'dd MMM yyyy hh:mm'}}</h2></div>
-        </div>
-        
-        
-</ion-list>
-<div class="list" >
-                <!--
-                <div class="item item-divider">Attach Supporting Document</div> 
-                    <div class="row">
-                      <button class="button button-block button-outline button-positive" ng-click="addPicture()"><i class="icon ion-ios-camera-outline"></i> Add Attachment</button>
+           <div class="card">
+              <div class="list">
+                <div class="item item-divider">Information</div> 
+                <div class="item">
+                    <div class="item item-light" >
+                        <i class="icon ion-android-bookmark text-large"></i>
+                        &nbsp;{{categoryType}}
                     </div>
-                <div class="row post" >
-                    <div class="col" ng-repeat="items in images" ><img height="90px"  ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
-                   
+
+                    <div class="item item-text-wrap">
+                        <h3 class="balanced ">{{typeDesc}}</h3>
+                    </div>
+
+                    <div class="item item-light">
+                        <i class="icon ion-android-calendar text-large"></i>
+                        &nbsp;DATE
+                    </div>
+
+                     <div class="item item-text-wrap">
+                        <div class="row">
+                            <div class="col-40 text-center">
+                                <h3 class="balanced">{{startDate | date: 'dd MMM yyyy'}}<h3>
+                            </div>
+                            <div class="col-20 text-center" >
+                                <h3 class="balanced">to</h3>
+                            </div>
+                            <div class="col-40 text-center" >
+                                <h3 class="balanced">{{endDate | date: 'dd MMM yyyy'}}</h3>
+                            </div>
+                        </div>
+                     </div>
+
+                    <div class="item item-light" ng-if="categoryType=='attendance edit'">
+                        <i class="icon ion-android-time text-large"></i>
+                        &nbsp;Attendance
+                    </div>
+
+                     <div class="item item-text-wrap" ng-if="categoryType=='attendance edit'">
+                        <div class="row ">
+                            <div class="col-40 text-center">
+                                <h3 class="balanced">{{attendanceInTime | date: 'dd MMM yyyy HH:mm'}}<h3>
+                            </div>
+                            <div class="col-20 text-center" >
+                                <h3 class="balanced">to</h3>
+                            </div>
+                            <div class="col-40 text-center" >
+                                <h3 class="balanced">{{attendanceOutTime | date: 'dd MMM yyyy HH:mm'}}</h3>
+                            </div>
+                        </div>
+                     </div>
+
+                     <div class="item item-light" ng-if="categoryType=='overtime'">
+                        <i class="icon ion-android-walk text-large"></i>
+                        &nbsp;Overtime
+                    </div>
+
+                     <div class="item item-text-wrap" ng-if="categoryType=='overtime'">
+                        <div class="row ">
+                            <div class="col-50 text-center">
+                                <h2 class="text-small">In</h2>
+                                <h3 class="balanced">{{overtimeIn}} Min<h3>
+                            </div>
+                           
+                            <div class="col-50 text-center" >
+                                <h2 class="text-small">Out</h2>
+                                <h3 class="balanced">{{overtimeOut}} Min</h3>
+                            </div>
+                        </div>
+                     </div>
+
+                     <div class="item item-light">
+                        <i class="icon ion-compose text-large"></i>
+                            &nbsp;TOTAL
+                     </div>
+                     <div class="item item-text-wrap">
+                        <div class="row">
+                            <div class="col text-left">
+                                <h3 class="balanced">Request : <b>{{total | number : 0}}</b> Days<h3>
+                            </div>
+                            <div class="col text-left">
+                                <h3 class="balanced">Balance : <b>{{totalBalance | number : 0}}</b> Days</h3>
+                            </div>
+                        </div>
+                     </div>
                 </div>
-                <div class="row center">
-                     <div class="col" style="min-height:90px" ng-if="images.length==0"><img ng-src="{{defaultImage}}" height="90px" ></div>
-                </div>-->
-    
-
-    <div class="row">
-        <button class="btn button-small  waves-effect waves-light button button-calm  button-block waves-effect waves-light"  ng-click="goBack('app.benefitlisttype')">Cancel</button>&nbsp;
-        <button class="btn button-small waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-disabled="totalCurrentClaim == 0" ng-click="submitForm()">Submit</button>
-    </div>
-
-</div>
+              </div>
+        </div>
+        
+        <div class="list" ng-if="requestType.showAttachment" >
+            <div class="item item-divider">Attach Supporting Document</div> 
+                <div class="row">
+                  <button class="button button-block button-outline button-positive" ng-click="addPicture()"><i class="icon ion-ios-camera-outline"></i> Add Attachment</button>
+                </div>
+            <div class="row post" >
+                <div class="col" ng-repeat="items in images" ><img height="90px"  ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
+               
+            </div>
+            <div class="row center">
+                 <div class="col" style="min-height:90px" ng-if="images.length==0"><img ng-src="{{defaultImage}}" height="90px" ></div>
+            </div>
+        </div>
+        <div class="row">
+            <button class="btn button-small  waves-effect waves-light button button-calm  button-block waves-effect waves-light"  ng-click="goBack('app.benefitlisttype')">Cancel</button>&nbsp;
+            <button class="btn button-small waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-disabled="totalCurrentClaim == 0" ng-click="submitForm()">Submit</button>
+        </div>
 
     </ion-content>
 </ion-view>

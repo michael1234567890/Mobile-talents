@@ -1,0 +1,59 @@
+<ion-view view-title="Add Timesheet" class="header">
+
+  <ion-content padding="true" class="has-header materialize" scroll="true" style="font-size:12px">
+    <ion-list>
+
+<style>
+	.left {
+        text-align: left;
+        float: left;
+        width: 50%;
+    }
+    .right {
+        text-align: left;
+        float: right;
+        width: 50%;
+    }
+</style>    
+					<h5 class="balanced">Date</h5>
+	                   	<ionic-datepicker class="button button-outline button-block button-positive" ng-click="openDatePicker()">
+	                        {{leave.startDate| date: "yyyy-MM-dd"}}
+	                    </ionic-datepicker>
+
+              	<div class="row">
+	                <div class="left">
+	                	<center><h5 class="balanced">&nbsp;Start Time</h5></center>
+	                	<ionic-timepicker class="button button-block button-medium button-positive" ng-click="openTimePicker()">
+	                		{{time.start | date:'HH:mm'}}
+	                    </ionic-timepicker>
+	                 </div>
+	                &nbsp;
+	                <div class="right">
+		                <center><h5 class="balanced">&nbsp;End Time</h5></center>
+		                	<ionic-timepicker class="button button-block button-medium button-positive" ng-click="openTimePicker()">
+		                		{{time.start | date:'HH:mm'}}
+		                    </ionic-timepicker>
+	   				</div>	
+	   			</div>
+           <h5 class="balanced">Shift</h5>
+    	   			<div class="list">
+                <label class="item item-input item-select">
+                    <h3 class="">Pick a Shift</h3>
+                        <select ng-model="selectedShift" ng-options="x for x in shift">
+                        </select>
+                </label>
+    	   			</div>                
+                <h5 class="balanced">Activity</h5>
+              <br>               
+                    <div class="input-field col s12">
+                        <textarea id="textarea" class="materialize-textarea" data-length="100" placeholder="Write your Activity here"></textarea>
+                    </div>                
+              <div class="row">
+                  <button class="btn waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="goTo('app.shift')">Back</button>&nbsp;
+                  <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Submit</button>
+              </div>
+    </ion-list>
+  </ion-content>
+</ion-view>
+
+

@@ -24,7 +24,7 @@
              on-refresh="refresh()">
         </ion-refresher>
         <div  class="bg-lightgrey">
-            <div class="item item-text-wrap item-icon-right" ng-repeat="item in leaves"  ui-sref="app.detailleave">
+            <div class="item item-text-wrap item-icon-right" ng-repeat="item in leaves"  ng-click="goToDetailLeave(item.id)">
                 <div class="row">
                     <div class="left"><h5 class="uppercase no-margin no-padding thicker">{{item.startDate | date: 'dd MMM'}} - {{item.endDate | date: 'dd MMM yyyy'}}</h5></div>
                 </div>

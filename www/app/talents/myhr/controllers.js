@@ -42,7 +42,7 @@ angular.module('myhr.controllers', [])
 }])
 
 
-.controller('PersonalCtrl',['$rootScope', '$scope','$state' , 'AuthenticationService', 'Main', function($rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('PersonalCtrl',['ionicSuperPopup','$rootScope','$scope','$state' , 'AuthenticationService', 'Main', function(ionicSuperPopup,$rootScope, $scope,$state , AuthenticationService, Main) {
   
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
@@ -53,7 +53,8 @@ angular.module('myhr.controllers', [])
     };
 
     $scope.personal = {};
-
+    
+    
 
     var successRequest = function (res){
     	$scope.personal = res;

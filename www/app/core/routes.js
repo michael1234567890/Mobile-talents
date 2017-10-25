@@ -242,7 +242,7 @@ angular.module('talent.routes', [])
       })
 
       .state('app.detailleave', {
-        url: '/detailleave',
+        url: '/detailleave/:id',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/selfservice/leave/detail-leave.html',

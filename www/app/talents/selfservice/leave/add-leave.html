@@ -2,7 +2,7 @@
     <ion-content padding="false"  scroll="true">
     <div class="list">
       <div  class="item padding">
-        <div ng-if="leaveCategory =='leave' || leaveCategory =='permission' || leaveCategory =='sick'">
+        <div ng-if="leaveCategory =='leave' || leaveCategory =='permission'">
           <div class="row no-padding text-center bt-grey bb-grey" style="height:44px">
               <div class="col col-40"><p class="bb text-medium padding uppercase">Remaining</p></div>
               <div class="col col-10 bl-grey"><p class="bb text-large padding uppercase">{{balance.balanceEnd}}</p></div>
@@ -10,17 +10,17 @@
               <div class="col col-10 bl-grey"><p class="bb text-large padding uppercase">{{balance.balanceUsed}}</p></div>
           </div>
 
-          <div class="item item-divider uppercase">
+        <div class="item item-divider uppercase">
             Type
-          </div>
+        </div>
 
-          <div class="item item-icon-right" style="border:0px" modal-select ng-model="leave.type" options="selectType" modal-title="Select a Type" option-property="type" on-select="shoutLoud()">
+        <div class="item item-icon-right" style="border:0px" modal-select ng-model="leave.type" options="selectType" modal-title="Select a Type" option-property="type" on-select="onSelectType()">
               {{labelType}}
               <i class="icon ion-chevron-right icon-accessory"></i>
               <div class="option">
-                <h2>{{option.type}}</h2>
+                <h2>{{option.typeLabel}}</h2>
               </div>
-          </div>
+        </div>
           
           <div class="item item-divider uppercase">
             Date
@@ -60,7 +60,69 @@
                 </div>
           </div>
         </div>
+
+        <!-- SICK -->
+        <div ng-if="leaveCategory =='sick'">
+          <div class="row no-padding text-center bt-grey bb-grey" style="height:44px">
+              <div class="col col-40"><p class="bb text-medium padding uppercase">Remaining</p></div>
+              <div class="col col-10 bl-grey"><p class="bb text-large padding uppercase">{{balance.balanceEnd}}</p></div>
+              <div class="col col-40"><p class="bb text-medium padding uppercase">Used</p></div>
+              <div class="col col-10 bl-grey"><p class="bb text-large padding uppercase">{{balance.balanceUsed}}</p></div>
+          </div>
+
+        <div class="item item-divider uppercase">
+            Type
+        </div>
+
+        <div class="item item-icon-right" style="border:0px" modal-select ng-model="leave.type" options="selectType" modal-title="Select a Type" option-property="type" on-select="onSelectType()">
+              {{labelType}}
+              <i class="icon ion-chevron-right icon-accessory"></i>
+              <div class="option">
+                <h2>{{option.typeLabel}}</h2>
+              </div>
+        </div>
+          
+          <div class="item item-divider uppercase">
+            Date
+          </div>
+          <div class="row">
+                <div class="input-field col">
+                    <p for="last_name">Start</p>
+                    <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()">
+                            {{leave.startDate| date: "yyyy-MM-dd"}}
+                    </ionic-datepicker>
+                </div>
+          </div>
+          <div class="row" ng-if="leaveCategory !='Overtime' &&  leaveCategory !='Edit Attendance'">
+                <div class="input-field col">
+                    <p for="last_name">End</p>
+                    <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker1()">
+                            {{leave.endDate| date: "yyyy-MM-dd"}}
+                    </ionic-datepicker>
+                </div>
+          </div>
+          <div class="row">
+                <div class="input-field col s12">
+                    <p for="textarea1">Remark</p>
+                    <textarea  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" rows="3" placeholder="Enter your remark" ng-model="leave.remark" ></textarea>
+                    
+                </div>
+          </div>
+        </div>
+
+        <!-- Overtime -->
         <div ng-if="leaveCategory == 'overtime'">
+          <div class="item item-divider uppercase">
+            Type
+          </div>
+
+          <div class="item item-icon-right" style="border:0px" modal-select ng-model="leave.type" options="selectType" modal-title="Select a Type" option-property="type" on-select="onSelectType()">
+                {{labelType}}
+                <i class="icon ion-chevron-right icon-accessory"></i>
+                <div class="option">
+                  <h2>{{option.typeLabel}}</h2>
+                </div>
+          </div>
            <div class="row">
                 <div class="input-field col">
                     <p for="last_name">Date</p>
@@ -119,6 +181,18 @@
         </div>
           
         <div ng-if="leaveCategory == 'attendance edit'">
+          <div class="item item-divider uppercase">
+              Type
+          </div>
+
+          <div class="item item-icon-right" style="border:0px" modal-select ng-model="leave.type" options="selectType" modal-title="Select a Type" option-property="type" on-select="onSelectType()">
+                {{labelType}}
+                <i class="icon ion-chevron-right icon-accessory"></i>
+                <div class="option">
+                  <h2>{{option.typeLabel}}</h2>
+                </div>
+          </div>
+          
            <div class="row">
                 <div class="input-field col">
                     <p for="last_name">Date</p>
@@ -141,6 +215,8 @@
                     </ionic-timepicker>
                 </div>
           </div>
+
+
           <div class="row">
                 <div class="input-field col s12">
                     <p for="textarea1">Notes</p>

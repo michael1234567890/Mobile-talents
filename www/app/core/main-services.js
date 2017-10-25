@@ -3,11 +3,11 @@
     'use strict'
 
     angular.module('main.services', [])
-    .factory('Main', function($q, $timeout, $http, $localStorage){
+    .factory('Main', function($q, $timeout, $http, $localStorage,$rootScope){
         //var hostname = "http://192.168.43.132";
-        var hostname = "http://192.168.43.162";
+        //var hostname = "http://192.168.43.162";
         //var hostname = "http://45.76.147.40";
-        //var hostname = "http://localhost";
+        var hostname = "http://localhost";
         var environment = "development"; // development , production
         var phphost =  hostname + "/talents";
         var printBaseUrl = hostname + "/talents/payslippdf";
@@ -274,7 +274,30 @@
                     };
                 }
                 return result;
+            },
+            cleanData : function(){
+                    localStorage.removeItem("profile");
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("balance");
+                    localStorage.removeItem("categoryType");
+                    localStorage.removeItem("tmCategoryType");
+                    $rootScope.refreshRequestApprovalCtrl = true;
+                    
+                    if($rootScope.user != undefined) {
+                        delete $rootScope.user;
+                    }
+
+                    if($rootScope.countApproval != undefined)
+                        delete $rootScope.countApproval;
+                    
+                    if($rootScope.team != undefined)
+                        delete $rootScope.team;
+                    
+                    if($rootScope.selectEmployeeSubstitute != undefined)
+                        delete $rootScope.selectEmployeeSubstitute;
+
             }
+
             
         };
 
