@@ -883,7 +883,7 @@ angular.module('selfservice.controllers', [])
               var data = JSON.stringify(benefitVerification);
               Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
           }else {
-              alert("You must add at least 1 attachment.");
+              $scope.warningAlert("You must add at least 1 attachment.");
           }
       }
 
@@ -899,6 +899,8 @@ angular.module('selfservice.controllers', [])
           $scope.requestHeader = {};
           $scope.requestHeader.attachments = []; 
           if(benefitVerification != null && benefitVerification.details.length > 0) {
+             $scope.categoryType = benefitVerification.categoryType;
+             
              for (var i = benefitVerification.details.length - 1; i >= 0; i--) {
                 $scope.totalClaim += benefitVerification.details[i].totalClaim;
                 $scope.totalSubmitedClaim += benefitVerification.details[i].totalSubmitedClaim;

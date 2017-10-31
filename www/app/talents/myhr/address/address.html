@@ -8,7 +8,7 @@
         </ion-refresher>
         <div  class="bg-lightgrey">
             <div >
-                <div class="card hybrid" ng-repeat="item in address | filter: searchFilter  | orderBy: 'publishedDate':true " ng-click="goToDetails(item.idx)">
+                <div class="card hybrid" ng-repeat="item in address | filter: searchFilter  | orderBy: 'publishedDate':true " ng-click="goToDetails(item.id)">
 
                     <div class="item item-text-wrap item-icon-right">
                         

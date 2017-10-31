@@ -4,56 +4,139 @@
         <button ng-if="canEdit == 'true' && family.status!='pending'" class="button button-dark button-clear icon ion-ios-compose-outline" ng-click="goEditFamily()"></button>
     </ion-nav-buttons>
 
-    <ion-content class="has-header bt-grey profile" scroll="true">
-        
-
+    <ion-content class="has-header " scroll="true">
         <div class="list">
             <div class="item item-text-wrap" >
-                <p class="text-small">Name</p>
-                <h2 class="lead text-medium" >{{family.name}}</h2>
+                <div class="row">
+                    <div class="col">
+                        <p class="text-small">Name</p>
+                        <h2 class="lead text-medium" >{{family.name}}</h2>
+                    </div>
+                </div>
             </div>
             <div class="item item-text-wrap" >
-                <p class="text-small">Place of Birth</p>
-                <h2 class="lead text-medium" >{{family.birthPlace}}</h2>
+                <div class="row">
+                    <div class="col">
+                        <p class="text-small">Place of Birth</p>
+                        <h2 class="lead text-medium" >{{family.birthPlace}}</h2>
+                    </div>
+                    <div class="col">
+                        <p class="text-small">Date of Birth</p>
+                        <h2 class="lead text-medium" >{{family.birthDate | date: "yyyy-MM-dd"}}</h2>
+                    </div>
+                    </div>
             </div>
+   
             <div class="item item-text-wrap" >
-                <p class="text-small">Date of Birth</p>
-                <h2 class="lead text-medium" >{{family.birthDate | date: "yyyy-MM-dd"}}</h2>
-            </div>
-            <div class="item item-text-wrap" >
-                <p class="text-small">Alive Status *</p>
-                <h2 class="lead text-medium" >{{family.aliveStatus}}</h2>
-            </div>
-            <div class="item item-text-wrap" >
-                <p class="text-small">Gender</p>
-                <h2 class="lead text-medium" >{{family.gender}}</h2>
-            </div>
-            <div class="item item-text-wrap" >
-                <p class="text-small">Relationship</p>
-                <h2 class="lead text-medium" >{{family.relationship}}</h2>
+
+              <div class="row">
+                <div class="col">
+                    <p class="text-small">Alive Status *</p>
+                    <h2 class="lead text-medium" >{{family.aliveStatus}}</h2>
+                </div>
+                <div class="col">
+                    <p class="text-small">Gender</p>
+                    <h2 class="lead text-medium" >{{family.gender}}</h2>
+                </div>
+              </div>
             </div>
             
+            <div class="item" >
+
+              <div class="row">
+                <div class="col">
+                    <p class="text-small">Relationship</p>
+                    <h2 class="lead text-medium" >{{family.relationship}}</h2>
+                </div>
+                <div class="col">
+                    <p class="text-small">Marital Status</p>
+                    <h2 class="lead text-medium" >{{family.maritalStatus}}</h2>
+                </div>
+              </div>
+            </div>
+            <div class="item" >
+                
+              <div class="row">
+                <div class="col">
+                    <p class="text-small">Identity Card No</p>
+                    <h2 class="lead text-medium" >{{family.nircNo}}</h2>
+                </div>
+                <div class="col">
+                    <p class="text-small">Family Card No</p>
+                    <h2 class="lead text-medium" >{{family.familyCardNo}}</h2>
+                </div>
+              </div>
+                
+            </div>
+            <div class="item" >
+              <div class="row">
+                <div class="col">
+                    <p class="text-small">District</p>
+                    <h2 class="lead text-medium" >{{family.district}}</h2>
+                </div>
+                <div class="col">
+                    <p class="text-small">Sub District</p>
+                    <h2 class="lead text-medium" >{{family.subDistrict}}</h2>
+                </div>
+              </div>
+            </div>
+            <div class="item" >
+              <div class="row">
+                <div class="col">
+                    <p class="text-small">RT</p>
+                    <h2 class="lead text-medium" >{{family.rt}}</h2>
+                </div>
+                <div class="col">
+                    <p class="text-small">RW</p>
+                    <h2 class="lead text-medium" >{{family.rw}}</h2>
+                </div>
+              </div>
+            </div>
+            <div class="item" >
+
+                <div class="col">
+                    <p class="text-small">Address</p>
+                    <h2 class="lead text-medium" >{{family.address}}</h2>
+                </div>
+                
+            </div>
+            <div class="item" >
+              <div class="row">
+              
+                <div class="col">
+                    <p class="text-small">Nationality</p>
+                    <h2 class="lead text-medium" >{{family.nationality}}</h2>
+                </div>
+                <div class="col">
+                    <p class="text-small">Blood Type</p>
+                    <h2 class="lead text-medium" >{{family.bloodType}}</h2>
+                </div>
+              </div>
+            </div>
+            <div class="item" >
+              <div class="row">
+              
+                <div class="col">
+                    <p class="text-small">Phone</p>
+                    <h2 class="lead text-medium" >{{family.phone}}</h2>
+                </div>
+                <div class="col">
+                    <p class="text-small">Email</p>
+                    <h2 class="lead text-medium" >{{family.email}}</h2>
+                </div>
+              </div>
+            </div>
             
-            <div class="item item-text-wrap" >
-                <p class="text-small">Blood Type</p>
-                <h2 class="lead text-medium" >{{family.bloodType}}</h2>
+            <div class="item">
+              <div class="row">
+              
+                <div class="col">
+                    <p class="text-small">Occupation</p>
+                    <h2 class="lead text-medium" >{{family.occupation}}</h2>
+                </div>
+              </div>
             </div>
-            <div class="item item-text-wrap" >
-                <p class="text-small">Address</p>
-                <h2 class="lead text-medium" >{{family.address}}</h2>
-            </div>
-            <div class="item item-text-wrap" >
-                <p class="text-small">Marital Status</p>
-                <h2 class="lead text-medium" >{{family.maritalStatus}}</h2>
-            </div>
-            <div class="item item-text-wrap" >
-                <p class="text-small">Occupation</p>
-                <h2 class="lead text-medium" >{{family.occupation}}</h2>
-            </div>
-            <div class="item item-text-wrap" >
-                <p class="text-small">Phone</p>
-                <h2 class="lead text-medium" >{{family.phone}}</h2>
-            </div>
+            
            
         </div>
     </ion-content>

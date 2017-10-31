@@ -4,13 +4,24 @@ angular.module('profile.controllers', [])
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
-    $scope.profile = Main.getSession("profile");
-    $scope.profile.fullName = $scope.profile.employeeTransient.firstName;
-    if($scope.profile.employeeTransient.middleName != null)
-      $scope.profile.fullName += " " + $scope.profile.employeeTransient.middleName;
+    $scope.profile = {};
+    
+    function initModule() {
+      $scope.profile =  Main.getSession("profile");
+      $scope.profile.fullName = $scope.profile.employeeTransient.firstName;
+      if($scope.profile.employeeTransient.middleName != null)
+        $scope.profile.fullName += " " + $scope.profile.employeeTransient.middleName;
 
-    if($scope.profile.employeeTransient.lastName != null)
-      $scope.profile.fullName += " " + $scope.profile.employeeTransient.lastName;
+      if($scope.profile.employeeTransient.lastName != null)
+        $scope.profile.fullName += " " + $scope.profile.employeeTransient.lastName;
+
+    }
+    $scope.$on('$ionicView.beforeEnter', function () {
+        initModule();
+    });
+
+
+
     
 })
 
@@ -21,7 +32,7 @@ angular.module('profile.controllers', [])
     }
     $scope.imageData = $rootScope.user.photo;
     $scope.profile = Main.getSession("profile");
-    console.log($scope.profile);
+   
     $scope.image = "";
     $scope.data = {};
     $scope.data.handphone = $scope.profile.employeeTransient.mobilePhone;
@@ -31,13 +42,17 @@ angular.module('profile.controllers', [])
     }
 
     var errRefreshToken = function(err, status) {
+
     }
 
     var successRequest = function (res){
         $ionicLoading.hide();
-        alert(res.message);
-        if($scope.image != "")
-           $rootScope.user.photo = "data:image/jpeg;base64," + $scope.image;
+        $scope.successAlert(res.message);
+        if($scope.data.image != ""){
+            console.log("change user photo");
+            $rootScope.user.photo = "data:image/jpeg;base64," + $scope.data.image;
+            
+        }
         $scope.goBack("app.profile");
       
     }
@@ -49,9 +64,9 @@ angular.module('profile.controllers', [])
           Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
         }else {
             if(status==500)
-              alert(err.message);
+              $scope.errorAlert(err.message);
             else
-              alert("Please Check your connection");
+              $scope.errorAlert("Please Check your connection");
         }
     }
 
@@ -99,11 +114,11 @@ angular.module('profile.controllers', [])
               $ionicLoading.show({
                   template: '<ion-spinner></ion-spinner>'
               });
-              data.image = $scope.image;
+              $scope.data.image = $scope.image;
               var accessToken = Main.getSession("token").access_token;
               var urlApi = Main.getUrlApi() + '/api/user/profile/changeprofile';
-              data = JSON.stringify(data);
-              Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
+              var data = JSON.stringify($scope.data);
+              Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
         }
     }
 

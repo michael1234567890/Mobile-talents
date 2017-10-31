@@ -18,11 +18,11 @@
     <ion-content padding="false" class="has-header materialize" scroll="true" >
         
         <div class="item padding">
-           <div class="item item-divider">Information</div> 
+           <div class="item item-divider">Personal Information</div> 
             <div class="row">
                 <div class="input-field col">
                     <p for="first_name">Name *</p>
-                    <input id="first_name" placeholder="Enter Name" type="text" class="validate" ng-model="family.name">
+                    <input id="first_name" placeholder="Enter Full Name" type="text" class="validate" ng-model="family.name">
                 </div>
                 
             </div>
@@ -31,19 +31,16 @@
                     <p for="last_name">Place of Birth *</p>
                     <input id="last_name" placeholder="Enter Place of Birth" type="text" class="validate" ng-model="family.birthPlace">
                     
-                </div>
-            </div>
-            <div class="input-field col">
+                </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                 <div class="input-field col">
                   <p for="first_name">Date of Birth *</p>
-                 
-                    <!-- <button class="button button-block button-outline button-positive" ion-datetime-picker ng-model="family.birthDate">
-                        {{family.birthDate| date: "yyyy-MM-dd"}}
-                    </button>-->
                     <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()">
                             {{family.birthDate| date: "yyyy-MM-dd"}}
                     </ionic-datepicker>
 
+                </div>
             </div>
+           
             <div class="row">
                 <div class="input-field col">
                   <p style="font-size:13px">Alive Status *</p>
@@ -53,8 +50,7 @@
                   </select>
 
                 </div>
-            </div>
-           <div class="row">
+                &nbsp;&nbsp;&nbsp;&nbsp;
                 <div class="input-field col">
                   <p style="font-size:13px">Gender *</p>
                    <select class="select-dropdown" ng-model="family.gender" >
@@ -63,6 +59,9 @@
                   </select>
 
                 </div>
+            </div>
+           <div class="row">
+                
             </div>
 
             <div class="row">
@@ -75,18 +74,7 @@
                   </select>
 
                 </div>
-                
-                
-            </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <p for="textarea1">Address</p>
-                    <textarea  placeholder="Enter Address Details" ng-model="family.address" class="materialize-textarea"></textarea>
-                    
-                </div>
-            </div>
-            
-            <div class="row">
+                &nbsp;&nbsp;&nbsp;&nbsp;
                 <div class="input-field col">
                   <p for="first_name" style="font-size:13px">Marital Status *</p>
                   <select class="select-dropdown" ng-model="family.maritalStatus" >
@@ -97,7 +85,64 @@
                 </div>
             </div>
             <div class="row">
+                <div class="input-field col">
+                    <p for="last_name">Identity Card No *</p>
+                    <input  placeholder="Enter Resident ID Card" type="text" class="validate" ng-model="family.nircNo">
+                    
+                </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                 <div class="input-field col">
+                  <p for="first_name">Family Card No *</p>
+                 
+                    <input id="last_name" placeholder="Enter Family Card No" type="text" class="validate" ng-model="family.familyCardNo"/>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col">
+                    <p for="last_name">District *</p>
+                    <input id="last_name" placeholder="Enter District" type="text" class="validate" ng-model="family.district">
+                    
+                </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                 <div class="input-field col">
+                  <p for="first_name">Subdistrict *</p>
+                 
+                    <input id="last_name" placeholder="Enter Subdistrict" type="text" class="validate" ng-model="family.subDistrict"/>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col">
+                    <p for="last_name">RT *</p>
+                    <input id="last_name" placeholder="Enter RT" type="text" class="validate" ng-model="family.rt">
+                    
+                </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                 <div class="input-field col">
+                  <p for="first_name">RW *</p>
+                 
+                    <input id="last_name" placeholder="Enter RW" type="text" class="validate" ng-model="family.rw"/>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <p for="textarea1">Address *</p>
+                    <textarea  placeholder="Enter Address Details" ng-model="family.address" class="materialize-textarea"></textarea>
+                    
+                </div>
+            </div>
+            
+            
+            <div class="row">
               <div class="input-field col">
+                  <p for="first_name" style="font-size:13px">Nationality *</p>
+                  <select class="select-dropdown" ng-model="family.nationality" >
+                    <option value="">-- Select --</option>
+                    <option ng-repeat="nationality in selectNationality">{{nationality.id}}</option>
+                  </select>
+                    
+                </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="input-field col">
                   <p for="first_name" style="font-size:13px">Blood Type *</p>
                   <select class="select-dropdown" ng-model="family.bloodType" >
                         <option value="">-- Select --</option>
@@ -107,19 +152,25 @@
                 </div>
 
             </div>
-             <div class="row">
-                <div class="input-field col">
-                    <p for="first_name">Occupation</p>
-                    <input id="first_name" placeholder="e.g. Housewife" type="text" class="validate" ng-model="family.occupation" >
-                </div>
-            </div>
             <div class="row">
                 <div class="input-field col">
                     <p for="first_name">Phone</p>
                     <input id="first_name" placeholder="e.g. 02145XXX" type="text" class="validate" ng-model="family.phone" >
                     
+                </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="input-field col">
+                    <p for="first_name">Email</p>
+                    <input id="first_name" placeholder="Enter Email" type="email" class="validate" ng-model="family.email" >
+                    
                 </div>
             </div>
+            <div class="row">
+                <div class="input-field col">
+                    <p for="first_name">Occupation</p>
+                    <input id="first_name" placeholder="e.g. Housewife" type="text" class="validate" ng-model="family.occupation" >
+                </div>
+            </div>
+            
             <div ng-if="isEdit != true">
               <div class="item item-divider">Attach Supporting Document</div> 
               <div class="row">

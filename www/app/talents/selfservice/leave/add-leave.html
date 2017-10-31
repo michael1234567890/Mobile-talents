@@ -4,17 +4,17 @@
       <div  class="item padding">
         <div ng-if="leaveCategory =='leave' || leaveCategory =='permission'">
           <div class="row no-padding text-center bt-grey bb-grey" style="height:44px">
-              <div class="col col-40"><p class="bb text-medium padding uppercase">Remaining</p></div>
-              <div class="col col-10 bl-grey"><p class="bb text-large padding uppercase">{{balance.balanceEnd}}</p></div>
-              <div class="col col-40"><p class="bb text-medium padding uppercase">Used</p></div>
-              <div class="col col-10 bl-grey"><p class="bb text-large padding uppercase">{{balance.balanceUsed}}</p></div>
+              <div class="col col-40"><p class="bb text-small padding uppercase">Remaining</p></div>
+              <div class="col col-10 bl-grey"><p class="bb text-large padding uppercase"><b>{{balance.balanceEnd}}</b></p></div>
+              <div class="col col-40"><p class="bb text-small padding uppercase">Used</p></div>
+              <div class="col col-10 bl-grey"><p class="bb text-large padding uppercase"><b>{{balance.balanceUsed}}</b></p></div>
           </div>
 
         <div class="item item-divider uppercase">
             Type
         </div>
 
-        <div class="item item-icon-right" style="border:0px" modal-select ng-model="leave.type" options="selectType" modal-title="Select a Type" option-property="type" on-select="onSelectType()">
+       <div class="item item-icon-right" style="border:0px" modal-select ng-model="leave.type" options="selectType" modal-title="Select a Type" option-property="type" on-select="onSelectType()">
               {{labelType}}
               <i class="icon ion-chevron-right icon-accessory"></i>
               <div class="option">
@@ -134,7 +134,7 @@
 
           <div class="row">
                 <div class="input-field col">
-                    <p for="last_name">Overtime In </p>
+                    <p for="last_name">Total Overtime In </p>
                     <div class="row">
                         <div class="col">
                           <select ng-model="leave.overtimeinhour">
@@ -142,19 +142,19 @@
                             <option ng-repeat="hour in selectHour">{{hour.id}}</option>
                           </select>
                         </div>
-                        <div class="col"><h6>&nbsp;Hours</h6></div>
+                        <div class="col"><h6>&nbsp;&nbsp;Hours</h6></div>
                         <div class="col">
                           <select ng-model="leave.overtimeinmin">
                             <option ng-repeat="min in selectMinutes">{{min.id}}</option>
                           </select>
                         </div>
-                        <div class="col" ><h6>&nbsp;Min</h6></div>
+                        <div class="col" ><h6>&nbsp;&nbsp;Min</h6></div>
                     </div>
                 </div>
           </div>
           <div class="row" ng-if="leaveCategory =='overtime'">
                 <div class="input-field col">
-                    <p for="last_name">Overtime Out </p>
+                    <p for="last_name">Total Overtime Out </p>
                     <div class="row">
                         <div class="col">
                           <select ng-model="leave.overtimeouthour">
@@ -173,8 +173,8 @@
           </div>
           <div class="row">
                 <div class="input-field col s12">
-                    <p for="textarea1">Notes</p>
-                    <textarea  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" rows="3" placeholder="Enter your notes" ng-model="leave.remark" ></textarea>
+                    <p for="textarea1">Remark</p>
+                    <textarea  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" rows="3" placeholder="Enter your remark" ng-model="leave.remark" ></textarea>
                     
                 </div>
           </div>
@@ -219,8 +219,8 @@
 
           <div class="row">
                 <div class="input-field col s12">
-                    <p for="textarea1">Notes</p>
-                    <textarea  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" rows="3" placeholder="Enter your notes" ng-model="leave.remark" ></textarea>
+                    <p for="textarea1">Remark</p>
+                    <textarea  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" rows="3" placeholder="Enter your remark" ng-model="leave.remark" ></textarea>
                     
                 </div>
           </div>

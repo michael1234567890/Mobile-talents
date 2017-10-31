@@ -7,6 +7,7 @@
 <div class="row text-center" style="height:40px">
             <div class="col font-thin" ng-class="module.type === 'personalia' ? 'text-medium balanced bb' : ''" ng-click="chooseTab('personalia')"><b>Personalia</b></div>
             <div class="col font-thin" ng-class="module.type === 'benefit' ? 'text-medium balanced bb' : ''" ng-click="chooseTab('benefit')"><b>Benefit</b></div>
+            <div class="col font-thin" ng-class="module.type === 'attendance' ? 'text-medium balanced bb' : ''" ng-click="chooseTab('attendance')"><b>Attendance</b></div>
 </div>
 
 <ion-scroll class="bg-lightgrey" direction="y" style="height:100%">
@@ -104,7 +105,7 @@
     <div class="item" ng-if="requests.length == 0" >
             <div class="col col-100">
                 <h2>No request available</h2>
-                <p>You may don't have any request need your approval</p>
+                <p>Please Pull to refresh</p>
             </div>  
     </div>
 </div>
@@ -112,13 +113,13 @@
          <div class="card" ng-repeat="item in benefitRequests | filter: searchFilter ">
                 <div class="item item-avatar item-text-wrap" ng-click="gotoDetailRequest(item.id)" >
                     <img ng-src="{{item.photoProfile}}">
+                    <span class="item-note calm text-smaller">
+                        {{item.modifiedDate | date: 'dd MMM yyyy HH:mm'}}
+                    </span>
                     <h2 class="lead">{{item.employeeRequest.name}}</h2>
                     <p class="text-small" >{{item.ref.categoryType}}</p>
                     <p class="text-small" ng-if="item.ref.categoryType!='Medical Overlimit'">Total : Rp. {{item.ref.totalAmount | number:0}}</p>
-                    <p class="text-smaller" >{{item.modifiedDate | date: 'dd MMM yyyy HH:mm'}}</p>
-                    <span class="item-note calm">
-                        {{item.processingStatus}}
-                    </span>
+                   
                 </div>
          </div>
 
@@ -127,16 +128,39 @@
                     <button class="button button-block button-outline button-positive" ng-click="loadMoreBenefit()">Load More Results</button>
             </div>  
         </div>
-        <!-- <ion-infinite-scroll  ng-if="hasDataBenefit" on-infinite="loadMoreBenefit()" distance="10%"></ion-infinite-scroll>-->
-        
-
          <div class="item" ng-if="benefitRequests.length == 0" >
             <div class="col col-100">
                 <h2>No request available</h2>
-                <p>You may don't have any request need your approval</p>
+                <p>Please Pull to refresh</p>
             </div>  
         </div>
-    </div>
+</div>
+<div ng-if="module.type === 'attendance'">
+         <div class="card" ng-repeat="item in attendanceRequests | filter: searchFilter ">
+                <div class="item item-avatar item-text-wrap" ng-click="gotoDetailRequest(item.id)" >
+                    <img ng-src="{{item.photoProfile}}">
+                    <span class="item-note calm text-smaller">
+                        {{item.modifiedDate | date: 'dd MMM yyyy HH:mm'}}
+                    </span>
+                    <h2 class="lead">{{item.employeeRequest.name}}</h2>
+                    <p class="text-medium" >{{item.ref.categoryType}}</p>
+                    <p class="text-smaller" >{{item.ref.startDate | date: 'dd MMM yyyy'}} - {{item.ref.endDate | date: 'dd MMM yyyy'}}</p>
+                    
+                </div>
+         </div>
+
+        <div class="row" ng-if="benefitRequests.length != 0"  ng-show="isLoadMoreBenefitShow">
+            <div class="col col-100">
+                    <button class="button button-block button-outline button-positive" ng-click="loadMoreBenefit()">Load More Results</button>
+            </div>  
+        </div>
+         <div class="item" ng-if="attendanceRequests.length == 0" >
+            <div class="col col-100">
+                <h2>No request available</h2>
+                <p>Please Pull to refresh</p>
+            </div>  
+        </div>
+</div>
 
  </ion-scroll> 
 </ion-content>

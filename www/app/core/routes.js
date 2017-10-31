@@ -107,7 +107,7 @@ angular.module('talent.routes', [])
       })
 
       .state('app.addfamily', {
-        url: '/addfamily',
+        url: '/addfamily/:id',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/myhr/family/add-family.html',
@@ -407,7 +407,7 @@ angular.module('talent.routes', [])
       })
 
        .state('app.addaddress', {
-        url: '/addaddress',
+        url: '/addaddress/:id',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/myhr/address/add-address.html',

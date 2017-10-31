@@ -119,20 +119,30 @@ he
                     }
                 }
 
-                function errorAlert(message){
+                $scope.errorAlert = function(message){
                     ionicSuperPopup.show("Error!", message, "error");
                 }
+
+                $scope.successAlert = function(message){
+                    ionicSuperPopup.show("Success!", message, "success");
+                }
+
+                $scope.warningAlert = function(message){
+                    ionicSuperPopup.show("Warning!", message, "warning");
+                }
+
+
                 $scope.errorRequest = function (err, status){
                   if(status == 401) {
                     $scope.goTo('login');
                   }else if(status == 500) {
                     if(err != null)
-                      errorAlert(err.message);
+                      $scope.errorAlert(err.message);
                     else 
-                      errorAlert("Problem with server. Please try again later.");
+                      $scope.errorAlert("Problem with server. Please try again later.");
                 
                   }else  {
-                    errorAlert("Please Check your connection.");
+                    $scope.errorAlert("Please Check your connection.");
                   }
                   $ionicLoading.hide();
                 }

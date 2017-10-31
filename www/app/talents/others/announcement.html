@@ -6,10 +6,7 @@
              pulling-icon="ion-ios7-arrow-thin-down"
              on-refresh="refresh()">
         </ion-refresher>
-        <div class="note note-info padding" style="margin:10px;" ng-if="news.length === 0">
-            <h2 class="positive">No Announcement</h4>
-            <p class="dark">There is no data to be displayed</p>
-        </div>
+       
         
         <div class="list">
             <div class="item item-text-wrap"  ng-repeat="item in news" >
@@ -17,9 +14,13 @@
                 <h2 class="lead">{{item.title}}</h2>
                 <p class="text-small">{{item.content}}</p>
                 <i class="icon ion-calendar assertive dark"><span class="text-smaller assertive">&nbsp;&nbsp;{{item.createdDate | date: 'dd MMM yyyy HH:mm a'}}</span></i>
-
-               
             </div>
+            <div class="item" ng-if="news.length == 0" >
+                    <div class="col col-100">
+                    <h2>No Announcement available</h2>
+                        <p>Please Pull to refresh !</p>
+                    </div>  
+                </div>
         </div>
         
     </ion-content>

@@ -2,19 +2,18 @@
     <ion-content class="has-header" scroll="true">
     <div  class="list">
       
-                <div class="card hybrid" style="padding:0px 0px" ng-repeat="item in categories" ng-click="goToLeaveForm(item.categoryType)">
+                <!-- <div class="list" style="padding:0px 0px" ng-repeat="item in categories" ng-click="goToLeaveForm(item.categoryType)">-->
 
-                    <div class="item item-icon-right">
-                        <i class="icon ion-chevron-right icon-accessory"></i>
+                    <div class="item item-icon-left item-icon-right" ng-repeat="item in categories" ng-click="goToLeaveForm(item.categoryType)">
+                        <i class="icon"><img ng-src="{{item.icon}}"></i>
                         <div class="inner-content">
                             <h2 class="balanced text-medium"><b>{{item.categoryType}}</b></h2>
                             <p class="text-small">{{item.description}}</p>
-                        
                         </div>
                         
                         <i class="icon ion-chevron-right icon-accessory"></i>
                     </div>
-                </div>
+                <!-- </div>-->
 
                 <div class="item" ng-if="categories.length == 0" >
                     <div class="col col-100">

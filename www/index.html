@@ -16,6 +16,7 @@
 
     <link async defer href="https://fonts.googleapis.com/css?family=Lato%3A400%2C300%2C100%2C700" rel="stylesheet" type="text/css">
     <link href="css/materialize.css" rel="stylesheet">
+    <!--  <link href="lib/Materialize/dist/css/materialize.min.css" rel="stylesheet">-->
     <link href="css/animate.css" rel="stylesheet">
     <link href="css/ionic.app.css" rel="stylesheet">
     <link href="lib/angular-bootstrap-calendar/dist/css/angular-bootstrap-calendar.css" rel="stylesheet">
@@ -71,7 +72,11 @@
     <script src="app/core/services.js"></script>
     <script src="app/core/authentication-services.js"></script>
     <script src="app/core/directives.js"></script>
-
+    <script>
+        $(document).ready(function() {
+            $('.select').material_select();
+        });
+    </script>
 </head>
 
 <body ng-app="talent" ng-controller="appCtrl">

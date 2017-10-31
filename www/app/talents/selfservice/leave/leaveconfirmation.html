@@ -61,12 +61,12 @@
                         <div class="row ">
                             <div class="col-50 text-center">
                                 <h2 class="text-small">In</h2>
-                                <h3 class="balanced">{{overtimeIn}} Min<h3>
+                                <h3 class="balanced">{{(overtimeIn / 60)  |  round:'':'down'}} Hours {{overtimeIn % 60}} Min<h3>
                             </div>
                            
                             <div class="col-50 text-center" >
                                 <h2 class="text-small">Out</h2>
-                                <h3 class="balanced">{{overtimeOut}} Min</h3>
+                                <h3 class="balanced">{{(overtimeOut / 60) | round:'':'down'}} Hours {{overtimeOut % 60 }} Min</h3>
                             </div>
                         </div>
                      </div>

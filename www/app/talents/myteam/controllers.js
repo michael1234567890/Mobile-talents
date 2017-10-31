@@ -39,9 +39,9 @@ angular.module('myteam.controllers', [])
     		Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
     	}else {
         if(status == -1) {
-          alert("Error : Problem with your connection.");
+          $scope.errorAlert("Problem with your connection.");
         }else {
-          alert( err.message);
+          $scope.errorAlert( err.message);
         }
         
       }
@@ -228,12 +228,14 @@ angular.module('myteam.controllers', [])
         $state.go("login");
   }
 
-    var i=0;
-    var j=0;
+    var i=0; // for benefit
+    var j=0; // for personalia
+    var h=0; //for attendance
     var size=Main.getDataDisplaySize();
 
     $scope.requests = [];
     $scope.benefitRequests = [];
+    $scope.attendanceRequests = [];
     $scope.module = {};
     $scope.hasDataBenefit = false;
     $scope.isLoadMoreBenefitShow = false;
@@ -265,6 +267,7 @@ angular.module('myteam.controllers', [])
     $scope.chooseTab = function(tab){
         i=0;
         j=0;
+        h = 0;
         $scope.module.type = tab;
         if(tab === 'personalia'){
             $scope.requests = [];
@@ -272,10 +275,10 @@ angular.module('myteam.controllers', [])
         }else if(tab === 'benefit'){
              $scope.benefitRequests = [];
              getNeedApproval(tab,i);
+        }else if(tab === 'attendance'){
+             $scope.attendanceRequests = [];
+             getNeedApproval(tab,h);
         }
-         
-
-        
         getCountNeedApproval();
     }
 
@@ -316,8 +319,6 @@ angular.module('myteam.controllers', [])
    
     var successRequest = function (res){
 
-
-      
       for(var i=0;i<res.data.length;i++) {
           var obj = res.data[i];
           obj.idx = i;
@@ -340,6 +341,8 @@ angular.module('myteam.controllers', [])
           
           if($scope.module.type == 'personalia') {
               $scope.requests.push(obj);
+          }else if($scope.module.type == 'attendance'){
+             $scope.attendanceRequests.push(obj);
           }else {
               $scope.benefitRequests.push(obj);
           }
@@ -399,7 +402,7 @@ angular.module('myteam.controllers', [])
     }
 })
 
-.controller('RequestDetailCtrl', function($ionicPopup,$ionicPopover,$ionicModal,$ionicLoading,$stateParams,$rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('RequestDetailCtrl', function(ionicSuperPopup,$ionicPopup,$ionicPopover,$ionicModal,$ionicLoading,$stateParams,$rootScope, $scope,$state , AuthenticationService, Main) {
     
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
@@ -422,16 +425,17 @@ angular.module('myteam.controllers', [])
     }
 
     $scope.viewMoreFamily = function(){
-        $state.go('app.detailfamily',{'idx':0,'edit':'false'});
+        $state.go('app.detailfamily',{'idx':$scope.detail.ref.id,'edit':'false'});
     }
 
     $scope.viewMoreAddress = function(){
-        $state.go('app.detailaddress',{'idx':0,'edit':'false'});
+        //console.log("$scope.detail",$scope.detail);
+        $state.go('app.detailaddress',{'idx':$scope.detail.ref.id,'edit':'false'});
     }
 
     var successApprove = function(res){
         $ionicLoading.hide();
-        alert(res.message);
+        $scope.successAlert(res.message);
         $rootScope.refreshRequestApprovalCtrl = true;
         $scope.goBack("app.requestapproval");
     }
@@ -467,12 +471,29 @@ angular.module('myteam.controllers', [])
           var validationAmount =  $scope.data.amount.replace(/\./g,'');
           validationAmount = Number(validationAmount);
           if(parseInt(validationAmount)<=1000) {
-              alert("Please fill out correct amount !!");
+              $scope.warningAlert("Please fill out correct amount !!");
               return false;
           }
         }
 
-        var confirmPopup = $ionicPopup.confirm({
+        ionicSuperPopup.show({
+           title: "Are you sure?",
+           text: "Are you sure want to Approve this request ?",
+           type: "warning",
+           showCancelButton: true,
+           confirmButtonColor: "#DD6B55",
+           confirmButtonText: "Yes",
+           closeOnConfirm: false
+         },
+        function(isConfirm){
+             if (isConfirm) {
+                sendApproval('approved',id,"");
+             }
+            
+           
+        });
+
+        /*var confirmPopup = $ionicPopup.confirm({
             title: 'Confirm',
             template: '<h5>Are you sure want to Accept this request ?</h5>',
             cancelText: 'Cancel',
@@ -482,7 +503,7 @@ angular.module('myteam.controllers', [])
                   sendApproval('approved',id,"");
               }
               
-          });
+          });*/
     }
 
     $scope.confirmReject = function (){
@@ -497,7 +518,7 @@ angular.module('myteam.controllers', [])
               if (res) {
                   var reason = $scope.confirm.reasonReject;
                   if(reason == "")
-                    alert("Reason reject can not empty");
+                    $scope.warningAlert("Reason reject can not empty");
                   else
                     sendApproval('rejected',id,reason);
               }
@@ -633,7 +654,7 @@ angular.module('myteam.controllers', [])
 
     var successApprove = function(res){
         $ionicLoading.hide();
-        alert("Cancel your request Successfully");
+        $scope.successAlert("Cancel your request Successfully");
         $scope.goBack("app.myrequestapproval");
     }
 
@@ -647,6 +668,7 @@ angular.module('myteam.controllers', [])
         $ionicLoading.show({
           template: '<ion-spinner></ion-spinner>'
         });
+        
         var accessToken = Main.getSession("token").access_token;
         var urlApi = Main.getUrlApi() + '/api/user/workflow/actionapproval';
         var data = JSON.stringify(data);
@@ -726,9 +748,9 @@ angular.module('myteam.controllers', [])
         Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
       }else {
         if(status == -1) {
-          alert("Error : Problem with your connection.");
+          $scope.errorAlert("Problem with your connection.");
         }else {
-          alert( err.message);
+          $scope.errorAlert( err.message);
         }
         
       }
@@ -776,7 +798,7 @@ angular.module('myteam.controllers', [])
         $scope.actionFind = true;
         var searchText = $scope.formSearching.search;
         if(searchText == "" ||  searchText.length < 5) {
-            alert("Min Request No must be of 5 characters length");
+            $scope.warningAlert("Min Request No must be of 5 characters length");
             return false;
         }
         $ionicLoading.show({

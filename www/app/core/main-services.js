@@ -225,7 +225,7 @@
             },
 
             postRequestApi: function(access_token,url, data, success, error) {
-                console.log(data);
+
                 var bearerAuthentication = 'Bearer '+ access_token;
                 var deferred = $q.defer();
                // $http.post(baseUrl + '/oauth/token?grant_type=password&username='+data.username+'&password='+data.password, data)

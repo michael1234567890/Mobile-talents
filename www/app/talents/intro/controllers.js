@@ -2,7 +2,7 @@ angular.module('intro.controllers', [])
 .controller('LoginCtrl',function( $timeout,$ionicHistory, $ionicLoading, appService, $state,$localStorage, $rootScope, $scope, $location,  Main) {
 	$scope.usertalent = {username:'',password:''};
 	//$scope.email = "hendra.ramdhan@gmail.com";
-
+    var messageValidation = "";
     $scope.forgotAction = function(){
         alert("Forgot Action");
     }
@@ -31,12 +31,12 @@ angular.module('intro.controllers', [])
         if(status == 401) {
             $scope.goTo('login');
         }else if(status == 500) {
-            alert("Problem with server. Please try again later.");
+            $scope.errorAlert("Problem with server. Please try again later.");
         }else {
             if(err != null)
-              alert(err.message);
+              $scope.errorAlert(err.message);
             else 
-              alert("Please Check your connection.");
+              $scope.errorAlert("Please Check your connection.");
         }
         $ionicLoading.hide();
     }
@@ -50,7 +50,8 @@ angular.module('intro.controllers', [])
         Main.requestApi(accessToken,urlApi,successUserReference,errorUserReference);
     }
 	$scope.loginAction = function() {
-			//alert("signin");
+
+        if(verificationForm($scope.usertalent)) {
             $ionicLoading.show({
                 template: '<ion-spinner></ion-spinner>'
             });
@@ -81,15 +82,32 @@ angular.module('intro.controllers', [])
                 }else {
                     err = "Problem with server. Please try again later !"
                 }
+                $scope.errorAlert(err);
 
                 // appService.showAlert('Error', err, 'Close', 'button-assertive', null);
-                appService.showAlert('Error', err, 'Close', 'button2', null);
+                //appService.showAlert('Error', err, 'Close', 'button2', null);
                
-            })
+            });
+        }else {
+            $scope.warningAlert(messageValidation);
+        }
+			
+            
      };
 
     function initModule(){
         Main.cleanData();
+    }
+    function verificationForm(usertalent){
+       
+        if(usertalent.username == undefined || usertalent.username ==''){
+            messageValidation = "Email can't be empty or wrong format.";
+            return false;
+        }else if(usertalent.password == undefined || usertalent.password ==''){
+            messageValidation = "Password can't be empty";
+            return false;
+        }
+        return true;
     }
     $scope.$on('$ionicView.beforeEnter', function (event,data) {
           initModule();
@@ -142,7 +160,7 @@ angular.module('intro.controllers', [])
             var data = JSON.stringify($scope.user);
             Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
         }else {
-            alert(messageValidation);
+            $scope.warningAlert(messageValidation);
         }    
 
     }
@@ -150,7 +168,7 @@ angular.module('intro.controllers', [])
     var successRequest = function (res){
       $ionicLoading.hide();
       // $scope.goTo('tabs.thanks');
-      alert(res.message);
+      $scope.successAlert(res.message);
       $scope.user = res;
       $scope.goBack("login");
     }
@@ -158,9 +176,9 @@ angular.module('intro.controllers', [])
     var errorRequest = function (err, status){
       $ionicLoading.hide();
       if(status == 500) {
-        alert(err.message);
+        $scope.errorAlert(err.message);
       }else {
-        alert("Check your connection");
+        $scope.errorAlert("Check your connection");
       }
     }
 

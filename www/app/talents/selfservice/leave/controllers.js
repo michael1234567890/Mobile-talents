@@ -112,12 +112,11 @@ angular.module('leave.controllers', [])
             getListCategory();
         else
           $scope.categories = Main.getSession("tmCategoryType");
-        
+        console.log("$scope.categories",$scope.categories);
     }
 
     $scope.$on('$ionicView.beforeEnter', function (event,data) {
           initModule();
-      
     });
 
 })
@@ -281,6 +280,7 @@ angular.module('leave.controllers', [])
     $scope.attendanceIn = "00:00";
     $scope.attendanceOut = "00:00"; 
     var module = "time management";
+    var messageValidation="";
 
     var timePickerComponent1 = {
         callback: function (val) {  
@@ -442,64 +442,81 @@ angular.module('leave.controllers', [])
     }
 
     $scope.submitForm = function(){
-         
-       // $ionicLoading.show({
-       //      template: '<ion-spinner></ion-spinner>'
-       //  });
-       var objCategory = getCategory($stateParams.category);
-       console.log("objCategory",objCategory);
-       $scope.leave.categoryType=$stateParams.category;
-       $scope.leave.startDate=$filter('date')(new Date($scope.leave.startDate),'yyyy-MM-dd');
-       $scope.leave.endDate=$filter('date')(new Date($scope.leave.endDate),'yyyy-MM-dd');
-        var dataPost = {};
-        if($scope.leaveCategory == "attendance edit") {
-            dataPost.startDate = $scope.leave.startDate;
-            dataPost.endDate = dataPost.startDate;
-            dataPost.remark = $scope.leave.remark;
-            dataPost.typeDesc = $scope.labelType;
-            //dataPost.type = "Edit Attendance";
-            dataPost.attendanceInTime = dataPost.startDate + " " + $scope.attendanceIn + ":00";
-            dataPost.attendanceOutTime = dataPost.startDate + " " + $scope.attendanceOut + ":00";
+      if(verificationForm($scope.leave)){
+          $ionicLoading.show({
+               template: '<ion-spinner></ion-spinner>'
+          });
+         var objCategory = getCategory($stateParams.category);
+         console.log("objCategory",objCategory);
+         $scope.leave.categoryType=$stateParams.category;
+         $scope.leave.startDate=$filter('date')(new Date($scope.leave.startDate),'yyyy-MM-dd');
+         $scope.leave.endDate=$filter('date')(new Date($scope.leave.endDate),'yyyy-MM-dd');
+          var dataPost = {};
+          if($scope.leaveCategory == "attendance edit") {
+              dataPost.startDate = $scope.leave.startDate;
+              dataPost.endDate = dataPost.startDate;
+              dataPost.remark = $scope.leave.remark;
+              dataPost.typeDesc = $scope.labelType;
+              //dataPost.type = "Edit Attendance";
+              dataPost.attendanceInTime = dataPost.startDate + " " + $scope.attendanceIn + ":00";
+              dataPost.attendanceOutTime = dataPost.startDate + " " + $scope.attendanceOut + ":00";
 
-        }else if($scope.leaveCategory == 'overtime') {
-            dataPost.startDate = $scope.leave.startDate;
-            dataPost.typeDesc = $scope.labelType;
-            dataPost.endDate = dataPost.startDate;
-            dataPost.remark = $scope.leave.remark;
-            //dataPost.type = "Overtime";
-            dataPost.overtimeIn = (parseInt($scope.leave.overtimeinhour) * 60) + parseInt($scope.leave.overtimeinmin) ;
-            dataPost.overtimeOut = (parseInt($scope.leave.overtimeouthour) * 60) + parseInt($scope.leave.overtimeoutmin) ;
-        }else {
-            dataPost.typeDesc = $scope.labelType;
-            dataPost.startDate = $scope.leave.startDate;
-            dataPost.endDate = $scope.leave.endDate;
-            dataPost.remark = $scope.leave.remark;
-            dataPost.substituteToEmployment = $scope.leave.substituteToEmployment;
-            
+          }else if($scope.leaveCategory == 'overtime') {
+              dataPost.startDate = $scope.leave.startDate;
+              dataPost.typeDesc = $scope.labelType;
+              dataPost.endDate = dataPost.startDate;
+              dataPost.remark = $scope.leave.remark;
+              //dataPost.type = "Overtime";
+              dataPost.overtimeIn = (parseInt($scope.leave.overtimeinhour) * 60) + parseInt($scope.leave.overtimeinmin) ;
+              dataPost.overtimeOut = (parseInt($scope.leave.overtimeouthour) * 60) + parseInt($scope.leave.overtimeoutmin) ;
+          }else {
+              dataPost.typeDesc = $scope.labelType;
+              dataPost.startDate = $scope.leave.startDate;
+              dataPost.endDate = $scope.leave.endDate;
+              dataPost.remark = $scope.leave.remark;
+              dataPost.substituteToEmployment = $scope.leave.substituteToEmployment;
+              
+          }
+          console.log("objCategory",objCategory);
+          dataPost.categoryType = $scope.leave.categoryType;
+
+          if(objCategory.directType) {
+              var typeSelected = objCategory.listRequestType[0];
+              dataPost.type = typeSelected.type;
+              dataPost.typeDesc = typeSelected.typeDesc;
+          }else {
+              dataPost.type = $scope.leave.type;
+          }
+
+
+          dataPost.workflow="SUBMITAT";
+          dataPost.module="Time Management";
+          dataPost.employee = employee;
+          
+          var accessToken = Main.getSession("token").access_token;
+          var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/verificationleave';
+          var data = JSON.stringify(dataPost);
+          // console.log(data);
+          // return false;
+          Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
+      } else {
+         $scope.warningAlert(messageValidation);
+      }
+    }
+
+    function verificationForm(leave){
+       
+        if(leave.type == undefined || leave.type == ""){
+          messageValidation = "Type can't be empty";
+          return false;
         }
-        console.log("objCategory",objCategory);
-        dataPost.categoryType = $scope.leave.categoryType;
 
-        if(objCategory.directType) {
-            var typeSelected = objCategory.listRequestType[0];
-            dataPost.type = typeSelected.type;
-            dataPost.typeDesc = typeSelected.typeDesc;
-        }else {
-            dataPost.type = $scope.leave.type;
+        if(leave.remark == undefined || leave.remark  == ""){
+            messageValidation = "Remark / Reason   can't be empty";
+            return false;
         }
-
-
-        dataPost.workflow="SUBMITAT";
-        dataPost.module="Time Management";
-        dataPost.employee = employee;
-        
-        var accessToken = Main.getSession("token").access_token;
-        var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/verificationleave';
-        var data = JSON.stringify(dataPost);
-        // console.log(data);
-        // return false;
-        Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
-
+  
+        return true;
     }
 
     

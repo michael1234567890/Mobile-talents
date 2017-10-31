@@ -8,18 +8,19 @@
             </ion-refresher>
         <div  class="bg-lightgrey">
       
-                <div class="card hybrid" style="padding:0px 0px" ng-repeat="item in family | filter: searchFilter  | orderBy: 'publishedDate':true " ng-click="goToDetails(item.idx)">
+                <div class="card hybrid" style="padding:0px 0px" ng-repeat="item in family | filter: searchFilter  | orderBy: 'publishedDate':true " ng-click="goToDetails(item.id)">
 
                     <div class="item item-icon-right">
                         <!-- <img ng-src="img/users/female.png">-->
+                        <span class="item-note calm text-smaller" ng-if="item.status=='pending'">
+                          Pending
+                        </span>
                         <div class="inner-content">
                             <h2 class="balanced text-medium"><b>{{item.name}}</b></h2>
                             <p class="text-small">{{item.relationship}}</p>
                         
                         </div>
-                        <span class="item-note calm text-smaller" ng-if="item.status=='pending'">
-                          Pending
-                        </span>
+                        
                         <i class="icon ion-chevron-right icon-accessory"></i>
                     </div>
                 </div>
@@ -33,5 +34,5 @@
         </div>
     </ion-content>
 
-    <a class="btn-floating btn-large waves-effect waves-light red lighten-1" style="position:fixed; bottom:3%;right:5%;z-index:999" ng-click="goToAddFamily('app.addfamily');"><i class="icons ion-plus"></i></a>
+    <a class="btn-floating btn-large waves-effect waves-light red lighten-1" style="position:fixed; bottom:3%;right:5%;z-index:999" ng-click="goToAddFamily();"><i class="icons ion-plus"></i></a>
 </ion-view>

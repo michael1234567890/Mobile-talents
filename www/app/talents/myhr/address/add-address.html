@@ -17,10 +17,19 @@
             <div class="row">
                 <div class="input-field col">
                       <p for="first_name">Province *</p>
+                      <!--
                       <select ng-model="address.province">
                         <option value="">-- Select --</option>
                             <option ng-repeat="province in selectProvince">{{province.id}}</option>
-                      </select>
+                      </select>-->
+                      <div class="item item-icon-right" style="border:0px" modal-select ng-model="address.province" options="selectProvince" modal-title="Select Province" option-property="id" on-select="onSelectProvince()">
+                              {{labelProvince}}
+                              <i class="icon ion-chevron-right icon-accessory"></i>
+                              <div class="option">
+                                <h2>{{option.id}}</h2>
+                              </div>
+                    </div>
+
                     
                 </div>
                 
