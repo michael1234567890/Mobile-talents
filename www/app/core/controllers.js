@@ -139,7 +139,7 @@ he
                     if(err != null)
                       $scope.errorAlert(err.message);
                     else 
-                      $scope.errorAlert("Problem with server. Please try again later.");
+                      $scope.errorAlert("Can't connect to server. Please try again later.");
                 
                   }else  {
                     $scope.errorAlert("Please Check your connection.");
@@ -274,7 +274,7 @@ he
                         if(status == 500) {
                             err = error.message;
                         }else if(status == 400 || status==401){
-                            err = "Problem with server. Please try again later !"
+                            err = "Can't connect to server. Please try again later !"
                         }
                         appService.showAlert('Error', err, 'Close', 'button-assertive', null);
                        
