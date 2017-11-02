@@ -83,8 +83,6 @@ angular.module('myteam.controllers', [])
     var size=Main.getDataDisplaySize();
     $scope.isLoadMoreBenefitShow = false;
     $scope.isLoadMorePersonalShow = false;
-
-   
     $scope.confirmApprove = $ionicPopover.fromTemplate(contactTemplate, {
         scope: $scope
     });
@@ -92,13 +90,13 @@ angular.module('myteam.controllers', [])
     $scope.loadMorePersonal = function(){
         j++;
         console.log(j);
-        getMyApproval('personalia',j);
+        getMyRequest('personalia',j);
     }
 
      $scope.loadMoreBenefit = function(){
         i++;
         console.log(i);
-        getMyApproval('benefit',i);
+        getMyRequest('benefit',i);
     }
 
     $scope.chooseTab = function(tab){
@@ -107,10 +105,10 @@ angular.module('myteam.controllers', [])
         $scope.module.type = tab;
         if(tab === 'personalia'){
             $scope.requests = [];
-            getMyApproval(tab,j);
+            getMyRequest(tab,j);
         }else {
             $scope.benefitRequests = [];
-            getMyApproval(tab,i);
+            getMyRequest(tab,i);
         }
         
     }
@@ -158,7 +156,7 @@ angular.module('myteam.controllers', [])
             if(obj.task == 'CHANGEMARITALSTATUS') {
                var change = obj.data;
                var objData = JSON.parse(change);
-               obj.taskDescription = "Change marital status from "+obj.employeeRequest.maritalStatus + " to " + objData.maritalStatus;
+               obj.taskDescription = "Change marital status " + " to " + objData.maritalStatus;
             }else if(obj.task == 'SUBMITADDRESS'){
                 obj.taskDescription = "Add new Address";
             }else if(obj.task == 'SUBMITFAMILY'){
@@ -199,8 +197,6 @@ angular.module('myteam.controllers', [])
       $scope.$broadcast('scroll.refreshComplete');
     }
 
-    
-
     //initMethod();
 
     $scope.$on('$ionicView.beforeEnter', function () {
@@ -209,11 +205,13 @@ angular.module('myteam.controllers', [])
 
 
     function initMethod(){
+        $scope.requests = [];
+        $scope.benefitRequests = [];
         $scope.chooseTab('personalia');
     }
     
     // invalid access token error: "invalid_token" 401
-    function getMyApproval(module,page){
+    function getMyRequest(module,page){
         $ionicLoading.show({
             template: '<ion-spinner></ion-spinner>'
           });
@@ -258,10 +256,7 @@ angular.module('myteam.controllers', [])
     }
 
     $scope.$on('$ionicView.beforeEnter', function () {
-        if($rootScope.refreshRequestApprovalCtrl) {
-            initMethod();
-        }
-        $rootScope.refreshRequestApprovalCtrl = false;
+        initMethod();
     });
 
     $scope.chooseTab = function(tab){
@@ -378,11 +373,12 @@ angular.module('myteam.controllers', [])
     }
     
 
-    initMethod();
+    //initMethod();
 
     function initMethod(){
      $scope.requests = [];
       $scope.benefitRequests = [];
+      $scope.attendanceRequests = [];
       $scope.chooseTab('personalia');
     }
     // invalid access token error: "invalid_token" 401

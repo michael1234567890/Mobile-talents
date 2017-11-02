@@ -5,6 +5,12 @@
     </ion-nav-buttons>
 
     <ion-content class="has-header bt-grey profile" scroll="true">
+        <ion-refresher pulling-text="Pull to refresh"
+             refreshing-text="Loading..."
+             refreshing-icon="ion-loading-c"
+             pulling-icon="ion-ios7-arrow-thin-down"
+             on-refresh="initMethod()">
+        </ion-refresher>
         <div class="card hybrid">
             <div class="item item-thumbnail-left item-text-wrap" >
                 <img ng-src="{{user.photo}}" style="max-width:100px">
@@ -25,10 +31,10 @@
             </div>
             <div class="item item-text-wrap item-icon-right" ng-click="goChangeMaritalStatus(personal.maritalStatus,personal.maritalStatusDataApproval)">
                 <p class="text-small">Marital Status</p>
-                <h2 class="lead text-small" >{{personal.showMaritalStatus}}</h2>
                 <span class="item-note calm" ng-if="personal.maritalStatusDataApproval !=null" style="font-size:12px;color">
                     Waiting Approval
                 </span>
+                <h2 class="lead text-small" >{{personal.showMaritalStatus}}</h2>
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </div>
             <div class="item item-text-wrap" >

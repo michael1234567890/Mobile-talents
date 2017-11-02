@@ -43,7 +43,7 @@ angular.module('myhr.controllers', [])
 }])
 
 
-.controller('PersonalCtrl',['ionicSuperPopup','$rootScope','$scope','$state' , 'AuthenticationService', 'Main', function(ionicSuperPopup,$rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('PersonalCtrl',['$ionicLoading','ionicSuperPopup','$rootScope','$scope','$state' , 'AuthenticationService', 'Main', function($ionicLoading,ionicSuperPopup,$rootScope, $scope,$state , AuthenticationService, Main) {
   
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
@@ -58,6 +58,7 @@ angular.module('myhr.controllers', [])
     
 
     var successRequest = function (res){
+      $ionicLoading.hide();
     	$scope.personal = res;
       $scope.personal.showMaritalStatus = $scope.personal.maritalStatus;
       if($scope.personal.maritalStatusDataApproval != null) {
@@ -70,15 +71,24 @@ angular.module('myhr.controllers', [])
           $scope.personal.addressFull += " " + address.address + " RT. " + address.rt + " RW. " + address.rw + " " + address.city + ", " + address.province;
           
       }
+      $scope.$broadcast('scroll.refreshComplete');
     }
 
-   	initMethod();
+   	$scope.$on('$ionicView.beforeEnter', function (event,data) {
+        //if(data.direction != undefined && data.direction!='back')
+          initMethod();
+
+    });
   
-  	function initMethod(){
+   function initMethod(){
+
    		getPersonal();
-   	}
+    }
   
    	function getPersonal(){
+      $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner>'
+      });
    		var accessToken = Main.getSession("token").access_token;
    		var urlApi = Main.getUrlApi() + '/api/myprofile/personal';
    		Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);

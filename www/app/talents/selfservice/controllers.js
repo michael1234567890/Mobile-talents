@@ -375,7 +375,7 @@ angular.module('selfservice.controllers', [])
         }else{
           url = Main.getPrintBaseUrl() + "/yearly?employment_id="+employment_id+"&session_id="+accessToken;
         } 
-
+        console.log("URL PDF",url);
         window.open(encodeURI(url), '_system', 'location=yes');
         return false;
     }

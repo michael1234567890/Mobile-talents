@@ -31,7 +31,7 @@ angular.module('intro.controllers', [])
         if(status == 401) {
             $scope.goTo('login');
         }else if(status == 500) {
-            $scope.errorAlert("Problem with server. Please try again later.");
+            $scope.errorAlert("Can't connect to server. Please try again later.");
         }else {
             if(err != null)
               $scope.errorAlert(err.message);
@@ -80,7 +80,7 @@ angular.module('intro.controllers', [])
                     
                     //appService.showAlert('Error', err, 'Close', 'button-assertive', null);
                 }else {
-                    err = "Problem with server. Please try again later !"
+                    err = "Can't connect to server. Please try again later !"
                 }
                 $scope.errorAlert(err);
 
