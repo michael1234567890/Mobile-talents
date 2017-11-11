@@ -126,6 +126,7 @@ angular.module('leave.controllers', [])
       var leaveVerification = $rootScope.data.requestLeaveVerification;
       $scope.defaultImage = "img/placeholder.png";
       $scope.images = [];  
+      $scope.imagesData = [];  
       $scope.requestHeader = {};
       $scope.requestHeader.attachments = []; 
 
@@ -161,7 +162,7 @@ angular.module('leave.controllers', [])
                           document.addEventListener("deviceready", function () {
                               $cordovaCamera.getPicture(appService.getCameraOptions()).then(function (imageData) {
                                   $scope.images.push({'image':"data:image/jpeg;base64," + imageData});
-                                  $scope.requestHeader.attachments.push({'image': imageData});
+                                  $scope.imagesData.push({'image': imageData});
                               }, function (err) {
                                   appService.showAlert('Error', err, 'Close', 'button-assertive', null);
                               });
@@ -172,7 +173,7 @@ angular.module('leave.controllers', [])
                           document.addEventListener("deviceready", function () {
                               $cordovaCamera.getPicture(appService.getLibraryOptions()).then(function (imageData) {
                                    $scope.images.push({'image':"data:image/jpeg;base64," + imageData});
-                                   $scope.requestHeader.attachments.push({'image': imageData});
+                                   $scope.imagesData.push({'image': imageData});
                               }, function (err) {
                                   appService.showAlert('Error', err, 'Close', 'button-assertive', null);
                               });
@@ -186,35 +187,38 @@ angular.module('leave.controllers', [])
 
 
       $scope.submitForm = function(){
-          if($scope.requestHeader.attachments.length > -1) {
-              $ionicLoading.show({
-                template: '<ion-spinner></ion-spinner>'
-              });
-              var accessToken = Main.getSession("token").access_token;
-              var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/leave';
-              var attachment = [];
-              
-              /*if($scope.requestHeader.attachments.length > 0) {
-                  for (var i = $scope.requestHeader.attachments.length - 1; i >= 0; i--) {
-                      var objAttchament = {"image":$scope.requestHeader.attachments[i].image};
-                      attachment.push(objAttchament);
-                  };
-              }*/
-              leaveVerification = $rootScope.data.requestLeaveVerification;
-              leaveVerification.startDate = $filter('date')(new Date(leaveVerification.startDate),'yyyy-MM-dd');
-              leaveVerification.endDate = $filter('date')(new Date(leaveVerification.endDate),'yyyy-MM-dd');
-              if(leaveVerification.attendanceInTime != undefined && leaveVerification.attendanceOutTime != undefined ){
-                  leaveVerification.attendanceInTime = $filter('date')(new Date(leaveVerification.attendanceInTime),'yyyy-MM-dd HH:mm:dd');
-                  leaveVerification.attendanceOutTime = $filter('date')(new Date(leaveVerification.attendanceOutTime),'yyyy-MM-dd HH:mm:dd');
-              }
-              
-              // leaveVerification.attachments = attachment; 
-
-              var data = JSON.stringify(leaveVerification);
-              Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
-          }else {
-              alert("You must add at least 1 attachment.");
+          if($scope.requestType.requiredAttachment && $scope.imagesData.length == 0) {
+              $scope.warningAlert("You must add at least 1 attachment.");
+              return false;
           }
+          
+          $ionicLoading.show({
+            template: '<ion-spinner></ion-spinner>'
+          });
+          var accessToken = Main.getSession("token").access_token;
+          var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/leave';
+          var attachment = [];
+          
+          if($scope.imagesData.length > 0) {
+              for (var i = $scope.imagesData.length - 1; i >= 0; i--) {
+                  var objAttchament = {"image":$scope.imagesData[i].image};
+                  attachment.push(objAttchament);
+              };
+          }
+
+          leaveVerification = $rootScope.data.requestLeaveVerification;
+          leaveVerification.startDate = $filter('date')(new Date(leaveVerification.startDate),'yyyy-MM-dd');
+          leaveVerification.endDate = $filter('date')(new Date(leaveVerification.endDate),'yyyy-MM-dd');
+          if(leaveVerification.attendanceInTime != undefined && leaveVerification.attendanceOutTime != undefined ){
+              leaveVerification.attendanceInTime = $filter('date')(new Date(leaveVerification.attendanceInTime),'yyyy-MM-dd HH:mm:dd');
+              leaveVerification.attendanceOutTime = $filter('date')(new Date(leaveVerification.attendanceOutTime),'yyyy-MM-dd HH:mm:dd');
+          }
+          
+          leaveVerification.attachments = attachment; 
+
+          var data = JSON.stringify(leaveVerification);
+          Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
+      
       }
 
       function initData(){
@@ -223,6 +227,7 @@ angular.module('leave.controllers', [])
           $scope.type = "-";
           $scope.categoryType = "-";
           $scope.images = [];  
+          $scope.imagesData = [];  
           $scope.requestHeader = {};
           $scope.requestHeader.attachments = []; 
           $scope.overtimeIn =0;
@@ -302,7 +307,7 @@ angular.module('leave.controllers', [])
               $scope.attendanceIn = hourString+":"+minuteString;
           }
         },
-        inputTime: 50400,   //Optional
+        inputTime: 32400,   //Optional
         format: 24,         //Optional
         step: 5,           //Optional
         setLabel: 'Set'    //Optional
@@ -334,7 +339,7 @@ angular.module('leave.controllers', [])
                 $scope.attendanceOut = hourString+":"+minuteString;
             }
         },
-        inputTime: 50400,   //Optional
+        inputTime: 61200,   //Optional
         format: 24,         //Optional
         step: 5,           //Optional
         setLabel: 'Set'    //Optional

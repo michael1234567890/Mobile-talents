@@ -325,9 +325,7 @@ he
 
             // profile
             function initProfile() {
-                console.log("rootScope",$rootScope);
                 $scope.general = {};
-               
                 if(Main.getSession('profile')!=null && Main.getSession('profile') !=undefined ) {
                     $scope.profile = Main.getSession('profile');
                     $scope.profile.fullname = $scope.profile.employeeTransient.name;
@@ -342,8 +340,10 @@ he
 
                     if($scope.profile.image != undefined) {
                         $rootScope.user.photo = $scope.profile.image;
+                        $scope.general.userPhoto = $scope.profile.image;
                     }else {
                         $rootScope.user.photo = 'img/1491892621_profle.png';
+                        $scope.general.userPhoto = 'img/1491892621_profle.png';
                     }
                 }
             }

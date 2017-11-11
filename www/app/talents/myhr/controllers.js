@@ -20,7 +20,6 @@ angular.module('myhr.controllers', [])
     }
 
    	function initMethod(){
-      console.log("Profile",$scope.profile);
       if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
             $state.go("login");
       }

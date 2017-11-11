@@ -174,12 +174,11 @@
             <div ng-if="isEdit != true">
               <div class="item item-divider">Attach Supporting Document</div> 
               <div class="row">
-                  <button class="button button-block button-outline button-positive" ng-click="addPicture()"><i class="icon ion-ios-camera-outline"></i> Add Attachment</button>
+                  
+                  <button  class="button button-block button-outline button-positive" ng-click="addPicture()"><i class="icon ion-ios-camera-outline"></i> Add Attachment</button>
               </div>
               <div class="row post" >
-            
                   <div class="col" ng-repeat="items in family.images" ><img height="90px"  ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
-                 
               </div>
               <div class="row center">
                <div class="col" style="min-height:90px" ng-if="family.images.length==0"><img ng-src="{{image}}" height="90px" ></div>

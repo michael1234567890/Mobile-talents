@@ -38,7 +38,7 @@
                         <p class="text-medium">{{detail.ref.details[0].typeDesc}}</p>
                       </div>
                       <div class="item item-icon-left text-small" href="#">
-                        <i class="icon ion-calendar text-larger"></i>
+                        <i class="icon ion-android-calendar text-larger"></i>
                         {{detail.ref.startDate | date: 'dd MMM yyyy'}} - {{detail.ref.endDate | date: 'dd MMM yyyy'}}
                       </div>
                       <div class="item item-icon-left text-small" href="#" ng-if="detail.ref.categoryType=='Attendance Edit'">
@@ -49,6 +49,11 @@
                         
                         <p class="text-large"><b>In : </b> {{detail.ref.details[0].overtimeIn/ 60 | round:'':'down'}} hours {{detail.ref.details[0].overtimeIn % 60}} min <b>Out : </b>{{detail.ref.details[0].overtimeOut / 60 | round:'':'down'}} hours {{detail.ref.details[0].overtimeOut % 60}} min</p>
                       </div>
+                      <div class="item item-icon-left text-small item-text-wrap" href="#">
+                        <i class="icon ion-android-chat text-larger"></i>
+                        <p class="text-medium">{{detail.ref.details[0].remark}}</p>
+                      </div>
+
                       <div class="item item-icon-left text-small" href="#">
                         <i class="icon ion-ios-compose-outline text-larger"></i>
                         <p class="text-large"><b>Total : </b> {{detail.ref.details[0].totalWorkDay}} days</p>

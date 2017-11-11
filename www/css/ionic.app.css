@@ -10165,6 +10165,7 @@ p {
     min-height: 120px; }
     .card.hybrid .item-thumbnail-left > img:first-child {
       max-width: 120px;
+      max-width: auto;
       max-height: 100px; }
     .card.hybrid .item-thumbnail-left img.profile {
       width: 25px;

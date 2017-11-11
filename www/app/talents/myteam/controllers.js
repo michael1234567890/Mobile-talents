@@ -368,7 +368,6 @@ angular.module('myteam.controllers', [])
         if(res!= null) {
             $rootScope.countApproval = res.count;
             $scope.general.countApproval = res.count;
-           
         }
     }
     

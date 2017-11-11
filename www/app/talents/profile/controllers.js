@@ -25,7 +25,7 @@ angular.module('profile.controllers', [])
     
 })
 
-.controller('EditProfileCtrl', function(appService,$cordovaCamera,$ionicActionSheet,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('EditProfileCtrl', function($timeout,appService,$cordovaCamera,$ionicActionSheet,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
@@ -46,15 +46,20 @@ angular.module('profile.controllers', [])
     }
 
     var successRequest = function (res){
-        $ionicLoading.hide();
-        $scope.successAlert(res.message);
-        if($scope.data.image != ""){
-            console.log("change user photo");
-            $rootScope.user.photo = "data:image/jpeg;base64," + $scope.data.image;
-            
-        }
-        $scope.goBack("app.profile");
-      
+        $timeout(function () {
+            if($scope.imageData != ""){
+              console.log("change user photo");
+              $scope.$apply(function(){
+                   console.log("change user photo 1");
+                   $scope.general.userPhoto = undefined;
+                   $scope.general.userPhoto = $scope.imageData;
+                   console.log($scope.general.userPhoto);
+              });
+            }
+            $ionicLoading.hide();
+            $scope.successAlert(res.message);
+            $scope.goBack("app.profile");
+        }, 1000);
     }
 
     var errorRequest = function (err, status){
@@ -163,7 +168,7 @@ angular.module('profile.controllers', [])
     var successRequest = function (res){
       $ionicLoading.hide();
       // $scope.goTo('tabs.thanks');
-      alert(res.message);
+      $scope.successAlert(res.message);
       $scope.user = res;
       $scope.goBack("app.profile");
     }
@@ -186,7 +191,7 @@ angular.module('profile.controllers', [])
             var accessToken = Main.getSession("token").access_token;
             var urlApi = Main.getUrlApi() + '/api/myprofile/changepassword';
             var data = JSON.stringify($scope.password);
-            Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
+            Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
         }else {
             alert(messageValidation);
         }
