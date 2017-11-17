@@ -1,6 +1,7 @@
 
 <ion-view title="Register">
     <ion-content padding="true" class="has-header materialize" style="top:4px">
+    <form name="form" novalidate>
         <div class="signup-screen">
          <div class="text-center" style="margin-bottom: 5px;">
             <div class="text-center"><img src="img/talents/talents.120x64-sidebar.png" class="text-center" /></div>
@@ -8,35 +9,38 @@
         <div class="item no-padding">
             <div class="row">
                 <div class="input-field col">
-                    <input ng-model="user.companyCode" type="text" class="validate">
+                    <input ng-model="user.companyCode" type="text" class="validate" name="companycode" ng-pattern="/^[0-9]*$/" maxlength="5">
                     <label for="first_name">Company Code</label>
+                    <font color="red" style="font-size: 10px"><span ng-show="form.companycode.$invalid">Only number allowed</span></font>
                 </div>
                 
             </div>
             <div class="row">
                 <div class="input-field col">
-                    <input ng-model="user.email" type="email" class="validate">
+                    <input ng-model="user.email" type="email" class="validate" name="email" maxlength="50">
                     <label for="email">Email</label>
+                    <font color="red" style="font-size: 10px"><span ng-show="form.email.$invalid">Email format is invalid</span></font>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col">
-                    <input ng-model="user.password" type="password" class="validate">
+                    <input ng-model="user.password" type="password" class="validate" maxlength="100">
                     <label for="password">Password</label>
                 </div>
             </div>
              <div class="row">
                 <div class="input-field col">
-                    <input ng-model="user.repassword" type="password" class="validate">
+                    <input ng-model="user.repassword" type="password" class="validate" maxlength="100">
                     <label for="password">Confirm Password</label>
                 </div>
             </div>
             <div class="row">
                 <button class="btn waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="goBack('login')">Back</button>&nbsp;
-                <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()">Register</button>
+                <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()" ng-disabled="form.$invalid">Register</button>
             </div>
 
         </div>
-
+    </div>
+    </form>
     </ion-content>
 </ion-view>
