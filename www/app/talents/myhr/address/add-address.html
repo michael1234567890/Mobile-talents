@@ -1,111 +1,117 @@
 <ion-view title="Add Address">
    
     <ion-content padding="false" class="has-header materialize" scroll="true">
-        
-        <div class="item no-padding">
-            <div class="row">
-                <div class="input-field col">
-                      <p for="first_name">Country *</p>
-                      <select ng-model="address.country">
-                            <option value="">-- Select --</option>
-                            <option ng-repeat="country in selectCountry">{{country.id}}</option>
-                      </select>
-                    
-                </div>
-                
-            </div>
-            <div class="row">
-                <div class="input-field col">
-                      <p for="first_name">Province *</p>
-                      <!--
-                      <select ng-model="address.province">
-                        <option value="">-- Select --</option>
-                            <option ng-repeat="province in selectProvince">{{province.id}}</option>
-                      </select>-->
-                      <div class="item item-icon-right" style="border:0px" modal-select ng-model="address.province" options="selectProvince" modal-title="Select Province" option-property="id" on-select="onSelectProvince()">
-                              {{labelProvince}}
-                              <i class="icon ion-chevron-right icon-accessory"></i>
-                              <div class="option">
-                                <h2>{{option.id}}</h2>
-                              </div>
-                    </div>
-
-                    
-                </div>
-                
-            </div>
-            <div class="row">
-                <div class="input-field col">
-                  <p for="first_name">City *</p>
-                  <input placeholder="Enter City" ng-model="address.city" type="text" class="validate">
-                </div>
-
-            </div>
-           <div class="row">
-                <div class="input-field col s6">
-                     <p for="textarea1">District *</p>
-                    <input id="first_name" placeholder="Enter District" ng-model="address.district" type="text" class="validate">
+        <form name="form" novalidate> 
+          <div class="item no-padding">
+              <div class="row">
+                  <div class="input-field col">
+                        <p for="first_name">Country *</p>
+                        <select ng-model="address.country">
+                              <option value="">-- Select --</option>
+                              <option ng-repeat="country in selectCountry">{{country.id}}</option>
+                        </select>
+                      
+                  </div>
                   
-                </div>
-                <div class="input-field col s6">
-                    <p for="textarea1">Sub District *</p>
-                    <input  type="text" ng-model="address.subdistrict" placeholder="Enter Sub District" class="validate">
-                   
-                </div>
-            </div>
+              </div>
+              <div class="row">
+                  <div class="input-field col">
+                        <p for="first_name">Province *</p>
+                        <!--
+                        <select ng-model="address.province">
+                          <option value="">-- Select --</option>
+                              <option ng-repeat="province in selectProvince">{{province.id}}</option>
+                        </select>-->
+                        <div class="item item-icon-right" style="border:0px" modal-select ng-model="address.province" options="selectProvince" modal-title="Select Province" option-property="id" on-select="onSelectProvince()">
+                                {{labelProvince}}
+                                <i class="icon ion-chevron-right icon-accessory"></i>
+                                <div class="option">
+                                  <h2>{{option.id}}</h2>
+                                </div>
+                      </div>
+
+                      
+                  </div>
+                  
+              </div>
+              <div class="row">
+                  <div class="input-field col">
+                    <p for="first_name">City *</p>
+                    <input placeholder="Enter City" ng-model="address.city" type="text" class="validate" name="city" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/" maxlength="30">
+                    <font color="red" style="font-size: 10px"><span ng-show="form.city.$invalid">Should not contain any special characters</span></font>
+                  </div>
+
+              </div>
              <div class="row">
-                <div class="input-field col s6">
-                     <p for="textarea1">RT *</p>
-                    <input id="first_name" placeholder="e.g. 01" ng-model="address.rt" type="text" class="validate">
-                  
-                </div>
-                <div class="input-field col s6">
-                    <p for="textarea1">RW *</p>
-                    <input  type="text" ng-model="address.rw" placeholder="e.g. 02" class="validate">
-                   
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="input-field col s12">
-                    <p for="textarea1">Address *</p>
-                    <textarea  placeholder="Enter your Address detail" ng-model="address.address" class="materialize-textarea"></textarea>
-                   
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col">
-                 <p for="first_name">Stay Status *</p>
-                  <select ng-model="address.stayStatus">
-                        <option value="">-- Select --</option>
-                        <option ng-repeat="stayStatus in selectStayStatus">{{stayStatus.id}}</option>
-                  </select>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col">
-                    <p for="first_name">ZIP Code</p>
-                    <input ng-model="address.zipCode" placeholder="e.g. 4546" type="text" class="validate">
+                  <div class="input-field col s6">
+                       <p for="textarea1">District *</p>
+                      <input id="first_name" placeholder="Enter District" ng-model="address.district" type="text" class="validate" name="district" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/" maxlength="50">
+                      <font color="red" style="font-size: 10px"><span ng-show="form.district.$invalid">Should not contain any special characters</span></font>
                     
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col">
-                    <p for="first_name">Phone</p>
-                    <input ng-model="address.phone" placeholder="Enter Phone Number" type="text" class="validate">
-                   
-                </div>
-            </div>
-            
+                  </div>
+                  <div class="input-field col s6">
+                      <p for="textarea1">Sub District *</p>
+                      <input  type="text" ng-model="address.subdistrict" placeholder="Enter Sub District" class="validate" name="subdistrict" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/" maxlength="30">
+                      <font color="red" style="font-size: 10px"><span ng-show="form.subdistrict.$invalid">Should not contain any special characters</span></font>
+                     
+                  </div>
+              </div>
+               <div class="row">
+                  <div class="input-field col s6">
+                       <p for="textarea1">RT *</p>
+                      <input id="first_name" placeholder="e.g. 01" ng-model="address.rt" type="text" class="validate" name="rt" ng-pattern="/^[0-9]*$/" maxlength="3">
+                      <font color="red" style="font-size: 10px"><span ng-show="form.rt.$invalid">Only number allowed</span></font>
+                    
+                  </div>
+                  <div class="input-field col s6">
+                      <p for="textarea1">RW *</p>
+                      <input  type="text" ng-model="address.rw" placeholder="e.g. 02" class="validate" name="rw" ng-pattern="/^[0-9]*$/" maxlength="3">
+                      <font color="red" style="font-size: 10px"><span ng-show="form.rw.$invalid">Only number allowed</span></font>
+                     
+                  </div>
+              </div>
+              
+              <div class="row">
+                  <div class="input-field col s12">
+                      <p for="textarea1">Address *</p>
+                      <textarea  placeholder="Enter your Address detail" ng-model="address.address" class="materialize-textarea" name="address" ng-pattern="/^[a-zA-Z0-9., ]*$/" maxlength="120"></textarea>
+                      <font color="red" style="font-size: 10px"><span ng-show="form.address.$invalid">Should not contain any special characters</span></font>
+                     
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="input-field col">
+                   <p for="first_name">Stay Status *</p>
+                    <select ng-model="address.stayStatus">
+                          <option value="">-- Select --</option>
+                          <option ng-repeat="stayStatus in selectStayStatus">{{stayStatus.id}}</option>
+                    </select>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="input-field col">
+                      <p for="first_name">ZIP Code</p>
+                      <input ng-model="address.zipCode" placeholder="e.g. 4546" type="text" class="validate" name="zipcode" ng-pattern="/^[0-9]*$/" maxlength="10">
+                      <font color="red" style="font-size: 10px"><span ng-show="form.zipcode.$invalid">Only number allowed</span></font>
+                      
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="input-field col">
+                      <p for="first_name">Phone</p>
+                      <input ng-model="address.phone" placeholder="Enter Phone Number" type="text" class="validate" name="phone" ng-pattern="/^[0-9]*$/" maxlength="20">
+                      <font color="red" style="font-size: 10px"><span ng-show="form.phone.$invalid">Only number allowed</span></font>
+                     
+                  </div>
+              </div>
+              
+              <div class="row">
+                  
+                  <button class="btn button-medium waves-effect waves-light button button-balanced  button-block waves-effect waves-light" style="font-weight:bold;background-color:#FF9800" ng-click="submitForm()" ng-disabled="form.$invalid">Submit</button>
+              </div>
 
-            
-            <div class="row">
-                
-                <button class="btn button-medium waves-effect waves-light button button-balanced  button-block waves-effect waves-light" style="font-weight:bold;background-color:#FF9800" ng-click="submitForm()">Submit</button>
-            </div>
-
-        </div>
-
+          </div>
+        </form>
     </ion-content>
 
 </ion-view>

@@ -16,179 +16,197 @@
 }
 </style>
     <ion-content padding="false" class="has-header materialize" scroll="true" >
-        
-        <div class="item padding">
-           <div class="item item-divider">Personal Information</div> 
-            <div class="row">
-                <div class="input-field col">
-                    <p for="first_name">Name *</p>
-                    <input id="first_name" placeholder="Enter Full Name" type="text" class="validate" ng-model="family.name">
-                </div>
-                
-            </div>
-            <div class="row">
-                <div class="input-field col">
-                    <p for="last_name">Place of Birth *</p>
-                    <input id="last_name" placeholder="Enter Place of Birth" type="text" class="validate" ng-model="family.birthPlace">
-                    
-                </div>&nbsp;&nbsp;&nbsp;&nbsp;
-                 <div class="input-field col">
-                  <p for="first_name">Date of Birth *</p>
-                    <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()">
-                            {{family.birthDate| date: "yyyy-MM-dd"}}
-                    </ionic-datepicker>
-
-                </div>
-            </div>
-           
-            <div class="row">
-                <div class="input-field col">
-                  <p style="font-size:13px">Alive Status *</p>
-                   <select class="select-dropdown" ng-model="family.aliveStatus" >
-                        <option value="">-- Select --</option>
-                        <option ng-repeat="alive in selectAliveStatus">{{alive.id}}</option>
-                  </select>
-
-                </div>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <div class="input-field col">
-                  <p style="font-size:13px">Gender *</p>
-                   <select class="select-dropdown" ng-model="family.gender" >
-                        <option value="">-- Select --</option>
-                        <option ng-repeat="gender in selectGender">{{gender.id}}</option>
-                  </select>
-
-                </div>
-            </div>
-           <div class="row">
-                
-            </div>
-
-            <div class="row">
-                <div class="input-field col">
-                   
-                  <p style="font-size:13px">Relationship *</p>
-                   <select class="select-dropdown" ng-model="family.relationship" >
-                        <option value="">-- Select --</option>
-                        <option ng-repeat="relationship in selectRelationship">{{relationship.id}}</option>
-                  </select>
-
-                </div>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <div class="input-field col">
-                  <p for="first_name" style="font-size:13px">Marital Status *</p>
-                  <select class="select-dropdown" ng-model="family.maritalStatus" >
-                        <option value="">-- Select --</option>
-                        <option ng-repeat="maritalStatus in selectMaritalStatus">{{maritalStatus.id}}</option>
-                  </select>
-                    
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col">
-                    <p for="last_name">Identity Card No *</p>
-                    <input  placeholder="Enter Resident ID Card" type="text" class="validate" ng-model="family.nircNo">
-                    
-                </div>&nbsp;&nbsp;&nbsp;&nbsp;
-                 <div class="input-field col">
-                  <p for="first_name">Family Card No *</p>
-                 
-                    <input id="last_name" placeholder="Enter Family Card No" type="text" class="validate" ng-model="family.familyCardNo"/>
-
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="input-field col">
-                    <p for="last_name">District *</p>
-                    <input id="last_name" placeholder="Enter District" type="text" class="validate" ng-model="family.district">
-                    
-                </div>&nbsp;&nbsp;&nbsp;&nbsp;
-                 <div class="input-field col">
-                  <p for="first_name">Subdistrict *</p>
-                 
-                    <input id="last_name" placeholder="Enter Subdistrict" type="text" class="validate" ng-model="family.subDistrict"/>
-
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col">
-                    <p for="last_name">RT *</p>
-                    <input id="last_name" placeholder="Enter RT" type="text" class="validate" ng-model="family.rt">
-                    
-                </div>&nbsp;&nbsp;&nbsp;&nbsp;
-                 <div class="input-field col">
-                  <p for="first_name">RW *</p>
-                 
-                    <input id="last_name" placeholder="Enter RW" type="text" class="validate" ng-model="family.rw"/>
-
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <p for="textarea1">Address *</p>
-                    <textarea  placeholder="Enter Address Details" ng-model="family.address" class="materialize-textarea"></textarea>
-                    
-                </div>
-            </div>
-            
-            
-            <div class="row">
-              <div class="input-field col">
-                  <p for="first_name" style="font-size:13px">Nationality *</p>
-                  <select class="select-dropdown" ng-model="family.nationality" >
-                    <option value="">-- Select --</option>
-                    <option ng-repeat="nationality in selectNationality">{{nationality.id}}</option>
-                  </select>
-                    
-                </div>&nbsp;&nbsp;&nbsp;&nbsp;
-                <div class="input-field col">
-                  <p for="first_name" style="font-size:13px">Blood Type *</p>
-                  <select class="select-dropdown" ng-model="family.bloodType" >
-                        <option value="">-- Select --</option>
-                        <option ng-repeat="bloodType in selectBloodType">{{bloodType.id}}</option>
-                  </select>
-                    
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="input-field col">
-                    <p for="first_name">Phone</p>
-                    <input id="first_name" placeholder="e.g. 02145XXX" type="text" class="validate" ng-model="family.phone" >
-                    
-                </div>&nbsp;&nbsp;&nbsp;&nbsp;
-                <div class="input-field col">
-                    <p for="first_name">Email</p>
-                    <input id="first_name" placeholder="Enter Email" type="email" class="validate" ng-model="family.email" >
-                    
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col">
-                    <p for="first_name">Occupation</p>
-                    <input id="first_name" placeholder="e.g. Housewife" type="text" class="validate" ng-model="family.occupation" >
-                </div>
-            </div>
-            
-            <div ng-if="isEdit != true">
-              <div class="item item-divider">Attach Supporting Document</div> 
+        <form name="form" novalidate>
+          <div class="item padding">
+             <div class="item item-divider">Personal Information</div> 
               <div class="row">
+                  <div class="input-field col">
+                      <p for="first_name">Name *</p>
+                      <input id="first_name" placeholder="Enter Full Name" type="text" class="validate" name="fullname" ng-model="family.name" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/" maxlength="40">
+                      <!-- <p ng-show="(family.name == undefined && family.name == '') || form.fullname.$invalid">Characters Only</p> -->
+                      <font color="red" style="font-size: 10px"><span ng-show="form.fullname.$invalid">Should not contain any special characters</span></font>
+                  </div>
                   
-                  <button  class="button button-block button-outline button-positive" ng-click="addPicture()"><i class="icon ion-ios-camera-outline"></i> Add Attachment</button>
               </div>
-              <div class="row post" >
-                  <div class="col" ng-repeat="items in family.images" ><img height="90px"  ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
+              <div class="row">
+                  <div class="input-field col">
+                      <p for="last_name">Place of Birth *</p>
+                      <input id="last_name" placeholder="Enter Place of Birth" type="text" class="validate" name="placeofbirth" ng-model="family.birthPlace" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/" maxlength="30">
+                      <font color="red" style="font-size: 10px"><span ng-show="form.placeofbirth.$invalid">Should not contain any special characters</span></font>
+                      
+                  </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                   <div class="input-field col">
+                    <p for="first_name">Date of Birth *</p>
+                      <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()">
+                              {{family.birthDate| date: "yyyy-MM-dd"}}
+                      </ionic-datepicker>
+
+                  </div>
               </div>
-              <div class="row center">
-               <div class="col" style="min-height:90px" ng-if="family.images.length==0"><img ng-src="{{image}}" height="90px" ></div>
+             
+              <div class="row">
+                  <div class="input-field col">
+                    <p style="font-size:13px">Alive Status *</p>
+                     <select class="select-dropdown" ng-model="family.aliveStatus" >
+                          <option value="">-- Select --</option>
+                          <option ng-repeat="alive in selectAliveStatus">{{alive.id}}</option>
+                    </select>
+
+                  </div>
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <div class="input-field col">
+                    <p style="font-size:13px">Gender *</p>
+                     <select class="select-dropdown" ng-model="family.gender" >
+                          <option value="">-- Select --</option>
+                          <option ng-repeat="gender in selectGender">{{gender.id}}</option>
+                    </select>
+
+                  </div>
               </div>
-            </div>
-            <div class="row">
-                <button class="btn waves-effect button-medium waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()" style="font-weight:bold;background-color:#FF9800">Submit</button>
+             <div class="row">
+                  
+              </div>
+
+              <div class="row">
+                  <div class="input-field col">
+                     
+                    <p style="font-size:13px">Relationship *</p>
+                     <select class="select-dropdown" ng-model="family.relationship" >
+                          <option value="">-- Select --</option>
+                          <option ng-repeat="relationship in selectRelationship">{{relationship.id}}</option>
+                    </select>
+
+                  </div>
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <div class="input-field col">
+                    <p for="first_name" style="font-size:13px">Marital Status *</p>
+                    <select class="select-dropdown" ng-model="family.maritalStatus" >
+                          <option value="">-- Select --</option>
+                          <option ng-repeat="maritalStatus in selectMaritalStatus">{{maritalStatus.id}}</option>
+                    </select>
+                      
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="input-field col">
+                      <p for="last_name">Identity Card No *</p>
+                      <input  placeholder="Enter Resident ID Card" type="text" class="validate" ng-model="family.nircNo" name="icno" ng-pattern="/^[0-9]*$/" maxlength="25">
+                      <font color="red" style="font-size: 10px"><span ng-show="form.icno.$invalid">Only number allowed</span></font>
+                      
+                  </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                   <div class="input-field col">
+                    <p for="first_name">Family Card No *</p>
+                   
+                      <input id="last_name" placeholder="Enter Family Card No" type="text" class="validate" ng-model="family.familyCardNo" name="fcno" ng-pattern="/^[0-9]*$/" maxlength="25" />
+                      <font color="red" style="font-size: 10px"><span ng-show="form.fcno.$invalid">Only number allowed</span></font>
+
+                  </div>
+              </div>
+
+              <div class="row">
+                  <div class="input-field col">
+                      <p for="last_name">District *</p>
+                      <input id="last_name" placeholder="Enter District" type="text" class="validate" ng-model="family.district" name="district" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/" maxlength="30">
+                      <font color="red" style="font-size: 10px"><span ng-show="form.district.$invalid">Should not contain any special characters</span></font>
+                      
+                  </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                   <div class="input-field col">
+                    <p for="first_name">Subdistrict *</p>
+                   
+                      <input id="last_name" placeholder="Enter Subdistrict" type="text" class="validate" ng-model="family.subDistrict" name="subdistrict" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/" maxlength="30" />
+                      <font color="red" style="font-size: 10px"><span ng-show="form.subdistrict.$invalid">Should not contain any special characters</span></font>
+
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="input-field col">
+                      <p for="last_name">RT *</p>
+                      <input id="last_name" placeholder="Enter RT" type="text" class="validate" ng-model="family.rt" name="rt" ng-pattern="/^[0-9]*$/" maxlength="3" />
+                      <font color="red" style="font-size: 10px"><span ng-show="form.rt.$invalid">Only number allowed</span></font>
+                      
+                  </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                   <div class="input-field col">
+                    <p for="first_name">RW *</p>
+                   
+                      <input id="last_name" placeholder="Enter RW" type="text" class="validate" ng-model="family.rw" name="rw" ng-pattern="/^[0-9]*$/" maxlength="3" />
+                      <font color="red" style="font-size: 10px"><span ng-show="form.rw.$invalid">Only number allowed</span></font>
+
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="input-field col s12">
+                      <p for="textarea1">Address *</p>
+                      <textarea  placeholder="Enter Address Details" ng-model="family.address" class="materialize-textarea" name="address" ng-pattern="/^[a-zA-Z0-9., ]*$/" maxlength="120"></textarea>
+                      <font color="red" style="font-size: 10px"><span ng-show="form.address.$invalid">Should not contain any special characters</span></font>
+                      
+                  </div>
+              </div>
               
-            </div>
-       </div>
+              
+              <div class="row">
+                <div class="input-field col">
+                    <p for="first_name" style="font-size:13px">Nationality *</p>
+                    <select class="select-dropdown" ng-model="family.nationality">
+                      <option value="">-- Select --</option>
+                      <option ng-repeat="nationality in selectNationality">{{nationality.id}}</option>
+                    </select>
+                      
+                  </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div class="input-field col">
+                    <p for="first_name" style="font-size:13px">Blood Type *</p>
+                    <select class="select-dropdown" ng-model="family.bloodType" >
+                          <option value="">-- Select --</option>
+                          <option ng-repeat="bloodType in selectBloodType">{{bloodType.id}}</option>
+                    </select>
+                      
+                  </div>
+
+              </div>
+              <div class="row">
+                  <div class="input-field col">
+                      <p for="first_name">Phone</p>
+                      <input id="first_name" placeholder="e.g. 02145XXX" type="text" class="validate" ng-model="family.phone" name="phone" ng-pattern="/^[0-9]*$/" maxlength="25">
+                      <font color="red" style="font-size: 10px"><span ng-show="form.phone.$invalid">Only number allowed</span></font>
+                      
+                  </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div class="input-field col">
+                      <p for="first_name">Email</p>
+                      <input id="first_name" placeholder="Enter Email" type="email" class="validate" ng-model="family.email" name="email" maxlength="50">
+                      <font color="red" style="font-size: 10px"><span ng-show="form.email.$invalid">Email format is invalid</span></font>
+                      
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="input-field col">
+                      <p for="first_name">Occupation</p>
+                      <input id="first_name" placeholder="e.g. Housewife" type="text" class="validate" ng-model="family.occupation" name="occupation" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/" maxlength="30">
+                      <font color="red" style="font-size: 10px"><span ng-show="form.occupation.$invalid">Should not contain any special characters</span></font>
+
+                  </div>
+              </div>
+              
+              <div ng-if="isEdit != true">
+                <div class="item item-divider">Attach Supporting Document</div> 
+                <div class="row">
+                    
+                    <button  class="button button-block button-outline button-positive" ng-click="addPicture()"><i class="icon ion-ios-camera-outline"></i> Add Attachment</button>
+                </div>
+                <div class="row post" >
+                    <div class="col" ng-repeat="items in family.images" ><img height="90px" ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
+                </div>
+                <div class="row center">
+                 <div class="col" style="min-height:90px" ng-if="family.images.length==0"><img ng-src="{{image}}" height="90px" ></div>
+                </div>
+              </div>
+              <div class="padding">
+                  
+              </div>
+              <div class="row">
+                  <button class="btn waves-effect button-medium waves-light button button-balanced  button-block waves-effect waves-light" ng-click="submitForm()" ng-disabled="form.$invalid" style="font-weight:bold;background-color:#FF9800">Submit</button>
+                
+              </div>
+         </div>
+       </form>
     </ion-content>
 
 </ion-view>

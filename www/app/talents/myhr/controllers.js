@@ -3,10 +3,14 @@ angular.module('myhr.controllers', [])
 .controller('MyHRCtrl',['$rootScope', '$scope','$state' , 'AuthenticationService', 'Main', function($rootScope, $scope,$state , AuthenticationService, Main) {
 
     $scope.$on('$ionicView.beforeEnter', function () {
-         
          initMethod();
     });
 
+    function checkChangePassword(){
+        if($scope.profile.isChangePassword == null || !$scope.profile.isChangePassword) {
+             $scope.goToPage("app.changepassword");            
+        }
+    }
     $scope.refresh = function(){
         $scope.profile = Main.getSession("profile");
         $scope.$broadcast('scroll.refreshComplete');
@@ -16,7 +20,7 @@ angular.module('myhr.controllers', [])
     var successProfile = function (res){
       $scope.profile = res;
       $scope.profile.fullname = $scope.profile.firstName + " " + $scope.profile.lastName;
-
+      checkChangePassword();
     }
 
    	function initMethod(){
@@ -27,6 +31,7 @@ angular.module('myhr.controllers', [])
       $scope.profile = Main.getSession("profile");
       if($scope.profile == undefined)
    		   getProfile();
+
    	}
    	// invalid access token error: "invalid_token" 401
    	function getProfile(){
@@ -717,7 +722,7 @@ angular.module('myhr.controllers', [])
     var arrCompanyRef = Main.getSession("profile").companyReference;
     var refSelectProvince = Main.getDataReference(arrCompanyRef,'address','province','indonesia');
     $scope.selectProvince = []; // Main.getSelectProvince();
-    $scope.selectCity=Main.getSelectCity();
+    
     $scope.selectCountry=Main.getSelectCountry();
    
     $scope.submitForm = function(){
@@ -803,10 +808,8 @@ angular.module('myhr.controllers', [])
     var refStayStatus = Main.getDataReference(arrCompanyRef,'myhr','address','staystatus');
     $scope.selectProvince = []; // Main.getSelectProvince();
     $scope.selectStayStatus = [];
-   
 
     // $scope.selectProvince = Main.getSelectProvince();
-    $scope.selectCity=Main.getSelectCity();
     $scope.selectCountry=Main.getSelectCountry();
 
     $scope.resetForm  = function(){

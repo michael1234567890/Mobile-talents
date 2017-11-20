@@ -51,6 +51,7 @@ angular.module('others.controllers', [])
     var successRequest = function (res){
         $ionicLoading.hide();
        	$scope.news = res;
+        $scope.general.countAnnouncement = res.length;
     }
 
     $scope.refresh = function(){

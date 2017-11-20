@@ -1,8 +1,7 @@
 angular.module('intro.controllers', [])
-.controller('LoginCtrl',function( $timeout,$ionicHistory, $ionicLoading, appService, $state,$localStorage, $rootScope, $scope, $location,  Main) {
+.controller('LoginCtrl',function( Idle,$timeout,$ionicHistory, $ionicLoading, appService, $state,$localStorage, $rootScope, $scope, $location,  Main) {
 	$scope.usertalent = {username:'',password:''};
-	//$scope.email = "hendra.ramdhan@gmail.com";
-    var messageValidation = "";
+	var messageValidation = "";
     $scope.forgotAction = function(){
         alert("Forgot Action");
     }
@@ -22,24 +21,9 @@ angular.module('intro.controllers', [])
             $state.go("app.myhr");
         }, 2000);
 
-        // $ionicLoading.hide();
-        // Main.setSession('profile',res);
-        // $state.go("app.myhr");
     }
 
-    var errorUserReference = function(res,status){
-        if(status == 401) {
-            $scope.goTo('login');
-        }else if(status == 500) {
-            $scope.errorAlert("Can't connect to server. Please try again later.");
-        }else {
-            if(err != null)
-              $scope.errorAlert(err.message);
-            else 
-              $scope.errorAlert("Please Check your connection.");
-        }
-        $ionicLoading.hide();
-    }
+    
     function getUserReference(){
         $ionicLoading.show({
             template: '<ion-spinner></ion-spinner>'
@@ -47,7 +31,7 @@ angular.module('intro.controllers', [])
 
         var accessToken = Main.getSession("token").access_token;
         var urlApi = Main.getUrlApi() + '/api/user/profile';
-        Main.requestApi(accessToken,urlApi,successUserReference,errorUserReference);
+        Main.requestApi(accessToken,urlApi,successUserReference,$scope.errorRequest);
     }
 	$scope.loginAction = function() {
 
@@ -65,7 +49,9 @@ angular.module('intro.controllers', [])
            Main.signin(formData, function(res) {
                 $ionicLoading.hide();
                 if (res.type == false) {
+
                 } else {
+                    Idle.watch();
                     Main.setSession('token',res);
                     getUserReference();
                     $rootScope.dataUser = {};
@@ -78,14 +64,11 @@ angular.module('intro.controllers', [])
                 if(status == 400 || status==401) {
                     err = "Error : " + error.error_description;
                     
-                    //appService.showAlert('Error', err, 'Close', 'button-assertive', null);
                 }else {
                     err = "Can't connect to server. Please try again later !"
                 }
                 $scope.errorAlert(err);
 
-                // appService.showAlert('Error', err, 'Close', 'button-assertive', null);
-                //appService.showAlert('Error', err, 'Close', 'button2', null);
                
             });
         }else {
@@ -95,7 +78,11 @@ angular.module('intro.controllers', [])
             
      };
 
+    function initData(){
+        $scope.usertalent = {username:'',password:''};
+    }
     function initModule(){
+        initData();
         Main.cleanData();
     }
     function verificationForm(usertalent){
@@ -109,9 +96,9 @@ angular.module('intro.controllers', [])
         }
         return true;
     }
+
     $scope.$on('$ionicView.beforeEnter', function (event,data) {
           initModule();
-      
     });
 })
 
@@ -158,7 +145,7 @@ angular.module('intro.controllers', [])
             var accessToken = null;
             var urlApi = Main.getUrlApi() + '/api/register';
             var data = JSON.stringify($scope.user);
-            Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
+            Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
         }else {
             $scope.warningAlert(messageValidation);
         }    
@@ -173,14 +160,14 @@ angular.module('intro.controllers', [])
       $scope.goBack("login");
     }
 
-    var errorRequest = function (err, status){
+   /* var errorRequest = function (err, status){
       $ionicLoading.hide();
       if(status == 500) {
         $scope.errorAlert(err.message);
       }else {
         $scope.errorAlert("Check your connection");
       }
-    }
+    }*/
 
     var successRefreshToken = function(res){
      

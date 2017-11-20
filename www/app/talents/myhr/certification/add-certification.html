@@ -1,84 +1,95 @@
 <ion-view title="Add Certification">
    
     <ion-content padding="true" class="has-header materialize" scroll="true">
-        
-        <div class="item no-padding">
-            <div class="row">
-                <div class="input-field col">
-                    <input id="name" maxlength="99" ng-model="certification.name" type="text" class="validate">
-                    <label for="first_name">Name *</label>
-                </div>
-            </div>
-             <div class="row">
-                <div class="input-field col s6">
-                    <input  maxlength="20" ng-model="certification.no" type="text" class="validate">
-                    <label for="first_name">No </label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col">
-                    <input  maxlength="50" ng-model="certification.principle" type="text" class="validate">
-                    <label for="first_name">Principle *</label>
-                </div>
-            </div>
-             <div class="row">
-                <div class="input-field col">
-                    <input maxlength="4" ng-model="certification.year" type="tel" class="validate">
-                    <label for="first_name">Year</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <p style="font-size:13px">Type *</p>
-                    <!-- <input  ng-model="certification.type" type="text" class="validate">-->
-                    <select class="select-dropdown" ng-model="certification.type" >
-                        <option value="">-- Select --</option>
-                        <option ng-repeat="type in selectCertificationType">{{type.id}}</option>
-                  </select>
-                    
-                </div>
-            </div>
-            <div class="row" ng-show="certification.type=='Period'">
-                <div class="input-field col s12">
-                    <p style="font-size:13px">Expired</p>
-                    <!-- <input  ng-model="certification.type" type="text" class="validate">-->
-                    <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()">
-                            {{certification.expired| date: "yyyy-MM-dd"}}
-                    </ionic-datepicker>
-                    
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <p>Description</p>
-                    <textarea maxlength="240" ng-model="certification.description" class="materialize-textarea"></textarea>
-                    
-                </div>
-            </div>
-            
-
-            <div ng-if="isEdit != true">
-              <div class="item item-divider">Attach Supporting Document</div> 
+        <form name="form" novalidate>
+          <div class="item no-padding">
               <div class="row">
-                  <button class="button button-block button-outline button-positive" ng-click="addPicture()"><i class="icon ion-ios-camera-outline"></i> Add Attachment</button>
-              </div>
-              <div class="row post" >
-            
-                  <div class="col" ng-repeat="items in imageCertification.images" style="height:90px;width:90px" ><img height="90px"  ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
-                 
-              </div>
+                  <div class="input-field col">
+                      <input id="name" maxlength="99" ng-model="certification.name" type="text" class="validate" name="name" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/">
+                      <label for="first_name">Name *</label>
+                      <font color="red" style="font-size: 10px"><span ng-show="form.name.$invalid">Should not contain any special characters</span></font>
 
-              <div class="row center">
-                  <div class="col" style="min-height:90px" ng-if="imageCertification.images.length==0"><a ><img ng-src="{{image}}" height="90px" ></a></div>
+                  </div>
               </div>
-            </div>
-             <div class="row">
-               <button class="btn waves-effect button-medium waves-light button button-balanced  button-block waves-effect waves-light" style="font-weight:bold;background-color:#FF9800" ng-click="submitForm()">Submit</button>
+               <div class="row">
+                  <div class="input-field col s6">
+                      <input  maxlength="20" ng-model="certification.no" type="text" class="validate" name="no" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/">
+                      <label for="first_name">No </label>
+                      <font color="red" style="font-size: 10px"><span ng-show="form.no.$invalid">Should not contain any special characters</span></font>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="input-field col">
+                      <input  maxlength="50" ng-model="certification.principle" type="text" class="validate" name="principle" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/">
+                      <label for="first_name">Principle *</label>
+                      <font color="red" style="font-size: 10px"><span ng-show="form.principle.$invalid">Should not contain any special characters</span></font>
+                  </div>
+              </div>
+               <div class="row">
+                  <div class="input-field col">
+                      <input maxlength="4" ng-model="certification.year" type="tel" class="validate" name="year" ng-pattern="/^[0-9]*$/">
+                      <label for="first_name">Year</label>
+                      <font color="red" style="font-size: 10px"><span ng-show="form.year.$invalid">Only number allowed</span></font>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="input-field col s12">
+                      <p style="font-size:13px">Type *</p>
+                      <!-- <input  ng-model="certification.type" type="text" class="validate">-->
+                      <select class="select-dropdown" ng-model="certification.type" >
+                          <option value="">-- Select --</option>
+                          <option ng-repeat="type in selectCertificationType">{{type.id}}</option>
+                      </select>
+                      
+                  </div>
+              </div>
+              <div class="row" ng-show="certification.type=='Period'">
+                  <div class="input-field col s12">
+                      <p style="font-size:13px">Expired</p>
+                      <!-- <input  ng-model="certification.type" type="text" class="validate">-->
+                      <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()">
+                              {{certification.expired| date: "yyyy-MM-dd"}}
+                      </ionic-datepicker>
+                      
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="input-field col s12">
+                      <p>Description</p>
+                      <textarea maxlength="240" ng-model="certification.description" class="materialize-textarea" name="description" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/"></textarea>
+                      <font color="red" style="font-size: 10px"><span ng-show="form.description.$invalid">Should not contain any special characters</span></font>
+                      
+                  </div>
+              </div>
               
-            </div>
 
-        </div>
+              <div ng-if="isEdit != true">
+                <div class="item item-divider">Attach Supporting Document</div> 
+                <div class="row">
+                    <button class="button button-block button-outline button-positive" ng-click="addPicture()"><i class="icon ion-ios-camera-outline"></i> Add Attachment</button>
 
+                    <!-- <input id="inputImage" type="file" accept="image/*" ng-model="imageCertification.images" image="imageCertification.images" resize-max-height="800" resize-max-width="800" resize-quality="0.7" resize-type="image/jpg" multiple="multiple" ng-image-compress/> -->
+
+                </div>
+                <div class="row post" >
+              
+                    <div class="col" ng-repeat="items in imageCertification.images" style="height:90px;width:90px" ><img height="90px"  ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
+
+                    <!-- <div class="col" ng-repeat="item in imageCertification.images" ><img ng-src="{{item.compressed.dataURL}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div> -->
+                   
+                </div>
+
+                <div class="row center">
+                    <div class="col" style="min-height:90px" ng-if="imageCertification.images.length==0"><a ><img ng-src="{{image}}" height="90px" ></a></div>
+                </div>
+              </div>
+               <div class="row">
+                 <button class="btn waves-effect button-medium waves-light button button-balanced  button-block waves-effect waves-light" style="font-weight:bold;background-color:#FF9800" ng-click="submitForm()" ng-disabled="form.$invalid">Submit</button>
+                
+              </div>
+
+          </div>
+        </form>
     </ion-content>
 
 </ion-view>

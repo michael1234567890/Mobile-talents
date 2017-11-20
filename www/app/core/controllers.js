@@ -15,22 +15,32 @@
         'ionic-datepicker'
     ])
 
-        .controller('appCtrl', function (ionicSuperPopup,$rootScope, $state, $scope, $stateParams, appService, $ionicHistory, $ionicPopover, $ionicModal,
+        .controller('appCtrl', function (Idle,ionicSuperPopup,$rootScope, $state, $scope, $stateParams, appService, $ionicHistory, $ionicPopover, $ionicModal,
             $ionicScrollDelegate, $ionicLoading, $ionicActionSheet, $cordovaCamera, $cordovaSocialSharing, $cordovaGeolocation, $timeout,AuthenticationService, Main) {
             
+            $scope.$on('IdleStart', function() {
+
+                console.log("Idle Start");
+            });
+
+            $scope.$on('IdleEnd', function() {
+                console.log("Idle End");
+            });
+
+            $scope.$on('IdleTimeout', function() {
+                $scope.signOut();
+            });
+
             initData();
             initProfile();
             initIntro();
-            //initNews();
-           
-            //initDashboard();
-            //initShop();
-            //initChat();
-            //initCalendar();
+            
             initAnimate();
             $scope.globalprofile = {};
             $rootScope.$on('$stateChangeStart', function(event,next, nextParam,fromState){
                 initProfile();
+                
+                Idle.watch();
                 console.log("Global change state");
             });
 
@@ -133,16 +143,15 @@ he
 
 
                 $scope.errorRequest = function (err, status){
+                  console.log("status",status);
                   if(status == 401) {
-                    $scope.goTo('login');
+                        $scope.goTo('login');
+                  }else if(status == 400){
+                        $scope.errorAlert(err.message);
                   }else if(status == 500) {
-                    if(err != null)
-                      $scope.errorAlert(err.message);
-                    else 
-                      $scope.errorAlert("Can't connect to server. Please try again later.");
-                
+                        $scope.errorAlert("Could not process this operation.");
                   }else  {
-                    $scope.errorAlert("Please Check your connection.");
+                        $scope.errorAlert("Please Check your connection.");
                   }
                   $ionicLoading.hide();
                 }
@@ -154,35 +163,16 @@ he
                 }
 
                 $scope.signOut = function () {
+                    Idle.unwatch();
                     $ionicLoading.show({
                         template: 'Signing out...'
                     });
                     
                     Main.cleanData();
                     
-                    // Main.destroySession("profile");
-                    // Main.destroySession("token");
-                    // Main.destroySession("balance");
-                    // Main.destroySession("categoryType");
-                    // Main.destroySession("tmCategoryType");
                     
-                    // $rootScope.refreshRequestApprovalCtrl = true;
-                    
-                    // if($rootScope.user != undefined) {
-                    //     delete $rootScope.user;
-                    // }
-
-                    // if($rootScope.countApproval != undefined)
-                    //     delete $rootScope.countApproval;
-                    
-                    // if($rootScope.team != undefined)
-                    //     delete $rootScope.team;
-                    
-                    // if($rootScope.selectEmployeeSubstitute != undefined)
-                    //     delete $rootScope.selectEmployeeSubstitute;
 
                     $timeout(function () {
-
                         $ionicLoading.hide();
                         $scope.goTo('login');
                     }, 2000);
@@ -267,17 +257,21 @@ he
 
                    Main.forgot(formData, function(res) {
                         $ionicLoading.hide();
-                        alert(res.message)
+                        $scope.modalForgot.hide();
+                        $scope.successAlert(res.message);
                     }, function(error, status) {
-                        $ionicLoading.hide();
-                        var err = "Please check your internet connection";
-                        if(status == 500) {
-                            err = error.message;
-                        }else if(status == 400 || status==401){
-                            err = "Can't connect to server. Please try again later !"
-                        }
-                        appService.showAlert('Error', err, 'Close', 'button-assertive', null);
-                       
+                          $ionicLoading.hide();
+                          if(status == 401) {
+                                $scope.goTo('login');
+                          }else if(status == 400){
+                                $scope.errorAlert(error.message);
+                          }else if(status == 500) {
+                                $scope.errorAlert("Could not process this operation.");
+                          }else  {
+                                $scope.errorAlert("Please Check your connection.");
+                          }
+                          $scope.modalForgot.hide();
+                            
                     })
                 }
 
@@ -334,6 +328,11 @@ he
                         $scope.general.countApproval = $scope.profile.needApproval;
                     else 
                         $scope.general.countApproval = $rootScope.countApproval;
+
+                    if($rootScope.countAnnouncement == undefined)
+                        $scope.general.countAnnouncement = $scope.profile.countAnnouncement;
+                    else 
+                        $scope.general.countAnnouncement = $rootScope.countAnnouncement;
                     
                     if($rootScope.user == undefined)
                         $rootScope.user = {};
@@ -345,6 +344,24 @@ he
                         $rootScope.user.photo = 'img/1491892621_profle.png';
                         $scope.general.userPhoto = 'img/1491892621_profle.png';
                     }
+
+                    /*if($scope.profile.isChangePassword == null || !$scope.profile.isChangePassword) {
+                        var state = $state;
+                        console.log("$state",state);
+                        if(state.current != undefined) {
+                            var stateName = $state.current.name;
+                            console.log("state name",$state.current);
+                            if(stateName != "app.changepassword"){
+                                $scope.goToPage("app.changepassword");
+                            }
+                        }
+                        
+                        // $timeout(function () {
+                        //     $scope.goToPage("app.changepassword");
+                        // }, 2000);
+
+                        console.log("Test Not yet change password",$state);
+                    }*/
                 }
             }
         })

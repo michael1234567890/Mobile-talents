@@ -5,7 +5,6 @@ angular.module('profile.controllers', [])
         $state.go("login");
     }
     $scope.profile = {};
-    
     function initModule() {
       $scope.profile =  Main.getSession("profile");
       $scope.profile.fullName = $scope.profile.employeeTransient.firstName;
@@ -18,11 +17,7 @@ angular.module('profile.controllers', [])
     }
     $scope.$on('$ionicView.beforeEnter', function () {
         initModule();
-    });
-
-
-
-    
+    });    
 })
 
 .controller('EditProfileCtrl', function($timeout,appService,$cordovaCamera,$ionicActionSheet,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
@@ -37,44 +32,39 @@ angular.module('profile.controllers', [])
     $scope.data = {};
     $scope.data.handphone = $scope.profile.employeeTransient.mobilePhone;
 
-    var successRefreshToken = function(res){
-      Main.setSession("token",res);
+    var successRequestInfo = function (res){
+        $timeout(function () {
+            if(res.image != null && res.image != ""){
+              // $scope.general.userPhoto = res.image;
+              // $scope.profile.image = res.image;
+              $scope.general.userPhoto = $scope.imageData;
+              $scope.profile.image =  $scope.imageData;
+              Main.setSession('profile',$scope.profile);
+
+            }
+            $ionicLoading.hide();
+            $scope.goBack("app.profile");
+        }, 500);
     }
 
-    var errRefreshToken = function(err, status) {
-
+    function getInfo(){
+      console.log("getInfo");
+        var urlApi = Main.getUrlApi() + '/api/user/info';
+        $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner>'
+        });
+        var accessToken = Main.getSession("token").access_token;
+        Main.requestApi(accessToken,urlApi,successRequestInfo, $scope.errorRequest);
     }
 
     var successRequest = function (res){
-        $timeout(function () {
-            if($scope.imageData != ""){
-              console.log("change user photo");
-              $scope.$apply(function(){
-                   console.log("change user photo 1");
-                   $scope.general.userPhoto = undefined;
-                   $scope.general.userPhoto = $scope.imageData;
-                   console.log($scope.general.userPhoto);
-              });
-            }
-            $ionicLoading.hide();
-            $scope.successAlert(res.message);
-            $scope.goBack("app.profile");
-        }, 1000);
-    }
-
-    var errorRequest = function (err, status){
         $ionicLoading.hide();
-        if(status == 401) {
-          var refreshToken = Main.getSession("token").refresh_token
-          Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-        }else {
-            if(status==500)
-              $scope.errorAlert(err.message);
-            else
-              $scope.errorAlert("Please Check your connection");
-        }
-    }
+        $scope.successAlert(res.message);
+        $scope.general.userPhoto = $scope.imageData;
+        $scope.profile.image =  $scope.imageData;
+        Main.setSession('profile',$scope.profile);
 
+    }
 
     $scope.takePicture = function () {
     
@@ -113,8 +103,8 @@ angular.module('profile.controllers', [])
           });
     };
 
+
     $scope.save = function(){
-          
           if($scope.image != "") {
               $ionicLoading.show({
                   template: '<ion-spinner></ion-spinner>'
@@ -132,7 +122,7 @@ angular.module('profile.controllers', [])
 
 })
 
-.controller('ChangePasswordCtrl', function($ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('ChangePasswordCtrl', function($timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     var messageValidation = "";
     $scope.password = {};
    
@@ -142,34 +132,26 @@ angular.module('profile.controllers', [])
     }
 
     $scope.$on('$ionicView.enter', function(){
-  		 $scope.password = {oldPassword:"",newPassword:"",confirmPassword:""};
-	});
+       initData();
+      
+    });
 
 
-    $scope.goBack = function (ui_sref) {
-        var currentView = $ionicHistory.currentView();
-        var backView = $ionicHistory.backView();
-
-        if (backView) {
-            //there is a back view, go to it
-            if (currentView.stateName == backView.stateName) {
-                //if not works try to go doubleBack
-                var doubleBackView = $ionicHistory.getViewById(backView.backViewId);
-                $state.go(doubleBackView.stateName, doubleBackView.stateParams);
-            } else {
-                backView.go();
-            }
-        } else {
-            $state.go(ui_sref);
-        }
+    function initData(){
+        $scope.password = {oldPassword:"",newPassword:"",confirmPassword:""};
     }
 
+    function changeSessionProfile(){
+        $scope.profile.isChangePassword = true;
+        Main.setSession('profile',$scope.profile);
+
+    }
 
     var successRequest = function (res){
+      changeSessionProfile();
+      initData();
       $ionicLoading.hide();
-      // $scope.goTo('tabs.thanks');
       $scope.successAlert(res.message);
-      $scope.user = res;
       $scope.goBack("app.profile");
     }
 
@@ -184,7 +166,7 @@ angular.module('profile.controllers', [])
 
 
     $scope.sendChangePassword = function(){
-    	if(verificationForm($scope.password)){
+      if(verificationForm($scope.password)){
             $ionicLoading.show({
               template: '<ion-spinner></ion-spinner>'
             });
@@ -197,23 +179,23 @@ angular.module('profile.controllers', [])
         }
     }
 
-  	
-  	function verificationForm(newPassword){
-     	if(newPassword.oldPassword == ""){
-     		messageValidation = "Old password can not empty";
-     		return false;
-     	}
+    
+    function verificationForm(newPassword){
+      if(newPassword.oldPassword == ""){
+        messageValidation = "Old password can not empty";
+        return false;
+      }
 
-     	if(newPassword.newPassword == ""){
-     		messageValidation = "New password can not empty";
-     		return false;
-     	}
+      if(newPassword.newPassword == ""){
+        messageValidation = "New password can not empty";
+        return false;
+      }
 
-     	if(newPassword.confirmPassword == ""){
-     		messageValidation = "Confirm New password can not empty";
-     		return false;
-     	}
-    	
+      if(newPassword.confirmPassword == ""){
+        messageValidation = "Confirm New password can not empty";
+        return false;
+      }
+      
         return true;
           
 

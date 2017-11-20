@@ -18,125 +18,130 @@
 }
 </style>
     <ion-content  class="profile has-header" scroll="true">
-     <div class="item padding bg-lightgrey" ng-if="directType == false || defaultValue==0">
-        <div class="row" ng-if="category != 'perjalanan dinas' ">
-            <div class="input-field col" >
-                      <p>Transaction Date</p>
-                        <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()">
-                            {{requestHeader.startDate| date: "yyyy-MM-dd"}}
-                        </ionic-datepicker>
-            </div>
+        <form name="form" novalidate>
+         <div class="item padding bg-lightgrey" ng-if="directType == false || defaultValue==0">
+            <div class="row" ng-if="category != 'perjalanan dinas' ">
+                <div class="input-field col" >
+                          <p>Transaction Date</p>
+                            <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()">
+                                {{requestHeader.startDate| date: "yyyy-MM-dd"}}
+                            </ionic-datepicker>
+                </div>
 
-        </div>
-        <div class="row" ng-if="category == 'kacamata' || category == 'medical' ">
-            <div class="input-field col " style="margin-top:10px">
-                <p ng-if="category=='kacamata'">Optical Store </p>
-                <p ng-if="category=='medical'">Hospital Name</p>
-                <textarea style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" rows="2" ng-model="requestHeader.remark" maxlength="100"></textarea>
-                
             </div>
-        </div>
-        
-
-        <div class="row" ng-if="category == 'perjalanan dinas'">
-            <div class="input-field col padding-horizontal" style="margin-top:5px">
-                <p>Origin</p>
-                <input  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" type="text" class="validate"  ng-model="requestHeader.origin">
-            </div>
-            <div class="input-field col" style="margin-top:5px">
-                <p>Destination</p>
-                <input  style="border: solid 2px #c9c9c9;" type="text" class="validate input-talents" ng-model="requestHeader.destination">
-            </div>
-        </div>
-        <div class="row" ng-if="category == 'perjalanan dinas'">
-            <div class="input-field col padding-horizontal" style="margin-top:5px">
-                      <p>Start Date</p>
-                        <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()" style="margin-top: 2px;margin-bottom: 5px; line-height: 34px;min-height: 34px;">
-                            {{requestHeader.startDate| date: "yyyy-MM-dd"}}
-                        </ionic-datepicker>
-            </div>
-            <div class="input-field col" style="margin-top:5px">
-                      <p>End Date</p>
-                        <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker1()" style="margin-top: 2px;margin-bottom: 5px; line-height: 34px;min-height: 34px;">
-                            {{requestHeader.endDate| date: "yyyy-MM-dd"}}
-                        </ionic-datepicker>
-            </div>
-        </div>
-        <div class="row" ng-if="category == 'perjalanan dinas' || category == 'mutasi' ">
-            <div class="input-field col padding-horizontal" style="margin-top:5px">
-                <p>Remark *</p>
-                <textarea style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" rows="2" ng-model="requestHeader.remark" maxlength="100"></textarea>
-                
-            </div>
-        </div>
-        <div class="row" ng-if="category == 'perjalanan dinas'">
-             <div class="input-field col padding-horizontal" style="margin-top:5px">
-                <select ng-model="requestHeader.spdType" style="font-size:13px">
-                    <option value="">-- Select SPD Type --</option>        
-                    <option ng-repeat="option in arrSpdType track by $index">{{option.id}}</option>
-                </select>
-            </div>
-        </div>
-       
-        <p class="bb text-medium padding">Please fill out your expense</p>
-        <br>
-        <div class="edit padding-horizontal">
-            
-            <div ng-if="category != 'perjalanan dinas'" >
-
-                 <div  class="item item-input" ng-repeat="item in listtype track by $index">
+            <div class="row" ng-if="category == 'kacamata' || category == 'medical' ">
+                <div class="input-field col " style="margin-top:10px">
+                    <p ng-if="category=='kacamata'">Optical Store </p>
+                    <p ng-if="category=='medical'">Hospital Name</p>
+                    <textarea style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" rows="2" ng-model="requestHeader.remark" maxlength="100" name="optichospital" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/"></textarea>
+                    <font color="red" style="font-size: 10px"><span ng-show="form.optichospital.$invalid">Should not contain any special characters</span></font>
                     
-                    <span class="input-label" ng-if="item.type != 'select'"><b>{{item.name}}</b></span> 
-            
-                   <!-- <span class="input-label"><b>{{item.name}}</b></span> -->
-                    <select ng-model="item.value" ng-if="item.type == 'select'" style="font-size:13px">
-                        
-                        <option   ng-repeat="option in item.options track by $index">{{option.id}}</option>
-                    </select>
-                    <input   placeholder="Rp. 0" value="0" ng-keyup="change($event,$index)" type="tel"   ng-model="item.amount">
-                        
                 </div>
             </div>
+            
 
-            <div ng-if="category == 'perjalanan dinas'"  >
-                 
-                 
-                 <div  class="item item-input" ng-repeat="item in listtype track by $index">
-                    <span class="input-label col col-40" ng-if="item.type != 'select'" style="font-size:11px"><b>{{item.name}}</b></span> 
-                    <select class="col col-40" ng-model="item.value" ng-change="changeBalance(item.value,$index)"  ng-if="item.type == 'select'" style="font-size:10px">
-                       
-                        <option ng-selected="$index ==0" ng-repeat="option in item.options track by $index">{{option.id}}</option>
+            <div class="row" ng-if="category == 'perjalanan dinas'">
+                <div class="input-field col padding-horizontal" style="margin-top:5px">
+                    <p>Origin</p>
+                    <input  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" type="text" class="validate"  ng-model="requestHeader.origin" name="origin" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/" maxlength="40">
+                    <font color="red" style="font-size: 10px"><span ng-show="form.origin.$invalid">Should not contain any special characters</span></font>
+                </div>
+                <div class="input-field col" style="margin-top:5px">
+                    <p>Destination</p>
+                    <input  style="border: solid 2px #c9c9c9;" type="text" class="validate input-talents" ng-model="requestHeader.destination" name="destination" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/" maxlength="40">
+                    <font color="red" style="font-size: 10px"><span ng-show="form.destination.$invalid">Should not contain any special characters</span></font>
+                </div>
+            </div>
+            <div class="row" ng-if="category == 'perjalanan dinas'">
+                <div class="input-field col padding-horizontal" style="margin-top:5px">
+                          <p>Start Date</p>
+                            <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()" style="margin-top: 2px;margin-bottom: 5px; line-height: 34px;min-height: 34px;">
+                                {{requestHeader.startDate| date: "yyyy-MM-dd"}}
+                            </ionic-datepicker>
+                </div>
+                <div class="input-field col" style="margin-top:5px">
+                          <p>End Date</p>
+                            <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker1()" style="margin-top: 2px;margin-bottom: 5px; line-height: 34px;min-height: 34px;">
+                                {{requestHeader.endDate| date: "yyyy-MM-dd"}}
+                            </ionic-datepicker>
+                </div>
+            </div>
+            <div class="row" ng-if="category == 'perjalanan dinas' || category == 'mutasi' ">
+                <div class="input-field col padding-horizontal" style="margin-top:5px">
+                    <p>Remark *</p>
+                    <textarea style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" rows="2" ng-model="requestHeader.remark" maxlength="100" name="remark" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/"></textarea>
+                    <font color="red" style="font-size: 10px"><span ng-show="form.remark.$invalid">Should not contain any special characters</span></font>
+                    
+                </div>
+            </div>
+            <div class="row" ng-if="category == 'perjalanan dinas'">
+                 <div class="input-field col padding-horizontal" style="margin-top:5px">
+                    <select ng-model="requestHeader.spdType" style="font-size:13px">
+                        <option value="">-- Select SPD Type --</option>        
+                        <option ng-repeat="option in arrSpdType track by $index">{{option.id}}</option>
                     </select>
-                    <div class="row" style="float:right" ng-if="item.input == true">
-                     <input style="float:right" class="col col-50" ng-keyup="multiple($event,$index)"  placeholder="0" value="0" type="number"   ng-model="item.qty">
-                     <h6 class="col col-50" style="margin-top: 0px;">{{item.satuan}}</h6>
+                </div>
+            </div>
+           
+            <p class="bb text-medium padding">Please fill out your expense</p>
+            <br>
+            <div class="edit padding-horizontal">
+                
+                <div ng-if="category != 'perjalanan dinas'" >
+
+                     <div  class="item item-input" ng-repeat="item in listtype track by $index">
+                        
+                        <span class="input-label" ng-if="item.type != 'select'"><b>{{item.name}}</b></span> 
+                
+                       <!-- <span class="input-label"><b>{{item.name}}</b></span> -->
+                        <select ng-model="item.value" ng-if="item.type == 'select'" style="font-size:13px">
+                            
+                            <option   ng-repeat="option in item.options track by $index">{{option.id}}</option>
+                        </select>
+                        <input   placeholder="Rp. 0" value="0" ng-keyup="change($event,$index)" type="tel"   ng-model="item.amount">
+                            
                     </div>
+                </div>
 
-                    <input  placeholder="Rp. 0" value="0" ng-keyup="change($event,$index)" type="tel"   ng-model="item.amount">
-                </div> 
+                <div ng-if="category == 'perjalanan dinas'"  >
+                     
+                     
+                     <div  class="item item-input" ng-repeat="item in listtype track by $index">
+                        <span class="input-label col col-40" ng-if="item.type != 'select'" style="font-size:11px"><b>{{item.name}}</b></span> 
+                        <select class="col col-40" ng-model="item.value" ng-change="changeBalance(item.value,$index)"  ng-if="item.type == 'select'" style="font-size:10px">
+                           
+                            <option ng-selected="$index ==0" ng-repeat="option in item.options track by $index">{{option.id}}</option>
+                        </select>
+                        <div class="row" style="float:right" ng-if="item.input == true">
+                         <input style="float:right" class="col col-50" ng-keyup="multiple($event,$index)"  placeholder="0" value="0" type="number"   ng-model="item.qty" ng-pattern="/^[0-9]*$/" maxlength="2">
+                         <h6 class="col col-50" style="margin-top: 0px;">{{item.satuan}}</h6>
+                        </div>
 
+                        <input  placeholder="Rp. 0" value="0" ng-keyup="change($event,$index)" type="tel"   ng-model="item.amount">
+                    </div> 
+
+                </div>
+            </div>
+            
+          </div>
+        </form>
+
+        <div class="item padding" ng-if="directType == true && defaultValue!=0">
+            <div class="container text-center" ng-if="defaultValue != 0">
+                    <br><br>
+                    <p ng-if="defaultValue != 1"class="text-small text-wrap">Are you sure want to apply {{labelCategory}} ?  <br>Default <b> Rp. {{defaultValue | number:0}}</b></p>
+                    <p ng-if="defaultValue == 1"class="text-small text-wrap">Are you sure want to apply {{labelCategory}} ? </p>
             </div>
         </div>
+
+        <div ng-if="directType == false || defaultValue==0">
+          <p class="bb text-medium padding uppercase">Total<span class="pull-right text-medium"> Rp.
+        {{getTotal() | number:0}}</span></p>
         
-      </div>
-    
-
-    <div class="item padding" ng-if="directType == true && defaultValue!=0">
-        <div class="container text-center" ng-if="defaultValue != 0">
-                <br><br>
-                <p ng-if="defaultValue != 1"class="text-small text-wrap">Are you sure want to apply {{labelCategory}} ?  <br>Default <b> Rp. {{defaultValue | number:0}}</b></p>
-                <p ng-if="defaultValue == 1"class="text-small text-wrap">Are you sure want to apply {{labelCategory}} ? </p>
         </div>
-    </div>
-
-    <div ng-if="directType == false || defaultValue==0">
-      <p class="bb text-medium padding uppercase">Total<span class="pull-right text-medium"> Rp.
-    {{getTotal() | number:0}}</span></p>
-    
-    </div>
-    
-    <div class="row">
-        <button ng-disabled = "getTotal() == 0 && (directType == false || defaultValue==0)"class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" style="font-weight:bold;background-color:#FF9800" ng-click="submitForm()">Next</button>
-    </div>
+        
+        <div class="row">
+            <button ng-disabled = "form.$invalid || getTotal() == 0 && (directType == false || defaultValue==0)"class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" style="font-weight:bold;background-color:#FF9800" ng-click="submitForm()">Next</button>
+        </div>
     </ion-content>
 </ion-view>

@@ -12,11 +12,9 @@
         var phphost =  "https://talents-report.phincon.com/index.php";
         var printBaseUrl = phphost + "/payslippdf";
         var printReportUrl = phphost + "/printpdf";
-        //var baseUrl = hostname + ":8080";
         var baseUrl = hostname;
         var basicAuthentication = 'Basic dGFsZW50czpzZWNyZXQ=';
         var timeoutms = 15000; // 15 sec
-
         var takePictureOptions = {
             quality: 100,
             targetWidth : 750,
@@ -24,18 +22,10 @@
         };
         var selectHour = [{id:0},{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9},{id:10},{id:11},{id:12},{id:13},{id:14},{id:15},{id:16},{id:17},{id:18},{id:19},{id:20},{id:21},{id:22},{id:23},{id:24}];
         var selectFiveteenMin = [{id:0},{id:15},{id:30},{id:45}];
-        var selectMaritalStatus = [{id:"Single"},{id:"Married"},{id:"Divorce"}];
-        var selectBloodType = [{id:"A"},{id:"B"},{id:"AB"},{id:"O"}];
-        var selectFamilyRelationShip = [{id:"Ayah"},{id:"Ibu"},{id:"Suami"},{id:"Istri"},{id:"Anak"}];
-        var selectGender = [{id:"Male"},{id:"Female"}];
-        var selectStayStatus = [{id:"Owned"},{id:"Contract"},{id:"Live with parent"}];
-        var selectProvince = [{id:"Jakarta Special Capital Region"}];
-        var selectCity = [{id:"South Jakarta"},{id:"North Jakarta"},{id:"West Jakarta"},{id:"East Jakarta"}];
-        var selectCountry = [{id:"Indonesia"}];
-        var selectMonth = [{name:"JAN",id:"01"},{name:"FEB",id:"02"},{id:"03",name:"MAR"},{id:"04",name:"APR"},{id:"05",name:"MAY"},{id:"06",name:"JUN"},{id:"07",name:"JUL"},{id:"08",name:"AUG"},{id:"09",name:"SEP"},{id:"10",name:"OCT"},{id:"11",name:"NOV"},{id:"12",name:"DES"}];  
-        var selectYear = [{id:"2016"},{id:"2017"}]; 
         var dataDisplaySize=15;
-
+        var selectMonth = [{name:"JAN",id:"01"},{name:"FEB",id:"02"},{id:"03",name:"MAR"},{id:"04",name:"APR"},{id:"05",name:"MAY"},{id:"06",name:"JUN"},{id:"07",name:"JUL"},{id:"08",name:"AUG"},{id:"09",name:"SEP"},{id:"10",name:"OCT"},{id:"11",name:"NOV"},{id:"12",name:"DES"}];  
+        var selectBloodType = [{id:"A"},{id:"B"},{id:"AB"},{id:"O"}];
+        var selectCountry = [{id:"Indonesia"}];
         function changeUser(user) {
             angular.extend(currentUser, user);
         }
@@ -99,7 +89,9 @@
              getSelectFiveteenMin : function(){
                 return selectFiveteenMin;
              },
-             
+             getSelectBloodType : function(){
+                return selectBloodType;
+             },
              getEnvironment : function(){
                 return environment;
              },
@@ -114,14 +106,11 @@
              getIdfromValue : function(array,val){
                 return getIdfromValue(array,val);
              },
-             getSelectMonth : function(){
-                return selectMonth;
+             getSelectCountry : function(){
+                return selectCountry;
              },
 
-             getSelectYear : function(){
-                return selectYear;
-             },
-
+            
              getPrintBaseUrl : function(){
                 return printBaseUrl;
              },
@@ -132,32 +121,10 @@
              getUrlApi : function(){
                 return baseUrl;
              },
-             getSelectStayStatus : function(){
-                return selectStayStatus;
-             },
-             getSelectProvince : function(){
-                return selectProvince;
-             },
-             getSelectCity : function(){
-                return selectCity;
-             },
-             getSelectCountry : function(){
-                return selectCountry;
-             },
 
-             getSelectMaritalStatus : function(){
-                return selectMaritalStatus;
+             getSelectMonth : function(){
+                return selectMonth;
              },
-             getSelectBloodType : function(){
-                return selectBloodType;
-             },
-             getSelectFamilyRelationShip : function(){
-                return selectFamilyRelationShip;
-             },
-             getSelectGender : function(){
-                return selectGender;
-             },
-
             signin: function(data, success, error) {
                 console.log(data);
                 // $http.defaults.headers.common['Authorization'] = 'Basic dGFsZW50czpzZWNyZXQ=';
@@ -187,7 +154,6 @@
             getProfile: function(token, success, error) {
                 console.log(token);
                 var url = '/api/myprofile';
-               //  $http.defaults.headers.common['Authorization'] = 'Basic dGFsZW50czpzZWNyZXQ=';
                 $http.defaults.headers.common['Authorization'] = basicAuthentication;
                 var headers = {
                     'Authorization':'Basic dGFsZW50czpzZWNyZXQ=',
@@ -219,7 +185,6 @@
             },
 
             requestApi: function(access_token,url, success, error) {
-                // var url = baseUrl + '/api/myprofile';
                 var bearerAuthentication = 'Bearer '+ access_token;
                 $http.get(url,{headers:{'Authorization':bearerAuthentication}}).success(success).error(error)
             },
@@ -239,9 +204,7 @@
 
             },
             requestUrl: function(url, success, error) {
-                // var url = baseUrl + '/api/myprofile';
-              
-                $http.get(url).success(success).error(error)
+                 $http.get(url).success(success).error(error)
             },
             logout: function(success) {
                 changeUser({});
@@ -289,9 +252,14 @@
 
                     if($rootScope.countApproval != undefined)
                         delete $rootScope.countApproval;
-                    
+
+                    if($rootScope.countAnnouncement != undefined)
+                        delete $rootScope.countAnnouncement;
+
                     if($rootScope.team != undefined)
                         delete $rootScope.team;
+
+
                     
                     if($rootScope.selectEmployeeSubstitute != undefined)
                         delete $rootScope.selectEmployeeSubstitute;
