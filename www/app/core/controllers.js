@@ -149,7 +149,7 @@ he
                   }else if(status == 400){
                         $scope.errorAlert(err.message);
                   }else if(status == 500) {
-                        $scope.errorAlert("Could not process this operation.");
+                        $scope.errorAlert("Could not process this operation. Please contact Admin.");
                   }else  {
                         $scope.errorAlert("Please Check your connection.");
                   }
@@ -173,6 +173,7 @@ he
                     
 
                     $timeout(function () {
+                        $ionicHistory.clearCache();
                         $ionicLoading.hide();
                         $scope.goTo('login');
                     }, 2000);
