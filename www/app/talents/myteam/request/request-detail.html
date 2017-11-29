@@ -127,7 +127,7 @@
                  <div class="item item-text-wrap" ng-if="detail.ref.categoryType != 'Medical Overlimit'">
                     <h2 class="talents">Attachment</h2>
                     <div class="row post" >
-                        <div class="col" ng-repeat="items in detail.attachments" style="width:90px;height:90px" ><img width="90px" height="90px"  ng-src="{{items.image}}" ng-click="openImagePreview(items.image)" /></div>
+                        <div class="col" ng-repeat="items in detail.attachments" style="width:90px;max-height:90px" ><img width="90px" height="90px"  ng-src="{{items.image}}" ng-click="openImagePreview(items.image)" /></div>
                     </div>
                     
                 </div>
@@ -167,7 +167,9 @@
         <div class="row" ng-if= "needApproval == 'true'" >
                 <button class="btn button-small  waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="confirmReject()">Reject</button>&nbsp;
                 <button class="btn button-small waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="confirmAccept()">Approve</button>
-
+        </div>
+        <div class="row" ng-if= "needApproval == 'false' && detail.processingStatus=='Request' && (detail.module=='benefit' || detail.module=='attendance')" >
+                <button class="btn button-small  waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="confirmCancel()">Cancel</button>
         </div>
 
     </div>

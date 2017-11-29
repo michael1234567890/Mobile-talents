@@ -137,7 +137,7 @@ angular.module('myteam.controllers', [])
         var urlApi = Main.getUrlApi() + '/api/user/workflow/actionapproval';
         var data = JSON.stringify(data);
 
-        Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
+        Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
 
     }
 
@@ -238,7 +238,9 @@ angular.module('myteam.controllers', [])
     $scope.hasDataBenefit = false;
     $scope.isLoadMoreBenefitShow = false;
     $scope.isLoadMorePersonalShow = false;
-
+    var profile = Main.getSession("profile");
+    $scope.isHr = profile.isHr;
+   
     $scope.goToSearch = function(){
       $state.go('app.formrequestsearching');
     }
@@ -302,7 +304,7 @@ angular.module('myteam.controllers', [])
         var accessToken = Main.getSession("token").access_token;
         var urlApi = Main.getUrlApi() + '/api/user/workflow/actionapproval';
         var data = JSON.stringify(data);
-        Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
+        Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
 
     }
 
@@ -398,7 +400,6 @@ angular.module('myteam.controllers', [])
 })
 
 .controller('RequestDetailCtrl', function(ionicSuperPopup,$ionicPopup,$ionicPopover,$ionicModal,$ionicLoading,$stateParams,$rootScope, $scope,$state , AuthenticationService, Main) {
-    
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
@@ -460,6 +461,24 @@ angular.module('myteam.controllers', [])
 
     }
     
+    $scope.confirmCancel = function (){
+        ionicSuperPopup.show({
+           title: "Are you sure?",
+           text: "Are you sure want to Cancel this request ?",
+           type: "warning",
+           showCancelButton: true,
+           confirmButtonColor: "#DD6B55",
+           confirmButtonText: "Yes",
+           closeOnConfirm: false
+         },
+        function(isConfirm){
+             if (isConfirm) {
+                sendApproval('cancelled',id,"");
+             }
+            
+           
+        });
+    }
 
     $scope.confirmAccept = function (){
         if($scope.detail.ref != undefined && $scope.detail.ref.categoryType != undefined && $scope.detail.ref.categoryType == 'Medical Overlimit' && $scope.detail.currentApprovalLevel >0) {
@@ -487,18 +506,6 @@ angular.module('myteam.controllers', [])
             
            
         });
-
-        /*var confirmPopup = $ionicPopup.confirm({
-            title: 'Confirm',
-            template: '<h5>Are you sure want to Accept this request ?</h5>',
-            cancelText: 'Cancel',
-            okText: 'Yes'
-          }).then(function(res) {
-              if (res) {
-                  sendApproval('approved',id,"");
-              }
-              
-          });*/
     }
 
     $scope.confirmReject = function (){
@@ -521,7 +528,7 @@ angular.module('myteam.controllers', [])
           });
     }
 
-   $ionicModal.fromTemplateUrl('app/shop/product-preview.html', {
+   $ionicModal.fromTemplateUrl('app/intro/image-preview.html', {
         scope: $scope,
         animation: 'fade-in-scale'
     }).then(function (modal) {
@@ -601,6 +608,7 @@ angular.module('myteam.controllers', [])
         $scope.detail.attachments = [];
       } 
 
+
     }
 
    
@@ -668,7 +676,7 @@ angular.module('myteam.controllers', [])
         var urlApi = Main.getUrlApi() + '/api/user/workflow/actionapproval';
         var data = JSON.stringify(data);
 
-        Main.postRequestApi(accessToken,urlApi,data,successApprove,errorRequest);
+        Main.postRequestApi(accessToken,urlApi,data,successApprove,$scope.errorRequest);
 
     }
     
@@ -688,7 +696,7 @@ angular.module('myteam.controllers', [])
     }
 
 
-   $ionicModal.fromTemplateUrl('app/shop/product-preview.html', {
+   $ionicModal.fromTemplateUrl('app/intro/image-preview.html', {
         scope: $scope,
         animation: 'fade-in-scale'
     }).then(function (modal) {
@@ -763,7 +771,7 @@ angular.module('myteam.controllers', [])
       });
       var accessToken = Main.getSession("token").access_token;
       var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval/'+id;
-      Main.requestApi(accessToken,urlApi,successRequest, errorRequest);
+      Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
     }
 
     function initModule(){
@@ -801,7 +809,7 @@ angular.module('myteam.controllers', [])
         });
 
         var accessToken = Main.getSession("token").access_token;
-        var urlApi = Main.getUrlApi() + '/api/user/tmrequest/findRequestNo?module=benefit&requestNo='+$scope.formSearching.search;
+        var urlApi = Main.getUrlApi() + '/api/user/tmrequest/findRequestNo?requestNo='+$scope.formSearching.search;
         Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
     }
 

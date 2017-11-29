@@ -6,7 +6,7 @@ angular.module('others.controllers', [])
  })
 
 .controller('AboutCtrl',function($rootScope, $scope,$state , AuthenticationService, Main) {
-
+        $scope.versionName = Main.getVersionName();
  })
 
 .controller('MyCompanyCtrl',function($ionicLoading,$rootScope, $scope,$state , AuthenticationService, Main) {

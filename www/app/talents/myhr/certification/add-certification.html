@@ -65,22 +65,28 @@
 
               <div ng-if="isEdit != true">
                 <div class="item item-divider">Attach Supporting Document</div> 
-                <div class="row">
+                <div class="row" ng-show="appMode=='mobile'">
                     <button class="button button-block button-outline button-positive" ng-click="addPicture()"><i class="icon ion-ios-camera-outline"></i> Add Attachment</button>
-
-                    <!-- <input id="inputImage" type="file" accept="image/*" ng-model="imageCertification.images" image="imageCertification.images" resize-max-height="800" resize-max-width="800" resize-quality="0.7" resize-type="image/jpg" multiple="multiple" ng-image-compress/> -->
-
                 </div>
-                <div class="row post" >
+                <div class="row" ng-show="appMode=='web'">
+                    <input id="inputImage" type="file" accept="image/*" ng-model="imageCertification.imagesData" image="imageCertification.imagesData" resize-max-height="800" resize-max-width="800" resize-quality="0.7" resize-type="image/jpg" multiple="multiple" ng-image-compress/> 
+                </div>
+                <div class="row post" ng-show="appMode=='mobile'" >
               
-                    <div class="col" ng-repeat="items in imageCertification.images" style="height:90px;width:90px" ><img height="90px"  ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
-
-                    <!-- <div class="col" ng-repeat="item in imageCertification.images" ><img ng-src="{{item.compressed.dataURL}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div> -->
-                   
+                    <div class="col" style="max-height:90px;max-width:90px" ng-repeat="items in imageCertification.images" style="height:90px;width:90px" ><img height="90px"  ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
+                </div>
+                <div class="row post" ng-show="appMode=='web'">
+                            <div class="col"  ng-repeat="item in imageCertification.imagesData" style="max-height:90px;max-width:90px"  >
+                                <img  height="90px" ng-src="{{item.compressed.dataURL}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button>
+                            </div>
                 </div>
 
-                <div class="row center">
-                    <div class="col" style="min-height:90px" ng-if="imageCertification.images.length==0"><a ><img ng-src="{{image}}" height="90px" ></a></div>
+                <div class="row center" ng-show="appMode=='mobile'">
+                    <div class="col" style="max-height:90px;max-width:90px" ng-if="imageCertification.images.length==0"><a ><img ng-src="{{image}}" height="90px" ></a></div>
+                </div>
+
+                <div class="row center" ng-show="appMode=='web'">
+                     <div class="col" style="min-height:90px" style="max-height:90px;max-width:90px" ng-if="imageCertification.imagesData==0"><img ng-src="{{image}}" height="90px" ></div>
                 </div>
               </div>
                <div class="row">

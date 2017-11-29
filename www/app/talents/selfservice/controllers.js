@@ -805,7 +805,7 @@ angular.module('selfservice.controllers', [])
       $scope.images = [];  
       $scope.requestHeader = {};
       $scope.requestHeader.attachments = []; 
-
+      $scope.appMode = Main.getAppMode();
       $scope.$on('$ionicView.beforeEnter', function (event,data) {
           initMethod();
       });
@@ -872,15 +872,25 @@ angular.module('selfservice.controllers', [])
               var attachment = [];
               if($scope.requestHeader.attachments.length > 0) {
                   for (var i = $scope.requestHeader.attachments.length - 1; i >= 0; i--) {
-                      var objAttchament = {"image":$scope.requestHeader.attachments[i].image};
-                      attachment.push(objAttchament);
+                      var objAttachment = {'image':null};
+                      if($scope.appMode=='mobile'){
+                          objAttachment = {"image":$scope.requestHeader.attachments[i].image};
+                      }else{
+                          if($scope.requestHeader.attachments[i].compressed.dataURL != undefined) {
+                              var webImageAttachment = $scope.requestHeader.attachments[i].compressed.dataURL.replace(/^data:image\/[a-z]+;base64,/, "");
+                              objAttachment = {"image":webImageAttachment};
+                          }
+                          
+                      }
+                      attachment.push(objAttachment);
                   };
               }
               benefitVerification.startDate = $filter('date')(new Date(benefitVerification.startDate),'yyyy-MM-dd');
               benefitVerification.endDate = $filter('date')(new Date(benefitVerification.endDate),'yyyy-MM-dd');
               benefitVerification.attachments = attachment; 
-
+              
               var data = JSON.stringify(benefitVerification);
+              
               Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
           }else {
               $scope.warningAlert("You must add at least 1 attachment.");
@@ -924,20 +934,27 @@ angular.module('selfservice.controllers', [])
     
  })
 
-.controller('BenefitDetailCtrl', function($ionicPopup,$stateParams,$ionicLoading, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('BenefitDetailCtrl', function(ionicSuperPopup,$ionicPopup,$stateParams,$ionicLoading, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     $scope.confirm = {};
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
-    $scope.isAdmin = Main.getSession("profile").isAdmin;
+    $scope.isHr = Main.getSession("profile").isHr;
     $scope.header = {};
     var id = $stateParams.id;
     console.log(Main.getSession("profile"));
     
     var successApprove = function(res){
         $ionicLoading.hide();
-        alert(res.message);
+        $scope.successAlert(res.message);
         $scope.goBack('app.formrequestsearching');
+
+    }
+
+    var successCancel = function(res){
+        $ionicLoading.hide();
+        $scope.successAlert(res.message);
+        $scope.goBack('app.benefitclaimlist');
 
     }
 
@@ -960,6 +977,23 @@ angular.module('selfservice.controllers', [])
 
     }
 
+     $scope.confirmCancel = function (idDataApproval){
+        ionicSuperPopup.show({
+           title: "Are you sure?",
+           text: "Are you sure want to Cancel this request ?",
+           type: "warning",
+           showCancelButton: true,
+           confirmButtonColor: "#DD6B55",
+           confirmButtonText: "Yes",
+           closeOnConfirm: false
+         },
+        function(isConfirm){
+             if (isConfirm) {
+                sendApproval('cancelled',idDataApproval,"");
+             }
+           
+        });
+    }
 
     $scope.confirmReject = function (idDataApproval){
         var confirmPopup = $ionicPopup.confirm({
@@ -1123,6 +1157,10 @@ angular.module('selfservice.controllers', [])
 
     $scope.requests = [];
     $scope.module = {};
+    $scope.$on('$ionicView.beforeEnter', function (event,data) {        
+        initMethod();
+    });
+
     $scope.gotoBenefitDetail = function(index){
           $state.go("app.benefitdetail");
     }
@@ -1142,8 +1180,6 @@ angular.module('selfservice.controllers', [])
       $ionicLoading.hide();
       $scope.$broadcast('scroll.refreshComplete');
     }
-
-    initMethod();
 
     function initMethod(){
         getListBenefit();

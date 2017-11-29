@@ -61,9 +61,10 @@ angular.module('intro.controllers', [])
                 $ionicLoading.hide();
                 var err = "Failed to signin. Please check your internet connection";
                 // $rootScope.error = 'Failed to signin';
-                if(status == 400 || status==401) {
+                if(status == 400) {
                     err = "Error : " + error.error_description;
-                    
+                }else if(status == 401){
+                    err = "Could not process this operation. Please contact Admin.";
                 }else {
                     err = "Can't connect to server. Please try again later !"
                 }
@@ -82,6 +83,9 @@ angular.module('intro.controllers', [])
         $scope.usertalent = {username:'',password:''};
     }
     function initModule(){
+        $timeout(function () {
+          $ionicHistory.clearCache();
+        }, 200) 
         initData();
         Main.cleanData();
     }

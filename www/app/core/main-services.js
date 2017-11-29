@@ -4,11 +4,11 @@
 
     angular.module('main.services', [])
     .factory('Main', function($q, $timeout, $http, $localStorage,$rootScope){
-        var hostname = "http://localhost:8080";
-        //var hostname = "http://192.168.43.162:8080";
+        //var hostname = "http://localhost:8080";
+        var hostname = "http://192.168.43.162:8080";
         //var hostname = "https://talents-api.phincon.com";
         var environment = "development"; // development , production
-        var appmode = "mobile"; // mobile , web
+        var appmode = "web"; // mobile , web
         //var phphost = "http://localhost/talents/index.php"
         var phphost =  "https://talents-report.phincon.com/index.php";
         var printBaseUrl = phphost + "/payslippdf";
@@ -16,6 +16,8 @@
         var baseUrl = hostname;
         var basicAuthentication = 'Basic dGFsZW50czpzZWNyZXQ=';
         var timeoutms = 15000; // 15 sec
+        var version = 100;
+        var versionName = "1.0.0";
         var takePictureOptions = {
             quality: 100,
             targetWidth : 750,
@@ -87,6 +89,12 @@
              getSelectHour : function(){
                 return selectHour;
              },
+             getVersion : function(){
+                return version;
+             },
+             getVersionName : function(){
+                return versionName;
+             },
              getAppMode : function(){
                 return appmode;
              },
@@ -130,7 +138,7 @@
                 return selectMonth;
              },
             signin: function(data, success, error) {
-                console.log(data);
+
                 // $http.defaults.headers.common['Authorization'] = 'Basic dGFsZW50czpzZWNyZXQ=';
                 $http.defaults.headers.common['Authorization'] = basicAuthentication;
                 var deferred = $q.defer();

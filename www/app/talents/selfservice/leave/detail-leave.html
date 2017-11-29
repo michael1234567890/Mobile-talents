@@ -3,9 +3,8 @@
 <ion-content class="has-header" scroll="true">
 <div class="list no-padding">
 
-        <div class="item item-divider" style="margin-top:10px"><span class="pull-left">{{leave.categoryType}}</span><span class="pull-right text-small energized"><b>{{leave.status}}</b></span></div> 
-        
-              <div class="item item-icon-left text-small" href="#">
+    <div class="item item-divider" style="margin-top:10px"><span class="pull-left">{{leave.categoryType}}</span><span class="pull-right text-small energized"><b>{{leave.status}}</b></span></div> 
+          <div class="item item-icon-left text-small" href="#">
                 <i class="icon ion-ios-list-outline text-larger"></i>
                  <h3>Description</h3>
                 <p>{{leave.typeDesc}}</p>
@@ -30,16 +29,20 @@
                 <div class="row">
                     <div class="col-50 text-left">In : <b>{{leave.overtimeIn}}</b>&nbsp; Min </div><div class="col-50 text-left">Out : <b>{{leave.overtimeOut}}</b>&nbsp; Min</div>
                 </div>
-                
               </div>
               
               <div class="item item-icon-left text-small" href="#">
 
                 <i class="icon ion-android-textsms text-larger"></i>
                 <h3>Remark</h3>
-                <p>{{leave.remark}}</p>
+                <p>{{leave.remark}} {{leave.remark}}</p>
               </div>
 </div>
-        
+<div class="row" ng-if= "header.dataApproval.processingStatus=='Request'" >
+    <button class="btn button-small  waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="confirmCancel(header.dataApproval.id)">Cancel</button>
+</div>
+<div class="row" ng-if="isHr==true && header.status=='approved'">
+    <button class="btn button-small waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="confirmReject(header.dataApproval.id)">Reject</button>
+</div>   
 </ion-content>
 </ion-view>

@@ -69,7 +69,7 @@ angular.module('talent', ['ngIdle','ionic','cera.ionicSuperPopup', 'ionic-timepi
 
 .config(['KeepaliveProvider', 'IdleProvider', function(KeepaliveProvider, IdleProvider) {
   IdleProvider.idle(4*60);
-  IdleProvider.timeout(15);
+  IdleProvider.timeout(30);
   KeepaliveProvider.interval(10);
 }]);
 

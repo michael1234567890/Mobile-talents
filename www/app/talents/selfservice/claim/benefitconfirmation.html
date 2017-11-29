@@ -41,17 +41,30 @@
 </ion-list>
 <div class="list" >
                 <div class="item item-divider">Attach Supporting Document</div> 
-                    <div class="row">
+
+                <div class="row" ng-show="appMode=='mobile'" >
                       <button class="button button-block button-outline button-positive" ng-click="addPicture()"><i class="icon ion-ios-camera-outline"></i> Add Attachment</button>
-                    </div>
-                <div class="row post" >
-                    <div class="col" ng-repeat="items in images" ><img height="90px"  ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
-                   
                 </div>
-                <div class="row center">
+                <div class="row" ng-show="appMode=='web'">
+                    <input id="inputImage" type="file" accept="image/*" ng-model="requestHeader.attachments" image="requestHeader.attachments" resize-max-height="800" resize-max-width="800" resize-quality="0.7" resize-type="image/jpg" multiple="multiple" ng-image-compress/> 
+                </div>
+              
+                <div class="row post" ng-show="appMode=='mobile'"  >
+                    <div class="col" ng-repeat="items in images" style="height:90px; width:90px" ><img height="90px"  ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
+                </div>
+                <div class="row post" ng-show="appMode=='web'">
+                            <div class="col" ng-repeat="item in requestHeader.attachments" style="height:90px; width:90px"  >
+                                <img  ng-src="{{item.compressed.dataURL}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button>
+                            </div>
+                </div>
+                
+                <div class="row center" ng-show="appMode=='mobile'">
                      <div class="col" style="min-height:90px" ng-if="images.length==0"><img ng-src="{{defaultImage}}" height="90px" ></div>
                 </div>
-    
+
+                <div class="row center" ng-show="appMode=='web'">
+                     <div class="col" style="min-height:90px" ng-if="requestHeader.attachments==0"><img ng-src="{{defaultImage}}" height="90px" ></div>
+                </div>
 
     <div class="row">
         

@@ -129,7 +129,8 @@ angular.module('leave.controllers', [])
       $scope.imagesData = [];  
       $scope.requestHeader = {};
       $scope.requestHeader.attachments = []; 
-
+      $scope.appMode = Main.getAppMode();
+      console.log($scope.appMode);
       $scope.$on('$ionicView.beforeEnter', function (event,data) {
           initMethod();
       });
@@ -163,6 +164,7 @@ angular.module('leave.controllers', [])
                               $cordovaCamera.getPicture(appService.getCameraOptions()).then(function (imageData) {
                                   $scope.images.push({'image':"data:image/jpeg;base64," + imageData});
                                   $scope.imagesData.push({'image': imageData});
+                                  $scope.requestHeader.attachments.push({'image': imageData});
                               }, function (err) {
                                   appService.showAlert('Error', err, 'Close', 'button-assertive', null);
                               });
@@ -174,6 +176,7 @@ angular.module('leave.controllers', [])
                               $cordovaCamera.getPicture(appService.getLibraryOptions()).then(function (imageData) {
                                    $scope.images.push({'image':"data:image/jpeg;base64," + imageData});
                                    $scope.imagesData.push({'image': imageData});
+                                   $scope.requestHeader.attachments.push({'image': imageData});
                               }, function (err) {
                                   appService.showAlert('Error', err, 'Close', 'button-assertive', null);
                               });
@@ -187,7 +190,7 @@ angular.module('leave.controllers', [])
 
 
       $scope.submitForm = function(){
-          if($scope.requestType.requiredAttachment && $scope.imagesData.length == 0) {
+          if($scope.requestType.requiredAttachment && $scope.requestHeader.attachments.length == 0) {
               $scope.warningAlert("You must add at least 1 attachment.");
               return false;
           }
@@ -199,10 +202,19 @@ angular.module('leave.controllers', [])
           var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/leave';
           var attachment = [];
           
-          if($scope.imagesData.length > 0) {
-              for (var i = $scope.imagesData.length - 1; i >= 0; i--) {
-                  var objAttchament = {"image":$scope.imagesData[i].image};
-                  attachment.push(objAttchament);
+          if($scope.requestHeader.attachments.length > 0) {
+              for (var i = $scope.requestHeader.attachments.length - 1; i >= 0; i--) {
+                  var objAttachment = {'image':null};
+                  if($scope.appMode=='mobile'){
+                          objAttachment = {"image":$scope.requestHeader.attachments[i].image};
+                  }else{
+                      if($scope.requestHeader.attachments[i].compressed.dataURL != undefined) {
+                          var webImageAttachment = $scope.requestHeader.attachments[i].compressed.dataURL.replace(/^data:image\/[a-z]+;base64,/, "");
+                          objAttachment = {"image":webImageAttachment};
+                      }
+                      
+                  }
+                  attachment.push(objAttachment);
               };
           }
 
@@ -215,7 +227,7 @@ angular.module('leave.controllers', [])
           }
           
           leaveVerification.attachments = attachment; 
-
+          
           var data = JSON.stringify(leaveVerification);
           Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
       
@@ -259,7 +271,6 @@ angular.module('leave.controllers', [])
           }
       }
       
-      initMethod();
 
  })
 
@@ -615,8 +626,6 @@ angular.module('leave.controllers', [])
       $scope.$broadcast('scroll.refreshComplete');
     }
 
-    initMethod();
-
     function initMethod(){
         getListBenefit();
     }
@@ -630,18 +639,26 @@ angular.module('leave.controllers', [])
       var urlApi = Main.getUrlApi() + '/api/user/tmrequest?module=Time Management';
       Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
     }
+
+    $scope.$on('$ionicView.beforeEnter', function (event,data) {
+          initMethod();
+      
+    });
 })
 
-.controller('DetailLeaveCtrl', function($ionicPopup,$stateParams,$ionicLoading, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('DetailLeaveCtrl', function(ionicSuperPopup,$ionicPopup,$stateParams,$ionicLoading, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
    
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
-   
+    $scope.isHr = Main.getSession("profile").isHr;
     var id = $stateParams.id;
     $scope.leave = {};
+    $scope.header = {};
     
     function successRequest(res) {
+        $scope.header = res;
+        console.log("Header",$scope.header);
         $ionicLoading.hide();
         if(res != undefined && res.details.length > 0) {
             $scope.leave = res.details[0];
@@ -649,7 +666,48 @@ angular.module('leave.controllers', [])
         
     }
 
-   
+    var successApprove = function(res){
+        $ionicLoading.hide();
+        $scope.successAlert(res.message);
+        $scope.goBack("app.leaves");
+    }
+    var sendApproval = function(action,id,reason){
+        var data = {};
+        if(action == 'approved')
+          data = {"id":id,"status":action};
+        else
+          data = {"id":id,"status":action,"reasonReject":reason};
+
+        $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner>'
+        });
+        
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/workflow/actionapproval';
+        var data = JSON.stringify(data);
+
+        Main.postRequestApi(accessToken,urlApi,data,successApprove,$scope.errorRequest);
+
+    }
+
+   $scope.confirmCancel = function (approvalId){
+        ionicSuperPopup.show({
+           title: "Are you sure?",
+           text: "Are you sure want to Cancel this request ?",
+           type: "warning",
+           showCancelButton: true,
+           confirmButtonColor: "#DD6B55",
+           confirmButtonText: "Yes",
+           closeOnConfirm: false
+         },
+        function(isConfirm){
+             if (isConfirm) {
+                sendApproval('cancelled',approvalId,"");
+             }
+            
+           
+        });
+    }
     function getDetailHeader (id){
         $ionicLoading.show({
             template: '<ion-spinner></ion-spinner>'
@@ -670,5 +728,4 @@ angular.module('leave.controllers', [])
       
     });
 
-    initModule();
  })

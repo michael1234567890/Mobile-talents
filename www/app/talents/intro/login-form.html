@@ -1,10 +1,32 @@
 <ion-view hide-nav-bar="true" style="background-color:; background-size: cover;">
+<style>
+#wrapper {
+  max-width: 1050px;
+  margin: 60px auto 60px auto;
+
+}
+#outer {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+.itemwrapper {
+  display: table-cell;
+  vertical-align: top;
+  width: 100%;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+</style>
     <ion-content padding="true" scroll="false" class="auth">
-        <div class="container" style="height:40%">
-            <div class="text-center"><img src="img/talents/200x100-talentslogin.png" class="text-center" /></div>
-           
+
+        <div class="padding-horizontal" style="position:relative;top:30px;left:0;right:0">
+            <center><img src="img/talents/logoacc.png" class="text-center" /></center>
         </div>
-        <div ng-form="login_form" class="padding text-center" novalidate>
+        
+        <div ng-form="login_form" class="padding text-center" style="position:relative;top:100px;left:0;right:0" novalidate>
             <ion-list>
                 <label class="item item-input">
                     <i class="icon ion-android-person placeholder-icon"></i>
@@ -16,14 +38,24 @@
                 </label>
             </ion-list>
             <button class="button button-positive button-block waves-effect waves-light" ng-click="loginAction();">Log in</button>
-           
-        </div>
-        
-        <p class="padding-horizontal">
+            <p class="padding-horizontal">
             <span class="balanced pull-left" ng-click="closeLogin();openForgot();" style="font-size:14px">Forgot password ?</span>
             <span class="balanced pull-right" ng-click="closeLogin();goToSignup();" style="font-size:14px">Sign up</span>
         </p>
+           
+        </div>
+        
+        
 
+        
+        <div id="wrapper">
+          <div id="outer">
+            <div class="itemwrapper text-center" style="padding-top: 90px;"><p>Powered By</p>
+              <img src="img/talents/200x100-talentslogin.png" />
+            </div>
+
+          </div>
+        </div>
 
     </ion-content>
 </ion-view>

@@ -68,8 +68,11 @@
     <div class="row" ng-if="(header.categoryType == 'Perjalanan Dinas' && header.status=='approved') || header.categoryType == 'SPD Advance'">
         <button class="btn button-small waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="printReport(header.employee,header.uuid)">Print Report</button>
     </div>
-    <div class="row" ng-if="isAdmin==true && header.status=='approved'">
+    <div class="row" ng-if="isHr==true && header.status=='approved'">
         <button class="btn button-small waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="confirmReject(header.dataApproval.id)">Reject</button>
+    </div>
+    <div class="row" ng-if= "header.dataApproval.processingStatus=='Request'" >
+                <button class="btn button-small  waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="confirmCancel(header.dataApproval.id)">Cancel</button>
     </div>
 </ion-content>
 </ion-view>

@@ -27,6 +27,23 @@ $dark:                            #444 !default;
   Modified icons to fit ionicon’s grid from original.
 */
 
+.circle{
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    font-size: 20px;
+    color: #33cd5f;
+    background:  #f8f8f8;
+}
+.posisi{
+    position: relative;top: 14px;
+}
+
+.thicker {
+    font-weight: bold;
+}
+
+
 .ionic_datepicker_popup .popup-body .month_select select, .ionic_datepicker_popup .popup-body .year_select select {
     left: -3px;
     top: -15px;

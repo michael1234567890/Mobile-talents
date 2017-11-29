@@ -12,7 +12,9 @@
         'ion-datetime-picker',
         'ion-google-place',
         'chart.js',
-        'ionic-datepicker'
+        'ionic-datepicker',
+        'ngImageCompress'
+
     ])
 
         .controller('appCtrl', function (Idle,ionicSuperPopup,$rootScope, $state, $scope, $stateParams, appService, $ionicHistory, $ionicPopover, $ionicModal,
@@ -32,8 +34,9 @@
             });
 
             initData();
-            initProfile();
             initIntro();
+            initProfile();
+           
             
             initAnimate();
             $scope.globalprofile = {};
@@ -178,6 +181,13 @@ he
                         $scope.goTo('login');
                     }, 2000);
 
+                    var success = function(status) {
+                       
+                    };
+                    var error = function(status) {
+                    };
+                    window.CacheClear(success, error);
+
                 }
 
                 if ($state.is('tabs.cards')) {
@@ -187,6 +197,19 @@ he
             }
             // intro
             function initIntro() {
+                
+                $scope.goToUpdate = function(){
+                    var url = $scope.profile.companySettings.mobileDownload;
+                    window.open(encodeURI(url), '_system', 'location=yes');
+                    $scope.modalUpdate.hide();
+                    $scope.signOut();
+                    return false;
+                }
+
+                $scope.showUpdateVersionModal = function(){
+                    
+                }
+
                 $scope.forgot = {email:""};
                 $scope.gotoHome = function () {
                     $scope.closeAll();
@@ -199,6 +222,17 @@ he
                         $state.go('app.home');
                     }, 2000);
                 }
+
+                $ionicModal.fromTemplateUrl('app/intro/update-version.html', {
+                    scope: $scope,
+                    animation: 'fade-in-scale',
+                    backdropClickToClose: false
+                }).then(function (modal) {
+                    $scope.modalUpdate = modal;
+                });
+                
+                
+
 
                 // Login modal
                 $ionicModal.fromTemplateUrl('app/intro/login.html', {
@@ -345,24 +379,9 @@ he
                         $rootScope.user.photo = 'img/1491892621_profle.png';
                         $scope.general.userPhoto = 'img/1491892621_profle.png';
                     }
+                          // Login modal
+                    
 
-                    /*if($scope.profile.isChangePassword == null || !$scope.profile.isChangePassword) {
-                        var state = $state;
-                        console.log("$state",state);
-                        if(state.current != undefined) {
-                            var stateName = $state.current.name;
-                            console.log("state name",$state.current);
-                            if(stateName != "app.changepassword"){
-                                $scope.goToPage("app.changepassword");
-                            }
-                        }
-                        
-                        // $timeout(function () {
-                        //     $scope.goToPage("app.changepassword");
-                        // }, 2000);
-
-                        console.log("Test Not yet change password",$state);
-                    }*/
                 }
             }
         })

@@ -1,15 +1,35 @@
 angular.module('myhr.controllers', [])
 
-.controller('MyHRCtrl',['$rootScope', '$scope','$state' , 'AuthenticationService', 'Main', function($rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('MyHRCtrl',['$timeout','$rootScope', '$scope','$state' , 'AuthenticationService', 'Main', function($timeout,$rootScope, $scope,$state , AuthenticationService, Main) {
 
     $scope.$on('$ionicView.beforeEnter', function () {
          initMethod();
     });
 
     function checkChangePassword(){
-        if($scope.profile.isChangePassword == null || !$scope.profile.isChangePassword) {
-             $scope.goToPage("app.changepassword");            
+        if($scope.profile != undefined) {
+            if($scope.profile.isChangePassword == null || !$scope.profile.isChangePassword) {
+                $scope.goToPage("app.changepassword");            
+            }
         }
+        
+    }
+
+    var successVersionApp = function(){
+        console.log($scope.profile);
+        
+    }
+
+    function checkVersionApp(){
+        if($scope.profile.companySettings != undefined) {
+            if($scope.profile.companySettings.mobileVersion != null && $scope.profile.companySettings.mobileVersion > Main.getVersion() ){
+                $scope.mobileDownload = $scope.profile.companySettings.mobileDownload;
+                console.log("Mobile Download",$scope.mobileDownload);
+                $scope.modalUpdate.show();
+            }
+            
+        }
+         
     }
     $scope.refresh = function(){
         $scope.profile = Main.getSession("profile");
@@ -20,7 +40,7 @@ angular.module('myhr.controllers', [])
     var successProfile = function (res){
       $scope.profile = res;
       $scope.profile.fullname = $scope.profile.firstName + " " + $scope.profile.lastName;
-      checkChangePassword();
+      
     }
 
    	function initMethod(){
@@ -31,6 +51,11 @@ angular.module('myhr.controllers', [])
       $scope.profile = Main.getSession("profile");
       if($scope.profile == undefined)
    		   getProfile();
+
+      $timeout(function () {
+          checkChangePassword();
+          checkVersionApp();
+      }, 2000);
 
    	}
    	// invalid access token error: "invalid_token" 401
@@ -43,7 +68,7 @@ angular.module('myhr.controllers', [])
    		
    	}
    
-    initMethod();
+    // initMethod();
 }])
 
 
@@ -352,14 +377,12 @@ angular.module('myhr.controllers', [])
     var refSelectGender = Main.getDataReference(arrCompanyRef,'myhr','family','gender');
     var refSelectMaritalStatus = Main.getDataReference(arrCompanyRef,'myhr','family','maritalstatus');
     var refSelectRelationship = Main.getDataReference(arrCompanyRef,'myhr','family','relationship');
-    console.log("refSelectNationality",refSelectNationality);
+    
     $scope.image = "img/placeholder.png";
     $scope.family = {};
     console.log(Main.getSession("profile"));
-   // $scope.selectMaritalStatus = Main.getSelectMaritalStatus();
-    //$scope.selectRelationship = Main.getSelectFamilyRelationShip();
+    $scope.appMode = Main.getAppMode();
     $scope.selectBloodType = Main.getSelectBloodType();
-    //$scope.selectGender = Main.getSelectGender();
     $scope.selectAliveStatus = []; // Main.getSelectProvince();
     $scope.selectNationality = [];
     $scope.selectGender = [];
@@ -478,8 +501,17 @@ angular.module('myhr.controllers', [])
         var attachment = [];
         if($scope.family.imagesData.length > 0) {
             for (var i = $scope.family.imagesData.length - 1; i >= 0; i--) {
-                var objAttchament = {"image":$scope.family.imagesData[i].image};
-                attachment.push(objAttchament);
+                var objAttachment = {'image':null};
+                if($scope.appMode=='mobile'){
+                        objAttachment = {"image":$scope.family.imagesData[i].image};
+                }else{
+                    if($scope.family.imagesData[i].compressed.dataURL != undefined) {
+                        var webImageAttachment = $scope.family.imagesData[i].compressed.dataURL.replace(/^data:image\/[a-z]+;base64,/, "");
+                        objAttachment = {"image":webImageAttachment};
+                    }
+                    
+                }
+                attachment.push(objAttachment);
             };
         }
         if($scope.family.birthDate != undefined)
@@ -1072,6 +1104,7 @@ angular.module('myhr.controllers', [])
     $scope.imageCertification.images = [];
     $scope.imageCertification.imagesData = [];
     $scope.certification.expired = new Date();
+    $scope.appMode = Main.getAppMode();
     var datepicker = {
         callback: function (val) {  //Mandatory
           $scope.certification.expired = val;
@@ -1202,8 +1235,17 @@ angular.module('myhr.controllers', [])
                   var attachments = [];
                   if($scope.imageCertification.imagesData.length > 0) {
                       for (var i = $scope.imageCertification.imagesData.length - 1; i >= 0; i--) {
-                          var objAttchament = {"image":$scope.imageCertification.imagesData[i].image};
-                          attachments.push(objAttchament);
+                        var objAttachment = {'image':null};
+                        if($scope.appMode=='mobile'){
+                            objAttachment = {"image":$scope.imageCertification.imagesData[i].image};
+                        }else{
+                            if($scope.imageCertification.imagesData[i].compressed.dataURL != undefined) {
+                                var webImageAttachment = $scope.imageCertification.imagesData[i].compressed.dataURL.replace(/^data:image\/[a-z]+;base64,/, "");
+                                objAttachment = {"image":webImageAttachment};
+                            }
+                            
+                        }
+                        attachments.push(objAttachment);
                       };
                   }
 
@@ -1285,7 +1327,7 @@ angular.module('myhr.controllers', [])
         $state.go("login");
     }
 
-    $ionicModal.fromTemplateUrl('app/shop/product-preview.html', {
+    $ionicModal.fromTemplateUrl('app/intro/image-preview.html', {
         scope: $scope,
         animation: 'fade-in-scale'
     }).then(function (modal) {
@@ -1368,7 +1410,7 @@ angular.module('myhr.controllers', [])
     $scope.currentStatus = $stateParams.currentStatus;
     $scope.showButton = true;
     $scope.dataApprovalStatus = null;
-
+    $scope.appMode = Main.getAppMode();
     $scope.image = "img/placeholder.png";
     $scope.maritalStatus = {};
     $scope.maritalStatus.images = []; 
@@ -1400,8 +1442,6 @@ angular.module('myhr.controllers', [])
                       case 0: // Take Picture
                           document.addEventListener("deviceready", function () {
                               $cordovaCamera.getPicture(appService.getCameraOptions()).then(function (imageData) {
-                                  // alert(imageData);
-                                  // $rootScope.user.photo = "data:image/jpeg;base64," + imageData;
                                   $scope.maritalStatus.images.push({'image':"data:image/jpeg;base64," + imageData});
                                   $scope.maritalStatus.imagesData.push({'image': imageData});
                               }, function (err) {
@@ -1413,7 +1453,6 @@ angular.module('myhr.controllers', [])
                       case 1: // Select From Gallery
                           document.addEventListener("deviceready", function () {
                               $cordovaCamera.getPicture(appService.getLibraryOptions()).then(function (imageData) {
-                                  // $rootScope.user.photo = "data:image/jpeg;base64," + imageData;
                                    $scope.maritalStatus.images.push({'image':"data:image/jpeg;base64," + imageData});
                                    $scope.maritalStatus.imagesData.push({'image': imageData});
                               }, function (err) {
@@ -1442,8 +1481,6 @@ angular.module('myhr.controllers', [])
         $cordovaCamera.getPicture(options).then(function (imageData) {
             $scope.image = "data:image/jpeg;base64," + imageData;
             $scope.imageData = imageData;
-           
-            //$scope.image =  imageData;
         }, function (err) {
             // An error occured. Show a message to the user
             $scope.errorAlert("an error occured while take picture");
@@ -1523,13 +1560,21 @@ angular.module('myhr.controllers', [])
         var idRef = Main.getSession("profile").employeeTransient.id;
          var jsonData = '{"maritalStatus":"'+$scope.selected+'"}';
          var attachment = [];
-         // var objAttchament = {"image":$scope.imageData};
-         // attachment.push(objAttchament);
-
+        
          if($scope.maritalStatus.imagesData.length > 0) {
               for (var i = $scope.maritalStatus.imagesData.length - 1; i >= 0; i--) {
-                  var objAttchament = {"image":$scope.maritalStatus.imagesData[i].image};
-                  attachment.push(objAttchament);
+                  var objAttachment = {'image':null};
+                  if($scope.appMode=='mobile'){
+                      objAttachment = {"image":$scope.maritalStatus.imagesData[i].image};
+                  }else{
+                      if($scope.maritalStatus.imagesData[i].compressed.dataURL != undefined) {
+                          var webImageAttachment = $scope.maritalStatus.imagesData[i].compressed.dataURL.replace(/^data:image\/[a-z]+;base64,/, "");
+                          objAttachment = {"image":webImageAttachment};
+                      }
+                      
+                  }
+                  attachment.push(objAttachment);
+
               };
           }
 
@@ -1541,7 +1586,7 @@ angular.module('myhr.controllers', [])
           var accessToken = Main.getSession("token").access_token;
           var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval';
           var data = JSON.stringify(dataStr);
-          Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
+          Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
     }
 
     $scope.send = function (){
@@ -1587,14 +1632,13 @@ angular.module('myhr.controllers', [])
 
     }
 
-
     function getDataApproval (dataapprovalId) {
         $ionicLoading.show({
           template: '<ion-spinner></ion-spinner>'
         });
         var accessToken = Main.getSession("token").access_token;
         var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval/'+dataapprovalId;
-        Main.requestApi(accessToken,urlApi,successDataApproval, errorRequest);
+        Main.requestApi(accessToken,urlApi,successDataApproval, $scope.errorRequest);
     }
     function initModule(){
        $scope.showButton = true;

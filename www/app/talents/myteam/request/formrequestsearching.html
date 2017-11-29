@@ -26,7 +26,7 @@
           </div>
     </div>
 <ion-scroll class="bg-lightgrey" direction="y" style="height:100%">
-    <div class="card" ng-repeat="item in requests" ui-sref="app.benefitdetail({id: item.id})">
+    <div class="card" ng-repeat="item in requests" ui-sref="app.benefitdetail({id: item.id})" ng-if="item.module=='Benefit' ">
       <div class="item item-avatar item-text-wrap" >
                 <img ng-if="item.dataApproval.employeeRequestPhotoProfile!=null" ng-src="{{item.dataApproval.employeeRequestPhotoProfile}}">
                 <img ng-if="item.dataApproval.employeeRequestPhotoProfile==null" ng-src="img/1491892511_profle.png">
@@ -48,12 +48,35 @@
             <div class="uppercase"><h5 class="positive no-margin no-padding thicker">Rp. {{item.totalAmount | number : 0}}</h5></div>
         </div>
     </div>
+   </div>
+
+   <div class="card" ng-repeat="item in requests" ui-sref="app.detailleave({id: item.id})" ng-if="item.module=='Time Management' ">
+      <div class="item item-avatar item-text-wrap" >
+                <img ng-if="item.dataApproval.employeeRequestPhotoProfile!=null" ng-src="{{item.dataApproval.employeeRequestPhotoProfile}}">
+                <img ng-if="item.dataApproval.employeeRequestPhotoProfile==null" ng-src="img/1491892511_profle.png">
+                <h2 class="lead">{{item.dataApproval.employeeRequest.name}}</h2>
+                <!-- <p>{{item.taskDescription}}</p>-->
+      </div>
+      <div class="item item-text-wrap" >
+        <div class="row">
+            <div class="left"><h5 style="color: #949494;">{{item.createdDate | date: 'dd MMM yyyy'}}</h5></div>
+            <div class="right"><h5 class="energized ">{{item.status}}</h5></div>
+        </div>
+        <div class="row">
+            <h5 class="uppercase no-margin no-padding thicker"><b>#{{item.reqNo}}</b></h5>
+        </div>
+        <div class="row">
+            <div class="uppercase"><h2 class="thicker">{{item.categoryType}}</h2></div>
+        </div>
+        <div class="row" ng-if="item.categoryType != 'Medical Overlimit'">
+            <div class="uppercase"><h5 class="positive no-margin no-padding thicker">Total {{item.totalAmount | number : 0}} Days</h5></div>
+        </div>
+    </div>
+   </div>
     <div class="item" ng-if="requests.length == 0 && actionFind==true" >
             <div class="col col-100">
                 <h2>Data not found</h2>
             </div>  
-    </div>
-
     </div>
 </ion-content>
 </ion-view>
