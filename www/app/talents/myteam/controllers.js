@@ -405,7 +405,7 @@ angular.module('myteam.controllers', [])
     }
     $scope.data = {}
     $scope.data.amount = 0;
-
+    $scope.isYourData = true;
     $scope.needApproval = $stateParams.needApproval;
     var id = $stateParams.id;
     $scope.detail = {};
@@ -548,7 +548,13 @@ angular.module('myteam.controllers', [])
     var successRequest = function (res){
       $ionicLoading.hide();
       $scope.detail = res;
-
+      var detailEmpId = $scope.detail.empRequest;
+      var profileEmpId = Main.getSession("profile").employeeTransient.id;
+      console.log("detailEmpId " + detailEmpId + " profileEmpId " + profileEmpId);
+      if(profileEmpId != detailEmpId) {
+          $scope.isYourData = false;
+      }
+      console.log("$scope.isYourData",$scope.isYourData);
       if($scope.detail.task == 'SUBMITLEAVE') {
           $scope.detail.taskTitle = "Request Leave";
       }else if($scope.detail.task == 'CHANGEMARITALSTATUS'){
@@ -623,6 +629,7 @@ angular.module('myteam.controllers', [])
     }
 
     function initModule(){
+        $scope.isYourData = true;
         $scope.detail = {};
         $scope.attachment = "img/placeholder.png";
         getDetailRequest();

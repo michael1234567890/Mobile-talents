@@ -37,12 +37,6 @@
 </div>
 
 <hr class="no-margin">
-
-<!-- <div class="row" ng-if="header.taxAllowance != 0">
-    <div class="col col-60"><h3>Tunjangan Pajak</h3></div>     
-    <div class="col"><h4 style="float: right;">Rp. {{header.taxAllowance | number:0}}</h4></div>
-</div>-->
-
 <div ng-repeat="detailIn in header.detailIn">
   <div class="row">
     <div class="col col-60"><h3>{{detailIn.elementGroup}}</h3></div>     
@@ -59,15 +53,7 @@
 </div>
 
 <hr class="no-margin">
-<!--
-<div class="row" ng-if="header.taxGross != 0">
-    <div class="col col-60"><h3>Potongan Pajak</h3></div>     
-    <div class="col"><h4 style="float: right;">Rp. {{header.taxGross  | number:0}}</h4></div>
-</div>
-<div class="row" ng-if="header.taxPenalty != 0">
-    <div class="col col-60"><h3>Penalti Pajak</h3></div>     
-    <div class="col"><h4 style="float: right;">Rp. {{header.taxPenalty  | number:0}}</h4></div>
-</div>-->
+
 <div ng-repeat="detailOut in header.detailOut">
   <div class="row" ng-if="detailOut.total != 0">
     <div class="col col-60"><h3>{{detailOut.elementGroup}}</h3></div>     
@@ -75,10 +61,6 @@
   </div>
 </div>
 </ion-item>
-
-
-
-
 <ion-item style="padding-bottom: 5px;padding-top: 5px;">
 <div class="row">
   <div class="col col-60"><h2 class="balanced">TOTAL</h2></div>     
@@ -99,14 +81,13 @@
   <div class="col col-60"><h3>Penerimaan</h3></div>     
   <div class="col"><h4 style="float: right;">Rp. {{header.takeHomePay  | number:0}}</h4></div>
 </div>
-
-<div class="row">
+</ion-item>
+</div>
+<div class="row" ng-if="type=='monthly'">
     <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" style="font-weight:bold;background-color:#FF9800" ng-click="printPdf('monthly')"><i class="icon ion-android-download"></i>&nbsp;Download PDF</button>
 </div>
-</ion-item>
 
 
-</div>
 
 <div ng-repeat="header in listHeader" ng-if="type=='yearly'">
 <ion-item style="background-color: #11c1f3 ;">
@@ -204,8 +185,6 @@
     <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" style="font-weight:bold;background-color:#FF9800" ng-click="printPdf('yearly')"><i class="icon ion-android-download"></i>&nbsp;Download PDF</button>
 </div>
 </ion-item>
-
-
 </div>
 
 

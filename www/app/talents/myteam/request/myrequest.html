@@ -100,10 +100,9 @@
 
         </div>
         
-        <div class="row" ng-if="requests.length != 0"  ng-show="isLoadMorePersonalShow">
-            <div class="col col-100">
-                    <button class="button button-block button-outline button-positive" ng-click="loadMorePersonal()">Load More Results</button>
-            </div>  
+        <div class="row" ng-if="requests.length != 0"  ng-show="isLoadMorePersonalShow" style="padding-top:0px;min-height:120px">
+                <button style="height:30px" class="button button-block button-outline button-positive" ng-click="loadMorePersonal()">Load More Results</button>
+          
         </div>
 
         <div class="item" ng-if="requests.length == 0" >
@@ -126,10 +125,9 @@
                 
                 </div>
          </div>
-          <div class="row" ng-if="benefitRequests.length != 0"  ng-show="isLoadMoreBenefitShow">
-            <div class="col col-100">
-                    <button class="button button-block button-outline button-positive" ng-click="loadMoreBenefit()">Load More Results</button>
-            </div>  
+          <div class="row" ng-if="benefitRequests.length != 0"  ng-show="isLoadMoreBenefitShow" style="padding-top:0px;min-height:120px">
+                <button style="height:30px" class="button button-block button-outline button-positive" ng-click="loadMoreBenefit()">Load More Results</button>
+        
         </div>
 
          <div class="item" ng-if="benefitRequests.length == 0" >

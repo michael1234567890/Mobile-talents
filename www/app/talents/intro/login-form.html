@@ -26,31 +26,32 @@ img {
             <center><img src="img/talents/logoacc.png" class="text-center" /></center>
         </div>
         
-        <div ng-form="login_form" class="padding text-center" style="position:relative;top:100px;left:0;right:0" novalidate>
+        <div ng-form="login_form" class="padding text-center" style="position:relative;top:70px;left:0;right:0" novalidate>
             <ion-list>
                 <label class="item item-input">
                     <i class="icon ion-android-person placeholder-icon"></i>
-                    <input type="email" placeholder="Email" ng-model="usertalent.username" required>
+                    <input type="email" placeholder="Email" ng-model="usertalent.username" maxlength="50" required>
                 </label>
                 <label class="item item-input">
                     <i class="icon ion-android-lock placeholder-icon"></i>
-                    <input type="password" placeholder="Password" ng-model="usertalent.password" required>
+                    <input type="{{inputType}}" placeholder="Password" ng-model="usertalent.password"  maxlength="30"  required>
+                    <input type="checkbox" id="checkbox" ng-click="hideShowPassword()" /> 
+                    <div>
+                      <label for="checkbox" ng-if="usertalent.password"><i class="icon ion-eye small placeholder-icon"></i></label>
+                    </div>
                 </label>
             </ion-list>
             <button class="button button-positive button-block waves-effect waves-light" ng-click="loginAction();">Log in</button>
             <p class="padding-horizontal">
-            <span class="balanced pull-left" ng-click="closeLogin();openForgot();" style="font-size:14px">Forgot password ?</span>
-            <span class="balanced pull-right" ng-click="closeLogin();goToSignup();" style="font-size:14px">Sign up</span>
-        </p>
+              <span class="balanced pull-left" ng-click="closeLogin();openForgot();" style="font-size:14px">Forgot password ?</span>
+              <span class="balanced pull-right" ng-click="closeLogin();goToSignup();" style="font-size:14px">Sign up</span>
+            </p>
            
         </div>
         
-        
-
-        
         <div id="wrapper">
           <div id="outer">
-            <div class="itemwrapper text-center" style="padding-top: 90px;"><p>Powered By</p>
+            <div class="itemwrapper text-center" style="padding-top: 75px;"><p>Powered By</p>
               <img src="img/talents/200x100-talentslogin.png" />
             </div>
 

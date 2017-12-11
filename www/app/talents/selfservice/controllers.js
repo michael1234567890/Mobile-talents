@@ -4,6 +4,18 @@ angular.module('selfservice.controllers', [])
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
+
+    var arrCompanyRef = Main.getSession("profile").companyReference;
+    var refMenu = Main.getDataReference(arrCompanyRef,'menu','right','selfservice');
+
+    function initMethod(){
+         if(refMenu != undefined && refMenu != '') {
+              $scope.menu = JSON.parse(refMenu);
+        }
+    }
+    
+    initMethod();
+    
 })
 
 .controller('SubmitAttendanceCtrl', function($compile,$filter,$cordovaGeolocation,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
@@ -192,8 +204,8 @@ angular.module('selfservice.controllers', [])
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
+    var messageValidation="";
     $scope.selectMonth = Main.getSelectMonth();
-   // $scope.selectYear = Main.getSelectYear();
     $scope.payslip = {};
     $scope.choice = {};
     $scope.choiceSelect="";
@@ -206,7 +218,7 @@ angular.module('selfservice.controllers', [])
     var successRequest = function (res){
       $ionicLoading.hide();
       if(res.length == 0 ){
-          alert("Data Not Found");
+          $scope.warningAlert("Data Not Found");
       }else {
         $rootScope.payslipSelected = res;
         $state.go("app.detailpayslip",{'year':year,'month':month,'type':$scope.choiceSelect});
@@ -217,30 +229,36 @@ angular.module('selfservice.controllers', [])
 
     $scope.submitForm = function(choice){
       $scope.choiceSelect = choice.select;
-      $ionicLoading.show({
-          template: 'Loading...'
-      });
-      var url = "";
-      var strData="";
-      var data="";
-      if(choice.select == 'monthly') {
-        url = Main.getUrlApi() + '/api/user/payroll';
-        var strData ="";
-        if($scope.payslipType == 'monthly') {
-            month = Main.getIdfromValue($scope.selectMonth,$scope.payslip.month);
-            year = $scope.payslip.year;
-            strData = {payrollType:$scope.payslipType,month:month,year:year};
-        } else {
-            strData = {payrollType:$scope.payslipType};
-        }
-          
-        data = JSON.stringify(strData);
+      if(verificationForm(choice.select,$scope.payslip)){
+            $ionicLoading.show({
+                template: 'Loading...'
+            });
+            var url = "";
+            var strData="";
+            var data="";
+            if(choice.select == 'monthly') {
+                url = Main.getUrlApi() + '/api/user/payroll';
+                var strData ="";
+                if($scope.payslipType == 'monthly') {
+                    month = Main.getIdfromValue($scope.selectMonth,$scope.payslip.month);
+                    year = $scope.payslip.year;
+                    strData = {payrollType:$scope.payslipType,month:month,year:year};
+                } else {
+                    strData = {payrollType:$scope.payslipType};
+                }
+                  
+                data = JSON.stringify(strData);
+            }else {
+              url = Main.getUrlApi() + '/api/user/payroll/yearly';
+            }
+            var accessToken = Main.getSession("token").access_token;
+            var urlApi = Main.getUrlApi() + '/api/user/payroll';
+            Main.postRequestApi(accessToken,url,data,successRequest,$scope.errorRequest);
+
       }else {
-        url = Main.getUrlApi() + '/api/user/payroll/yearly';
+          $scope.warningAlert(messageValidation);
       }
-      var accessToken = Main.getSession("token").access_token;
-      var urlApi = Main.getUrlApi() + '/api/user/payroll';
-      Main.postRequestApi(accessToken,url,data,successRequest,$scope.errorRequest);
+      
 
     }
 
@@ -268,78 +286,32 @@ angular.module('selfservice.controllers', [])
         }
         $scope.payslip.year = $filter('date')(new Date(),'yyyy');
         $scope.payslip.month = $filter('date')(new Date(),'MMM').toUpperCase();
-
+        console.log("$scope.payslip.month",$scope.payslip.month);
         if($scope.payslipType == "latest"){
             getLatestMonth();
         }
           
     }
 
+    function verificationForm(type,payroll){
+       if(type == 'monthly') {
+            console.log(payroll);
+            if(payroll.year == undefined || payroll.year == ""){
+              messageValidation = "Year can't be empty";
+              return false;
+            }
+
+            if(payroll.month == undefined || payroll.month == ""){
+              messageValidation = "Month can't be empty";
+              return false;
+            }
+        }
+        return true;
+    }
+
     initModule();
 
  })
-
-.controller('SubmitPayslipCtrl', function($compile,$filter,$cordovaGeolocation,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
-    $scope.selectYear = [];
-    $scope.selectMonth = [];
-    $scope.payslip = {};
-    $scope.payslip.payrollType = "monthly";
-
-    var successRequest = function (res){
-      $ionicLoading.hide();
-      if(res.length == 0 ){
-          alert("Data Not Found");
-      }else {
-        $rootScope.payslipSelected = res;
-        $state.go("app.detailpayslip",{'year':$scope.payslip.year,'month':$scope.payslip.month});
-      }
-    }
-
-    var errorRequest = function (err, status){
-      $ionicLoading.hide();
-      if(status == 401) {
-        var refreshToken = Main.getSession("token").refresh_token
-        Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
-      }else {
-         if(status==500)
-            alert(err.message);
-          else
-            alert("Please Check your connection");
-      }
-    }
-
-    function getPaySlip(payrollType,year,month){
-      $ionicLoading.show({
-          template: 'Loading...'
-      });
-      var strData = {payrollType:payrollType,year:year,month:month};
-      var data = JSON.stringify(strData);
-      var accessToken = Main.getSession("token").access_token;
-      var urlApi = Main.getUrlApi() + '/api/user/payroll';
-      Main.postRequestApi(accessToken,urlApi,data,successRequest,errorRequest);
-
-    }
-
-
-    $scope.submitForm = function(){
-        $rootScope.payslipSelected = null;
-        getPaySlip($scope.payslip.payrollType,$scope.payslip.year,$scope.payslip.month);
-        //$state.go('app.detailpayslip',{'year':$scope.payslip.year,'month':$scope.payslip.month});
-        //$state.go("app.detailpayslip");
-    }
-
-    function initData(){
-     $scope.selectYear = [{id:"2016"},{id:"2017"}];
-     $scope.selectMonth = [{name:"JAN",id:"01"},{name:"FEB",id:"02"},{id:"03",name:"MAR"},{id:"04",name:"APR"},{id:"05",name:"MAY"},{id:"06",name:"JUN"},{id:"07",name:"JUL"},{id:"08",name:"AUG"},{id:"09",name:"SEP"},{id:"10",name:"OCT"},{id:"11",name:"NOV"},{id:"12",name:"DES"}];     
-    }
-
-    function initModule() {
-      initData();
-    }
-
-    initModule();
-
-    })
 
 .controller('DetailPayslipCtrl', function($ionicLoading, $stateParams,$compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
 
@@ -723,7 +695,7 @@ angular.module('selfservice.controllers', [])
             Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
 
         }else {
-          alert(messageValidation);
+          $scope.warningAlert(messageValidation);
         }
         
     }
@@ -822,8 +794,8 @@ angular.module('selfservice.controllers', [])
       }
 
     $scope.addPicture = function () {
-          if($scope.images.length > 4) {
-            alert("Only 5 pictures can be upload");
+          if($scope.images.length > 2) {
+            alert("Only 3 pictures can be upload");
             return false;
           }
           $ionicActionSheet.show({
@@ -863,7 +835,7 @@ angular.module('selfservice.controllers', [])
 
 
       $scope.submitForm = function(){
-          if($scope.requestHeader.attachments.length > -1) {
+          if($scope.requestHeader.attachments.length > 0) {
               $ionicLoading.show({
                 template: '<ion-spinner></ion-spinner>'
               });

@@ -43,7 +43,7 @@
             $rootScope.$on('$stateChangeStart', function(event,next, nextParam,fromState){
                 initProfile();
                 
-                Idle.watch();
+                // Idle.watch();
                 console.log("Global change state");
             });
 
@@ -356,6 +356,7 @@ he
             function initProfile() {
                 $scope.general = {};
                 if(Main.getSession('profile')!=null && Main.getSession('profile') !=undefined ) {
+                    Idle.watch();
                     $scope.profile = Main.getSession('profile');
                     $scope.profile.fullname = $scope.profile.employeeTransient.name;
 

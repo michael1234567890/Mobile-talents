@@ -2,6 +2,7 @@ angular.module('intro.controllers', [])
 .controller('LoginCtrl',function( Idle,$timeout,$ionicHistory, $ionicLoading, appService, $state,$localStorage, $rootScope, $scope, $location,  Main) {
 	$scope.usertalent = {username:'',password:''};
 	var messageValidation = "";
+    $scope.inputType = 'password';
     $scope.forgotAction = function(){
         alert("Forgot Action");
     }
@@ -23,14 +24,21 @@ angular.module('intro.controllers', [])
 
     }
 
-    
+     $scope.hideShowPassword = function(){
+       if ($scope.inputType == 'password')
+          $scope.inputType = 'text';
+        else
+          $scope.inputType = 'password';
+     }
+
     function getUserReference(){
         $ionicLoading.show({
             template: '<ion-spinner></ion-spinner>'
         });
 
         var accessToken = Main.getSession("token").access_token;
-        var urlApi = Main.getUrlApi() + '/api/user/profile';
+        //var urlApi = Main.getUrlApi() + '/api/user/profile';
+        var urlApi = Main.getUrlApi() + '/api/user/profile?mobileversion=' + Main.getVersion();
         Main.requestApi(accessToken,urlApi,successUserReference,$scope.errorRequest);
     }
 	$scope.loginAction = function() {

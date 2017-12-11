@@ -361,6 +361,7 @@ angular.module('leave.controllers', [])
     };
 
 
+   
 
     $scope.onSelectType = function() {
       // $scope.labelType = $scope.leave.type;
@@ -490,7 +491,7 @@ angular.module('leave.controllers', [])
               dataPost.startDate = $scope.leave.startDate;
               dataPost.endDate = $scope.leave.endDate;
               dataPost.remark = $scope.leave.remark;
-              dataPost.substituteToEmployment = $scope.leave.substituteToEmployment;
+              //dataPost.substituteToEmployment = $scope.leave.substituteToEmployment;
               
           }
           console.log("objCategory",objCategory);

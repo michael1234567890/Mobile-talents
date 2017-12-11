@@ -21,10 +21,9 @@ angular.module('myhr.controllers', [])
     }
 
     function checkVersionApp(){
-        if($scope.profile.companySettings != undefined) {
+        if($scope.profile != undefined && $scope.profile.companySettings != undefined) {
             if($scope.profile.companySettings.mobileVersion != null && $scope.profile.companySettings.mobileVersion > Main.getVersion() ){
                 $scope.mobileDownload = $scope.profile.companySettings.mobileDownload;
-                console.log("Mobile Download",$scope.mobileDownload);
                 $scope.modalUpdate.show();
             }
             

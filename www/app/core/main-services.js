@@ -5,8 +5,9 @@
     angular.module('main.services', [])
     .factory('Main', function($q, $timeout, $http, $localStorage,$rootScope){
         //var hostname = "http://localhost:8080";
-        var hostname = "http://192.168.43.162:8080";
-        //var hostname = "https://talents-api.phincon.com";
+        //var hostname = "http://192.168.43.162:8080";
+        var hostname = "https://talents-api.phincon.com";
+        //var hostname = "https://api.talents.id";
         var environment = "development"; // development , production
         var appmode = "web"; // mobile , web
         //var phphost = "http://localhost/talents/index.php"
@@ -16,8 +17,8 @@
         var baseUrl = hostname;
         var basicAuthentication = 'Basic dGFsZW50czpzZWNyZXQ=';
         var timeoutms = 15000; // 15 sec
-        var version = 100;
-        var versionName = "1.0.0";
+        var version = 110;
+        var versionName = "1.1.0";
         var takePictureOptions = {
             quality: 100,
             targetWidth : 750,
@@ -26,7 +27,7 @@
         var selectHour = [{id:0},{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9},{id:10},{id:11},{id:12},{id:13},{id:14},{id:15},{id:16},{id:17},{id:18},{id:19},{id:20},{id:21},{id:22},{id:23},{id:24}];
         var selectFiveteenMin = [{id:0},{id:15},{id:30},{id:45}];
         var dataDisplaySize=15;
-        var selectMonth = [{name:"JAN",id:"01"},{name:"FEB",id:"02"},{id:"03",name:"MAR"},{id:"04",name:"APR"},{id:"05",name:"MAY"},{id:"06",name:"JUN"},{id:"07",name:"JUL"},{id:"08",name:"AUG"},{id:"09",name:"SEP"},{id:"10",name:"OCT"},{id:"11",name:"NOV"},{id:"12",name:"DES"}];  
+        var selectMonth = [{name:"JAN",id:"01"},{name:"FEB",id:"02"},{id:"03",name:"MAR"},{id:"04",name:"APR"},{id:"05",name:"MAY"},{id:"06",name:"JUN"},{id:"07",name:"JUL"},{id:"08",name:"AUG"},{id:"09",name:"SEP"},{id:"10",name:"OCT"},{id:"11",name:"NOV"},{id:"12",name:"DEC"}];  
         var selectBloodType = [{id:"A"},{id:"B"},{id:"AB"},{id:"O"}];
         var selectCountry = [{id:"Indonesia"}];
         function changeUser(user) {

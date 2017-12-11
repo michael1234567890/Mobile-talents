@@ -83,7 +83,7 @@
                     },
                     getCameraOptions: function () {
                         return {
-                            quality: 50,
+                            quality: 100,
                             destinationType: Camera.DestinationType.DATA_URL,
                             sourceType: Camera.PictureSourceType.CAMERA,
                             encodingType: Camera.EncodingType.JPEG,
@@ -96,7 +96,7 @@
                     },
                     getLibraryOptions: function () {
                         return {
-                            quality: 50,
+                            quality: 100,
                             destinationType: Camera.DestinationType.DATA_URL,
                             sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
                             encodingType: Camera.EncodingType.JPEG,

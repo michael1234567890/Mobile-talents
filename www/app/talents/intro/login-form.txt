@@ -1,0 +1,37 @@
+<ion-view hide-nav-bar="true" style="background-color:; background-size: cover;">
+    <ion-content padding="true" scroll="false" class="auth">
+
+        <div class="padding-horizontal" style="position:relative;top:30px;left:0;right:0">
+            <center><img src="img/talents/logoacc.png" class="text-center" /></center>
+        </div>
+        
+        <div ng-form="login_form" class="padding text-center" style="position:relative;top:100px;left:0;right:0" novalidate>
+            <ion-list>
+                <label class="item item-input">
+                    <i class="icon ion-android-person placeholder-icon"></i>
+                    <input type="email" placeholder="Email" ng-model="usertalent.username" required>
+                </label>
+                <label class="item item-input">
+                    <i class="icon ion-android-lock placeholder-icon"></i>
+                    <input type="password" placeholder="Password" ng-model="usertalent.password" required>
+                </label>
+            </ion-list>
+            <button class="button button-positive button-block waves-effect waves-light" ng-click="loginAction();">Log in</button>
+           
+        </div>
+        
+        <p class="padding-horizontal">
+            <span class="balanced pull-left" ng-click="closeLogin();openForgot();" style="font-size:14px">Forgot password ?</span>
+            <span class="balanced pull-right" ng-click="closeLogin();goToSignup();" style="font-size:14px">Sign up</span>
+        </p>
+
+        <div  class="padding-horizontal"  style="position:absolute;bottom:30px;left:0;right:0">
+            
+            <div class="text-center"><p>Powered By</p><img src="img/talents/200x100-talentslogin.png" class="text-center" />
+            </div>
+        </div>
+
+        
+
+    </ion-content>
+</ion-view>

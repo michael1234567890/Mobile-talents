@@ -53,20 +53,20 @@
                     <div class="col" ng-repeat="items in images" style="height:90px; width:90px" ><img height="90px"  ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
                 </div>
                 <div class="row post" ng-show="appMode=='web'">
-                            <div class="col" ng-repeat="item in requestHeader.attachments" style="height:90px; width:90px"  >
-                                <img  ng-src="{{item.compressed.dataURL}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button>
-                            </div>
+                        <div class="col" ng-repeat="item in requestHeader.attachments" style="height:90px; width:90px"  >
+                            <img  ng-src="{{item.compressed.dataURL}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button>
+                        </div>
                 </div>
                 
                 <div class="row center" ng-show="appMode=='mobile'">
-                     <div class="col" style="min-height:90px" ng-if="images.length==0"><img ng-src="{{defaultImage}}" height="90px" ></div>
+                     <div class="col" style="max-height:90px; max-width:90px" ng-if="images.length==0"><img ng-src="{{defaultImage}}" height="90px" ></div>
                 </div>
 
                 <div class="row center" ng-show="appMode=='web'">
-                     <div class="col" style="min-height:90px" ng-if="requestHeader.attachments==0"><img ng-src="{{defaultImage}}" height="90px" ></div>
+                     <div class="col" style="max-height:90px; max-width:90px" ng-if="requestHeader.attachments==0"><img ng-src="{{defaultImage}}" height="90px" ></div>
                 </div>
 
-    <div class="row">
+    <div class="row" style="padding-top:50px">
         
         <button class="btn button-small waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-disabled="totalCurrentClaim == 0" style="font-weight:bold;background-color:#FF9800" ng-click="submitForm()">Submit</button>
     </div>

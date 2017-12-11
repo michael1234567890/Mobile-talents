@@ -6,11 +6,11 @@
         <div ng-if="leaveCategory =='leave' || leaveCategory =='permission'">
           <div class="row no-padding text-center bt-grey bb-grey" style="height:44px">
               <div class="col col-40"><p class="bb text-small padding uppercase">Remaining</p></div>
-              <div class="col col-10 bl-grey"><p class="bb text-large padding uppercase"><b>{{balance.balanceEnd}}</b></p></div>
+              <div class="col col-10 bl-grey"><p class="bb text-large padding uppercase" ><b>{{balance.balanceEnd}}</b></p></div>
               <div class="col col-40"><p class="bb text-small padding uppercase">Used</p></div>
-              <div class="col col-10 bl-grey"><p class="bb text-large padding uppercase"><b>{{balance.balanceUsed}}</b></p></div>
+              <div class="col col-10 bl-grey" ><p class="bb text-large padding uppercase"><b>{{balance.balanceUsed}}</b></p></div>
           </div>
-
+          
         <div class="item item-divider uppercase">
             Type
         </div>
@@ -44,20 +44,21 @@
           </div>
           
           <div class="item item-divider uppercase">
-            Subtitute
+            Substitute
           </div>
+          <!--
           <div class="item item-icon-right" style="border:0px" modal-select ng-model="leave.substituteToEmployment" options-expression=" person in selectEmployeeSubstitute | orderBy:'fullName'" option-property="employment" has-search="true" search-placeholder="Search by name" modal-title="Select Substitute" on-select="onSelectSubstitute()">
               {{labelSubstitute}}
               <i class="icon ion-chevron-right icon-accessory"></i>
               <div class="option">
                 {{option.fullName}}
               </div>
-          </div>
+          </div>-->
           
           <div class="row">
                 <div class="input-field col s12">
-                    <p for="textarea1">Reason</p>
-                    <textarea  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" rows="3" placeholder="Enter your reason" maxlength="100" ng-model="leave.remark" name="reason" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/"></textarea>
+                   <!-- <p for="textarea1">Reason</p>-->
+                    <textarea  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" rows="3" placeholder="Enter name of Substitute employee" maxlength="100" ng-model="leave.remark" name="reason" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/"></textarea>
                     <font color="red" style="font-size: 10px"><span ng-show="form.reason.$invalid">Should not contain any special characters</span></font>
                     
                 </div>

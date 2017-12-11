@@ -262,15 +262,7 @@ angular.module('talent.routes', [])
         }
       })
 
-       .state('app.submitpayslip', {
-        url: '/submitpayslip',
-        views: {
-          'menuContent': {
-            templateUrl: 'app/talents/selfservice/payslip/submitpayslip.html',
-            controller: 'SubmitPayslipCtrl'
-          }
-        }
-      })
+      
 
        .state('app.choicepayslip', {
         url: '/choicepayslip',

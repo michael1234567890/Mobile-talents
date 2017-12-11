@@ -4,7 +4,7 @@
         
         
         <div class="row height-20 text-center stable-bg">
-            <div class="col  padding">
+            <div class="col  padding" ng-show="menu.payslip">
                 <div class="card contact" ui-sref="app.choicepayslip">
                     <div class="item item-text-wrap light-bg">
                         <img src="img/talents/42/42_payslip.png"><br>
@@ -12,7 +12,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col padding" >
+            <div class="col padding" ng-show="menu.benefit" >
                     <div class="card contact" ui-sref="app.submitclaim" >
                         <div class="item item-text-wrap light-bg">
                             <img src="img/talents/42/42_benefit.png"><br>
@@ -20,9 +20,21 @@
                         </div>
                     </div>
             </div>
-
         </div>
-
+        <div class="row height-20 text-center stable-bg">
+            <div class="col-50 padding" ng-show="menu.tm">
+                <div class="card contact" ui-sref="app.homeleave">
+                    <div class="item item-text-wrap light-bg">
+                        <img src="img/talents/42/42_timemanagement.png"><br>
+                        <span class="text-small">Time Management</span> 
+                    </div>
+                </div>
+            </div>
+            <div class="col padding">
+                
+            </div>
+        </div>
+        
         
         
     </ion-content>
