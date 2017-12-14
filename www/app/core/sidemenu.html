@@ -10,21 +10,7 @@
         <ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
     </ion-side-menu-content>
 
-<!--
-    <ion-side-menu side="left" width="255" id="menu" hide-nav-bar="false">
-        <ion-header-bar class="c0">
-            <h1 class="title light">Menu</h1>
-        </ion-header-bar>
-        <ion-content padding="false" class="side-menu-left">
-            <ion-list>
-                <ion-item class="c1 item-avatar" menu-close><img ng-src="{{user.photo}}" ui-sref="tabs.account"></ion-item>
-                <ion-item class="c2" menu-close><i class="icon ion-ios-star-outline" ui-sref="tabs.dashboard"></i></ion-item>
-                
-                <ion-item class="c7" menu-close ui-sref="login">LOGIN</ion-item>
-            </ion-list>
-        </ion-content>
-    </ion-side-menu>
--->
+
  <!-- Left menu -->
   <ion-side-menu  >
     <ion-content>
@@ -57,9 +43,14 @@
           My Team
         </div>
         <div class="item item-icon-left" ui-sref="app.requestapproval" ng-show="profile.isAdmin==true || profile.isLeader == true">
-         <i class="icon ion-email"></i>
+        <i class="icon ion-email"></i>
           Approval <span class="badge badge-assertive" >{{general.countApproval}}</span>
         </div>
+        <div class="item item-icon-left" ui-sref="app.formhistoryapproval" ng-show="profile.isAdmin==true || profile.isLeader == true">
+         <i class="icon ion-email"></i>
+          History Approval
+        </div>
+
         <div class="item item-icon-left" ui-sref="app.myrequest">
          <i class="icon ion-compose"></i>
           My Request

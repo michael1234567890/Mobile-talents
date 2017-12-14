@@ -460,7 +460,7 @@ angular.module('talent.routes', [])
         }
       })
 
-       .state('app.requestapproval', {
+      .state('app.requestapproval', {
         url: '/requestapproval',
         views: {
           'menuContent': {
@@ -469,6 +469,17 @@ angular.module('talent.routes', [])
           }
         }
       })
+
+      .state('app.formhistoryapproval', {
+        url: '/formhistoryapproval',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/myteam/approval/form-history-approval.html',
+            controller: 'FormHistoryApprovalCtrl'
+          }
+        }
+      })
+
 
       .state('app.myrequest', {
         url: '/myrequest',

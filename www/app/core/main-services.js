@@ -4,14 +4,15 @@
 
     angular.module('main.services', [])
     .factory('Main', function($q, $timeout, $http, $localStorage,$rootScope){
-        //var hostname = "http://localhost:8080";
+        var hostname = "http://localhost:8080";
         //var hostname = "http://192.168.43.162:8080";
-        var hostname = "https://talents-api.phincon.com";
+        //var hostname = "https://talents-api.phincon.com";
         //var hostname = "https://api.talents.id";
         var environment = "development"; // development , production
         var appmode = "web"; // mobile , web
         //var phphost = "http://localhost/talents/index.php"
-        var phphost =  "https://talents-report.phincon.com/index.php";
+        //var phphost =  "https://talents-report.phincon.com/index.php";
+        var phphost =  "https://report.talents.id/index.php";
         var printBaseUrl = phphost + "/payslippdf";
         var printReportUrl = phphost + "/printpdf";
         var baseUrl = hostname;
