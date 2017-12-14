@@ -1,0 +1,28 @@
+
+<ion-view title="Approval History">
+    <ion-content  class="profile has-header" scroll="true">
+        <form name="form" novalidate>
+         <div class="item padding bg-lightgrey">
+            <div class="row">
+                <div class="input-field col" >
+                    <p>From</p>
+                    <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePickerFrom()">
+                        {{formHistory.from| date: "yyyy-MM-dd"}}
+                    </ionic-datepicker>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col" >
+                    <p>To</p>
+                    <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePickerTo()">
+                        {{formHistory.to| date: "yyyy-MM-dd"}}
+                    </ionic-datepicker>
+                </div>
+            </div>
+          </div>
+        </form>        
+        <div class="row">
+            <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" style="font-weight:bold;background-color:#FF9800" ng-click="submitForm()">Show</button>
+        </div>
+    </ion-content>
+</ion-view>

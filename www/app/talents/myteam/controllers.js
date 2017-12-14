@@ -835,7 +835,7 @@ angular.module('myteam.controllers', [])
 
 
 .controller('DetailTeamCtrl', function($stateParams,$rootScope, $scope,$state , AuthenticationService, Main) {
-	if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+	  if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
 
@@ -850,4 +850,69 @@ angular.module('myteam.controllers', [])
    // console.log(teamIdx);
 
 })
+
+.controller('FormHistoryApprovalCtrl', function($ionicLoading,$filter,ionicDatePicker,$stateParams,$rootScope, $scope,$state , AuthenticationService, Main) {
+    
+    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+        $state.go("login");
+    }
+
+    $scope.formHistory = {from:new Date(),to:new Date()};
+
+    var datepickerFrom = {
+        callback: function (val) {  //Mandatory
+          $scope.formHistory.from = val;
+        },
+        inputDate: new Date(),      //Optional
+        mondayFirst: true,          //Optional
+        dateFormat:"yyyy-MM-dd",
+        closeOnSelect: false,       //Optional
+        templateType: 'popup'       //Optional
+    };
+
+    var datepickerTo = {
+        callback: function (val) {  //Mandatory
+          $scope.formHistory.to = val;
+        },
+        inputDate: new Date(),      //Optional
+        mondayFirst: true,          //Optional
+        dateFormat:"yyyy-MM-dd",
+        closeOnSelect: false,       //Optional
+        templateType: 'popup'       //Optional
+    };
+
+    $scope.openDatePickerFrom = function(){
+        ionicDatePicker.openDatePicker(datepickerFrom);
+    };
+
+    $scope.openDatePickerTo = function(){
+        ionicDatePicker.openDatePicker(datepickerTo);
+    };
+
+    function successRequest(res) {
+        $ionicLoading.hide();
+        console.log("response",res);
+    }
+
+    $scope.submitForm = function(){
+        $ionicLoading.show({
+            template: '<ion-spinner></ion-spinner>'
+         });
+
+        console.log($scope.formHistory);
+
+        $scope.formHistory.from = $filter('date')(new Date($scope.formHistory.from),'yyyy-MM-dd') +' 00:00:00' ;
+        $scope.formHistory.to = $filter('date')(new Date($scope.formHistory.to),'yyyy-MM-dd') +' 23:59:59' ;
+        console.log($scope.formHistory);
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval/historyapproval?fromdate='+$scope.formHistory.from+'&todate='+$scope.formHistory.to;
+        Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
+        
+    }
+
+
+
+
+})
+
 
