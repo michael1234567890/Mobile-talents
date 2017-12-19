@@ -1,0 +1,36 @@
+<ion-view title="History Approval" class="bg-lightgrey">
+<ion-nav-buttons side="right">
+       
+</ion-nav-buttons>
+<ion-content class="has-header bt-grey profile" scroll="false">
+
+<div class="row text-center" style="height:40px">
+    <div class="col font-thin">{{startDate}}</div>
+    <div class="col font-thin"><b>-</b></div>
+    <div class="col font-thin">{{endDate}}</div>
+</div>
+
+<ion-scroll class="bg-lightgrey" direction="y" style="height:100%">
+    <div>
+         <div class="card" ng-repeat="item in request | filter: searchFilter ">
+                <div class="item item-text-wrap" ng-click="gotoDetailRequest(item.dataApproval)" >
+                    <span class="badge badge-energized" >{{item.currentApproval}}</span>
+
+                    <h2 class="lead">{{item.employeeRequesterName}}</h2>
+                    <p class="text-medium" >#{{item.requestNo}}</p>
+                    <p class="text-small lead" ><b>{{item.categoryType}}</b></p>
+                    <p class="text-small" >Rp. {{item.totalAmount | number:0}}</p>
+                   <span class="item-note positive text-smaller">
+                        {{item.createdDate | date: 'dd MMM yyyy HH:mm'}}
+                   </span>
+                </div>
+         </div>
+         <div class="item" ng-if="request.length == 0" >
+            <div class="col col-100">
+                <h2>No History available</h2>
+            </div>  
+        </div>
+    </div>
+ </ion-scroll> 
+</ion-content>
+</ion-view>

@@ -125,6 +125,9 @@
                     <h2 class="lead">{{item.employeeRequest.name}}</h2>
                     <p class="text-small" >{{item.ref.categoryType}}</p>
                     <p class="text-small" ng-if="item.ref.categoryType!='Medical Overlimit'">Total : Rp. {{item.ref.totalAmount | number:0}}</p>
+                    <span class="item-note positive text-smaller">
+                           Approval {{item.currentApprovalLevel + 1}} of {{item.approvalLevel}}
+                    </span>
                    
                 </div>
          </div>
@@ -150,6 +153,9 @@
                     <h2 class="lead">{{item.employeeRequest.name}}</h2>
                     <p class="text-medium" >{{item.ref.categoryType}}</p>
                     <p class="text-smaller" >{{item.ref.startDate | date: 'dd MMM yyyy'}} - {{item.ref.endDate | date: 'dd MMM yyyy'}}</p>
+                    <span class="item-note positive text-smaller">
+                           Approval {{item.currentApprovalLevel + 1}} of {{item.approvalLevel}}
+                    </span>
                     
                 </div>
          </div>

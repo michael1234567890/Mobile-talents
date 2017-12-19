@@ -115,12 +115,16 @@
     <div ng-if="module.type === 'benefit'">
          <div class="card" ng-repeat="item in benefitRequests | filter: searchFilter ">
                 <div class="item item-text-wrap" ng-click="gotoDetailRequest(item.id)" >
-                   
-                    <h2 class="lead">{{item.ref.categoryType}}</h2>
+                   <span class="item-note calm text-smaller">
+                        {{item.processingStatus}}
+                    </span>
+                    
+                    <h2 class="lead">#{{item.ref.reqNo}}</h2>
+                    <p class="text-medium">{{item.ref.categoryType}}</p>
                     <p class="text-small" ng-if="item.ref.categoryType!='Medical Overlimit'" >Total : Rp. {{item.ref.totalAmount | number:0}}</p>
                     <p class="text-smaller" >{{item.modifiedDate | date: 'dd MMM yyyy HH:mm'}}</p>
-                    <span class="item-note calm">
-                        {{item.processingStatus}}
+                    <span ng-if="item.processingStatus == 'Waiting' || item.processingStatus == 'Request'" class="item-note positive text-smaller">
+                           Progress {{item.currentApprovalLevel}} of {{item.approvalLevel}}
                     </span>
                 
                 </div>

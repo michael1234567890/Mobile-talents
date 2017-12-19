@@ -513,8 +513,9 @@ angular.module('myhr.controllers', [])
                 attachment.push(objAttachment);
             };
         }
+        
         if($scope.family.birthDate != undefined)
-            $scope.family.birthDate = $filter('date')(Date.now(), "yyyy-MM-dd");
+            $scope.family.birthDate = $filter('date')($scope.family.birthDate, "yyyy-MM-dd");
 
         $scope.family.attachments = attachment;  
         var accessToken = Main.getSession("token").access_token;

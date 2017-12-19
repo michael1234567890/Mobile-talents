@@ -15,6 +15,10 @@
             <p class="text-small">Request Type</p>
             <h2 class="lead text-medium" >{{detail.description}}</h2>
         </div>
+        <div class="item item-text-wrap" >
+            <p class="text-small">Request No</p>
+            <h2 class="lead text-medium" >{{detail.ref.reqNo}}</h2>
+        </div>
         <div ng-if="detail.task == 'CHANGEMARITALSTATUS'">
                 <div class="item item-text-wrap" >
                     <p class="text-small">Description</p>
@@ -80,16 +84,19 @@
                     <div class="row post" >
                         <div class="col" ng-repeat="items in detail.attachments" style="width:90px;height:90px" ><img width="90px" height="90px"  ng-src="{{items.image}}" ng-click="openImagePreview(items.image)" /></div>
                     </div>
-                    <!-- 
-                    <div class="col" style="min-height:90px"><a ng-click="gotoAddPhoto()"><img ng-src="{{attachment}}" height="90px" ></a></div>-->
+                   
                 </div>
                 
         </div>
-        <!--<div ng-if="detail.task == 'SUBMITBENEFIT' || detail.task == 'SUBMITBENEFIT1'  || detail.task == 'SUBMITBENEFIT2' || detail.task == 'SUBMITBENEFIT3' || detail.task == 'SUBMITBENEFIT4' || detail.task == 'SUBMITBENEFIT5'">-->
+       
         <div ng-if="detail.module == 'benefit'">
                 <div class="item item-text-wrap" >
                     <p class="text-small">Category</p>
                     <h2 class="lead text-medium" >{{detail.ref.categoryType}}</h2>
+                </div>
+                <div class="item item-text-wrap" >
+                    <p class="text-small">Transaction Date</p>
+                    <h2 class="lead text-medium" >{{detail.ref.startDate | date :'dd MMM yyyy'}}</h2>
                 </div>
                 <div class="list no-padding" ng-if="detail.ref.categoryType == 'Perjalanan Dinas' || detail.ref.categoryType == 'SPD Advance'" >
                       <div class="item item-icon-left text-small" href="#">
@@ -164,25 +171,13 @@
                 
         </div>
         
-        <div class="row" style="padding-top:50px" ng-if= "needApproval == 'true' && detail.status !='completed' && !isYourData" >
+        <div class="row" style="padding-top:50px" ng-if= "detail.status !='completed'" >
                 <button class="btn button-small  waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="confirmReject()">Reject</button>&nbsp;
                 <button class="btn button-small waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="confirmAccept()">Approve</button>
-        </div>
-        <div class="row" style="padding-top:50px" ng-if= "isYourData && detail.processingStatus=='Request' && (detail.module=='benefit' || detail.module=='attendance')" >
-                <button class="btn button-small  waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="confirmCancel()">Cancel</button>
         </div>
 
     </div>
     
         
     </ion-content>
-    <!--
-    <ion-footer-bar class="bar-light" style="border-top:0px;height:50px;margin-bottom:2px" ng-if= "needApproval == 'true'" >
-        <div class="col">
-        <button class="btn button-small  waves-effect waves-light button button-calm  button-block waves-effect waves-light" ng-click="confirmReject()">Reject</button></div>
-        <div class="col">
-        <button class="btn button-small waves-effect waves-light button button-balanced  button-block waves-effect waves-light" ng-click="confirmAccept()">Approve</button>
-        </div>
-
-    </ion-footer-bar> -->
 </ion-view>

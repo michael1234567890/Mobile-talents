@@ -480,6 +480,17 @@ angular.module('talent.routes', [])
         }
       })
 
+      .state('app.historyapproval', {
+        url: '/historyapproval/:startDate/:endDate',
+        params: { data: null },
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/myteam/approval/history-approval.html',
+            controller: 'HistoryApprovalCtrl'
+          }
+        }
+      })
+
 
       .state('app.myrequest', {
         url: '/myrequest',
@@ -491,7 +502,7 @@ angular.module('talent.routes', [])
         }
       })
 
-       .state('app.requestdetail', {
+      .state('app.requestdetail', {
         url: '/requestdetail/:id/:needApproval',
         views: {
           'menuContent': {
@@ -501,12 +512,13 @@ angular.module('talent.routes', [])
         }
       })
 
+
       .state('app.myrequestdetail', {
         url: '/myrequestdetail/:id',
         views: {
           'menuContent': {
             templateUrl: 'app/talents/myteam/request/myrequest-detail.html',
-            controller: 'MyRequestDetailCtrl'
+            controller: 'RequestDetailCtrl'
           }
         }
       })

@@ -462,7 +462,6 @@ angular.module('selfservice.controllers', [])
     $scope.$on('$ionicView.beforeEnter', function (event,data) {
         if(data.direction != undefined && data.direction!='back')
           initModule();
-      
     });
 
     var datepicker = {

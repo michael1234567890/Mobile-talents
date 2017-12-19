@@ -119,7 +119,7 @@ angular.module('myteam.controllers', [])
 
     $scope.gotoDetailRequest = function(id){
       
-        $state.go('app.requestdetail',{'id':id,'needApproval':false});
+        $state.go('app.myrequestdetail',{'id':id});
     }
 
     
@@ -554,7 +554,7 @@ angular.module('myteam.controllers', [])
       if(profileEmpId != detailEmpId) {
           $scope.isYourData = false;
       }
-      console.log("$scope.isYourData",$scope.isYourData);
+
       if($scope.detail.task == 'SUBMITLEAVE') {
           $scope.detail.taskTitle = "Request Leave";
       }else if($scope.detail.task == 'CHANGEMARITALSTATUS'){
@@ -856,12 +856,13 @@ angular.module('myteam.controllers', [])
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
     }
-
-    $scope.formHistory = {from:new Date(),to:new Date()};
+    
+    $scope.formHistory = {};
 
     var datepickerFrom = {
         callback: function (val) {  //Mandatory
           $scope.formHistory.from = val;
+          setFormHistoryTo(val);
         },
         inputDate: new Date(),      //Optional
         mondayFirst: true,          //Optional
@@ -889,30 +890,71 @@ angular.module('myteam.controllers', [])
         ionicDatePicker.openDatePicker(datepickerTo);
     };
 
+    function setFormHistoryTo(fromDate){
+       
+        var toDate = new Date(fromDate);
+        var toDateTemp =  $filter('date')(toDate.getTime() + (7 * (1000 * 60 * 60 * 24)),'yyyy-MM-dd');
+        var currentDateTemp = $filter('date')(new Date(),'yyyy-MM-dd');
+        if(toDateTemp > currentDateTemp)
+          $scope.formHistory.to = currentDateTemp;
+        else
+          $scope.formHistory.to = toDateTemp;
+       
+    }
+
     function successRequest(res) {
         $ionicLoading.hide();
-        console.log("response",res);
+        $rootScope.data.historyApproval = res;
+        var startDate = $filter('date')(new Date($scope.formHistory.from),'yyyy-MM-dd');
+        var endDate = $filter('date')(new Date($scope.formHistory.to),'yyyy-MM-dd');
+        $state.go("app.historyapproval",{'startDate':startDate,'endDate':endDate});
     }
 
     $scope.submitForm = function(){
         $ionicLoading.show({
             template: '<ion-spinner></ion-spinner>'
          });
-
-        console.log($scope.formHistory);
-
-        $scope.formHistory.from = $filter('date')(new Date($scope.formHistory.from),'yyyy-MM-dd') +' 00:00:00' ;
-        $scope.formHistory.to = $filter('date')(new Date($scope.formHistory.to),'yyyy-MM-dd') +' 23:59:59' ;
-        console.log($scope.formHistory);
+        var data = {};
+        data.from = $filter('date')(new Date($scope.formHistory.from),'yyyy-MM-dd') +' 00:00:00' ;
+        data.to = $filter('date')(new Date($scope.formHistory.to),'yyyy-MM-dd') +' 23:59:59' ;
         var accessToken = Main.getSession("token").access_token;
-        var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval/historyapproval?fromdate='+$scope.formHistory.from+'&todate='+$scope.formHistory.to;
+        var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval/historyapproval?fromdate='+data.from+'&todate='+data.to;
         Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
         
     }
+    $scope.$on('$ionicView.beforeEnter', function (event,data) {
+        if(data.direction != undefined && data.direction!='back')
+            initMethod();
+    });
+
+    function initData() {
+        var currentDate = new Date();
+        var fromDate = $filter('date')((currentDate.getTime() - (7 * (1000 * 60 * 60 * 24)) ),'yyyy-MM-dd');
+        $scope.formHistory = {from:fromDate,to:currentDate};
+    }
+    function initMethod(){
+        initData();
+        $rootScope.data.historyApproval = [];
+    }
+})
 
 
+.controller('HistoryApprovalCtrl', function($stateParams,$rootScope, $scope,$state , AuthenticationService, Main) {
+    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+        $state.go("login");
+    }
 
+    console.log("history",$rootScope.data.historyApproval);
+    $scope.request = $rootScope.data.historyApproval;
+
+    $scope.gotoDetailRequest = function(id){
+        $state.go('app.myrequestdetail',{'id':id});
+    }
+
+    $scope.startDate = $stateParams.startDate;
+    $scope.endDate = $stateParams.endDate;
 
 })
+
 
 
