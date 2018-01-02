@@ -5,21 +5,21 @@
     angular.module('main.services', [])
     .factory('Main', function($q, $timeout, $http, $localStorage,$rootScope){
         //var hostname = "http://localhost:8080";
-        var hostname = "http://192.168.43.162:8080";
+        //var hostname = "http://192.168.43.162:8080";
         //var hostname = "https://talents-api.phincon.com";
-        //var hostname = "https://api.talents.id";
+        var hostname = "https://api.talents.id";
         var environment = "development"; // development , production
         var appmode = "mobile"; // mobile , web
-        var phphost = "http://localhost/talents/index.php"
+        //var phphost = "http://localhost/talents/index.php"
         //var phphost =  "https://talents-report.phincon.com/index.php";
-        //var phphost =  "https://report.talents.id/index.php";
+        var phphost =  "https://report.talents.id/index.php";
         var printBaseUrl = phphost + "/payslippdf";
         var printReportUrl = phphost + "/printpdf";
         var baseUrl = hostname;
         var basicAuthentication = 'Basic dGFsZW50czpzZWNyZXQ=';
-        var timeoutms = 15000; // 15 sec
-        var version = 110;
-        var versionName = "1.1.0";
+        var timeoutms = 35000; // 35 sec
+        var version = 121;
+        var versionName = "1.2.1";
         var takePictureOptions = {
             quality: 100,
             targetWidth : 750,
@@ -279,6 +279,8 @@
                     
                     if($rootScope.selectEmployeeSubstitute != undefined)
                         delete $rootScope.selectEmployeeSubstitute;
+
+                    
 
             }
 

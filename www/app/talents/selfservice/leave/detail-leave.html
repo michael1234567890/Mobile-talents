@@ -9,10 +9,15 @@
                  <h3>Description</h3>
                 <p>{{leave.typeDesc}}</p>
               </div>
-              <div class="item item-icon-left text-small" href="#">
+              <div class="item item-icon-left text-small" href="#" ng-if="leave.categoryType != 'Overtime'">
                 <i class="icon ion-calendar text-larger"></i>
                 <h3>Date</h3>
                 <p>{{leave.startDate | date: 'dd MMM'}}  - {{leave.endDate | date: 'dd MMM yyyy'}}</p>
+              </div>
+              <div class="item item-icon-left text-small" href="#" ng-if="leave.categoryType == 'Overtime'">
+                <i class="icon ion-calendar text-larger"></i>
+                <h3>Time</h3>
+                <p>{{leave.startDateInTime |  date: 'dd MMM HH:mm'}} - {{leave.endDateInTime | date: 'dd MMM HH:mm'}}</p>
               </div>
               
               <div class="item item-icon-left text-small" href="#">
@@ -22,12 +27,21 @@
                 <p>
                 {{leave.attendanceInTime | date: 'HH:mm'}}  - {{leave.attendanceOutTime | date: 'HH:mm'}}</p>
               </div>
-              <div class="item item-text-wrap item-icon-left text-small" href="#">
+              <div class="item item-text-wrap item-icon-left text-small" href="#" ng-if="leave.categoryType != 'Overtime'">
 
                 <i class="icon ion-android-walk text-larger"></i>
-                <h3>Overtime</h3>
+                <h3>Total</h3>
                 <div class="row">
-                    <div class="col-50 text-left">In : <b>{{leave.overtimeIn}}</b>&nbsp; Min </div><div class="col-50 text-left">Out : <b>{{leave.overtimeOut}}</b>&nbsp; Min</div>
+                    <div class="col-50 text-left"><b>{{leave.totalAmount}}</b>&nbsp; Day </div>
+                </div>
+              </div>
+
+              <div class="item item-text-wrap item-icon-left text-small" href="#" ng-if="leave.categoryType == 'Overtime'">
+
+                <i class="icon ion-android-walk text-larger"></i>
+                <h3>Total</h3>
+                <div class="row">
+                    <div class="col-50 text-left"><b>{{leave.overtimeIn}}</b>&nbsp; Min </div>
                 </div>
               </div>
               
@@ -35,7 +49,7 @@
 
                 <i class="icon ion-android-textsms text-larger"></i>
                 <h3>Remark</h3>
-                <p>{{leave.remark}} {{leave.remark}}</p>
+                <p>{{leave.remark}}</p>
               </div>
 </div>
 <div class="row" ng-if= "header.dataApproval.processingStatus=='Request'" >

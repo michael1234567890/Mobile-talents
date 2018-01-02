@@ -251,6 +251,26 @@ angular.module('talent.routes', [])
         }
       })
 
+      .state('app.listempdaily', {
+        url: '/listempdaily',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/leave/list-empdaily.html',
+            controller: 'ListEmpDailyCtrl'
+          }
+        }
+      })
+
+      .state('app.detailempdaily', {
+        url: '/detailempdaily/:idx',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/leave/detail-empdaily.html',
+            controller: 'DetailEmpDailyCtrl'
+          }
+        }
+      })
+
 
        .state('app.submitattendance', {
         url: '/submitattendance',

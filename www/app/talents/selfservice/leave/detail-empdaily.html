@@ -1,0 +1,61 @@
+<ion-view title="Submit Attendance Edit">
+    <ion-content padding="false"  scroll="true">
+    <form name="form" novalidate>
+    <div class="list">
+      <div  class="item padding">
+                  
+        <div class="item item-divider uppercase">
+            Reason
+        </div>
+
+        <div class="item item-icon-right" style="border:0px" modal-select ng-model="attendance.type" options="selectType" modal-title="Select a Type" option-property="type" on-select="onSelectType()">
+                {{labelType}}
+                <i class="icon ion-chevron-right icon-accessory"></i>
+              <div class="option">
+                <h2>{{option.typeLabel}}</h2>
+              </div>
+        </div>
+        
+         <div class="row">
+              <div class="input-field col">
+                  <p for="last_name">Date</p>
+                  <ionic-datepicker class="button button-block button-outline button-positive">
+                          {{atempdaily.workDate| date: "yyyy-MM-dd"}}
+                  </ionic-datepicker>
+              </div>
+        </div>
+        <div class="row">
+              <div class="input-field col-50">
+                  <p for="last_name">In</p>
+                  <ionic-timepicker ng-click="openTimePicker1()"> 
+                      <button class="button button-block button-outline button-positive">{{attendanceIn}}</button>
+                  </ionic-timepicker>
+              </div>&nbsp;&nbsp;
+              <div class="input-field col-50">
+                  <p for="last_name">Out</p>
+                  <ionic-timepicker ng-click="openTimePicker2()"> 
+                      <button class="button button-block button-outline button-positive">{{attendanceOut}}</button>
+                  </ionic-timepicker>
+              </div>
+        </div>
+
+
+        <div class="row">
+              <div class="input-field col s12">
+                  <p for="textarea1">Remark</p>
+                  <textarea  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" rows="3" placeholder="Enter your remark" maxlength="100" ng-model="attendance.remark" name="remark" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/"></textarea>
+                  <font color="red" style="font-size: 10px"><span ng-show="form.remark.$invalid">Should not contain any special characters</span></font>
+                  
+              </div>
+        </div>
+        <div class="row">
+              <button ng-disabled="atempdaily.isLocked" class="btn button-medium button button-balanced  button-block" style="font-weight:bold;background-color:#FF9800" ng-click="submitForm()" ng-disabled="form.$invalid">Next</button>
+            
+        </div>
+      </div>
+    </div>
+    </form>
+    </ion-content>
+</ion-view>
+
+

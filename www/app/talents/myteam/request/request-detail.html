@@ -13,11 +13,11 @@
     <div class="list">
         <div class="item item-text-wrap" >
             <p class="text-small">Request Type</p>
-            <h2 class="lead text-medium" >{{detail.description}}</h2>
+            <h2 class="lead text-small" >{{detail.description}}</h2>
         </div>
         <div class="item item-text-wrap" >
             <p class="text-small">Request No</p>
-            <h2 class="lead text-medium" >{{detail.ref.reqNo}}</h2>
+            <h2 class="lead text-small" >{{detail.ref.reqNo}}</h2>
         </div>
         <div ng-if="detail.task == 'CHANGEMARITALSTATUS'">
                 <div class="item item-text-wrap" >
@@ -41,27 +41,49 @@
                         <h2><b>{{detail.ref.categoryType}}</b></h2>
                         <p class="text-medium">{{detail.ref.details[0].typeDesc}}</p>
                       </div>
-                      <div class="item item-icon-left text-small" href="#">
+                      <div class="item item-icon-left text-small" href="#" ng-if="detail.ref.categoryType!='Overtime'">
                         <i class="icon ion-android-calendar text-larger"></i>
                         {{detail.ref.startDate | date: 'dd MMM yyyy'}} - {{detail.ref.endDate | date: 'dd MMM yyyy'}}
                       </div>
                       <div class="item item-icon-left text-small" href="#" ng-if="detail.ref.categoryType=='Attendance Edit'">
-                        <i class="icon ion-android-time text-larger"></i>
-                        <p class="text-large">{{detail.ref.details[0].attendanceInTime |  date: 'HH:mm'}} <b>To</b> {{detail.ref.details[0].attendanceOutTime |  date: 'HH:mm'}}</p>
+                        <i class="icon ion-android-time text-medium"></i>
+                        <p class="text-medium">{{detail.ref.details[0].attendanceInTime |  date: 'HH:mm'}} <b>To</b> {{detail.ref.details[0].attendanceOutTime |  date: 'HH:mm'}}</p>
                       </div>
+                      <div class="item item-icon-left text-small" href="#" ng-if="detail.ref.categoryType=='Overtime'">
+                        <i class="icon ion-android-calendar text-larger"></i>
+                        <p class="text-medium"><b>{{detail.ref.details[0].startDateInTime |  date: 'dd MMM HH:mm'}}</b>&nbsp;&nbsp; - &nbsp;&nbsp;<b>{{detail.ref.details[0].endDateInTime |  date: 'dd MMM HH:mm'}}</b></p>
+                      </div>
+                      <!-- 
                       <div class="item item-icon-left text-small" href="#" ng-if="detail.ref.categoryType=='Overtime'">
                         
                         <p class="text-large"><b>In : </b> {{detail.ref.details[0].overtimeIn/ 60 | round:'':'down'}} hours {{detail.ref.details[0].overtimeIn % 60}} min <b>Out : </b>{{detail.ref.details[0].overtimeOut / 60 | round:'':'down'}} hours {{detail.ref.details[0].overtimeOut % 60}} min</p>
-                      </div>
+                      </div>-->
                       <div class="item item-icon-left text-small item-text-wrap" href="#">
                         <i class="icon ion-android-chat text-larger"></i>
                         <p class="text-medium">{{detail.ref.details[0].remark}}</p>
                       </div>
 
-                      <div class="item item-icon-left text-small" href="#">
-                        <i class="icon ion-ios-compose-outline text-larger"></i>
-                        <p class="text-large"><b>Total : </b> {{detail.ref.details[0].totalWorkDay}} days</p>
+                      <div class="item item-icon-left text-small" href="#" ng-if="detail.ref.categoryType!='Overtime'">
+                        <i class="icon ion-ios-compose-outline text-medium"></i>
+                        <p class="text-medium"><b>Total : </b> {{detail.ref.details[0].totalWorkDay}} days</p>
                       </div>
+                      <div class="item item-icon-left text-small" href="#" ng-if="detail.ref.categoryType=='Overtime'">
+                        <i class="icon ion-ios-compose-outline text-medium"></i>
+                        <p class="text-medium">Total : <b> {{detail.ref.details[0].overtimeIn/ 60 | round:'':'down'}} hours {{detail.ref.details[0].overtimeIn % 60}} min</b></p>
+                      </div>
+
+
+                    <div class="item item-text-wrap">
+                        <h2 class="talents">Attachment</h2>
+                        <div class="row post" >
+                            <div class="col" ng-repeat="items in detail.attachments" style="width:90px;max-height:90px" ><img width="90px" height="90px"  ng-src="{{items.image}}" ng-click="openImagePreview(items.image)" /></div>
+                        </div>
+                    
+                    </div>
+
+
+
+
                 </div>
         </div>
 

@@ -65,7 +65,7 @@ angular.module('myteam.controllers', [])
       });
    		var accessToken = Main.getSession("token").access_token;
    		var urlApi = Main.getUrlApi() + '/api/myprofile/team';
-   		Main.requestApi(accessToken,urlApi,successProfile, errorProfile);
+   		Main.requestApi(accessToken,urlApi,successProfile, $scope.errorRequest);
    	}
 })
 
@@ -75,14 +75,18 @@ angular.module('myteam.controllers', [])
         $state.go("login");
   }
 
-    $scope.requests = [];
     $scope.module = {};
-
+    $scope.requests = [];
+    $scope.benefitRequests = [];
+    $scope.attendanceRequests = [];
+    
     var i=0;
     var j=0;
+    var h=0; //for attendance
     var size=Main.getDataDisplaySize();
     $scope.isLoadMoreBenefitShow = false;
     $scope.isLoadMorePersonalShow = false;
+    $scope.isLoadMoreAttendanceShow = false;
     $scope.confirmApprove = $ionicPopover.fromTemplate(contactTemplate, {
         scope: $scope
     });
@@ -99,16 +103,26 @@ angular.module('myteam.controllers', [])
         getMyRequest('benefit',i);
     }
 
+    $scope.loadMoreAttendance = function(){
+        h++;
+        console.log(h);
+        getMyRequest('attendance',h);
+    }
+
     $scope.chooseTab = function(tab){
         i=0;
         j=0;
+        h=0;
         $scope.module.type = tab;
-        if(tab === 'personalia'){
+        if(tab == 'personalia'){
             $scope.requests = [];
             getMyRequest(tab,j);
-        }else {
+        }else if(tab =='benefit') {
             $scope.benefitRequests = [];
             getMyRequest(tab,i);
+        }else {
+            $scope.benefitRequests = [];
+            getMyRequest(tab,h);
         }
         
     }
@@ -174,8 +188,10 @@ angular.module('myteam.controllers', [])
 
         if($scope.module.type == 'personalia') {
             $scope.requests.push(obj);
-        }else {
+        }else if($scope.module.type == 'benefit') {
             $scope.benefitRequests.push(obj);
+        }else {
+            $scope.attendanceRequests.push(obj);
         }
 
         if($scope.module.type == 'personalia') {
@@ -188,6 +204,11 @@ angular.module('myteam.controllers', [])
             $scope.isLoadMoreBenefitShow = false;
           else
             $scope.isLoadMoreBenefitShow = true;
+        }else {
+            if($scope.attendanceRequests.length == res.totalRecord) 
+              $scope.isLoadMoreAttendanceShow = false;
+            else
+              $scope.isLoadMoreAttendanceShow = true;
         }
 
           
@@ -207,6 +228,7 @@ angular.module('myteam.controllers', [])
     function initMethod(){
         $scope.requests = [];
         $scope.benefitRequests = [];
+        $scope.attendanceRequests = [];
         $scope.chooseTab('personalia');
     }
     
@@ -237,6 +259,7 @@ angular.module('myteam.controllers', [])
     $scope.module = {};
     $scope.hasDataBenefit = false;
     $scope.isLoadMoreBenefitShow = false;
+    $scope.isLoadMoreAttendanceShow = false;
     $scope.isLoadMorePersonalShow = false;
     var profile = Main.getSession("profile");
     $scope.isHr = profile.isHr;
@@ -251,10 +274,16 @@ angular.module('myteam.controllers', [])
         getNeedApproval('personalia',j);
     }
 
-     $scope.loadMoreBenefit = function(){
+    $scope.loadMoreBenefit = function(){
         i++;
         console.log(i);
         getNeedApproval('benefit',i);
+    }
+
+    $scope.loadMoreAttendance = function(){
+        h++;
+        console.log(h);
+        getNeedApproval('attendance',h);
     }
 
     $scope.$on('$ionicView.beforeEnter', function () {
@@ -359,6 +388,12 @@ angular.module('myteam.controllers', [])
             $scope.isLoadMoreBenefitShow = false;
           else
             $scope.isLoadMoreBenefitShow = true;
+      }else {
+          if($scope.attendanceRequests.length == res.totalRecord) 
+            $scope.isLoadMoreAttendanceShow = false;
+          else
+            $scope.isLoadMoreAttendanceShow = true;
+
       }
 
       $ionicLoading.hide();
@@ -398,6 +433,8 @@ angular.module('myteam.controllers', [])
       Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
     }
 })
+
+
 
 .controller('RequestDetailCtrl', function(ionicSuperPopup,$ionicPopup,$ionicPopover,$ionicModal,$ionicLoading,$stateParams,$rootScope, $scope,$state , AuthenticationService, Main) {
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
@@ -469,7 +506,7 @@ angular.module('myteam.controllers', [])
            showCancelButton: true,
            confirmButtonColor: "#DD6B55",
            confirmButtonText: "Yes",
-           closeOnConfirm: false
+           closeOnConfirm: true
          },
         function(isConfirm){
              if (isConfirm) {
@@ -497,7 +534,7 @@ angular.module('myteam.controllers', [])
            showCancelButton: true,
            confirmButtonColor: "#DD6B55",
            confirmButtonText: "Yes",
-           closeOnConfirm: false
+           closeOnConfirm: true
          },
         function(isConfirm){
              if (isConfirm) {

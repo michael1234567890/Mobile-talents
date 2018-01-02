@@ -1,0 +1,119 @@
+<ion-view title="Attendance" class="bg-lightgrey">
+
+    <ion-content class="has-header bt-grey profile" scroll="false">
+        
+        <div>
+          <div class="row">
+            <div class="col col-30 padding">
+                <select ng-model="selected.month" class="center" 
+                ng-options="month.id as month.name for month in month">
+                <option value="">Month</option>
+                </select>
+            </div>
+            <div class="col col-30 padding">
+                <select ng-model="selected.year" class="center" >
+                    <option value="">Year</option>
+                    <option ng-repeat="year in year">{{year.id}}</option>
+                </select>
+            </div>
+
+            <div class="col col-40 padding">
+                <button class="btn" ng-click="show()">SHOW</button>
+            </div>
+          </div>             
+
+        </div>
+
+        <style>
+            .left2 {
+                text-align: left;
+                float: left;
+                width: 100%;
+            }
+            .right2 {
+                text-align: right;
+                float: right;
+                width: 93%;
+            }
+            .square{
+                width: 60px;
+                height: 60px;
+                color: #33cd5f;
+                margin: 0px;
+                border-radius: 25px;
+                padding-top: 15px;
+            }
+
+            .nopaddingbottom{
+                padding-bottom: 0px;
+            }
+
+            .letak{
+                padding-top: 10px;
+                padding-bottom: 5px;
+            }
+        </style>
+
+    
+    <ion-scroll class="bg-lightgrey" direction="y" style="height:100%">
+       
+       <!--  <ion-refresher pulling-text="Pull to refresh"
+             refreshing-text="Loading..."
+             refreshing-icon="ion-loading-c"
+             pulling-icon="ion-ios7-arrow-thin-down"
+             on-refresh="refresh()">
+        </ion-refresher>
+        -->
+     <div class="list" ng-repeat="item in atempdaily" ng-click="goToDetails(item.idx)">
+        <div class="item row">
+            <div class="col col-20 square">
+                 <center>
+                    <h3 class="balanced">{{item.workDate | date: "dd"}}</h3>
+                    <h5 class="balanced">{{item.workDate | date: "MMM"}}</h5>
+                 </center>
+            </div>
+            <div class="col">
+            <!-- <img ng-src="{{post.sourceLogo}}">-->
+
+                <div class="row">
+                    <h4 class="balanced">{{item.dayType}}</h4>
+                </div>
+                <!-- <h3>Sub</h3>-->
+                <div class="row">
+
+                    <div class="col">
+                        <span class="text-small font-thin pull-left">IN</span>
+                    </div>
+                    <div class="col">
+                        <span class="text-small font-thin pull-right">{{item.actualInTime | date: "HH:mm"}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <span class="text-small font-thin pull-left">OUT</span>
+                    </div>
+                    <div class="col">
+                        <span class="text-small font-thin pull-right">{{item.actualOutTime | date: "HH:mm"}}</span>
+                    </div>
+                </div>
+                <div class="row"> 
+                    <span class="item-note calm text-small">
+                     {{item.reason}}
+                    </span>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="item" ng-if=" atempdaily.length == 0" >
+        <div class="col col-100">
+            <h2>Data not found</h2>
+        </div>  
+    </div>
+
+    
+
+    </ion-scroll>
+</ion-content>
+</ion-view>

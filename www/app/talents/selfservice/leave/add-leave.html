@@ -4,7 +4,7 @@
     <div class="list">
       <div  class="item padding">
         <div ng-if="leaveCategory =='leave' || leaveCategory =='permission'">
-          <div class="row no-padding text-center bt-grey bb-grey" style="height:44px">
+          <div class="row no-padding text-center bt-grey bb-grey" style="height:44px" ng-if="leaveCategory =='leave'">
               <div class="col col-40"><p class="bb text-small padding uppercase">Remaining</p></div>
               <div class="col col-10 bl-grey"><p class="bb text-large padding uppercase" ><b>{{balance.balanceEnd}}</b></p></div>
               <div class="col col-40"><p class="bb text-small padding uppercase">Used</p></div>
@@ -28,7 +28,7 @@
           </div>
           <div class="row">
                 <div class="input-field col">
-                    <p for="last_name">Start</p>
+                    <p for="last_name"><b>Start</b></p>
                     <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker()">
                             {{leave.startDate| date: "yyyy-MM-dd"}}
                     </ionic-datepicker>
@@ -36,7 +36,7 @@
           </div>
           <div class="row" ng-if="leaveCategory !='Overtime' &&  leaveCategory !='Edit Attendance'">
                 <div class="input-field col">
-                    <p for="last_name">End</p>
+                    <p for="last_name"><b>End</b></p>
                     <ionic-datepicker class="button button-block button-outline button-positive" ng-click="openDatePicker1()">
                             {{leave.endDate| date: "yyyy-MM-dd"}}
                     </ionic-datepicker>
@@ -128,6 +128,46 @@
                   <h2>{{option.typeLabel}}</h2>
                 </div>
           </div>
+          <div class="item item-divider uppercase">
+            Date & Time
+          </div>
+            <div class="row">
+              <p for="last_name"><b>Start</b></p>
+            </div>
+            <div class="row">
+              <div class="col">
+                <ionic-datepicker class="button button-block button-outline button-dark text-medium" ng-click="openDatePickerOvertime1()">
+                    <span class="icon ion-calendar">&nbsp;&nbsp;{{leave.startDateInTimeDate| date: "yyyy-MM-dd"}}</span>
+                </ionic-datepicker>
+              </div>
+              &nbsp;
+              <div class="col ">
+                    <ionic-timepicker class="button button-block button-outline button-dark text-medium" ng-click="openTimePickerOvertime1()"> 
+                      <span class="icon ion-clock">&nbsp;&nbsp;{{leave.startDateInTimeTime | date:'HH:mm'}}</span>
+                    </ionic-timepicker>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <p for="last_name"><b>End</b></p>
+            </div>
+            <div class="row">
+              <div class="col">
+                <ionic-datepicker class="button button-block button-outline button-dark text-medium" ng-click="openDatePickerOvertime2()">
+                    <span class="icon ion-calendar">&nbsp;&nbsp;{{leave.endDateInTimeDate| date: "yyyy-MM-dd"}}</span>
+                  
+                </ionic-datepicker>
+              </div>
+              &nbsp;
+              <div class="col">
+                <ionic-timepicker class="button button-block button-outline button-dark text-medium" ng-click="openTimePickerOvertime2()"> 
+                    <span class="icon ion-clock">&nbsp;&nbsp;{{leave.endDateInTimeTime | date:'HH:mm'}}</span>
+
+                </ionic-timepicker>
+              </div>
+           </div>
+          <!--
            <div class="row">
                 <div class="input-field col">
                     <p for="last_name">Date</p>
@@ -175,7 +215,7 @@
                         <div class="col"><h6>&nbsp;Min</h6></div>
                     </div>
                 </div>
-          </div>
+          </div> -->
           <div class="row">
                 <div class="input-field col s12">
                     <p for="textarea1">Remark</p>

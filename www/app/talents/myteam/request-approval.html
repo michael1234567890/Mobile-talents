@@ -152,7 +152,8 @@
                     </span>
                     <h2 class="lead">{{item.employeeRequest.name}}</h2>
                     <p class="text-medium" >{{item.ref.categoryType}}</p>
-                    <p class="text-smaller" >{{item.ref.startDate | date: 'dd MMM yyyy'}} - {{item.ref.endDate | date: 'dd MMM yyyy'}}</p>
+                    <p class="text-smaller" ng-if="item.ref.categoryType!='Overtime'">{{item.ref.startDate | date: 'dd MMM yyyy'}} - {{item.ref.endDate | date: 'dd MMM yyyy'}}</p>
+                    <p class="text-smaller" ng-if="item.ref.categoryType=='Overtime'" >{{item.ref.startDateInTime | date: 'dd MMM HH:mm'}} - {{item.ref.endDateInTime | date: 'dd MMM HH:mm'}}</p>
                     <span class="item-note positive text-smaller">
                            Approval {{item.currentApprovalLevel + 1}} of {{item.approvalLevel}}
                     </span>
@@ -160,8 +161,8 @@
                 </div>
          </div>
 
-        <div class="row" ng-if="benefitRequests.length != 0"  ng-show="isLoadMoreBenefitShow" style="padding-top:0px;min-height:120px">
-            <button style="height:30px" class="button button-block button-outline button-positive" ng-click="loadMoreBenefit()">Load More Results</button>
+        <div class="row" ng-if="attendanceRequests.length != 0"  ng-show="isLoadMoreAttendanceShow" style="padding-top:0px;min-height:120px">
+            <button style="height:30px" class="button button-block button-outline button-positive" ng-click="loadMoreAttendance()">Load More Results</button>
     
         </div>
          <div class="item" ng-if="attendanceRequests.length == 0" >

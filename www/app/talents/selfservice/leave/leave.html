@@ -25,13 +25,17 @@
         </ion-refresher>
         <div  class="bg-lightgrey">
             <div class="item item-text-wrap item-icon-right" ng-repeat="item in leaves"  ng-click="goToDetailLeave(item.id)">
-                <div class="row">
+                <div class="row" ng-if="item.categoryType != 'Overtime'">
                     <div class="left"><h5 class="uppercase no-margin no-padding thicker">{{item.startDate | date: 'dd MMM'}} - {{item.endDate | date: 'dd MMM yyyy'}}</h5></div>
+                </div>
+                <div class="row" ng-if="item.categoryType == 'Overtime'">
+                    <div class="left"><h5 class="uppercase no-margin no-padding thicker">{{item.startDateInTime |  date: 'dd MMM HH:mm'}} - {{item.endDateInTime | date: 'dd MMM HH:mm'}}</h5></div>
                 </div>
                
                 <div class="row">
                     <div class="uppercase left"><h3 class="thicker">{{item.categoryType}}</h3></div>
-                    <div class="uppercase right"><h5 class="positive no-margin no-padding thicker">{{item.totalAmount}} Days</h5></div>
+                    <div class="uppercase right" ng-if="item.categoryType != 'Overtime'"><h5 class="positive no-margin no-padding thicker">{{item.totalAmount}} Days</h5></div>
+                    <div class="uppercase right" ng-if="item.categoryType == 'Overtime'"><h5 class="positive no-margin no-padding thicker">{{item.overtimeIn}} min</h5></div>
                 </div>
                 <div class="row">
                     <div class="left"><h5 style="color: #949494;">{{item.createdDate  | date: 'dd MMM yyyy HH:mm'}}</h5></div>

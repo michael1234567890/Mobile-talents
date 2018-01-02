@@ -340,12 +340,12 @@ angular.module('selfservice.controllers', [])
         var accessToken = Main.getSession("token").access_token;
         var url = "";
         if(type=='monthly'){
-          url = Main.getPrintBaseUrl() + "/monthly/latest?employment_id="+employment_id+"&session_id="+accessToken;
+          url = Main.getPrintBaseUrl() + "/monthly/latest?employment_id="+employment_id+"&ses_id="+accessToken;
           if($scope.payslipType == 'monthly') 
-            url = Main.getPrintBaseUrl() + "/monthly?employment_id="+employment_id+"&year="+year+"&month="+month+"&session_id="+accessToken;
+            url = Main.getPrintBaseUrl() + "/monthly?employment_id="+employment_id+"&year="+year+"&month="+month+"&ses_id="+accessToken;
         
         }else{
-          url = Main.getPrintBaseUrl() + "/yearly?employment_id="+employment_id+"&session_id="+accessToken;
+          url = Main.getPrintBaseUrl() + "/yearly?employment_id="+employment_id+"&ses_id="+accessToken;
         } 
         console.log("URL PDF",url);
         window.open(encodeURI(url), '_system', 'location=yes');

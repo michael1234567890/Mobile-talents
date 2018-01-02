@@ -14,12 +14,12 @@
                         <h3 class="balanced ">{{typeDesc}}</h3>
                     </div>
 
-                    <div class="item item-light">
+                    <div class="item item-light" ng-if="categoryType!='overtime'">
                         <i class="icon ion-android-calendar text-large"></i>
                         &nbsp;DATE
                     </div>
 
-                     <div class="item item-text-wrap">
+                     <div class="item item-text-wrap" ng-if="categoryType!='overtime'">
                         <div class="row">
                             <div class="col-40 text-center">
                                 <h3 class="balanced">{{startDate | date: 'dd MMM yyyy'}}<h3>
@@ -60,6 +60,18 @@
                      <div class="item item-text-wrap" ng-if="categoryType=='overtime'">
                         <div class="row ">
                             <div class="col-50 text-center">
+                                <h2 class="text-small">Start</h2>
+                                <h3 class="balanced">{{startDateInTime | date: 'dd MMM HH:mm'}}<h3>
+                            </div>
+                           
+                            <div class="col-50 text-center" >
+                                <h2 class="text-small">End</h2>
+                                <h3 class="balanced">{{endDateInTime | date: 'dd MMM HH:mm'}}</h3>
+                            </div>
+                        </div>
+                        <!-- 
+                        <div class="row ">
+                            <div class="col-50 text-center">
                                 <h2 class="text-small">In</h2>
                                 <h3 class="balanced">{{(overtimeIn / 60)  |  round:'':'down'}} Hours {{overtimeIn % 60}} Min<h3>
                             </div>
@@ -68,14 +80,14 @@
                                 <h2 class="text-small">Out</h2>
                                 <h3 class="balanced">{{(overtimeOut / 60) | round:'':'down'}} Hours {{overtimeOut % 60 }} Min</h3>
                             </div>
-                        </div>
+                        </div> -->
                      </div>
 
                      <div class="item item-light">
                         <i class="icon ion-compose text-large"></i>
                             &nbsp;TOTAL
                      </div>
-                     <div class="item item-text-wrap">
+                     <div class="item item-text-wrap" ng-if="categoryType!='overtime'">
                         <div class="row">
                             <div class="col text-left">
                                 <h3 class="balanced">Request : <b>{{total | number : 0}}</b> Days<h3>
@@ -83,6 +95,14 @@
                             <div class="col text-left">
                                 <h3 class="balanced">Balance : <b>{{totalBalance | number : 0}}</b> Days</h3>
                             </div>
+                        </div>
+                     </div>
+                     <div class="item item-text-wrap" ng-if="categoryType=='overtime'">
+                        <div class="row">
+                            <div class="col text-left">
+                                <h3 class="balanced">Request : <b>{{(overtimeIn / 60)  |  round:'':'down'}} Hours {{overtimeIn % 60}} Min</b> <h3>
+                            </div>
+                            
                         </div>
                      </div>
                 </div>

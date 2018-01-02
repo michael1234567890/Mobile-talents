@@ -165,20 +165,22 @@
 
                     var applyScope = function(imageResult) {
                         scope.$apply(function() {
-                            if (attrs.multiple) {
-                                scope.image.push(imageResult);
-                            } else {
-                                scope.image = imageResult;
-                            }
+                            scope.image.push(imageResult);
+                            // if (attrs.multiple) {
+                            //     scope.image.push(imageResult);
+                            // } 
+                            // else {
+                            //     scope.image = imageResult;
+                            // }
                         });
                     };
 
 
                     element.bind('change', function(evt) {
                         //when multiple always return an array of images
-                        if (attrs.multiple) {
-                            scope.image = [];
-                        }
+                        // if (attrs.multiple) {
+                        //     scope.image = [];
+                        // }
 
                         var files = evt.target.files;
                         for (var i = 0; i < files.length; i++) {

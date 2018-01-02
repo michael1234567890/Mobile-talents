@@ -538,7 +538,7 @@ angular.module('myhr.controllers', [])
            showCancelButton: true,
            confirmButtonColor: "#DD6B55",
            confirmButtonText: "Yes",
-           closeOnConfirm: false
+           closeOnConfirm: true
          },
         function(isConfirm){
              if (isConfirm) {
@@ -876,7 +876,7 @@ angular.module('myhr.controllers', [])
            showCancelButton: true,
            confirmButtonColor: "#DD6B55",
            confirmButtonText: "Yes",
-           closeOnConfirm: false},
+           closeOnConfirm: true},
         function(isConfirm){
              if (isConfirm) {
                 sendData();
@@ -1600,7 +1600,7 @@ angular.module('myhr.controllers', [])
            showCancelButton: true,
            confirmButtonColor: "#DD6B55",
            confirmButtonText: "Yes",
-           closeOnConfirm: false},
+           closeOnConfirm: true},
         function(isConfirm){
              if (isConfirm) {
                 sendData();
