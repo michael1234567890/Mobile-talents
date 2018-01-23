@@ -74,31 +74,37 @@
             </div>
             <div class="col">
             <!-- <img ng-src="{{post.sourceLogo}}">-->
+                <div class="row">
+                    <div class="col text-center energized" style="margin-right:2px;">
+                        <div class="row"><span class="text-small font-thin pull-left">Schedule</span></div>
+                        <div class="row">
+                            <div class="col">
+                            <span class="text-small font-thin pull-left">IN</span><span class="text-small font-thin pull-right">{{item.inTime | date: "HH:mm"}}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                            <span class="text-small font-thin pull-left">OUT</span><span class="text-small font-thin pull-right">{{item.outTime | date: "HH:mm"}}</span></div>
+                        </div>
+                    </div>
 
-                <div class="row">
-                    <h4 class="balanced">{{item.dayType}}</h4>
-                </div>
-                <!-- <h3>Sub</h3>-->
-                <div class="row">
+                    <div class="col text-center balanced" style="margin-left:2px;">
+                        <div class="row"><span class="text-small font-thin pull-left">Actual</span></div>
 
-                    <div class="col">
-                        <span class="text-small font-thin pull-left">IN</span>
+                        <div class="row">
+                            <div class="col">
+                            <span class="text-small font-thin pull-left">IN</span><span class="text-small font-thin pull-right">{{item.editInTime | date: "HH:mm"}}</span></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <span class="text-small font-thin pull-left">OUT</span><span class="text-small font-thin pull-right">{{item.editOutTime | date: "HH:mm"}}</span></div>
+                        </div>
                     </div>
-                    <div class="col">
-                        <span class="text-small font-thin pull-right">{{item.actualInTime | date: "HH:mm"}}</span>
-                    </div>
+
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <span class="text-small font-thin pull-left">OUT</span>
-                    </div>
-                    <div class="col">
-                        <span class="text-small font-thin pull-right">{{item.actualOutTime | date: "HH:mm"}}</span>
-                    </div>
-                </div>
-                <div class="row"> 
+                <div class="row text-right">
                     <span class="item-note calm text-small">
-                     {{item.reason}}
+                     {{item.editRemark}}
                     </span>
                 </div>
             </div>

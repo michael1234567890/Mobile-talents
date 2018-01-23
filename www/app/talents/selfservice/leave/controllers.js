@@ -14,8 +14,8 @@ angular.module('leave.controllers', [])
     $scope.leave = {};
     var messageValidation="";
     $scope.attendance = {};
-    $scope.attendanceIn = $filter('date')(new Date($scope.atempdaily.actualInTime), 'HH:mm');
-    $scope.attendanceOut = $filter('date')(new Date($scope.atempdaily.actualOutTime), 'HH:mm');
+    $scope.attendanceIn = $filter('date')(new Date($scope.atempdaily.editInTime), 'HH:mm');
+    $scope.attendanceOut = $filter('date')(new Date($scope.atempdaily.editOutTime), 'HH:mm');
     var employee= Main.getSession("profile").employeeTransient.id;
 
     $scope.onSelectType = function() {
@@ -89,7 +89,7 @@ angular.module('leave.controllers', [])
         },
         inputTime: 32400,
         format: 24,
-        step: 5,
+        step: 1,
         setLabel: 'Set'
     };
 
@@ -118,7 +118,7 @@ angular.module('leave.controllers', [])
         },
         inputTime: 32400,
         format: 24,
-        step: 5,
+        step: 1,
         setLabel: 'Set'
     };
 
@@ -137,8 +137,8 @@ angular.module('leave.controllers', [])
                 template: '<ion-spinner></ion-spinner>'
             });
 
-            $scope.atempdaily.actualInTime = $filter('date')(new Date($scope.atempdaily.actualInTime), 'yyyy-MM-dd');
-            $scope.atempdaily.actualOutTime = $filter('date')(new Date($scope.atempdaily.actualOutTime), 'yyyy-MM-dd');
+            $scope.atempdaily.editInTime = $filter('date')(new Date($scope.atempdaily.editInTime), 'yyyy-MM-dd');
+            $scope.atempdaily.editOutTime = $filter('date')(new Date($scope.atempdaily.editOutTime), 'yyyy-MM-dd');
             var dataPost = {};
             dataPost.startDate = $scope.atempdaily.workDate;
             dataPost.endDate = $scope.atempdaily.workDate;
@@ -668,7 +668,7 @@ angular.module('leave.controllers', [])
         },
         inputTime: 32400,   //Optional
         format: 24,         //Optional
-        step: 5,           //Optional
+        step: 1,           //Optional
         setLabel: 'Set'    //Optional
     };
   
@@ -699,7 +699,7 @@ angular.module('leave.controllers', [])
         },
         inputTime: 32400,   //Optional
         format: 24,         //Optional
-        step: 5,           //Optional
+        step: 1,           //Optional
         setLabel: 'Set'    //Optional
     };
   
@@ -882,15 +882,15 @@ angular.module('leave.controllers', [])
 
     var successGetBalance = function(res){
         $ionicLoading.hide();
-        // $scope.balance = res;
-        var balanceEnd =0;
-        var balanceUsed=0;
-        for(var i=0;i<res.length;i++) {
-            balanceEnd += res[i].balanceEnd;
-            balanceUsed += res[i].balanceUsed;
-        }
-        $scope.balance.balanceEnd = balanceEnd;
-        $scope.balance.balanceUsed = balanceUsed;
+        $scope.balance = res;
+        // var balanceEnd =0;
+        // var balanceUsed=0;
+        // for(var i=0;i<res.length;i++) {
+        //     balanceEnd += res[i].balanceEnd;
+        //     balanceUsed += res[i].balanceUsed;
+        // }
+        // $scope.balance.balanceEnd = balanceEnd;
+        // $scope.balance.balanceUsed = balanceUsed;
     }
     var errorRequestBalance = function(res){
          $ionicLoading.hide();

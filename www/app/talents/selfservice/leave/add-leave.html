@@ -4,11 +4,11 @@
     <div class="list">
       <div  class="item padding">
         <div ng-if="leaveCategory =='leave' || leaveCategory =='permission'">
-          <div class="row no-padding text-center bt-grey bb-grey" style="height:44px" ng-if="leaveCategory =='leave'">
-              <div class="col col-40"><p class="bb text-small padding uppercase">Remaining</p></div>
-              <div class="col col-10 bl-grey"><p class="bb text-large padding uppercase" ><b>{{balance.balanceEnd}}</b></p></div>
-              <div class="col col-40"><p class="bb text-small padding uppercase">Used</p></div>
-              <div class="col col-10 bl-grey" ><p class="bb text-large padding uppercase"><b>{{balance.balanceUsed}}</b></p></div>
+          <div class="row no-padding text-center bt-grey bb-grey" style="height:44px; border:none;" ng-if="leaveCategory =='leave'" ng-repeat="balance in balance">
+              <div class="col col-40"><p class="bb text-small padding uppercase">Remaining {{balance.period}}</p></div>
+              <div class="col col-10"><p class="bb text-large padding uppercase" style="min-height:42px !important;"><b>{{balance.balanceEnd}}</b></p></div>
+              <div class="col col-40"><p class="bb text-small padding uppercase">Used {{balance.period}}</p></div>
+              <div class="col col-10" ><p class="bb text-large padding uppercase" style="min-height:42px !important;"><b>{{balance.balanceUsed}}</b></p></div>
           </div>
           
         <div class="item item-divider uppercase">

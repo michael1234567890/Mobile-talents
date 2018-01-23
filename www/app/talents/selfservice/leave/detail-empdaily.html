@@ -27,7 +27,7 @@
         <div class="row">
               <div class="input-field col-50">
                   <p for="last_name">In</p>
-                  <ionic-timepicker ng-click="openTimePicker1()"> 
+                  <ionic-timepicker ng-click="openTimePicker1()">
                       <button class="button button-block button-outline button-positive">{{attendanceIn}}</button>
                   </ionic-timepicker>
               </div>&nbsp;&nbsp;
@@ -43,7 +43,7 @@
         <div class="row">
               <div class="input-field col s12">
                   <p for="textarea1">Remark</p>
-                  <textarea  style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" rows="3" placeholder="Enter your remark" maxlength="100" ng-model="attendance.remark" name="remark" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/"></textarea>
+                  <textarea disabled style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:5px" rows="3" placeholder="{{atempdaily.editRemark}}" maxlength="100" ng-model="attendance.remark" name="remark" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/"></textarea>
                   <font color="red" style="font-size: 10px"><span ng-show="form.remark.$invalid">Should not contain any special characters</span></font>
                   
               </div>
