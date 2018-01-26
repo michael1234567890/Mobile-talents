@@ -1329,5 +1329,118 @@ angular.module('selfservice.controllers', [])
  })
 
 
+.controller('ChoiceSptaiCtrl', function($ionicLoading,$compile,$filter,$cordovaGeolocation,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+    if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
+        $state.go("login");
+    }
+    var messageValidation="";
+    $scope.selectMonth = Main.getSelectMonth();
+    $scope.sptai = {};
+    $scope.choice = {};
+    $scope.choiceSelect="";
+    $scope.choice.select = "monthly";
+    $scope.sptaiType = Main.getSession("profile").companySettings.payslipType;
+    var arrCompanyRef = Main.getSession("profile").companyReference;
+    var refYear = Main.getDataReference(arrCompanyRef,'payslip',null,'selectYear');
+    var year ="0";
+    var month = "0";
+    var successRequest = function (res){
+      $ionicLoading.hide();
+      if(res.length == 0 ){
+          $scope.warningAlert("Data Not Found");
+      }else {
+        $rootScope.payslipSelected = res;
+        $state.go("app.detailsptai",{'year':year,'month':month,'type':$scope.choiceSelect});
+      }
+    }
+
+    
+
+    $scope.submitForm = function(choice){
+      $scope.choiceSelect = choice.select;
+      if(verificationForm($scope.sptai)){
+            $ionicLoading.show({
+                template: 'Loading...'
+            });
+            var url = "";
+            var strData="";
+            var data="";
+            if(choice.select == 'monthly') {
+                url = Main.getUrlApi() + '/api/user/payroll';
+                var strData ="";
+                if($scope.sptaiType == 'monthly') {
+                    month = Main.getIdfromValue($scope.selectMonth,$scope.sptai.month);
+                    year = $scope.sptai.year;
+                    strData = {payrollType:$scope.sptaiType,month:month,year:year};
+                } else {
+                    strData = {payrollType:$scope.sptaiType};
+                }
+                  
+                data = JSON.stringify(strData);
+            }else {
+              url = Main.getUrlApi() + '/api/user/payroll/yearly';
+            }
+            var accessToken = Main.getSession("token").access_token;
+            var urlApi = Main.getUrlApi() + '/api/user/payroll';
+            Main.postRequestApi(accessToken,url,data,successRequest,$scope.errorRequest);
+
+      }else {
+          $scope.warningAlert(messageValidation);
+      }
+      
+
+    }
+
+    // function to print data choice sptai
+    $scope.printPdf = function(year){  
+      var profile = Main.getSession("profile");
+      if(profile.employeeTransient.assignment.employment == null) {
+          alert("Employment is null");
+          return false;
+      }
+      var employment_id = profile.employeeTransient.assignment.employment;
+      var accessToken = Main.getSession("token").access_token;
+      var url = "";
+      url = Main.getPrintSptBaseUrl() + "?employment_id="+employment_id+"&ses_id="+accessToken+"&year="+year;
+      
+      console.log("URL PDF",url);
+      window.open(encodeURI(url), '_system', 'location=yes');
+      return false;
+    }
+    
+
+    var successLatestPeriod = function (res){
+      $ionicLoading.hide();
+      if(res!= null && res.periodDate != null) {
+          arrPeriodDate = res.periodDate.split("-");
+          $scope.sptai.year = arrPeriodDate[0];
+          $scope.sptai.month = Main.getValuefromId($scope.selectMonth,arrPeriodDate[1]);
+      }
+    }
+
+    
+
+
+
+
+    function initModule(){
+        if(refYear != undefined && refYear != '') {
+             $scope.selectYear = JSON.parse(refYear);
+        }
+        
+      // calculate one year ago from date now
+      var date = (new Date()).getFullYear() - 1;
+      var dateString = date.toString();
+      var data = $filter('date')(new Date(),'yyyy');
+      
+      $scope.sptai.year = dateString;
+      
+          
+    }
+
+
+    initModule();
+
+ })
 
 

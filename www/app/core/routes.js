@@ -669,6 +669,18 @@ angular.module('talent.routes', [])
           }
         }
       })
+
+
+      .state('app.choicesptai', {
+        url: '/choicesptai',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/selfservice/sptai/choice-sptai.html',
+            controller: 'ChoiceSptaiCtrl'
+          }
+        }
+      })
+
     $urlRouterProvider.otherwise('/app/myhr')
 
 
