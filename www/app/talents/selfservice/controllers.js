@@ -1327,7 +1327,7 @@ angular.module('selfservice.controllers', [])
 
 
  })
-
+  
 
 .controller('ChoiceSptaiCtrl', function($ionicLoading,$compile,$filter,$cordovaGeolocation,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
@@ -1419,9 +1419,6 @@ angular.module('selfservice.controllers', [])
     }
 
     
-
-
-
 
     function initModule(){
         if(refYear != undefined && refYear != '') {
