@@ -1,0 +1,43 @@
+<ion-view title="Change Npwp" class="bg-lightgrey">
+
+    <ion-nav-buttons side="right">
+    </ion-nav-buttons>
+
+    <ion-content class="has-header bt-grey profile" scroll="true">
+        <ion-list>
+            
+
+            <div class="item item-divider">Npwp</div>
+            <div class="row">
+                <input ng-model="npwp.npwpNo" placeholder="Enter Npwp Number" type="text" class="validate" name="npwpNo" ng-pattern="/^[0-9]*$/" maxlength="20" ng-value="{{personal.npwpNo}}">
+            </div>        
+
+            <div class="item item-divider">Document</div>
+            <div class="row" ng-show="appMode=='mobile'">
+                  <button class="button button-block button-outline button-positive" ng-click="addPicture()"><i class="icon ion-ios-camera-outline"></i> Add Attachment</button>
+            </div>
+            <div class="row" ng-show="appMode=='web'">
+                    <input id="inputImage" type="file" accept="image/*" ng-model="npwp.imagesData" image="npwp.imagesData" resize-max-height="800" resize-max-width="800" resize-quality="0.7" resize-type="image/jpg" multiple="multiple" ng-image-compress/> 
+            </div>
+            <div class="row post" ng-show="appMode=='mobile'" >
+                  <div class="col" style="height:90px;width:90px" ng-repeat="items in npwp.images" ><img height="90px" width="90px"   ng-src="{{items.image}}" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button></div>
+                 
+            </div>
+            <div class="row post" ng-show="appMode=='web'">
+            <div class="col" ng-repeat="item in npwp.imagesData" style="height:90px;width:90px"  >
+                <img  ng-src="{{item.compressed.dataURL}}" height="90px" width="90px" /> <button class="remove" ng-show="$last" ng-click="removeChoice()">-</button>
+            </div>
+            </div>
+            <div class="row center" ng-show="appMode=='mobile'">
+                <div class="col" style="max-height:90px;max-width:90px" ng-if="npwp.imagesData.length==0"><a ><img ng-src="{{image}}" height="90px" ></a></div>
+            </div>
+            <div class="row center" ng-show="appMode=='web'">
+                 <div style="max-height:90px;max-width:90px" class="col"  ng-if="npwp.imagesData==0"><img ng-src="{{image}}" height="90px" ></div>
+            </div>
+            <div class="row" style="padding-top:50px">
+                <button  class="btn waves-effect waves-light button button-positive button-block waves-effect waves-light" ng-click="send()">Send</button>
+            </div>
+        </ion-list>
+
+    </ion-content>
+</ion-view>

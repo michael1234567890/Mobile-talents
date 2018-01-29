@@ -81,6 +81,11 @@ angular.module('myhr.controllers', [])
       $state.go('app.changemaritalstatus',{'currentStatus':currentStatus,'dataApprovalId':dataApprovalId});
     };
 
+
+    $scope.goChangeNpwp = function (currentStatus,dataApprovalId) {
+      $state.go('app.changenpwp',{'currentStatus':currentStatus,'dataApprovalId':dataApprovalId});
+    };
+
     $scope.personal = {};
     
     
@@ -100,6 +105,8 @@ angular.module('myhr.controllers', [])
           
       }
       $scope.$broadcast('scroll.refreshComplete');
+
+      console.log($scope.personal);
     }
 
    	$scope.$on('$ionicView.beforeEnter', function (event,data) {
@@ -1650,5 +1657,262 @@ angular.module('myhr.controllers', [])
     initModule();
 
 })
+
+
+.controller('ChangeNpwpCtrl', function(ionicSuperPopup,$ionicPopup, $ionicActionSheet,appService,$ionicHistory,$cordovaCamera,$stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+
+    var arrCompanyRef = Main.getSession("profile").companyReference;
+    var arrItens = Main.getDataReference(arrCompanyRef,'personal','information','npwp');
+    $scope.itens = JSON.parse(arrItens);
+    var dataapprovalId = $stateParams.dataApprovalId;
+    $scope.currentStatus = $stateParams.currentStatus;
+    $scope.showButton = true;
+    $scope.dataApprovalStatus = null;
+    $scope.appMode = Main.getAppMode();
+    $scope.image = "img/placeholder.png";
+    $scope.npwp = {};
+    $scope.npwp.npwpNo = "";
+    $scope.npwp.images = []; 
+    $scope.npwp.imagesData = []; 
+    $scope.imageData ;
+    var messageValidation = "";
+
+    $scope.removeChoice = function(){
+        var lastItem = $scope.npwp.imagesData.length-1;
+        $scope.npwp.imagesData.splice(lastItem);
+        $scope.npwp.images.splice(lastItem);
+    }
+
+    $scope.addPicture = function () {
+          if($scope.npwp.images.length > 2) {
+            $scope.errorAlert("Only 3 pictures can be upload");
+            return false;
+          }
+        
+
+          $ionicActionSheet.show({
+              buttons: [{
+                  text: 'Take Picture'
+              }, {
+                      text: 'Select From Gallery'
+                  }],
+              buttonClicked: function (index) {
+                  switch (index) {
+                      case 0: // Take Picture
+                          document.addEventListener("deviceready", function () {
+                              $cordovaCamera.getPicture(appService.getCameraOptions()).then(function (imageData) {
+                                  $scope.npwp.images.push({'image':"data:image/jpeg;base64," + imageData});
+                                  $scope.npwp.imagesData.push({'image': imageData});
+                              }, function (err) {
+                                  appService.showAlert('Error', err, 'Close', 'button-assertive', null);
+                              });
+                          }, false);
+
+                          break;
+                      case 1: // Select From Gallery
+                          document.addEventListener("deviceready", function () {
+                              $cordovaCamera.getPicture(appService.getLibraryOptions()).then(function (imageData) {
+                                   $scope.npwp.images.push({'image':"data:image/jpeg;base64," + imageData});
+                                   $scope.npwp.imagesData.push({'image': imageData});
+                              }, function (err) {
+                                  appService.showAlert('Error', err, 'Close', 'button-assertive', null);
+                              });
+                          }, false);
+                          break;
+                  }
+                  return true;
+              }
+          });
+      };
+
+    $scope.takePicture = function(){
+        var options =  {
+            quality: Main.getTakePictureOptions().quality,
+            destinationType: Camera.DestinationType.DATA_URL,
+            sourceType: Camera.PictureSourceType.CAMERA,
+            targetWidth : Main.getTakePictureOptions().targetWidth,
+            targetHeight:Main.getTakePictureOptions().targetHeight,
+            encodingType: Camera.EncodingType.JPEG,
+            saveToPhotoAlbum: true,
+            correctOrientation:true
+        };
+        
+        $cordovaCamera.getPicture(options).then(function (imageData) {
+            $scope.image = "data:image/jpeg;base64," + imageData;
+            $scope.imageData = imageData;
+        }, function (err) {
+            // An error occured. Show a message to the user
+            $scope.errorAlert("an error occured while take picture");
+        });
+    }
+
+
+    // $scope.updateSelection = function(position, itens, title) {
+      
+    //     angular.forEach(itens, function(subscription, index) {
+    //         if (position != index)
+    //             subscription.checked = false;
+    //             $scope.selected = title;
+    //         }
+    //     );
+    // }
+
+    function goBack  (ui_sref) {
+        var currentView = $ionicHistory.currentView();
+        var backView = $ionicHistory.backView();
+        if (backView) {
+            //there is a back view, go to it
+            if (currentView.stateName == backView.stateName) {
+                //if not works try to go doubleBack
+                var doubleBackView = $ionicHistory.getViewById(backView.backViewId);
+                $state.go(doubleBackView.stateName, doubleBackView.stateParams);
+            } else {
+                backView.go();
+            }
+        } else {
+            $state.go(ui_sref);
+        }
+    }
+
+    var successRequest = function (res){
+      $ionicLoading.hide();
+      $scope.successAlert(res.message);
+      goBack("app.biodata");
+    }
+
+    var errorRequest = function (err, status){
+      $ionicLoading.hide();
+      if(status == 401) {
+          var refreshToken = Main.getSession("token").refresh_token
+          Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
+      }else {
+          if(status==500)
+            $scope.errorAlert(err.message);
+          else
+            $scope.errorAlert("Please Check your connection");
+      }
+     
+    }
+
+    var successRefreshToken = function(res){
+      Main.setSession("token",res);
+    }
+
+    var errRefreshToken = function(err, status) {
+    }
+
+
+    // function validationForm(selected){
+    //     if(selected == undefined || selected == ""){
+    //         messageValidation = "You must pick your new marital status!";
+    //         return false;
+    //     }
+
+    //     if(selected == $scope.currentStatus) {
+    //         messageValidation = "You can't pick the same marital status!";
+    //         return false;
+    //     }
+    //     return true;
+    // }
+
+    function sendData(){
+        var idRef = Main.getSession("profile").employeeTransient.id;
+         var jsonData = '{"npwp":"'+$scope.npwp.npwpNo+'"}';
+         var attachment = [];
+        
+         if($scope.npwp.imagesData.length > 0) {
+              for (var i = $scope.npwp.imagesData.length - 1; i >= 0; i--) {
+                  var objAttachment = {'image':null};
+                  if($scope.appMode=='mobile'){
+                      objAttachment = {"image":$scope.npwp.imagesData[i].image};
+                  }else{
+                      if($scope.npwp.imagesData[i].compressed.dataURL != undefined) {
+                          var webImageAttachment = $scope.npwp.imagesData[i].compressed.dataURL.replace(/^data:image\/[a-z]+;base64,/, "");
+                          objAttachment = {"image":webImageAttachment};
+                      }
+                      
+                  }
+                  attachment.push(objAttachment);
+
+              };
+          }
+
+         var dataStr = {task:"CHANGEnpwp",data:jsonData,idRef:idRef,attachments:attachment};
+         
+         $ionicLoading.show({
+            template: 'Submit Request...'
+          });
+          var accessToken = Main.getSession("token").access_token;
+          
+          // must change endpoint url to be change npwp personal biodata
+          var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval';
+
+
+          var data = JSON.stringify(dataStr);
+          Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
+    }
+
+    $scope.send = function (){
+
+      // if(validationForm($scope.selected)){
+         
+      //   ionicSuperPopup.show({
+      //      title: "Are you sure?",
+      //      text: "Are you sure the data submitted is correct ?",
+      //      type: "warning",
+      //      showCancelButton: true,
+      //      confirmButtonColor: "#DD6B55",
+      //      confirmButtonText: "Yes",
+      //      closeOnConfirm: true},
+      //   function(isConfirm){
+      //        if (isConfirm) {
+      //           sendData();
+      //        }
+            
+           
+      //   });
+      // }else {
+      //     $scope.warningAlert(messageValidation);
+      // }
+      
+
+       
+
+    }
+
+    var successDataApproval = function (res){
+      $ionicLoading.hide();
+      var dataApproval = res;
+      $scope.dataApprovalStatus = dataApproval.processingStatus; 
+      if(dataApproval.processingStatus != null && dataApproval.processingStatus.toLowerCase()=='request'){
+          $scope.showButton = false;
+          
+      }
+
+      if(dataApproval.attachments != null && dataApproval.attachments.length > 0)
+            $scope.image = dataApproval.attachments[0].image;
+        
+
+    }
+
+    function getDataApproval (dataapprovalId) {
+        $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner>'
+        });
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval/'+dataapprovalId;
+        Main.requestApi(accessToken,urlApi,successDataApproval, $scope.errorRequest);
+    }
+    function initModule(){
+       $scope.showButton = true;
+      if(dataapprovalId != null && dataapprovalId !="" && dataapprovalId !="0" ){
+          getDataApproval(dataapprovalId);
+      }
+    }
+
+    initModule();
+
+})
+
 
 
