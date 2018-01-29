@@ -3,13 +3,15 @@
     <ion-nav-buttons side="right">
     </ion-nav-buttons>
 
-    <ion-content class="has-header bt-grey profile" scroll="true">
+    <ion-content class="has-header materialize" scroll="true">
         <ion-list>
             
 
             <div class="item item-divider">Npwp</div>
             <div class="row">
-                <input ng-model="npwp.npwpNo" placeholder="Enter Npwp Number" type="text" class="validate" name="npwpNo" ng-pattern="/^[0-9]*$/" maxlength="20" ng-value="{{npwp.npwpNo}}">
+                <div class="input-field col">
+                    <input ng-model="npwp.npwpNo" placeholder="Enter Npwp Number" type="text" class="validate" name="npwpNo" ng-pattern="/^[0-9]*$/" maxlength="20" ng-value="{{npwp.npwpNo}}">
+                </div>
             </div>        
 
             <div class="item item-divider">Document</div>
