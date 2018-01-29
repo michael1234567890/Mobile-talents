@@ -1662,6 +1662,11 @@ angular.module('myhr.controllers', [])
 .controller('ChangeNpwpCtrl', function(ionicSuperPopup,$ionicPopup, $ionicActionSheet,appService,$ionicHistory,$cordovaCamera,$stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
 
     var arrCompanyRef = Main.getSession("profile").companyReference;
+
+    var getSession = Main.getSession("profile").employeeTransient.npwpNo;
+
+    // console.log(getSession);
+
     var arrItens = Main.getDataReference(arrCompanyRef,'personal','information','npwp');
     $scope.itens = JSON.parse(arrItens);
     var dataapprovalId = $stateParams.dataApprovalId;
@@ -1671,7 +1676,7 @@ angular.module('myhr.controllers', [])
     $scope.appMode = Main.getAppMode();
     $scope.image = "img/placeholder.png";
     $scope.npwp = {};
-    $scope.npwp.npwpNo = "";
+    $scope.npwp.npwpNo = getSession;
     $scope.npwp.images = []; 
     $scope.npwp.imagesData = []; 
     $scope.imageData ;
@@ -1837,7 +1842,7 @@ angular.module('myhr.controllers', [])
               };
           }
 
-         var dataStr = {task:"CHANGEnpwp",data:jsonData,idRef:idRef,attachments:attachment};
+         var dataStr = {task:"CHANGENPWP",data:jsonData,idRef:idRef,attachments:attachment};
          
          $ionicLoading.show({
             template: 'Submit Request...'
