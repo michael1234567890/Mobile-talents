@@ -1,0 +1,30 @@
+<ion-view title="Choose SPT-AI">
+   
+    <ion-content padding="true" class="has-header materialize" scroll="true">
+        
+        <div class="item no-padding">
+            
+            <ion-list>
+              <div>
+                  <div class="row">
+                      <div class="input-field col" >
+                            <p for="first_name">Year</p>
+                            <select ng-model="sptai.year">
+                                  <option ng-repeat="year in selectYear">{{year.id}}</option>
+                            </select>
+                      </div>
+                      
+                  </div>
+              </div>
+              <p class="bb text-medium padding uppercase"></p>
+              <br>
+            </ion-list>
+            <div class="row">
+                <button class="btn waves-effect waves-light button button-balanced  button-block waves-effect waves-light" style="font-weight:bold;background-color:#FF9800" ng-click="printPdf(sptai.year)"><i class="icon ion-android-download"></i>&nbsp;Download PDF</button>
+            </div>
+
+        </div>
+
+    </ion-content>
+
+</ion-view>
