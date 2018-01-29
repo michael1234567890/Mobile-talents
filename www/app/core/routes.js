@@ -84,7 +84,18 @@ angular.module('talent.routes', [])
         }
       })
 
-       .state('app.edit-biodata', {
+
+      .state('app.changenpwp', {
+        url: '/changenpwp/:currentStatus/:dataApprovalId',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/myhr/information/changenpwp.html',
+            controller: 'ChangeNpwpCtrl'
+          }
+        }
+      })
+
+      .state('app.edit-biodata', {
         url: '/edit-biodata',
         views: {
           'menuContent': {
