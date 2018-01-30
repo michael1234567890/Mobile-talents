@@ -240,10 +240,12 @@
             },
             getSession : function(key) {
                 
-                if(localStorage.getItem(key) === null || localStorage.getItem(key)=== undefined )
+                if(localStorage.getItem(key) === null || localStorage.getItem(key)=== undefined ){
                     return null;
-                else
+                }
+                else{
                     return JSON.parse(localStorage.getItem(key));
+                }
             },
             destroySession : function (key){
                 return localStorage.removeItem(key);

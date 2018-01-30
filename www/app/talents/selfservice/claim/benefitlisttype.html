@@ -29,10 +29,12 @@
                 </div>
 
             </div>
-            <div class="row" ng-if="category == 'kacamata' || category == 'medical' ">
+            <div class="row" ng-if="category == 'kacamata' || category == 'medical' || category == 'kacamata family' || category == 'medical family' ">
                 <div class="input-field col " style="margin-top:10px">
                     <p ng-if="category=='kacamata'">Optical Store </p>
                     <p ng-if="category=='medical'">Hospital Name</p>
+                    <p ng-if="category=='kacamata family'">Optical Store </p>
+                    <p ng-if="category=='medical family'">Hospital Name</p>
                     <textarea style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" rows="2" ng-model="requestHeader.remark" maxlength="100" name="optichospital" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/"></textarea>
                     <font color="red" style="font-size: 10px"><span ng-show="form.optichospital.$invalid">Should not contain any special characters</span></font>
                     
@@ -122,7 +124,24 @@
 
                 </div>
             </div>
+            <br />
             
+            <div ng-if="category == 'kacamata family'|| category=='medical family' "  >
+
+                <p class="bb text-medium padding">Choose Your Childerns Get Benefit</p>
+                <br>
+                <div class="edit padding-horizontal">
+                    <ion-list>
+                        <ion-radio ng-model="choice.select" ng-value="'monthly'">Indah</ion-radio>
+                        <ion-radio ng-model="choice.select" ng-value="'monthly'">Dina</ion-radio>
+                        <ion-radio ng-model="choice.select" ng-value="'monthly'">Rohman</ion-radio>
+                    </ion-list>
+                </div>
+
+            </div>
+            
+
+
           </div>
         </form>
 

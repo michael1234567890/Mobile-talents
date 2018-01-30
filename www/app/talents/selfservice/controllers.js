@@ -359,13 +359,15 @@ angular.module('selfservice.controllers', [])
 
 .controller('SubmitClaimCtrl', function($ionicLoading, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     $scope.categoryType = [];
+  
 
     $scope.gotoListType = function(name,extId,index,workflow){
         
         $rootScope.needReportSelected = undefined;
         if(index != undefined)
             $rootScope.selectedBenefitCategory = Main.getSession("categoryType")[index]; //$rootScope.benefitCategory[index];
-        
+          
+          console.log($rootScope.selectedBenefitCategory);
         if(name.toLowerCase() == 'spd advance'){
              $state.go("app.spdadvanceadd",{categoryType:name,extId:extId,workflow:workflow});
         }else if(name.toLowerCase() == 'perjalanan dinas'){
@@ -422,14 +424,24 @@ angular.module('selfservice.controllers', [])
 
 
     function initModule() {
-        if(Main.getSession("categoryType") == undefined)
+        if(Main.getSession("categoryType") == undefined){
+          console.log('undefined');
             getListCategory();
-        else
+        }
+          
+        else{
+          
+          console.log('unundefined');
           $scope.categoryType = Main.getSession("categoryType");
-        
+
+          console.log($scope.categoryType);
+        }
+
         if(Main.getSession("balance") == undefined)
           getBalanceSaveToSession();
     }
+
+
 
      $scope.$on('$ionicView.beforeEnter', function (event,data) {
           initModule();
@@ -1038,6 +1050,7 @@ angular.module('selfservice.controllers', [])
     $scope.module = {};
 
     $scope.gotoListType = function(index){
+      console.log('abc');
         $rootScope.needReportSelected = $scope.needReportRequests[index];
 
         if(Main.getSession("categoryType") != undefined) {
