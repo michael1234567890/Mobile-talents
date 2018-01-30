@@ -84,6 +84,18 @@
                     </select>
                 </div>
             </div>
+
+             <div ng-if="category == 'kacamata family'|| category=='medical family' "  >
+
+                <p class="bb text-medium padding">Choose Your Childrens Get Benefit</p>
+                <br>
+                <div class="edit padding-horizontal">
+                    <ion-list>
+                        <ion-radio ng-model="requestHeader.childrenSelected" ng-repeat="list in childrenList" ng-value="{{list}}">{{list}}</ion-radio>
+                    </ion-list>
+                </div>
+
+            </div>
            
             <p class="bb text-medium padding">Please fill out your expense</p>
             <br>
@@ -126,17 +138,7 @@
             </div>
             <br />
             
-            <div ng-if="category == 'kacamata family'|| category=='medical family' "  >
-
-                <p class="bb text-medium padding">Choose Your Childrens Get Benefit</p>
-                <br>
-                <div class="edit padding-horizontal">
-                    <ion-list>
-                        <ion-radio ng-model="requestHeader.childrenSelected" ng-repeat="list in childrenList" ng-value="{{list}}">{{list}}</ion-radio>
-                    </ion-list>
-                </div>
-
-            </div>
+           
             
 
 

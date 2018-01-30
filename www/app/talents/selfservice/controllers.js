@@ -746,6 +746,11 @@ angular.module('selfservice.controllers', [])
             $scope.listtype = [{id:"dokter",name:"Dokter"},{id:"obat",name:"Apotik / Obat"},{id:"lab",name:"Lab / R.S"},{id:"lainlain",name:"Lain-lain"}];
         }else if($scope.category == 'mutasi'){
             $scope.listtype = [{id:"sekolah",name:"Pendaftaran sekolah"},{id:"rumahoperasional",name:"Sumbangan rumah operasional"}];
+        }else if($scope.category == 'kacamata family') {
+            var arrLensa = [{id:"Lensa Monofocus Non Cylindris"},{id:"Lensa Monofocus Cylindris"},{id:"Lensa Bifokus Non Cylindris"},{id:"Lensa Bifokus Cylindris"}];
+            $scope.listtype = [{id:"frame",name:"Frame"},{id:"lensa", name:"Lensa",type:"select",options:arrLensa,value:"Lensa Monofocus Non Cylindris"}];
+        }else if($scope.category == 'medical family'){
+            $scope.listtype = [{id:"dokter",name:"Dokter"},{id:"obat",name:"Apotik / Obat"},{id:"lab",name:"Lab / R.S"},{id:"lainlain",name:"Lain-lain"}];
         }
 
         if($rootScope.selectedBenefitCategory != undefined){
