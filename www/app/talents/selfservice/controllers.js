@@ -454,6 +454,10 @@ angular.module('selfservice.controllers', [])
     var categoryTypeExtId = $stateParams.extId;
     var workflow = $stateParams.workflow;
     var messageValidation = "";
+
+    // child list 
+    $scope.childrenList = ["rina","desti","wiwin"];
+
     $scope.directType = false;
     $scope.labelCategory = "Label";
     $scope.defaultValue = 1;
@@ -469,6 +473,7 @@ angular.module('selfservice.controllers', [])
     $scope.titleCategory = categoryType;
     $scope.category = categoryType.toLowerCase();
     $scope.requestHeader = {};
+    $scope.requestHeader.childrenSelected = "";
     $scope.arrSpdType = [{id:"regular"},{id:"pulang kampung"},{id:"mutasi"},{id:"training"},{id:"assessment"}];
     
     $scope.$on('$ionicView.beforeEnter', function (event,data) {

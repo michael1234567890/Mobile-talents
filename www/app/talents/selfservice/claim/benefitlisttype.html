@@ -132,9 +132,7 @@
                 <br>
                 <div class="edit padding-horizontal">
                     <ion-list>
-                        <ion-radio ng-model="choice.select" ng-value="'monthly'">Indah</ion-radio>
-                        <ion-radio ng-model="choice.select" ng-value="'monthly'">Dina</ion-radio>
-                        <ion-radio ng-model="choice.select" ng-value="'monthly'">Rohman</ion-radio>
+                        <ion-radio ng-model="requestHeader.childrenSelected" ng-repeat="list in childrenList" ng-value="{{list}}">{{list}}</ion-radio>
                     </ion-list>
                 </div>
 
