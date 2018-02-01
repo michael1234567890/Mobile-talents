@@ -456,7 +456,9 @@ angular.module('selfservice.controllers', [])
     var messageValidation = "";
 
     // child list 
-    $scope.childrenList = ["rina","desti","wiwin"];
+    
+    $scope.childrenList = {};
+      //$scope.childrenList = ["aswqasa","asasa","asasqq"];
 
     $scope.directType = false;
     $scope.labelCategory = "Label";
@@ -716,7 +718,44 @@ angular.module('selfservice.controllers', [])
         
     }
 
-   
+  
+    
+
+    var successRequest = function (res){
+      console.log(res);
+      $ionicLoading.hide();
+      $scope.childrenList = res;
+      console.log($scope.childrenList);
+    }
+
+    // $scope.$on('$ionicView.beforeEnter', function (event,data) {
+    //     //if(data.direction != undefined && data.direction!='back')
+    //       initMethod();
+
+    // });
+
+    // function initMethod(){
+    //   getListChildrenBenefit();
+    // }
+  
+    function getListChildrenBenefit(){
+      $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner>'
+      });
+      
+      // list child get benefit medical or kacamata
+      var accessToken = Main.getSession("token").access_token;
+      console.log(accessToken);
+      var urlApi = "";
+      if($scope.category == 'medical family'){
+        var urlApi = Main.getUrlApi() + '/api/user/familyeligiblemedical';
+      }else{
+        var urlApi =  Main.getUrlApi() + '/api/user/familyeligible';
+      }
+
+      Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
+    }
+
     function initData(){
         $scope.requestHeader.startDate = new Date();
         $scope.requestHeader.endDate = new Date();
@@ -728,8 +767,11 @@ angular.module('selfservice.controllers', [])
         $scope.images = []; 
     }
 
+    
+
     function initModule() {
         initData();
+        getListChildrenBenefit();
         $rootScope.data.requestBenefitVerification = {};
         if($scope.category == 'kacamata') {
             var arrLensa = [{id:"Lensa Monofocus Non Cylindris"},{id:"Lensa Monofocus Cylindris"},{id:"Lensa Bifokus Non Cylindris"},{id:"Lensa Bifokus Cylindris"}];
@@ -786,9 +828,17 @@ angular.module('selfservice.controllers', [])
             $scope.requestHeader.endDate = $filter('date')(new Date($rootScope.needReportSelected.endDate),'yyyy-MM-dd');
        
         }
-        
-        
+
+
+     
+
+        // console.log($scope.childrenList);
     }
+
+    // function initMethod(){
+    //   getListChildrenBenefit();
+    // }
+    // initMethod();
     initModule();
 })
 

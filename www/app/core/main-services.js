@@ -210,7 +210,9 @@
 
             requestApi: function(access_token,url, success, error) {
                 var bearerAuthentication = 'Bearer '+ access_token;
+                // $http.get(url,{headers:{'Authorization':bearerAuthentication}}).success(success).error(error)
                 $http.get(url,{headers:{'Authorization':bearerAuthentication}}).success(success).error(error)
+                // console.log($http.get(url,{headers:{'Authorization':bearerAuthentication}}).success(success).error(error));
             },
 
             postRequestApi: function(access_token,url, data, success, error) {

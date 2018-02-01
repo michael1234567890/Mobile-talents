@@ -91,6 +91,7 @@ angular.module('myhr.controllers', [])
     
 
     var successRequest = function (res){
+      console.log(res);
       $ionicLoading.hide();
     	$scope.personal = res;
       $scope.personal.showMaritalStatus = $scope.personal.maritalStatus;
@@ -128,6 +129,8 @@ angular.module('myhr.controllers', [])
    		var urlApi = Main.getUrlApi() + '/api/myprofile/personal';
    		Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
    	}
+
+    console.log(getPersonal());
     // Main.refreshToken("4c648f69-5158-4260-a47f-e7793c6a952e", resRefreshToken, errRefreshToken);
 
 }])
