@@ -718,8 +718,7 @@ angular.module('selfservice.controllers', [])
         
     }
 
-  
-    
+      
 
     var successRequest = function (res){
       console.log(res);
@@ -728,15 +727,6 @@ angular.module('selfservice.controllers', [])
       console.log($scope.childrenList);
     }
 
-    // $scope.$on('$ionicView.beforeEnter', function (event,data) {
-    //     //if(data.direction != undefined && data.direction!='back')
-    //       initMethod();
-
-    // });
-
-    // function initMethod(){
-    //   getListChildrenBenefit();
-    // }
   
     function getListChildrenBenefit(){
       $ionicLoading.show({
