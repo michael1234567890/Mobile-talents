@@ -456,9 +456,7 @@ angular.module('selfservice.controllers', [])
     var messageValidation = "";
 
     // child list 
-    
     $scope.childrenList = {};
-      //$scope.childrenList = ["aswqasa","asasa","asasqq"];
 
     $scope.directType = false;
     $scope.labelCategory = "Label";
@@ -475,7 +473,8 @@ angular.module('selfservice.controllers', [])
     $scope.titleCategory = categoryType;
     $scope.category = categoryType.toLowerCase();
     $scope.requestHeader = {};
-    $scope.requestHeader.childrenSelected = "";
+    // $scope.requestHeader.childrenSelected = "";
+    $scope.requestHeader.requestForFamily = "";
     $scope.arrSpdType = [{id:"regular"},{id:"pulang kampung"},{id:"mutasi"},{id:"training"},{id:"assessment"}];
     
     $scope.$on('$ionicView.beforeEnter', function (event,data) {
@@ -606,10 +605,32 @@ angular.module('selfservice.controllers', [])
         $scope.goBack('app.submitclaim');
     }
 
+
+
+  
+    function getListChildrenBenefit(){
+      $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner>'
+      });
+      
+      // list child get benefit medical or kacamata
+      var accessToken = Main.getSession("token").access_token;
+      console.log(accessToken);
+      var urlApi = "";
+      if($scope.category == 'medical family'){
+        var urlApi = Main.getUrlApi() + '/api/user/familyeligiblemedical';
+      }else{
+        var urlApi =  Main.getUrlApi() + '/api/user/familyeligible';
+      }
+
+      Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
+    }
+
     var successRequest = function (res){
         $timeout(function () {
             $rootScope.data.requestBenefitVerification = res;
             $ionicLoading.hide();
+            $scope.childrenList = res;
             if($scope.requestHeader.categoryType.toLowerCase() == 'medical overlimit'){
                 $scope.goTo("app.selfservicesuccess");
             }else {
@@ -647,7 +668,7 @@ angular.module('selfservice.controllers', [])
 
 
     $scope.submitForm = function(){
-        
+        console.log('sss');
         $scope.requestHeader.module = "Benefit";
         $scope.requestHeader.startDate = $filter('date')(new Date($scope.requestHeader.startDate),'yyyy-MM-dd');
         $scope.requestHeader.endDate = $filter('date')(new Date($scope.requestHeader.endDate),'yyyy-MM-dd');
@@ -662,6 +683,7 @@ angular.module('selfservice.controllers', [])
             
             // if($scope.category != 'medical overlimit') {
              if($scope.directType != true || $scope.defaultValue==0){
+              console.log('is valid');
                 var requestDetail = [];
                 angular.forEach($scope.listtype, function(value, key){
                       var obj ={};
@@ -694,6 +716,7 @@ angular.module('selfservice.controllers', [])
                 }
                 $scope.requestHeader.attachments = attachment; 
             }else {
+              console.log('data masuk');
                 var requestDetail = [];
                 var obj = {};
                 obj.type = objDirectType.type;
@@ -705,46 +728,28 @@ angular.module('selfservice.controllers', [])
             var accessToken = Main.getSession("token").access_token;
             // var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/benefit';
             var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/verificationbenefit';
+
             if($scope.requestHeader.categoryType.toLowerCase() == 'medical overlimit'){
-                urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/benefit';
+                urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/benefit'; 
             }
             var data = JSON.stringify($scope.requestHeader);
             
+            console.log(data);
+
+            console.log(urlApi);
+
             Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
 
         }else {
           $scope.warningAlert(messageValidation);
+          console.log('dt 101');
         }
         
     }
 
       
 
-    var successRequest = function (res){
-      console.log(res);
-      $ionicLoading.hide();
-      $scope.childrenList = res;
-      console.log($scope.childrenList);
-    }
-
-  
-    function getListChildrenBenefit(){
-      $ionicLoading.show({
-          template: '<ion-spinner></ion-spinner>'
-      });
-      
-      // list child get benefit medical or kacamata
-      var accessToken = Main.getSession("token").access_token;
-      console.log(accessToken);
-      var urlApi = "";
-      if($scope.category == 'medical family'){
-        var urlApi = Main.getUrlApi() + '/api/user/familyeligiblemedical';
-      }else{
-        var urlApi =  Main.getUrlApi() + '/api/user/familyeligible';
-      }
-
-      Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
-    }
+    
 
     function initData(){
         $scope.requestHeader.startDate = new Date();
@@ -923,6 +928,8 @@ angular.module('selfservice.controllers', [])
               benefitVerification.attachments = attachment; 
               
               var data = JSON.stringify(benefitVerification);
+
+              // console.log(data);
               
               Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
           }else {
@@ -973,9 +980,11 @@ angular.module('selfservice.controllers', [])
         $state.go("login");
     }
     $scope.isHr = Main.getSession("profile").isHr;
+
+    // console.log($scope.isHr);
     $scope.header = {};
     var id = $stateParams.id;
-    console.log(Main.getSession("profile"));
+    // console.log(Main.getSession("profile"));
     
     var successApprove = function(res){
         $ionicLoading.hide();
@@ -1059,9 +1068,15 @@ angular.module('selfservice.controllers', [])
                 arrDetail = JSON.parse($scope.header.details[0].data);
               }
               $scope.header.details = arrDetail;
+          }else if($scope.header.categoryType == 'Medical Family'){
+            var arrDetail = [];
+              if($scope.header.details.length > 0) {
+                arrDetail = JSON.parse($scope.header.details[0].data);
+              }
+              $scope.header.details = arrDetail;
           }
         }
-            
+        console.log($scope.header);
     }
 
     $scope.printReport = function (employee,uuid){

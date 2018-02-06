@@ -656,9 +656,7 @@ angular.module('myteam.controllers', [])
         $scope.detail.attachments = [];
       } 
 
-
     }
-
    
 
     function getDetailRequest(){
