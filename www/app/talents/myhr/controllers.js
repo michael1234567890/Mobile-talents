@@ -1668,6 +1668,9 @@ angular.module('myhr.controllers', [])
 
     var getSession = Main.getSession("profile").employeeTransient.npwpNo;
 
+
+    // console.log(getSession);
+
     // console.log(getSession);
 
     var arrItens = Main.getDataReference(arrCompanyRef,'personal','information','npwp');
@@ -1824,6 +1827,7 @@ angular.module('myhr.controllers', [])
     // }
 
     function sendData(){
+      // console.log($scope.npwp.npwpNo);
         var idRef = Main.getSession("profile").employeeTransient.id;
          var jsonData = '{"npwp":"'+$scope.npwp.npwpNo+'"}';
          var attachment = [];
@@ -1846,6 +1850,8 @@ angular.module('myhr.controllers', [])
           }
 
          var dataStr = {task:"CHANGENPWP",data:jsonData,idRef:idRef,attachments:attachment};
+
+         console.log(dataStr);
          
          $ionicLoading.show({
             template: 'Submit Request...'
@@ -1864,21 +1870,21 @@ angular.module('myhr.controllers', [])
 
       // if(validationForm($scope.selected)){
          
-      //   ionicSuperPopup.show({
-      //      title: "Are you sure?",
-      //      text: "Are you sure the data submitted is correct ?",
-      //      type: "warning",
-      //      showCancelButton: true,
-      //      confirmButtonColor: "#DD6B55",
-      //      confirmButtonText: "Yes",
-      //      closeOnConfirm: true},
-      //   function(isConfirm){
-      //        if (isConfirm) {
-      //           sendData();
-      //        }
-            
-           
-      //   });
+      ionicSuperPopup.show({
+         title: "Are you sure?",
+         text: "Are you sure the data submitted is correct ?",
+         type: "warning",
+         showCancelButton: true,
+         confirmButtonColor: "#DD6B55",
+         confirmButtonText: "Yes",
+         closeOnConfirm: true},
+      function(isConfirm){
+           if (isConfirm) {
+              sendData();
+           }
+          
+         
+      });
       // }else {
       //     $scope.warningAlert(messageValidation);
       // }

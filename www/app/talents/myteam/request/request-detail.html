@@ -15,9 +15,17 @@
             <p class="text-small">Request Type</p>
             <h2 class="lead text-small" >{{detail.description}}</h2>
         </div>
-        <div class="item item-text-wrap" >
-            <p class="text-small">Request No</p>
-            <h2 class="lead text-small" >{{detail.ref.reqNo}}</h2>
+        <div ng-if="detail.task == 'CHANGENPWP'">
+            <div class="item item-text-wrap" >
+                <p class="text-small">No Npwp</p>
+                <h2 class="lead text-small" >{{detail.employeeRequest.changeNPWP}}</h2>
+            </div>
+        </div>
+        <div ng-if="detail.task != 'CHANGENPWP'">
+            <div class="item item-text-wrap" >
+                <p class="text-small">Request No</p>
+                <h2 class="lead text-small" >{{detail.ref.reqNo}}</h2>
+            </div>
         </div>
         <div ng-if="detail.task == 'CHANGEMARITALSTATUS'">
                 <div class="item item-text-wrap" >
@@ -110,6 +118,31 @@
                 </div>
                 
         </div>
+
+
+        <!-- <div ng-if="detail.task == 'CHANGENPWP'">
+                <div class="item item-text-wrap" >
+                     <p class="text-small">Name</p>
+                    <h2 class="lead text-medium" >{{detail.ref.name}}</h2>
+
+                </div>
+                <div class="item item-text-wrap" >
+                    <p class="text-small">Npwp No</p>
+                    <h2 class="lead text-medium" >{{detail.ref}}</h2>
+                    
+                </div>
+                <div class="row">
+                  <button class="button button-medium  button-block button-outline button-positive" ng-click="viewMoreFamily()">View More</button>
+                </div>
+                 <div class="item item-text-wrap" >
+                    <h2 class="talents">Attachment</h2>
+                    <div class="row post" >
+                        <div class="col" ng-repeat="items in detail.attachments" style="width:90px;height:90px" ><img width="90px" height="90px"  ng-src="{{items.image}}" ng-click="openImagePreview(items.image)" /></div>
+                    </div>
+                   
+                </div>
+                
+        </div> -->
        
         <div ng-if="detail.module == 'benefit'">
                 <div class="item item-text-wrap" >

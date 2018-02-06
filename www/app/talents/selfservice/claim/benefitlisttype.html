@@ -85,15 +85,16 @@
                 </div>
             </div>
 
-             <div ng-if="category == 'kacamata family'|| category=='medical family' "  >
-
-                <p class="bb text-medium padding">Choose Your Childrens Get Benefit</p>
-                <br>
-                <div class="edit padding-horizontal">
-                    <ion-list>
-                        <ion-radio ng-model="requestHeader.childrenSelected" ng-repeat="list in childrenList" ng-value="{{list.name}}">{{list.name}}</ion-radio>
-                    </ion-list>
-                </div>
+             <div ng-if="category == 'kacamata family'|| category=='medical family'"  >
+               <!--  <div ng-if="childrenList == empty"> -->
+                    <p class="bb text-medium padding">Choose Your Childrens Get Benefit</p>
+                    <br>
+                    <div class="edit padding-horizontal">
+                        <ion-list>
+                            <ion-radio ng-model="requestHeader.childrenSelected" ng-repeat="list in childrenList" ng-value="{{list.name}}">{{list.name}}</ion-radio>
+                        </ion-list>
+                    </div>
+                <!-- </div> -->
 
             </div>
            
