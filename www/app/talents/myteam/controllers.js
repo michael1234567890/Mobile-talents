@@ -585,6 +585,9 @@ angular.module('myteam.controllers', [])
     var successRequest = function (res){
       $ionicLoading.hide();
       $scope.detail = res;
+
+
+      console.log($scope.detail);
       var detailEmpId = $scope.detail.empRequest;
       var profileEmpId = Main.getSession("profile").employeeTransient.id;
       console.log("detailEmpId " + detailEmpId + " profileEmpId " + profileEmpId);
