@@ -451,8 +451,18 @@ angular.module('selfservice.controllers', [])
 
 .controller('BenefitListtypeCtrl', function($timeout,appService,$ionicActionSheet,$cordovaCamera,ionicDatePicker, $stateParams, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     var categoryType = $stateParams.categoryType;
+    console.log(categoryType);
+    
     var categoryTypeExtId = $stateParams.extId;
+
+    // deffine default workflow
     var workflow = $stateParams.workflow;
+    
+    // conditional if category type is medical family or  kacamata family
+    if(categoryType == "Medical Family" || categoryType == "Kacamata Family"){
+      workflow = "SUBMITBENEFIT";
+    }
+
     var messageValidation = "";
 
     // child list 
