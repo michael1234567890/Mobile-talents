@@ -15,16 +15,18 @@
             <p class="text-small">Request Type</p>
             <h2 class="lead text-small" >{{detail.description}}</h2>
         </div>
+        <div ng-if="detail.ref.categoryType == 'kacamata Family' || detail.ref.categoryType == 'Medical Family'">
 
-        <div class="item item-text-wrap" >
-            <p class="text-small">Request For</p>
-            <h2 class="lead text-small" >{{detail.requestForFamilyName}}</h2>
-        </div>
+            <div class="item item-text-wrap" >
+                <p class="text-small">Request For</p>
+                <h2 class="lead text-small" >{{detail.requestForFamilyName}}</h2>
+            </div>
 
 
-        <div class="item item-text-wrap" >
-            <p class="text-small">Relationship</p>
-            <h2 class="lead text-small" >{{detail.requestForFamilyRelationhip}}</h2>
+            <div class="item item-text-wrap" >
+                <p class="text-small">Relationship</p>
+                <h2 class="lead text-small" >{{detail.requestForFamilyRelationhip}}</h2>
+            </div>
         </div>
 
         <div class="item item-text-wrap" >
