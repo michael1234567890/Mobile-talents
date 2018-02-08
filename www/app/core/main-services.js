@@ -5,13 +5,16 @@
     angular.module('main.services', [])
     .factory('Main', function($q, $timeout, $http, $localStorage,$rootScope){
 
+        // hostname perlu di ganti kalau mau generate ke local laptop
         var hostname = "http://localhost:8080";
-        // var hostname = "http://192.168.43.162:8080";
-        //var hostname = "https://talents-api.phincon.com";
-        // if build prod must be change to 
+
+        // hostname perlu di ganti kalau mau running local mobile
+        // var hostname = "http://192.168.43.100:8080";
+
+        // hostname perlu di ganti kalau mau running production
         //var hostname = "https://api.talents.id";
         var environment = "development"; // development , production
-        var appmode = "web"; // mobile , web
+        var appmode = "mobile"; // mobile , web
         var phphost = "http://localhost/talents/index.php"
         //var phphost =  "https://talents-report.phincon.com/index.php";
         //var phphost =  "https://report.talents.id/index.php";
