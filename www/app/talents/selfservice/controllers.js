@@ -485,6 +485,9 @@ angular.module('selfservice.controllers', [])
     $scope.requestHeader = {};
     // $scope.requestHeader.childrenSelected = "";
     $scope.requestHeader.requestForFamily = "";
+    $scope.requestHeader.noRek="";
+    $scope.requestHeader.nameRek="";
+    $scope.requestHeader.nameBank="";
     $scope.arrSpdType = [{id:"regular"},{id:"pulang kampung"},{id:"mutasi"},{id:"training"},{id:"assessment"}];
     
     $scope.$on('$ionicView.beforeEnter', function (event,data) {

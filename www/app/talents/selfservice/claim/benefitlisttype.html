@@ -29,6 +29,30 @@
                 </div>
 
             </div>
+
+            <div class="row">
+                <div class="input-field col " style="margin-top:10px">
+                    <p>No Rekening</p>
+                    <textarea style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" rows="2" ng-model="requestHeader.noRek" maxlength="100" name="norek" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/"></textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col " style="margin-top:10px">
+                    <p>Rekening Name</p>
+                    <textarea style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" rows="2" ng-model="requestHeader.nameRek" maxlength="100" name="name_rekening" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/"></textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col " style="margin-top:10px">
+                    <p>Bank Name</p>
+                    <textarea style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" rows="2" ng-model="requestHeader.nameBank" maxlength="100" name="name_bank" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/"></textarea>
+                </div>
+            </div>
+
+
+
             <div class="row" ng-if="category == 'kacamata' || category == 'medical' || category == 'kacamata family' || category == 'medical family' ">
                 <div class="input-field col " style="margin-top:10px">
                     <p ng-if="category=='kacamata'">Optical Store </p>

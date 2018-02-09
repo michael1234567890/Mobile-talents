@@ -130,6 +130,7 @@ angular.module('myhr.controllers', [])
    		Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
    	}
 
+    console.log('Data personal : ');
     console.log(getPersonal());
     // Main.refreshToken("4c648f69-5158-4260-a47f-e7793c6a952e", resRefreshToken, errRefreshToken);
 
