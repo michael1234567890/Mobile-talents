@@ -95,6 +95,16 @@ angular.module('talent.routes', [])
         }
       })
 
+      .state('app.changefamilycardno', {
+        url: '/changefamilycardno/:currentStatus/:dataApprovalId',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/myhr/information/changefamilycard.html',
+            controller: 'ChangeFamilyCardNoCtrl'
+          }
+        }
+      })
+
       .state('app.edit-biodata', {
         url: '/edit-biodata',
         views: {

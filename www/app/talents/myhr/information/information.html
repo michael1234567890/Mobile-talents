@@ -39,7 +39,7 @@
                 <h2 class="lead text-small" >{{personal.showMaritalStatus}}</h2>
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </div>
-             <div class="item item-text-wrap item-icon-right" ng-click="goChangeNpwp(personal.maritalStatus,personal.maritalStatusDataApproval)">
+            <div class="item item-text-wrap item-icon-right" ng-click="goChangeNpwp(personal.npwpNo,personal.npwpStatusDataApproval)">
                 <p class="text-small">No. Npwp</p>
                 <span class="item-note calm" ng-if="personal.npwpStatusDataApproval !=null" style="font-size:12px;color">
                     Waiting Approval
@@ -58,9 +58,20 @@
                 <h2 class="lead text-small" >{{personal.nircNo}}</h2>
             </div>
 
-            <div class="item item-text-wrap" >
+           
+
+            <div class="item item-text-wrap item-icon-right" ng-click="goChangeFamilyCardNo(personal.npwpNo,personal.npwpStatusDataApproval)">
                 <p class="text-small">Family Card No</p>
-                <h2 class="lead text-small" >{{personal.familyCardNo}}</h2>
+                <span class="item-note calm" ng-if="personal.npwpStatusDataApproval !=null" style="font-size:12px;color">
+                    Waiting Approval
+                </span>
+                <div ng-if="personal.npwpStatusDataApproval != null">
+                    <h2 class="lead text-small" >{{personal.familyCardNo}}</h2>
+                </div>
+                <div ng-if="personal.npwpStatusDataApproval == null">
+                    <h2 class="lead text-small" >{{personal.familyCardNo}}</h2>
+                </div>
+                <i class="icon ion-chevron-right icon-accessory"></i>
             </div>
 
             <div class="item item-text-wrap" >

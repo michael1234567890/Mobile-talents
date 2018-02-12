@@ -86,6 +86,14 @@ angular.module('myhr.controllers', [])
       $state.go('app.changenpwp',{'currentStatus':currentStatus,'dataApprovalId':dataApprovalId});
     };
 
+    $scope.goChangeFamilyCardNo = function (currentStatus,dataApprovalId) {
+
+      console.log('changefamilycardno');
+      $state.go('app.changefamilycardno',{'currentStatus':currentStatus,'dataApprovalId':dataApprovalId});
+    };
+
+    
+
     $scope.personal = {};
     
     
@@ -183,8 +191,11 @@ angular.module('myhr.controllers', [])
     var successRequest = function (res){
       $ionicLoading.hide();
       $scope.family = res;
+      
+    console.log($scope.family);
       $scope.$broadcast('scroll.refreshComplete');
     }
+
 
 
     initMethod();
@@ -1890,6 +1901,240 @@ angular.module('myhr.controllers', [])
       //     $scope.warningAlert(messageValidation);
       // }
       
+
+       
+
+    }
+
+    var successDataApproval = function (res){
+      $ionicLoading.hide();
+      var dataApproval = res;
+      $scope.dataApprovalStatus = dataApproval.processingStatus; 
+      if(dataApproval.processingStatus != null && dataApproval.processingStatus.toLowerCase()=='request'){
+          $scope.showButton = false;
+          
+      }
+
+      if(dataApproval.attachments != null && dataApproval.attachments.length > 0)
+            $scope.image = dataApproval.attachments[0].image;
+        
+
+    }
+
+    function getDataApproval (dataapprovalId) {
+        $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner>'
+        });
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval/'+dataapprovalId;
+        Main.requestApi(accessToken,urlApi,successDataApproval, $scope.errorRequest);
+    }
+    function initModule(){
+       $scope.showButton = true;
+      if(dataapprovalId != null && dataapprovalId !="" && dataapprovalId !="0" ){
+          getDataApproval(dataapprovalId);
+      }
+    }
+
+    initModule();
+
+})
+
+
+.controller('ChangeFamilyCardNoCtrl', function(ionicSuperPopup,$ionicPopup, $ionicActionSheet,appService,$ionicHistory,$cordovaCamera,$stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+    var arrCompanyRef = Main.getSession("profile").companyReference;
+
+    var getSession = Main.getSession("profile").employeeTransient.familyCardNo;
+
+
+    var arrItens = Main.getDataReference(arrCompanyRef,'personal','information','familyCardNo');
+    $scope.itens = JSON.parse(arrItens);
+    var dataapprovalId = $stateParams.dataApprovalId;
+    $scope.currentStatus = $stateParams.currentStatus;
+    $scope.showButton = true;
+    $scope.dataApprovalStatus = null;
+    $scope.appMode = Main.getAppMode();
+    $scope.image = "img/placeholder.png";
+    $scope.familycardno = {};
+    $scope.familycardno.familyCardNo = getSession;
+    $scope.familycardno.images = []; 
+    $scope.familycardno.imagesData = []; 
+    $scope.imageData ;
+    var messageValidation = "";
+
+    $scope.removeChoice = function(){
+        var lastItem = $scope.familycardno.imagesData.length-1;
+        $scope.familycardno.imagesData.splice(lastItem);
+        $scope.familycardno.images.splice(lastItem);
+    }
+
+    $scope.addPicture = function () {
+          if($scope.familycardno.images.length > 2) {
+            $scope.errorAlert("Only 3 pictures can be upload");
+            return false;
+          }
+        
+
+          $ionicActionSheet.show({
+              buttons: [{
+                  text: 'Take Picture'
+              }, {
+                      text: 'Select From Gallery'
+                  }],
+              buttonClicked: function (index) {
+                  switch (index) {
+                      case 0: // Take Picture
+                          document.addEventListener("deviceready", function () {
+                              $cordovaCamera.getPicture(appService.getCameraOptions()).then(function (imageData) {
+                                  $scope.familycardno.images.push({'image':"data:image/jpeg;base64," + imageData});
+                                  $scope.familycardno.imagesData.push({'image': imageData});
+                              }, function (err) {
+                                  appService.showAlert('Error', err, 'Close', 'button-assertive', null);
+                              });
+                          }, false);
+
+                          break;
+                      case 1: // Select From Gallery
+                          document.addEventListener("deviceready", function () {
+                              $cordovaCamera.getPicture(appService.getLibraryOptions()).then(function (imageData) {
+                                   $scope.familycardno.images.push({'image':"data:image/jpeg;base64," + imageData});
+                                   $scope.familycardno.imagesData.push({'image': imageData});
+                              }, function (err) {
+                                  appService.showAlert('Error', err, 'Close', 'button-assertive', null);
+                              });
+                          }, false);
+                          break;
+                  }
+                  return true;
+              }
+          });
+      };
+
+    $scope.takePicture = function(){
+        var options =  {
+            quality: Main.getTakePictureOptions().quality,
+            destinationType: Camera.DestinationType.DATA_URL,
+            sourceType: Camera.PictureSourceType.CAMERA,
+            targetWidth : Main.getTakePictureOptions().targetWidth,
+            targetHeight:Main.getTakePictureOptions().targetHeight,
+            encodingType: Camera.EncodingType.JPEG,
+            saveToPhotoAlbum: true,
+            correctOrientation:true
+        };
+        
+        $cordovaCamera.getPicture(options).then(function (imageData) {
+            $scope.image = "data:image/jpeg;base64," + imageData;
+            $scope.imageData = imageData;
+        }, function (err) {
+            // An error occured. Show a message to the user
+            $scope.errorAlert("an error occured while take picture");
+        });
+    }
+
+
+    function goBack  (ui_sref) {
+        var currentView = $ionicHistory.currentView();
+        var backView = $ionicHistory.backView();
+        if (backView) {
+            //there is a back view, go to it
+            if (currentView.stateName == backView.stateName) {
+                //if not works try to go doubleBack
+                var doubleBackView = $ionicHistory.getViewById(backView.backViewId);
+                $state.go(doubleBackView.stateName, doubleBackView.stateParams);
+            } else {
+                backView.go();
+            }
+        } else {
+            $state.go(ui_sref);
+        }
+    }
+
+    var successRequest = function (res){
+      $ionicLoading.hide();
+      $scope.successAlert(res.message);
+      goBack("app.biodata");
+    }
+
+    var errorRequest = function (err, status){
+      $ionicLoading.hide();
+      if(status == 401) {
+          var refreshToken = Main.getSession("token").refresh_token
+          Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
+      }else {
+          if(status==500)
+            $scope.errorAlert(err.message);
+          else
+            $scope.errorAlert("Please Check your connection");
+      }
+     
+    }
+
+    var successRefreshToken = function(res){
+      Main.setSession("token",res);
+    }
+
+    var errRefreshToken = function(err, status) {
+    }
+
+
+
+    function sendData(){
+        var idRef = Main.getSession("profile").employeeTransient.id;
+         var jsonData = '{"familycardno":"'+$scope.familycardno.familyCardNo+'"}';
+         var attachment = [];
+        
+         if($scope.familycardno.imagesData.length > 0) {
+              for (var i = $scope.familycardno.imagesData.length - 1; i >= 0; i--) {
+                  var objAttachment = {'image':null};
+                  if($scope.appMode=='mobile'){
+                      objAttachment = {"image":$scope.familycardno.imagesData[i].image};
+                  }else{
+                      if($scope.familycardno.imagesData[i].compressed.dataURL != undefined) {
+                          var webImageAttachment = $scope.familycardno.imagesData[i].compressed.dataURL.replace(/^data:image\/[a-z]+;base64,/, "");
+                          objAttachment = {"image":webImageAttachment};
+                      }
+                      
+                  }
+                  attachment.push(objAttachment);
+
+              };
+          }
+
+         var dataStr = {task:"CHANGEFAMILYCARDNO",data:jsonData,idRef:idRef,attachments:attachment};
+
+         console.log(dataStr);
+         
+         $ionicLoading.show({
+            template: 'Submit Request...'
+          });
+          var accessToken = Main.getSession("token").access_token;
+          
+          // must change endpoint url to be change familycardno personal biodata
+          var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval';
+
+
+          var data = JSON.stringify(dataStr);
+          Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
+    }
+
+    $scope.send = function (){
+
+         
+      ionicSuperPopup.show({
+         title: "Are you sure?",
+         text: "Are you sure the data submitted is correct ?",
+         type: "warning",
+         showCancelButton: true,
+         confirmButtonColor: "#DD6B55",
+         confirmButtonText: "Yes",
+         closeOnConfirm: true},
+      function(isConfirm){
+           if (isConfirm) {
+              sendData();
+           }
+          
+         
+      });
 
        
 
