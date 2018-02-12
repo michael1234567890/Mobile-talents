@@ -191,7 +191,7 @@ angular.module('myhr.controllers', [])
     var successRequest = function (res){
       $ionicLoading.hide();
       $scope.family = res;
-      
+
     console.log($scope.family);
       $scope.$broadcast('scroll.refreshComplete');
     }
@@ -840,11 +840,7 @@ angular.module('myhr.controllers', [])
             return false;
         }
         return true;
-    }
-
-   
-
-   
+    }   
 
 })
 
@@ -1943,10 +1939,7 @@ angular.module('myhr.controllers', [])
 
 .controller('ChangeFamilyCardNoCtrl', function(ionicSuperPopup,$ionicPopup, $ionicActionSheet,appService,$ionicHistory,$cordovaCamera,$stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     var arrCompanyRef = Main.getSession("profile").companyReference;
-
     var getSession = Main.getSession("profile").employeeTransient.familyCardNo;
-
-
     var arrItens = Main.getDataReference(arrCompanyRef,'personal','information','familyCardNo');
     $scope.itens = JSON.parse(arrItens);
     var dataapprovalId = $stateParams.dataApprovalId;
@@ -2118,8 +2111,6 @@ angular.module('myhr.controllers', [])
     }
 
     $scope.send = function (){
-
-         
       ionicSuperPopup.show({
          title: "Are you sure?",
          text: "Are you sure the data submitted is correct ?",
@@ -2135,9 +2126,6 @@ angular.module('myhr.controllers', [])
           
          
       });
-
-       
-
     }
 
     var successDataApproval = function (res){
