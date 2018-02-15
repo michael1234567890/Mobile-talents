@@ -453,13 +453,22 @@ angular.module('selfservice.controllers', [])
 
     var categoryType = $stateParams.categoryType;
 
+    var categoryType2 = categoryType;
+
+   
+
     // for handle some  different code 
     if(categoryType == "Medical Family"){
       categoryType = 'Medical';
+      categoryType2 = 'Medical Family';
+    }else if(categoryType == "Kacamata Family"){
+      categoryType2 = 'Kacamata Family';
     }
+
+    // indentity category type
+    $scope.categoryTypeIndentity = categoryType2;
     
     var categoryTypeExtId = $stateParams.extId;
-
     // deffine default workflow
     var workflow = $stateParams.workflow;
     
@@ -485,7 +494,7 @@ angular.module('selfservice.controllers', [])
     $scope.images = []; 
 
     var listTypeSelected = [];
-    $scope.titleCategory = categoryType;
+    $scope.titleCategory = categoryType2;
     $scope.category = categoryType.toLowerCase();
     $scope.requestHeader = {};
     $scope.requestHeader.requestForFamily = "";
@@ -644,6 +653,20 @@ angular.module('selfservice.controllers', [])
       Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
     }
 
+    var successRequest = function (res){
+        $timeout(function () {
+            $rootScope.data.requestBenefitVerification = res;
+            $ionicLoading.hide();
+            $scope.childrenList = res;
+            if($scope.requestHeader.categoryType.toLowerCase() == 'medical overlimit'){
+                $scope.goTo("app.selfservicesuccess");
+            }else {
+                $state.go("app.benefitconfirmation");
+            }
+        }, 1000);
+
+    }
+
     
 
     function verificationForm(reqHeader){
@@ -677,7 +700,7 @@ angular.module('selfservice.controllers', [])
         $scope.requestHeader.module = "Benefit";
         $scope.requestHeader.startDate = $filter('date')(new Date($scope.requestHeader.startDate),'yyyy-MM-dd');
         $scope.requestHeader.endDate = $filter('date')(new Date($scope.requestHeader.endDate),'yyyy-MM-dd');
-        $scope.requestHeader.categoryType = categoryType;
+        $scope.requestHeader.categoryType = categoryType; 
         $scope.requestHeader.categoryTypeExtId = categoryTypeExtId;
         $scope.requestHeader.workflow = workflow;
 
@@ -771,19 +794,7 @@ angular.module('selfservice.controllers', [])
     }
 
 
-    var successRequest = function (res){
-        $timeout(function () {
-            $rootScope.data.requestBenefitVerification = res;
-            $ionicLoading.hide();
-            $scope.childrenList = res;
-            if($scope.requestHeader.categoryType.toLowerCase() == 'medical overlimit'){
-                $scope.goTo("app.selfservicesuccess");
-            }else {
-                $state.go("app.benefitconfirmation");
-            }
-        }, 1000);
-
-    }
+    
 
     
 
