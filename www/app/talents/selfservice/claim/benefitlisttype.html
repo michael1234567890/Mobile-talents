@@ -109,7 +109,7 @@
                 </div>
             </div>
 
-            <div ng-if="category == 'kacamata family'|| category=='medical family'">
+            <!-- <div ng-if="category == 'kacamata family'|| category=='medical family'">
                 <div ng-if="childrenList.length >  0">
                     <p class="bb text-medium padding">Choose Your Childrens Get Benefit</p>
                     <br>
@@ -119,7 +119,7 @@
                         </ion-list>
                     </div>
                 </div>
-            </div>
+            </div> -->
            
             <p class="bb text-medium padding">Please fill out your expense</p>
             <br>
@@ -131,7 +131,7 @@
                         
                         <span class="input-label" ng-if="item.type != 'select'"><b>{{item.name}}</b></span> 
                 
-                       <!-- <span class="input-label"><b>{{item.name}}</b></span> -->
+                
                         <select ng-model="item.value" ng-if="item.type == 'select'" style="font-size:13px">
                             
                             <option   ng-repeat="option in item.options track by $index">{{option.id}}</option>

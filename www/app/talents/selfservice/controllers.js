@@ -450,8 +450,13 @@ angular.module('selfservice.controllers', [])
 })
 
 .controller('BenefitListtypeCtrl', function($timeout,appService,$ionicActionSheet,$cordovaCamera,ionicDatePicker, $stateParams, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+
     var categoryType = $stateParams.categoryType;
-    console.log(categoryType);
+
+    // for handle some  different code 
+    if(categoryType == "Medical Family"){
+      categoryType = 'Medical';
+    }
     
     var categoryTypeExtId = $stateParams.extId;
 
@@ -483,7 +488,6 @@ angular.module('selfservice.controllers', [])
     $scope.titleCategory = categoryType;
     $scope.category = categoryType.toLowerCase();
     $scope.requestHeader = {};
-    // $scope.requestHeader.childrenSelected = "";
     $scope.requestHeader.requestForFamily = "";
     $scope.requestHeader.noRek="";
     $scope.requestHeader.nameRek="";
@@ -576,6 +580,7 @@ angular.module('selfservice.controllers', [])
             name = $scope.listtype[index].value;
         }
 
+
         var balance = getBalance(name);
         if(balance == undefined || balance == 0)
           balance = 1;
@@ -628,7 +633,7 @@ angular.module('selfservice.controllers', [])
       
       // list child get benefit medical or kacamata
       var accessToken = Main.getSession("token").access_token;
-      console.log(accessToken);
+      // console.log(accessToken);
       var urlApi = "";
       if($scope.category == 'medical family'){
         var urlApi = Main.getUrlApi() + '/api/user/familyeligiblemedical';
@@ -639,19 +644,7 @@ angular.module('selfservice.controllers', [])
       Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
     }
 
-    var successRequest = function (res){
-        $timeout(function () {
-            $rootScope.data.requestBenefitVerification = res;
-            $ionicLoading.hide();
-            $scope.childrenList = res;
-            if($scope.requestHeader.categoryType.toLowerCase() == 'medical overlimit'){
-                $scope.goTo("app.selfservicesuccess");
-            }else {
-                $state.go("app.benefitconfirmation");
-            }
-        }, 1000);
-
-    }
+    
 
     function verificationForm(reqHeader){
        if(reqHeader.categoryType == 'Perjalanan Dinas') {
@@ -681,7 +674,6 @@ angular.module('selfservice.controllers', [])
 
 
     $scope.submitForm = function(){
-        console.log('sss');
         $scope.requestHeader.module = "Benefit";
         $scope.requestHeader.startDate = $filter('date')(new Date($scope.requestHeader.startDate),'yyyy-MM-dd');
         $scope.requestHeader.endDate = $filter('date')(new Date($scope.requestHeader.endDate),'yyyy-MM-dd');
@@ -696,8 +688,9 @@ angular.module('selfservice.controllers', [])
             
             // if($scope.category != 'medical overlimit') {
              if($scope.directType != true || $scope.defaultValue==0){
-              console.log('is valid');
+              
                 var requestDetail = [];
+
                 angular.forEach($scope.listtype, function(value, key){
                       var obj ={};
                       if(value.type == 'select'){
@@ -720,6 +713,10 @@ angular.module('selfservice.controllers', [])
                       requestDetail.push(obj);
                 })
                 $scope.requestHeader.details = requestDetail;
+
+
+               
+
                 var attachment = [];
                 if($scope.requestHeader.attachments.length > 0) {
                     for (var i = $scope.requestHeader.attachments.length - 1; i >= 0; i--) {
@@ -729,7 +726,7 @@ angular.module('selfservice.controllers', [])
                 }
                 $scope.requestHeader.attachments = attachment; 
             }else {
-              console.log('data masuk');
+
                 var requestDetail = [];
                 var obj = {};
                 obj.type = objDirectType.type;
@@ -737,6 +734,7 @@ angular.module('selfservice.controllers', [])
                 requestDetail.push(obj);
                 $scope.requestHeader.details = requestDetail;
             }
+
 
             var accessToken = Main.getSession("token").access_token;
             // var urlApi = Main.getUrlApi() + '/api/user/tmrequestheader/benefit';
@@ -747,9 +745,6 @@ angular.module('selfservice.controllers', [])
             }
             var data = JSON.stringify($scope.requestHeader);
             
-            console.log(data);
-
-            console.log(urlApi);
 
             Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
 
@@ -773,6 +768,21 @@ angular.module('selfservice.controllers', [])
         $scope.requestHeader.remark = "";
         $scope.requestHeader.attachments = []; 
         $scope.images = []; 
+    }
+
+
+    var successRequest = function (res){
+        $timeout(function () {
+            $rootScope.data.requestBenefitVerification = res;
+            $ionicLoading.hide();
+            $scope.childrenList = res;
+            if($scope.requestHeader.categoryType.toLowerCase() == 'medical overlimit'){
+                $scope.goTo("app.selfservicesuccess");
+            }else {
+                $state.go("app.benefitconfirmation");
+            }
+        }, 1000);
+
     }
 
     
@@ -839,19 +849,15 @@ angular.module('selfservice.controllers', [])
 
 
      
-
-        // console.log($scope.childrenList);
     }
 
-    // function initMethod(){
-    //   getListChildrenBenefit();
-    // }
-    // initMethod();
     initModule();
 })
 
 .controller('BenefitConfirmationCtrl', function(appService,$ionicActionSheet,$cordovaCamera,$stateParams,$ionicLoading, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
       var benefitVerification = $rootScope.data.requestBenefitVerification;
+     
+
       $scope.defaultImage = "img/placeholder.png";
       $scope.images = [];  
       $scope.requestHeader = {};
@@ -942,8 +948,7 @@ angular.module('selfservice.controllers', [])
               
               var data = JSON.stringify(benefitVerification);
 
-              // console.log(data);
-              
+
               Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
           }else {
               $scope.warningAlert("You must add at least 1 attachment.");
@@ -954,6 +959,7 @@ angular.module('selfservice.controllers', [])
 
       function initMethod(){
           benefitVerification = $rootScope.data.requestBenefitVerification;
+
           $scope.totalClaim = 0;
           $scope.totalSubmitedClaim = 0;
           $scope.totalCurrentClaim = 0;
@@ -962,6 +968,7 @@ angular.module('selfservice.controllers', [])
           $scope.requestHeader = {};
           $scope.requestHeader.attachments = []; 
           if(benefitVerification != null && benefitVerification.details.length > 0) {
+            console.log(benefitVerification);
              $scope.categoryType = benefitVerification.categoryType;
              
              for (var i = benefitVerification.details.length - 1; i >= 0; i--) {
@@ -976,6 +983,8 @@ angular.module('selfservice.controllers', [])
              }
 
           }
+
+
       }
       
       initMethod();
@@ -1075,21 +1084,16 @@ angular.module('selfservice.controllers', [])
         $ionicLoading.hide();
         if(res != null){
             $scope.header = res;
-            if($scope.header.categoryType == 'Medical') {
+            if($scope.header.categoryType == 'Medical' || $scope.header.categoryType == 'Medical Family') {
+              
+            console.log('is medical');
               var arrDetail = [];
               if($scope.header.details.length > 0) {
                 arrDetail = JSON.parse($scope.header.details[0].data);
               }
               $scope.header.details = arrDetail;
-          }else if($scope.header.categoryType == 'Medical Family'){
-            var arrDetail = [];
-              if($scope.header.details.length > 0) {
-                arrDetail = JSON.parse($scope.header.details[0].data);
-              }
-              $scope.header.details = arrDetail;
           }
-        }
-        console.log($scope.header);
+      }
     }
 
     $scope.printReport = function (employee,uuid){

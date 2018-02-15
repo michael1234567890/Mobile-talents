@@ -14,7 +14,7 @@
         // hostname perlu di ganti kalau mau running production
         //var hostname = "https://api.talents.id";
         var environment = "development"; // development , production
-        var appmode = "mobile"; // mobile , web
+        var appmode = "web"; // mobile , web
         var phphost = "http://localhost/talents/index.php";
         //var phphost =  "https://talents-report.phincon.com/index.php";
         //var phphost =  "https://report.talents.id/index.php";

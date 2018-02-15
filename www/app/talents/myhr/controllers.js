@@ -95,13 +95,19 @@ angular.module('myhr.controllers', [])
     
 
     $scope.personal = {};
+
+    $scope.zipCode=0;
     
     
 
     var successRequest = function (res){
+      console.log('response');
       console.log(res);
       $ionicLoading.hide();
     	$scope.personal = res;
+
+      console.log('address log');
+      console.log(res.address);
       $scope.personal.showMaritalStatus = $scope.personal.maritalStatus;
       if($scope.personal.maritalStatusDataApproval != null) {
           $scope.personal.showMaritalStatus = $scope.personal.changeMaritalStatus;
@@ -109,9 +115,11 @@ angular.module('myhr.controllers', [])
       $scope.personal.addressShow = false;
       $scope.personal.addressFull = "";
       if(res.address != null){
+          console.log('address log');
+          console.log(address);
           address = res.address;
           $scope.personal.addressFull += " " + address.address + " RT. " + address.rt + " RW. " + address.rw + " " + address.city + ", " + address.province;
-          
+          $scope.zipCode = address.zipCode;
       }
       $scope.$broadcast('scroll.refreshComplete');
 
