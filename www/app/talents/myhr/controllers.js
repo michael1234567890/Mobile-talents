@@ -96,7 +96,7 @@ angular.module('myhr.controllers', [])
 
     $scope.personal = {};
 
-    $scope.zipCode=0;
+    $scope.zipCode="";
     
     
 

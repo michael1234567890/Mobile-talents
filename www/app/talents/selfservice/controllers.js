@@ -452,10 +452,7 @@ angular.module('selfservice.controllers', [])
 .controller('BenefitListtypeCtrl', function($timeout,appService,$ionicActionSheet,$cordovaCamera,ionicDatePicker, $stateParams, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
 
     var categoryType = $stateParams.categoryType;
-
     var categoryType2 = categoryType;
-
-   
 
     // for handle some  different code 
     if(categoryType == "Medical Family"){
@@ -867,8 +864,6 @@ angular.module('selfservice.controllers', [])
 
 .controller('BenefitConfirmationCtrl', function(appService,$ionicActionSheet,$cordovaCamera,$stateParams,$ionicLoading, $compile,$filter,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
       var benefitVerification = $rootScope.data.requestBenefitVerification;
-     
-
       $scope.defaultImage = "img/placeholder.png";
       $scope.images = [];  
       $scope.requestHeader = {};
@@ -970,16 +965,15 @@ angular.module('selfservice.controllers', [])
 
       function initMethod(){
           benefitVerification = $rootScope.data.requestBenefitVerification;
-
           $scope.totalClaim = 0;
           $scope.totalSubmitedClaim = 0;
           $scope.totalCurrentClaim = 0;
           $scope.lastClaimDate = "";
           $scope.images = [];  
           $scope.requestHeader = {};
-          $scope.requestHeader.attachments = []; 
+          $scope.requestHeader.attachments = [];
+          // console.log(benefitVerification.details); 
           if(benefitVerification != null && benefitVerification.details.length > 0) {
-            console.log(benefitVerification);
              $scope.categoryType = benefitVerification.categoryType;
              
              for (var i = benefitVerification.details.length - 1; i >= 0; i--) {
@@ -994,8 +988,6 @@ angular.module('selfservice.controllers', [])
              }
 
           }
-
-
       }
       
       initMethod();

@@ -6,7 +6,7 @@
     .factory('Main', function($q, $timeout, $http, $localStorage,$rootScope){
 
         // hostname perlu di ganti kalau mau generate ke local laptop
-        var hostname = "http://localhost:8080";
+        var hostname = "http://localhost:8082";
 
         // hostname perlu di ganti kalau mau running local mobile
         // var hostname = "http://192.168.43.100:8080";
