@@ -34,10 +34,11 @@
 
 
 
-            <div class="row" ng-if="category == 'kacamata' || category == 'medical' ">
+            <div class="row" ng-if="category == 'kacamata' || category == 'medical' || categoryTypeIndentity == 'Kacamata Family'|| categoryTypeIndentity=='Medical Family'" >
                 <div class="input-field col " style="margin-top:10px">
                     <p ng-if="category=='kacamata'">Optical Store </p>
                     <p ng-if="category=='medical'">Hospital Name</p>
+                    <p ng-if="categoryTypeIndentity=='Kacamata Family'">Optical Store </p>
                     <textarea style="width:100%; border-color:#ddd; border: solid 2px #c9c9c9;border-radius:2px" rows="2" ng-model="requestHeader.remark" maxlength="100" name="optichospital" ng-pattern="/^[a-zA-Z,.0-9-/ ]*$/"></textarea>
                     <font color="red" style="font-size: 10px"><span ng-show="form.optichospital.$invalid">Should not contain any special characters</span></font>
                     

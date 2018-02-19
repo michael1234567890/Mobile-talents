@@ -1511,7 +1511,7 @@ angular.module('selfservice.controllers', [])
       $ionicLoading.hide();
       if(res!= null && res.periodDate != null) {
           arrPeriodDate = res.periodDate.split("-");
-          $scope.sptai.year = arrPeriodDate[0];
+          // $scope.sptai.year = arrPeriodDate[0];
           $scope.sptai.month = Main.getValuefromId($scope.selectMonth,arrPeriodDate[1]);
       }
     }
@@ -1522,14 +1522,18 @@ angular.module('selfservice.controllers', [])
         if(refYear != undefined && refYear != '') {
              $scope.selectYear = JSON.parse(refYear);
         }
+
+
+
         
       // calculate one year ago from date now
       var date = (new Date()).getFullYear() - 1;
       var dateString = date.toString();
       var data = $filter('date')(new Date(),'yyyy');
       
+
       $scope.sptai.year = dateString;
-      
+  
           
     }
 
