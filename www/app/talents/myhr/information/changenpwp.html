@@ -10,7 +10,7 @@
             <div class="item item-divider">Npwp</div>
             <div class="row">
                 <div class="input-field col">
-                    <input ng-model="npwp.npwpNo" placeholder="Enter Npwp Number" type="text" class="validate" name="npwpNo" ng-pattern="/^[0-9]*$/" maxlength="20" ng-value="{{npwp.npwpNo}}">
+                    <input ng-model="npwp.npwpNo" placeholder="Enter Npwp Number" type="text" class="validate" name="npwpNo" ng-pattern="/^[0-9]*$/" maxlength="15" ng-value="{{npwp.npwpNo}}">
                 </div>
             </div>        
 
@@ -37,7 +37,7 @@
                  <div style="max-height:90px;max-width:90px" class="col"  ng-if="npwp.imagesData==0"><img ng-src="{{image}}" height="90px" ></div>
             </div>
             <div class="row" style="padding-top:50px">
-                <button  class="btn waves-effect waves-light button button-positive button-block waves-effect waves-light" ng-click="send()">Send</button>
+                <button  ng-disabled="npwp.npwpNo.length < 15" class="btn waves-effect waves-light button button-positive button-block waves-effect waves-light" ng-click="send()">Send</button>
             </div>
         </ion-list>
 
