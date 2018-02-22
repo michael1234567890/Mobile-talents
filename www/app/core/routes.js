@@ -95,6 +95,31 @@ angular.module('talent.routes', [])
         }
       })
 
+
+      .state('app.changenircno', {
+        url: '/changenircno/:currentStatus/:dataApprovalId',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/myhr/information/changenircno.html',
+            controller: 'ChangeNircNoCtrl'
+          }
+        }
+      })
+
+
+      .state('app.changektpname', {
+        url: '/changektpname/:currentStatus/:dataApprovalId',
+        views: {
+          'menuContent': {
+            templateUrl: 'app/talents/myhr/information/changektpname.html',
+            controller: 'ChangeKtpNameCtrl'
+          }
+        }
+      })
+
+
+      
+
       .state('app.changefamilycardno', {
         url: '/changefamilycardno/:currentStatus/:dataApprovalId',
         views: {
