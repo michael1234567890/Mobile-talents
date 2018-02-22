@@ -86,6 +86,17 @@ angular.module('myhr.controllers', [])
       $state.go('app.changenpwp',{'currentStatus':currentStatus,'dataApprovalId':dataApprovalId});
     };
 
+    $scope.goChangeNik = function (currentStatus,dataApprovalId) {
+      $state.go('app.changenircno',{'currentStatus':currentStatus,'dataApprovalId':dataApprovalId});
+    };
+
+
+    $scope.goChangeKtpName = function (currentStatus,dataApprovalId) {
+      $state.go('app.changektpname',{'currentStatus':currentStatus,'dataApprovalId':dataApprovalId});
+    };
+
+      
+
     $scope.goChangeFamilyCardNo = function (currentStatus,dataApprovalId) {
 
       console.log('changefamilycardno');
@@ -1943,6 +1954,551 @@ angular.module('myhr.controllers', [])
     initModule();
 
 })
+
+
+.controller('ChangeNircNoCtrl', function(ionicSuperPopup,$ionicPopup, $ionicActionSheet,appService,$ionicHistory,$cordovaCamera,$stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+
+    var arrCompanyRef = Main.getSession("profile").companyReference;
+
+    var getSession = Main.getSession("profile").employeeTransient.nircNo;
+
+
+    // console.log(getSession);
+
+    // console.log(getSession);
+
+    var arrItens = Main.getDataReference(arrCompanyRef,'personal','information','nircno');
+    $scope.itens = JSON.parse(arrItens);
+    var dataapprovalId = $stateParams.dataApprovalId;
+    $scope.currentStatus = $stateParams.currentStatus;
+    $scope.showButton = true;
+    $scope.dataApprovalStatus = null;
+    $scope.appMode = Main.getAppMode();
+    $scope.image = "img/placeholder.png";
+    $scope.nircno = {};
+    $scope.nircno.nircNo = getSession;
+    $scope.nircno.images = []; 
+    $scope.nircno.imagesData = []; 
+    $scope.imageData ;
+    var messageValidation = "";
+
+    $scope.removeChoice = function(){
+        var lastItem = $scope.nircno.imagesData.length-1;
+        $scope.nircno.imagesData.splice(lastItem);
+        $scope.nircno.images.splice(lastItem);
+    }
+
+    $scope.addPicture = function () {
+          if($scope.nircno.images.length > 2) {
+            $scope.errorAlert("Only 3 pictures can be upload");
+            return false;
+          }
+        
+
+          $ionicActionSheet.show({
+              buttons: [{
+                  text: 'Take Picture'
+              }, {
+                      text: 'Select From Gallery'
+                  }],
+              buttonClicked: function (index) {
+                  switch (index) {
+                      case 0: // Take Picture
+                          document.addEventListener("deviceready", function () {
+                              $cordovaCamera.getPicture(appService.getCameraOptions()).then(function (imageData) {
+                                  $scope.nircno.images.push({'image':"data:image/jpeg;base64," + imageData});
+                                  $scope.nircno.imagesData.push({'image': imageData});
+                              }, function (err) {
+                                  appService.showAlert('Error', err, 'Close', 'button-assertive', null);
+                              });
+                          }, false);
+
+                          break;
+                      case 1: // Select From Gallery
+                          document.addEventListener("deviceready", function () {
+                              $cordovaCamera.getPicture(appService.getLibraryOptions()).then(function (imageData) {
+                                   $scope.nircno.images.push({'image':"data:image/jpeg;base64," + imageData});
+                                   $scope.nircno.imagesData.push({'image': imageData});
+                              }, function (err) {
+                                  appService.showAlert('Error', err, 'Close', 'button-assertive', null);
+                              });
+                          }, false);
+                          break;
+                  }
+                  return true;
+              }
+          });
+      };
+
+    $scope.takePicture = function(){
+        var options =  {
+            quality: Main.getTakePictureOptions().quality,
+            destinationType: Camera.DestinationType.DATA_URL,
+            sourceType: Camera.PictureSourceType.CAMERA,
+            targetWidth : Main.getTakePictureOptions().targetWidth,
+            targetHeight:Main.getTakePictureOptions().targetHeight,
+            encodingType: Camera.EncodingType.JPEG,
+            saveToPhotoAlbum: true,
+            correctOrientation:true
+        };
+        
+        $cordovaCamera.getPicture(options).then(function (imageData) {
+            $scope.image = "data:image/jpeg;base64," + imageData;
+            $scope.imageData = imageData;
+        }, function (err) {
+            // An error occured. Show a message to the user
+            $scope.errorAlert("an error occured while take picture");
+        });
+    }
+
+
+    // $scope.updateSelection = function(position, itens, title) {
+      
+    //     angular.forEach(itens, function(subscription, index) {
+    //         if (position != index)
+    //             subscription.checked = false;
+    //             $scope.selected = title;
+    //         }
+    //     );
+    // }
+
+    function goBack  (ui_sref) {
+        var currentView = $ionicHistory.currentView();
+        var backView = $ionicHistory.backView();
+        if (backView) {
+            //there is a back view, go to it
+            if (currentView.stateName == backView.stateName) {
+                //if not works try to go doubleBack
+                var doubleBackView = $ionicHistory.getViewById(backView.backViewId);
+                $state.go(doubleBackView.stateName, doubleBackView.stateParams);
+            } else {
+                backView.go();
+            }
+        } else {
+            $state.go(ui_sref);
+        }
+    }
+
+    var successRequest = function (res){
+      $ionicLoading.hide();
+      $scope.successAlert(res.message);
+      goBack("app.biodata");
+    }
+
+    var errorRequest = function (err, status){
+      $ionicLoading.hide();
+      if(status == 401) {
+          var refreshToken = Main.getSession("token").refresh_token
+          Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
+      }else {
+          if(status==500)
+            $scope.errorAlert(err.message);
+          else
+            $scope.errorAlert("Please Check your connection");
+      }
+     
+    }
+
+    var successRefreshToken = function(res){
+      Main.setSession("token",res);
+    }
+
+    var errRefreshToken = function(err, status) {
+    }
+
+
+    // function validationForm(selected){
+    //     if(selected == undefined || selected == ""){
+    //         messageValidation = "You must pick your new marital status!";
+    //         return false;
+    //     }
+
+    //     if(selected == $scope.currentStatus) {
+    //         messageValidation = "You can't pick the same marital status!";
+    //         return false;
+    //     }
+    //     return true;
+    // }
+
+    function sendData(){
+      // console.log($scope.nircno.nircNo);
+        var idRef = Main.getSession("profile").employeeTransient.id;
+         var jsonData = '{"nircno":"'+$scope.nircno.nircNo+'"}';
+         var attachment = [];
+        
+         if($scope.nircno.imagesData.length > 0) {
+              for (var i = $scope.nircno.imagesData.length - 1; i >= 0; i--) {
+                  var objAttachment = {'image':null};
+                  if($scope.appMode=='mobile'){
+                      objAttachment = {"image":$scope.nircno.imagesData[i].image};
+                  }else{
+                      if($scope.nircno.imagesData[i].compressed.dataURL != undefined) {
+                          var webImageAttachment = $scope.nircno.imagesData[i].compressed.dataURL.replace(/^data:image\/[a-z]+;base64,/, "");
+                          objAttachment = {"image":webImageAttachment};
+                      }
+                      
+                  }
+                  attachment.push(objAttachment);
+
+              };
+          }
+
+
+         var dataStr = {task:"CHANGENIRCNO",data:jsonData,idRef:idRef,attachments:attachment};
+
+         console.log(dataStr);
+         
+         $ionicLoading.show({
+            template: 'Submit Request...'
+          });
+          var accessToken = Main.getSession("token").access_token;
+          
+          // must change endpoint url to be change nircno personal biodata
+          var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval';
+
+
+          var data = JSON.stringify(dataStr);
+
+          console.log('get datanya x');
+          console.log(data);
+          Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
+    }
+
+    $scope.send = function (){
+
+      // if(validationForm($scope.selected)){
+         
+      ionicSuperPopup.show({
+         title: "Are you sure?",
+         text: "Are you sure the data submitted is correct ?",
+         type: "warning",
+         showCancelButton: true,
+         confirmButtonColor: "#DD6B55",
+         confirmButtonText: "Yes",
+         closeOnConfirm: true},
+      function(isConfirm){
+           if (isConfirm) {
+              sendData();
+           }
+          
+         
+      });
+
+      
+
+       
+
+    }
+
+    var successDataApproval = function (res){
+      $ionicLoading.hide();
+      var dataApproval = res;
+      $scope.dataApprovalStatus = dataApproval.processingStatus; 
+      if(dataApproval.processingStatus != null && dataApproval.processingStatus.toLowerCase()=='request'){
+          $scope.showButton = false;
+          
+      }
+
+      if(dataApproval.attachments != null && dataApproval.attachments.length > 0)
+            $scope.image = dataApproval.attachments[0].image;
+        
+
+    }
+
+    function getDataApproval (dataapprovalId) {
+        $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner>'
+        });
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval/'+dataapprovalId;
+        Main.requestApi(accessToken,urlApi,successDataApproval, $scope.errorRequest);
+    }
+    function initModule(){
+       $scope.showButton = true;
+      if(dataapprovalId != null && dataapprovalId !="" && dataapprovalId !="0" ){
+          getDataApproval(dataapprovalId);
+      }
+    }
+
+    initModule();
+
+})
+
+
+.controller('ChangeKtpNameCtrl', function(ionicSuperPopup,$ionicPopup, $ionicActionSheet,appService,$ionicHistory,$cordovaCamera,$stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+
+    var arrCompanyRef = Main.getSession("profile").companyReference;
+
+    var getSession = Main.getSession("profile").employeeTransient.ktpName;
+
+
+    // console.log(getSession);
+
+    // console.log(getSession);
+
+    var arrItens = Main.getDataReference(arrCompanyRef,'personal','information','ktpname');
+    $scope.itens = JSON.parse(arrItens);
+    var dataapprovalId = $stateParams.dataApprovalId;
+    $scope.currentStatus = $stateParams.currentStatus;
+    $scope.showButton = true;
+    $scope.dataApprovalStatus = null;
+    $scope.appMode = Main.getAppMode();
+    $scope.image = "img/placeholder.png";
+    $scope.datapost = {};
+    $scope.datapost.ktpName = getSession;
+    $scope.datapost.images = []; 
+    $scope.datapost.imagesData = []; 
+    $scope.imageData ;
+    var messageValidation = "";
+
+    $scope.removeChoice = function(){
+        var lastItem = $scope.datapost.imagesData.length-1;
+        $scope.datapost.imagesData.splice(lastItem);
+        $scope.datapost.images.splice(lastItem);
+    }
+
+    $scope.addPicture = function () {
+          if($scope.datapost.images.length > 2) {
+            $scope.errorAlert("Only 3 pictures can be upload");
+            return false;
+          }
+        
+
+          $ionicActionSheet.show({
+              buttons: [{
+                  text: 'Take Picture'
+              }, {
+                      text: 'Select From Gallery'
+                  }],
+              buttonClicked: function (index) {
+                  switch (index) {
+                      case 0: // Take Picture
+                          document.addEventListener("deviceready", function () {
+                              $cordovaCamera.getPicture(appService.getCameraOptions()).then(function (imageData) {
+                                  $scope.datapost.images.push({'image':"data:image/jpeg;base64," + imageData});
+                                  $scope.datapost.imagesData.push({'image': imageData});
+                              }, function (err) {
+                                  appService.showAlert('Error', err, 'Close', 'button-assertive', null);
+                              });
+                          }, false);
+
+                          break;
+                      case 1: // Select From Gallery
+                          document.addEventListener("deviceready", function () {
+                              $cordovaCamera.getPicture(appService.getLibraryOptions()).then(function (imageData) {
+                                   $scope.datapost.images.push({'image':"data:image/jpeg;base64," + imageData});
+                                   $scope.datapost.imagesData.push({'image': imageData});
+                              }, function (err) {
+                                  appService.showAlert('Error', err, 'Close', 'button-assertive', null);
+                              });
+                          }, false);
+                          break;
+                  }
+                  return true;
+              }
+          });
+      };
+
+    $scope.takePicture = function(){
+        var options =  {
+            quality: Main.getTakePictureOptions().quality,
+            destinationType: Camera.DestinationType.DATA_URL,
+            sourceType: Camera.PictureSourceType.CAMERA,
+            targetWidth : Main.getTakePictureOptions().targetWidth,
+            targetHeight:Main.getTakePictureOptions().targetHeight,
+            encodingType: Camera.EncodingType.JPEG,
+            saveToPhotoAlbum: true,
+            correctOrientation:true
+        };
+        
+        $cordovaCamera.getPicture(options).then(function (imageData) {
+            $scope.image = "data:image/jpeg;base64," + imageData;
+            $scope.imageData = imageData;
+        }, function (err) {
+            // An error occured. Show a message to the user
+            $scope.errorAlert("an error occured while take picture");
+        });
+    }
+
+
+    // $scope.updateSelection = function(position, itens, title) {
+      
+    //     angular.forEach(itens, function(subscription, index) {
+    //         if (position != index)
+    //             subscription.checked = false;
+    //             $scope.selected = title;
+    //         }
+    //     );
+    // }
+
+    function goBack  (ui_sref) {
+        var currentView = $ionicHistory.currentView();
+        var backView = $ionicHistory.backView();
+        if (backView) {
+            //there is a back view, go to it
+            if (currentView.stateName == backView.stateName) {
+                //if not works try to go doubleBack
+                var doubleBackView = $ionicHistory.getViewById(backView.backViewId);
+                $state.go(doubleBackView.stateName, doubleBackView.stateParams);
+            } else {
+                backView.go();
+            }
+        } else {
+            $state.go(ui_sref);
+        }
+    }
+
+    var successRequest = function (res){
+      $ionicLoading.hide();
+      $scope.successAlert(res.message);
+      goBack("app.biodata");
+    }
+
+    var errorRequest = function (err, status){
+      $ionicLoading.hide();
+      if(status == 401) {
+          var refreshToken = Main.getSession("token").refresh_token
+          Main.refreshToken(refreshToken, successRefreshToken, errRefreshToken);
+      }else {
+          if(status==500)
+            $scope.errorAlert(err.message);
+          else
+            $scope.errorAlert("Please Check your connection");
+      }
+     
+    }
+
+    var successRefreshToken = function(res){
+      Main.setSession("token",res);
+    }
+
+    var errRefreshToken = function(err, status) {
+    }
+
+
+    // function validationForm(selected){
+    //     if(selected == undefined || selected == ""){
+    //         messageValidation = "You must pick your new marital status!";
+    //         return false;
+    //     }
+
+    //     if(selected == $scope.currentStatus) {
+    //         messageValidation = "You can't pick the same marital status!";
+    //         return false;
+    //     }
+    //     return true;
+    // }
+
+    function sendData(){
+      // console.log($scope.nircno.nircNo);
+        var idRef = Main.getSession("profile").employeeTransient.id;
+        var jsonData = '{"ktpname":"'+$scope.datapost.ktpName+'"}';  
+
+         var attachment = [];
+        
+         if($scope.datapost.imagesData.length > 0) {
+              for (var i = $scope.datapost.imagesData.length - 1; i >= 0; i--) {
+                  var objAttachment = {'image':null};
+                  if($scope.appMode=='mobile'){
+                      objAttachment = {"image":$scope.datapost.imagesData[i].image};
+                  }else{
+                      if($scope.datapost.imagesData[i].compressed.dataURL != undefined) {
+                          var webImageAttachment = $scope.datapost.imagesData[i].compressed.dataURL.replace(/^data:image\/[a-z]+;base64,/, "");
+                          objAttachment = {"image":webImageAttachment};
+                      }
+                      
+                  }
+                  attachment.push(objAttachment);
+
+              };
+          }
+
+
+         var dataStr = {task:"CHANGEKTPNAME",data:jsonData,idRef:idRef,attachments:attachment};
+
+         console.log(dataStr);
+         
+         $ionicLoading.show({
+            template: 'Submit Request...'
+          });
+          var accessToken = Main.getSession("token").access_token;
+          
+          // must change endpoint url to be change nircno personal biodata
+          var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval';
+
+
+          var data = JSON.stringify(dataStr);
+
+          console.log('get datanya x');
+          console.log(data);
+          Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
+    }
+
+    $scope.send = function (){
+
+      // if(validationForm($scope.selected)){
+         
+      ionicSuperPopup.show({
+         title: "Are you sure?",
+         text: "Are you sure the data submitted is correct ?",
+         type: "warning",
+         showCancelButton: true,
+         confirmButtonColor: "#DD6B55",
+         confirmButtonText: "Yes",
+         closeOnConfirm: true},
+      function(isConfirm){
+           if (isConfirm) {
+              sendData();
+           }
+          
+         
+      });
+
+      
+
+       
+
+    }
+
+    var successDataApproval = function (res){
+      $ionicLoading.hide();
+      var dataApproval = res;
+      $scope.dataApprovalStatus = dataApproval.processingStatus; 
+      if(dataApproval.processingStatus != null && dataApproval.processingStatus.toLowerCase()=='request'){
+          $scope.showButton = false;
+          
+      }
+
+      if(dataApproval.attachments != null && dataApproval.attachments.length > 0)
+            $scope.image = dataApproval.attachments[0].image;
+        
+
+    }
+
+    function getDataApproval (dataapprovalId) {
+        $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner>'
+        });
+        var accessToken = Main.getSession("token").access_token;
+        var urlApi = Main.getUrlApi() + '/api/user/workflow/dataapproval/'+dataapprovalId;
+        Main.requestApi(accessToken,urlApi,successDataApproval, $scope.errorRequest);
+    }
+    function initModule(){
+       $scope.showButton = true;
+      if(dataapprovalId != null && dataapprovalId !="" && dataapprovalId !="0" ){
+          getDataApproval(dataapprovalId);
+      }
+    }
+
+    initModule();
+
+})
+
+
+
+
+
+
 
 
 .controller('ChangeFamilyCardNoCtrl', function(ionicSuperPopup,$ionicPopup, $ionicActionSheet,appService,$ionicHistory,$cordovaCamera,$stateParams,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {

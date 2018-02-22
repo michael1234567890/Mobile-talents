@@ -39,6 +39,21 @@
                 <h2 class="lead text-small" >{{detail.employeeRequest.changeNPWP}}</h2>
             </div>
         </div>
+
+         <div ng-if="detail.task == 'CHANGENIRCNO'">
+            <div class="item item-text-wrap" >
+                <p class="text-small">NIK</p>
+                <h2 class="lead text-small" >{{detail.employeeRequest.changeNPWP}}</h2>
+            </div>
+        </div>
+
+         <div ng-if="detail.task == 'CHANGEKTPNAME'">
+            <div class="item item-text-wrap" >
+                <p class="text-small">Faskes</p>
+                <h2 class="lead text-small" >{{detail.employeeRequest.changeKTPNAME}}</h2>
+            </div>
+        </div>
+        
         <div ng-if="detail.task != 'CHANGENPWP'">
             <div class="item item-text-wrap" >
                 <p class="text-small">Request No</p>

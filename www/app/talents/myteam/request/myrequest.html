@@ -78,6 +78,29 @@
                 </span>
                 
             </div>
+
+
+            <div class="item item-text-wrap" ng-if="item.task=='CHANGENIRCNO'" ng-click="gotoDetailRequest(item.id)" >
+                <h2 class="lead">{{item.employeeRequest.name}}</h2>
+                <p>{{item.description}}</p>
+                <p class="text-smaller" >{{item.modifiedDate | date: 'dd MMM yyyy HH:mm'}}</p>
+                <span class="item-note calm">
+                    {{item.processingStatus}}
+                </span>
+                
+            </div>
+
+
+
+            <div class="item item-text-wrap" ng-if="item.task=='CHANGEKTPNAME'" ng-click="gotoDetailRequest(item.id)" >
+                <h2 class="lead">{{item.employeeRequest.name}}</h2>
+                <p>{{item.description}}</p>
+                <p class="text-smaller" >{{item.modifiedDate | date: 'dd MMM yyyy HH:mm'}}</p>
+                <span class="item-note calm">
+                    {{item.processingStatus}}
+                </span>
+                
+            </div>
             
             <div class="item item-text-wrap" ng-if="item.task=='SUBMITLEAVE'" ng-click="gotoDetailRequest(item.id)" >
                 <div class="row">

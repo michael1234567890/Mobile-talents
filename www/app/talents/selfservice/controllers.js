@@ -1,8 +1,20 @@
 angular.module('selfservice.controllers', [])
-.controller('SelfServiceCtrl', function($ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
+.controller('SelfServiceCtrl', function($ionicHistory ,$ionicLoading, $rootScope, $scope, $cordovaInAppBrowser, $state ,  AuthenticationService, Main) {
     
     if(Main.getSession("token") == null || Main.getSession("token") == undefined) {
         $state.go("login");
+    }
+
+
+
+    $scope.openBrowser = function (){
+      
+      if(Main.getPhpHost == 'https://api.talents.id'){
+        window.open('https://hdff.fs.ap1.oraclecloud.com/homePage/faces/FuseWelcome', '_blank', 'location=yes');
+      }else{
+        window.open('https://hdff-test.fs.ap1.oraclecloud.com/homePage/faces/FuseWelcome', '_blank', 'location=yes');
+      }
+      
     }
 
     var arrCompanyRef = Main.getSession("profile").companyReference;
@@ -13,6 +25,8 @@ angular.module('selfservice.controllers', [])
               $scope.menu = JSON.parse(refMenu);
         }
     }
+
+
     
     initMethod();
     
