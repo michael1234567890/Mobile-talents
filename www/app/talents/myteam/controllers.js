@@ -617,6 +617,11 @@ angular.module('myteam.controllers', [])
           var change = $scope.detail.data;
           var objData = JSON.parse(change);
           $scope.detail.taskDescription = "Change ktpname status from "+$scope.detail.employeeRequest.ktpName + " to " + objData.ktpName;
+       }else if($scope.detail.task == 'CHANGEFAMILYCARDNO'){
+          $scope.detail.taskTitle = "Change Family Card No";
+          var change = $scope.detail.data;
+          var objData = JSON.parse(change);
+          $scope.detail.taskDescription = "Change family card no status from "+$scope.detail.employeeRequest.familyCardNo + " to " + objData.familyCardNo;
       }else if($scope.detail.task == 'SUBMITFAMILY' || $scope.detail.task == 'CHANGEFAMILY') {
            $scope.detail.taskTitle = "Add new Family";
            $scope.detail.taskDescription = "Add new family";

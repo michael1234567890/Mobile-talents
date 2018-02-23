@@ -101,7 +101,20 @@
             </div>
 
 
-                <div class="item item-avatar item-text-wrap" ng-if="item.task=='CHANGEKTPNAME'" ng-click="gotoDetailRequest(item.id)" >
+            <div class="item item-avatar item-text-wrap" ng-if="item.task=='CHANGEKTPNAME'" ng-click="gotoDetailRequest(item.id)" >
+                <img ng-src="{{item.photoProfile}}"/>
+                <span class="item-note calm">
+                    {{item.processingStatus}}
+                </span>
+                <h2 class="lead">{{item.employeeRequest.name}}</h2>
+                <p>{{item.taskDescription}}</p>
+                <p class="text-smaller" >{{item.modifiedDate | date: 'dd MMM yyyy HH:mm'}}</p>
+                
+            </div>
+
+
+
+            <div class="item item-avatar item-text-wrap" ng-if="item.task=='CHANGEFAMILYCARDNO'" ng-click="gotoDetailRequest(item.id)" >
                 <img ng-src="{{item.photoProfile}}"/>
                 <span class="item-note calm">
                     {{item.processingStatus}}

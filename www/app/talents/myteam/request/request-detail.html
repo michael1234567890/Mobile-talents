@@ -53,6 +53,14 @@
                 <h2 class="lead text-small" >{{detail.employeeRequest.changeKTPNAME}}</h2>
             </div>
         </div>
+
+
+         <div ng-if="detail.task == 'CHANGEFAMILYCARDNO'">
+            <div class="item item-text-wrap" >
+                <p class="text-small">Family Card No</p>
+                <h2 class="lead text-small" >{{detail.employeeRequest.changeFamilyCardNo}}</h2>
+            </div>
+        </div>
         
         <div ng-if="detail.task != 'CHANGENPWP'">
             <div class="item item-text-wrap" >

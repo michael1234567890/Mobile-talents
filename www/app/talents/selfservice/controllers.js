@@ -35,6 +35,7 @@ angular.module('selfservice.controllers', [])
 .controller('SubmitAttendanceCtrl', function($compile,$filter,$cordovaGeolocation,$timeout,$ionicHistory ,$ionicLoading, $rootScope, $scope,$state , AuthenticationService, Main) {
     alert("This feature is not available");
     $scope.goBack('app.selfservice');
+    
     /*var serverTime = $filter('date')(Date.now(), "yyyy-MM-dd HH:mm:ss");
     var clockTick = null;
     $scope.tickInterval = 1000;
@@ -653,13 +654,8 @@ angular.module('selfservice.controllers', [])
       
       // list child get benefit medical or kacamata
       var accessToken = Main.getSession("token").access_token;
-      // console.log(accessToken);
-      var urlApi = "";
-      if($scope.category == 'medical family'){
-        var urlApi = Main.getUrlApi() + '/api/user/familyeligiblemedical';
-      }else{
-        var urlApi =  Main.getUrlApi() + '/api/user/familyeligible';
-      }
+      var urlApi = Main.getUrlApi() + '/api/user/eligiblefamily';
+      
 
       Main.requestApi(accessToken,urlApi,successRequest, $scope.errorRequest);
     }

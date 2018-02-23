@@ -2637,7 +2637,13 @@ angular.module('myhr.controllers', [])
 
     function sendData(){
         var idRef = Main.getSession("profile").employeeTransient.id;
-         var jsonData = '{"familycardno":"'+$scope.familycardno.familyCardNo+'"}';
+
+        console.log('data family card no');
+
+        console.log($scope.familycardno.familyCardNo);
+
+
+         var jsonData = '{"familyCardNo":"'+$scope.familycardno.familyCardNo+'"}';
          var attachment = [];
         
          if($scope.familycardno.imagesData.length > 0) {
@@ -2671,6 +2677,10 @@ angular.module('myhr.controllers', [])
 
 
           var data = JSON.stringify(dataStr);
+
+
+          console.log('data yg di post :');
+          console.log(data);
           Main.postRequestApi(accessToken,urlApi,data,successRequest,$scope.errorRequest);
     }
 
