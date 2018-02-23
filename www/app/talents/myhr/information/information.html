@@ -106,9 +106,19 @@
 
         
 
-             <div class="item item-text-wrap" >
+            <div class="item item-text-wrap item-icon-right" ng-click="goChangeFamilyCardNo(familycardno.familyCardNo,familycardno.familycardnoStatusDataApproval)">
                 <p class="text-small">Family Card No</p>
-                <h2 class="lead text-small" >{{personal.familyCardNo}}</h2>
+                <span class="item-note calm" style="font-size:12px;color">
+                    Waiting Approval
+                </span>
+                
+                <div ng-if="personal.familycardnoStatusDataApproval != null">
+                    <h2 class="lead text-small" >{{familycardno.changeFAMILYCARDNO}}</h2>
+                </div>
+                <div ng-if="personal.familycardnoStatusDataApproval == null">
+                    <h2 class="lead text-small" >{{familycardno.familyCardNo}}</h2>
+                </div>
+                <i class="icon ion-chevron-right icon-accessory"></i>
             </div>
 
             <div class="item item-text-wrap" >
